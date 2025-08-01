@@ -1,6 +1,7 @@
 # Implementation Plan
 
-- [ ] 1. Set up Firebase Auth adapter service foundation
+- [-] 1. Set up Firebase Auth adapter service foundation
+
   - Create the core Firebase Auth adapter service with basic structure
   - Implement dependency injection for @angular/fire/auth services
   - Set up basic authentication methods (signIn, signOut, getCurrentUser)

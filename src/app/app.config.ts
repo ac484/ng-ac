@@ -74,11 +74,38 @@ if (environment.api?.refreshTokenEnabled && environment.api.refreshTokenType ===
   providers.push(provideBindAuthRefresh());
 }
 
+// Firebase providers
+const firebaseProviders: Array<Provider | EnvironmentProviders> = [
+  provideFirebaseApp(() => initializeApp({ 
+    projectId: "ng-acc", 
+    appId: "1:289956121604:web:4dd9d608a2db962aeaf951", 
+    storageBucket: "ng-acc.firebasestorage.app", 
+    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", 
+    authDomain: "ng-acc.firebaseapp.com", 
+    messagingSenderId: "289956121604", 
+    measurementId: "G-6YM5S9LCNV" 
+  })),
+  provideAuth_alias(() => getAuth()),
+  provideAnalytics(() => getAnalytics()),
+  ScreenTrackingService,
+  UserTrackingService,
+  provideAppCheck(() => {
+    // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
+    const provider = new ReCaptchaEnterpriseProvider("6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo");
+    return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
+  }),
+  provideFirestore(() => getFirestore()),
+  provideFunctions(() => getFunctions()),
+  provideMessaging(() => getMessaging()),
+  providePerformance(() => getPerformance()),
+  provideStorage(() => getStorage()),
+  provideRemoteConfig(() => getRemoteConfig()),
+  provideVertexAI(() => getVertexAI())
+];
+
 export const appConfig: ApplicationConfig = {
-  providers: providers,
-  providers: [provideFirebaseApp(() => initializeApp({ projectId: "ng-acc", appId: "1:289956121604:web:4dd9d608a2db962aeaf951", storageBucket: "ng-acc.firebasestorage.app", apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", authDomain: "ng-acc.firebaseapp.com", messagingSenderId: "289956121604", measurementId: "G-6YM5S9LCNV" })), provideAuth_alias(() => getAuth()), provideAnalytics(() => getAnalytics()), ScreenTrackingService, UserTrackingService, provideAppCheck(() => {
-  // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
-  const provider = new ReCaptchaEnterpriseProvider("6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo");
-  return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
-}), provideFirestore(() => getFirestore()), provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig()), provideVertexAI(() => getVertexAI())]
+  providers: [
+    ...providers,
+    ...firebaseProviders
+  ]
 };
