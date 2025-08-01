@@ -8,7 +8,8 @@ import { provideRouter, RouteReuseStrategy, TitleStrategy, withComponentInputBin
 // Firebase 相關導入
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
+import { initializeAppCheck, provideAppCheck } from '@angular/fire/app-check';
+import { ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
