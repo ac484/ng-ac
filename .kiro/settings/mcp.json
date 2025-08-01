@@ -6,7 +6,7 @@
         "-y",
         "@modelcontextprotocol/server-filesystem",
         "./",
-        "./.cursor",
+        "./.kiro",
         "./src",
         "./functions",
         "./custom_modes",
