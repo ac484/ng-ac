@@ -7,6 +7,9 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import 'zone.js';
+import '../node_modules/zone.js/fesm2015/long-stack-trace-zone.js';
+import type { Request, Response, NextFunction } from 'express';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -64,3 +67,8 @@ if (isMainModule(import.meta.url)) {
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
  */
 export const reqHandler = createNodeRequestHandler(app);
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error('SSR Error:', err && err.stack ? err.stack : err);
+  res.status(500).send('SSR Error: ' + (err && err.stack ? err.stack : err));
+});
