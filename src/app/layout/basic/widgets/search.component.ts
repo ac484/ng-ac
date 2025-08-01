@@ -82,7 +82,11 @@ export class HeaderSearchComponent implements AfterViewInit, OnDestroy {
   @Output() readonly toggleChangeChange = new EventEmitter<boolean>();
 
   ngAfterViewInit(): void {
-    this.qIpt = this.el.querySelector('.ant-input') as HTMLInputElement;
+    // 只在瀏覽器環境中執行 DOM 操作
+    if (isPlatformBrowser(this.platformId)) {
+      this.qIpt = this.el.querySelector('.ant-input') as HTMLInputElement;
+    }
+
     this.search$
       .pipe(
         debounceTime(500),
