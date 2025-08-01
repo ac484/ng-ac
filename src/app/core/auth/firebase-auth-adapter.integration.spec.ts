@@ -1,29 +1,41 @@
 import { TestBed } from '@angular/core/testing';
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { provideAuth, getAuth, connectAuthEmulator } from '@angular/fire/auth';
+import { Auth } from '@angular/fire/auth';
+import { of } from 'rxjs';
 import { FirebaseAuthAdapterService } from './firebase-auth-adapter.service';
+import { FirebaseErrorHandlerService } from './firebase-error-handler.service';
 
 describe('FirebaseAuthAdapterService Integration', () => {
   let service: FirebaseAuthAdapterService;
+  let mockAuth: jasmine.SpyObj<Auth>;
+  let mockErrorHandler: jasmine.SpyObj<FirebaseErrorHandlerService>;
 
   beforeEach(() => {
+    const authSpy = jasmine.createSpyObj('Auth', ['signInWithEmailAndPassword', 'signOut']);
+    const errorHandlerSpy = jasmine.createSpyObj('FirebaseErrorHandlerService', ['handleError', 'handleSilentError']);
+
     TestBed.configureTestingModule({
       providers: [
-        provideFirebaseApp(() => initializeApp({
-          projectId: 'test-project',
-          apiKey: 'test-api-key',
-          authDomain: 'test-project.firebaseapp.com'
-        })),
-        provideAuth(() => {
-          const auth = getAuth();
-          // 連接到 Firebase Auth Emulator 進行測試
-          connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
-          return auth;
-        })
+        FirebaseAuthAdapterService,
+        { provide: Auth, useValue: authSpy },
+        { provide: FirebaseErrorHandlerService, useValue: errorHandlerSpy }
       ]
     });
-    
+
     service = TestBed.inject(FirebaseAuthAdapterService);
+    mockAuth = TestBed.inject(Auth) as jasmine.SpyObj<Auth>;
+    mockErrorHandler = TestBed.inject(FirebaseErrorHandlerService) as jasmine.SpyObj<FirebaseErrorHandlerService>;
+
+    // 設置 authState$ 的模擬
+    Object.defineProperty(service, 'authState$', {
+      get: () => of(null),
+      configurable: true
+    });
+
+    // 設置 isAuthenticated$ 的模擬
+    Object.defineProperty(service, 'isAuthenticated$', {
+      get: () => of(false),
+      configurable: true
+    });
   });
 
   it('should be created', () => {

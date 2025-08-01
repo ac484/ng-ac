@@ -85,6 +85,11 @@ export class SessionManagerService {
      */
     saveSession(user: any): Observable<void> {
         try {
+            // 檢查是否在瀏覽器環境中
+            if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+                return of(void 0);
+            }
+
             const now = Date.now();
             const sessionData: SessionData = {
                 uid: user.uid,
@@ -183,6 +188,11 @@ export class SessionManagerService {
      */
     private getStoredSession(): SessionData | null {
         try {
+            // 檢查是否在瀏覽器環境中
+            if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+                return null;
+            }
+
             const stored = localStorage.getItem(this.SESSION_KEY);
             if (!stored) {
                 return null;
@@ -250,6 +260,11 @@ export class SessionManagerService {
      */
     private updateSessionActivity(sessionData: SessionData): void {
         try {
+            // 檢查是否在瀏覽器環境中
+            if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+                return;
+            }
+
             sessionData.lastActivity = Date.now();
             localStorage.setItem(this.SESSION_KEY, JSON.stringify(sessionData));
         } catch (error) {
@@ -263,6 +278,11 @@ export class SessionManagerService {
      */
     private clearStoredSession(): void {
         try {
+            // 檢查是否在瀏覽器環境中
+            if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+                return;
+            }
+
             localStorage.removeItem(this.SESSION_KEY);
         } catch (error) {
             // 靜默處理清除錯誤
@@ -292,6 +312,11 @@ export class SessionManagerService {
      */
     private getDeviceInfo(): string {
         try {
+            // 檢查是否在瀏覽器環境中
+            if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+                return 'server_environment';
+            }
+
             const userAgent = navigator.userAgent;
             const platform = navigator.platform;
             const language = navigator.language;
