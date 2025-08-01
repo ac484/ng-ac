@@ -1,254 +1,274 @@
-# Firebase Auth Integration
+# Firebase Auth 整合模組
 
-Firebase Auth 與 ng-alain 認證系統整合，提供完整的認證解決方案。
+## 概述
 
-## 特色
-
-- 🔥 使用 @angular/fire 進行 Firebase 整合
-- 🎯 精簡設計，僅包含必要功能
-- 📡 響應式設計，使用 Observable 模式
-- 🔒 自動 token 管理和刷新
-- 🔄 自動同步到 ng-alain token 服務
-- 🧪 完整的測試覆蓋
+這個模組提供了 Firebase Authentication 與 ng-alain/delon 認證系統的完整整合。遵循精簡主義原則，僅包含必要功能，並保持與現有 ng-alain 結構的完全相容性。
 
 ## 核心服務
 
-### FirebaseAuthAdapterService
-Firebase 認證適配器，提供基本的認證操作。
+### 1. FirebaseAuthAdapterService
+- **用途**: Firebase Auth 的主要適配器
+- **功能**: 提供與 ng-alain 相容的 Firebase 認證介面
+- **位置**: `firebase-auth-adapter.service.ts`
 
-### TokenSyncService
-Token 同步服務，負責將 Firebase ID token 轉換並同步到 ng-alain 系統。
+### 2. TokenSyncService
+- **用途**: 同步 Firebase ID tokens 與 Alain token 格式
+- **功能**: 處理 token 轉換、儲存和過期管理
+- **位置**: `token-sync.service.ts`
 
-### AuthStateManagerService
-認證狀態管理器，統一管理 Firebase Auth 和 ng-alain 認證狀態，協調各個服務之間的互動。
+### 3. AuthStateManagerService
+- **用途**: 統一認證狀態管理
+- **功能**: 協調 Firebase Auth 和 ng-alain 認證狀態
+- **位置**: `auth-state-manager.service.ts`
 
-## 基本使用
+### 4. SessionManagerService
+- **用途**: 會話持久化管理
+- **功能**: 處理會話保存、恢復和驗證
+- **位置**: `session-manager.service.ts`
 
-### 在組件中注入服務
+### 5. FirebaseErrorHandlerService
+- **用途**: Firebase 錯誤處理
+- **功能**: 將 Firebase 錯誤映射為用戶友好的訊息
+- **位置**: `firebase-error-handler.service.ts`
+
+## HTTP 攔截器
+
+### FirebaseTokenInterceptor
+- **用途**: 自動附加 Firebase ID tokens 到 HTTP 請求
+- **功能**: 處理 token 刷新和併發請求
+- **位置**: `firebase-token.interceptor.ts`
+
+## 路由守衛
+
+### FirebaseAuthGuard
+- **用途**: 基於 Firebase Auth 狀態的路由保護
+- **功能**: 與現有 ng-alain 守衛整合
+- **位置**: `firebase-auth.guard.ts`
+
+## 配置和提供者
+
+### provideFirebaseAuthIntegration()
+- **用途**: 提供所有 Firebase Auth 整合服務
+- **位置**: `firebase-auth.providers.ts`
+- **使用**: 在 `app.config.ts` 中調用
 
 ```typescript
-import { Component, inject } from '@angular/core';
-import { FirebaseAuthAdapterService } from '@core/auth';
-
-@Component({
-  selector: 'app-example',
-  template: `
-    <div *ngIf="authService.isAuthenticated$ | async; else loginTemplate">
-      <p>已登入</p>
-      <button (click)="signOut()">登出</button>
-    </div>
-    <ng-template #loginTemplate>
-      <p>未登入</p>
-      <button (click)="signIn()">登入</button>
-    </ng-template>
-  `
-})
-export class ExampleComponent {
-  authService = inject(FirebaseAuthAdapterService);
-
-  signIn() {
-    this.authService.signIn('user@example.com', 'password')
-      .subscribe({
-        next: (user) => console.log('登入成功', user),
-        error: (error) => console.error('登入失敗', error)
-      });
-  }
-
-  signOut() {
-    this.authService.signOut()
-      .subscribe({
-        next: () => console.log('登出成功'),
-        error: (error) => console.error('登出失敗', error)
-      });
-  }
-}
+export const appConfig: ApplicationConfig = {
+  providers: [
+    ...providers,
+    ...firebaseProviders,
+    ...provideFirebaseAuthIntegration()
+  ]
+};
 ```
 
-### 監聽認證狀態
+## 應用程式配置
+
+### Firebase 配置
+Firebase 配置現在從環境變數中讀取：
 
 ```typescript
-export class AuthStatusComponent implements OnInit {
-  private authService = inject(FirebaseAuthAdapterService);
+// environment.ts
+export const environment = {
+  // ... 其他配置
+  firebase: {
+    projectId: "your-project-id",
+    appId: "your-app-id",
+    storageBucket: "your-storage-bucket",
+    apiKey: "your-api-key",
+    authDomain: "your-auth-domain",
+    messagingSenderId: "your-sender-id",
+    measurementId: "your-measurement-id"
+  }
+};
+```
 
-  ngOnInit() {
-    // 監聽認證狀態變化
-    this.authService.authState$.subscribe(user => {
-      if (user) {
-        console.log('使用者已登入:', user.email);
+### HTTP 攔截器順序
+攔截器按以下順序配置：
+1. 環境特定攔截器 (如 mockInterceptor)
+2. `firebaseTokenInterceptor` - 附加 Firebase tokens
+3. `authSimpleInterceptor` - ng-alain 認證攔截器
+4. `defaultInterceptor` - 預設錯誤處理
+
+## 啟動流程整合
+
+### StartupService 整合
+應用程式啟動時會自動：
+1. 嘗試恢復 Firebase Auth 會話
+2. 如果會話有效，初始化認證狀態管理器
+3. 同步 Firebase 狀態與 ng-alain token 服務
+4. 繼續正常的應用程式初始化流程
+
+```typescript
+load(): Observable<void> {
+  return this.sessionManager.restoreSession().pipe(
+    switchMap((sessionRestored) => {
+      if (sessionRestored) {
+        return this.authStateManager.initialize().pipe(
+          switchMap(() => this.viaMockI18n()),
+          catchError(() => this.viaMockI18n())
+        );
       } else {
-        console.log('使用者未登入');
+        return this.viaMockI18n();
       }
-    });
-
-    // 監聽認證狀態布林值
-    this.authService.isAuthenticated$.subscribe(isAuth => {
-      console.log('認證狀態:', isAuth);
-    });
-  }
+    }),
+    catchError(() => this.viaMockI18n())
+  );
 }
 ```
 
-### 整合認證與 Token 同步
+## 服務依賴關係
 
+```mermaid
+graph TD
+    A[StartupService] --> B[SessionManagerService]
+    A --> C[AuthStateManagerService]
+    
+    C --> D[FirebaseAuthAdapterService]
+    C --> E[TokenSyncService]
+    C --> B
+    C --> F[FirebaseErrorHandlerService]
+    
+    B --> D
+    B --> F
+    
+    E --> G[DA_SERVICE_TOKEN]
+    
+    H[FirebaseTokenInterceptor] --> D
+    H --> F
+    
+    I[FirebaseAuthGuard] --> C
+```
+
+## 類型定義
+
+### AuthState
 ```typescript
-export class AuthIntegrationComponent implements OnInit {
-  private authService = inject(FirebaseAuthAdapterService);
-  private tokenSync = inject(TokenSyncService);
-
-  ngOnInit() {
-    // 監聽認證狀態並自動同步 token
-    this.authService.authState$.subscribe(async user => {
-      if (user) {
-        // 取得 Firebase ID token 並同步到 Alain
-        const idToken = await this.authService.getIdToken().toPromise();
-        if (idToken) {
-          this.tokenSync.syncFirebaseToken(idToken, user).subscribe(() => {
-            console.log('Token 已同步到 ng-alain 系統');
-          });
-        }
-      } else {
-        // 清除所有 token
-        this.tokenSync.clearTokens().subscribe(() => {
-          console.log('所有 token 已清除');
-        });
-      }
-    });
-  }
-
-  signIn() {
-    this.authService.signIn('user@example.com', 'password')
-      .subscribe({
-        next: async (user) => {
-          console.log('Firebase 登入成功', user);
-          // Token 同步會在 authState$ 監聽器中自動處理
-        },
-        error: (error) => console.error('登入失敗', error)
-      });
-  }
+interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  error: string | null;
 }
 ```
 
-### 使用認證狀態管理器（推薦方式）
-
+### SessionData
 ```typescript
-export class AuthManagerComponent implements OnInit {
-  private authStateManager = inject(AuthStateManagerService);
-
-  ngOnInit() {
-    // 初始化認證狀態管理器
-    this.authStateManager.initialize().subscribe();
-
-    // 監聽統一的認證狀態
-    this.authStateManager.authState$.subscribe(state => {
-      console.log('認證狀態:', state);
-      if (state.isAuthenticated) {
-        console.log('使用者已登入:', state.user?.email);
-        console.log('當前 token:', state.token);
-      } else {
-        console.log('使用者未登入');
-      }
-      
-      if (state.loading) {
-        console.log('認證處理中...');
-      }
-      
-      if (state.error) {
-        console.error('認證錯誤:', state.error);
-      }
-    });
-
-    // 監聽特定狀態
-    this.authStateManager.isAuthenticated$.subscribe(isAuth => {
-      console.log('認證狀態變化:', isAuth);
-    });
-
-    this.authStateManager.user$.subscribe(user => {
-      console.log('使用者變化:', user);
-    });
-  }
-
-  // 清除會話（登出）
-  logout() {
-    this.authStateManager.clearSession().subscribe(() => {
-      console.log('已登出');
-    });
-  }
-
-  // 恢復會話
-  restoreSession() {
-    this.authStateManager.restoreSession().subscribe(hasSession => {
-      console.log('會話恢復結果:', hasSession);
-    });
-  }
+interface SessionData {
+  uid: string;
+  email?: string;
+  displayName?: string;
+  photoURL?: string;
+  lastActivity: number;
+  sessionId: string;
+  version: string;
+  createdAt: number;
+  deviceInfo?: string;
 }
 ```
 
-### Token 管理
+## 測試
 
+### 單元測試
+每個服務都有對應的單元測試：
+- `firebase-auth-adapter.service.spec.ts`
+- `token-sync.service.spec.ts`
+- `auth-state-manager.service.spec.ts`
+- `session-manager.service.spec.ts`
+- `firebase-error-handler.service.spec.ts`
+
+### 整合測試
+- `auth-integration.spec.ts` - 服務整合測試
+- `session-persistence.integration.spec.ts` - 會話持久化測試
+
+### 配置測試
+- `app.config.spec.ts` - 應用程式配置測試
+
+## 使用範例
+
+### 基本認證流程
 ```typescript
-export class TokenManagementService {
-  private tokenSync = inject(TokenSyncService);
-  private authStateManager = inject(AuthStateManagerService);
+// 登入
+this.firebaseAuth.signIn(email, password).subscribe(user => {
+  // 認證成功，狀態會自動同步
+});
 
-  // 檢查 token 是否即將過期
-  checkTokenExpiration() {
-    this.tokenSync.monitorTokenExpiration().subscribe(isExpiring => {
-      if (isExpiring) {
-        console.log('Token 即將過期，需要刷新');
-        // 觸發 token 刷新邏輯
-        this.refreshToken();
-      }
-    });
-  }
+// 登出
+this.authStateManager.clearSession().subscribe(() => {
+  // 登出完成，重定向到登入頁面
+});
 
-  // 刷新 token
-  refreshToken() {
-    // 假設從 Firebase 取得新的 token
-    const newToken = 'new-firebase-token';
-    this.authStateManager.handleTokenRefresh(newToken).subscribe(() => {
-      console.log('Token 已刷新');
-    });
+// 檢查認證狀態
+this.authStateManager.isAuthenticated$.subscribe(isAuth => {
+  if (isAuth) {
+    // 用戶已認證
   }
-
-  // 取得當前 Alain 格式的 token
-  getCurrentAlainToken() {
-    const token = this.tokenSync.getCurrentToken();
-    if (token) {
-      console.log('當前 Alain token:', token);
-      return token;
-    }
-    return null;
-  }
-}
+});
 ```
 
-## API 參考
+### 會話管理
+```typescript
+// 手動更新會話活動
+this.sessionManager.updateActivity().subscribe();
 
-### 方法
+// 驗證會話
+this.sessionManager.validateSession().subscribe(isValid => {
+  if (!isValid) {
+    // 會話無效，需要重新登入
+  }
+});
 
-- `signIn(email: string, password: string): Observable<User>` - 使用 email/password 登入
-- `signOut(): Observable<void>` - 登出
-- `getCurrentUser(): Observable<User | null>` - 取得當前使用者
-- `getIdToken(forceRefresh?: boolean): Observable<string | null>` - 取得 ID Token
+// 清理過期會話
+this.sessionManager.cleanupExpiredSessions().subscribe();
+```
 
-### 屬性
+## 最佳實踐
 
-- `authState$: Observable<User | null>` - 認證狀態流
-- `isAuthenticated$: Observable<boolean>` - 認證狀態布林值
+1. **不要直接操作 localStorage 中的會話資料**
+2. **使用 AuthStateManagerService 來檢查認證狀態**
+3. **讓 TokenSyncService 自動處理 token 同步**
+4. **依賴 FirebaseTokenInterceptor 自動附加 tokens**
+5. **使用 FirebaseErrorHandlerService 處理錯誤**
 
-## 設計考量
+## 故障排除
 
-1. **精簡主義**: 僅實作必要功能，避免過度設計
-2. **響應式**: 使用 Observable 模式，便於狀態管理
-3. **錯誤處理**: 統一的錯誤處理機制
-4. **效能優化**: 使用 shareReplay 避免重複訂閱
-5. **測試友善**: 提供完整的測試覆蓋
+### 常見問題
 
-## 後續整合
+1. **Token 未自動附加到請求**
+   - 檢查 `firebaseTokenInterceptor` 是否在攔截器鏈中
+   - 確認用戶已認證且有有效 token
 
-此服務將在後續任務中與以下組件整合：
+2. **會話無法恢復**
+   - 檢查 localStorage 中的會話資料
+   - 確認設備資訊一致性
+   - 檢查會話是否過期
 
-- Token 同步服務 (Task 2)
-- 認證狀態管理器 (Task 3)
-- HTTP 攔截器 (Task 4)
-- 登入組件 (Task 5)
+3. **認證狀態不同步**
+   - 確認 `AuthStateManagerService` 已正確初始化
+   - 檢查 Firebase Auth 狀態變化是否被監聽
+
+4. **服務注入錯誤**
+   - 確認 `provideFirebaseAuthIntegration()` 已在 `app.config.ts` 中調用
+   - 檢查服務依賴關係是否正確
+
+### 調試工具
+
+1. **會話資訊**
+   ```typescript
+   const sessionInfo = this.sessionManager.getCurrentSessionInfo();
+   console.log('Current session:', sessionInfo);
+   ```
+
+2. **認證狀態**
+   ```typescript
+   const authState = this.authStateManager.getCurrentState();
+   console.log('Auth state:', authState);
+   ```
+
+3. **Firebase Auth 狀態**
+   ```typescript
+   this.firebaseAuth.authState$.subscribe(user => {
+     console.log('Firebase user:', user);
+   });
+   ```
