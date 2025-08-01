@@ -12,6 +12,7 @@
         "./custom_modes",
         "./memory-bank"
       ],
+      "disabled": false,
       "autoApprove": [
         "list_allowed_directories",
         "list_directory",
@@ -74,7 +75,9 @@
       ],
       "env": {},
       "disabled": false,
-      "autoApprove": []
+      "autoApprove": [
+        "fetch"
+      ]
     }
   }
 }
