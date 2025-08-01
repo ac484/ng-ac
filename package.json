@@ -19,7 +19,8 @@
     "prepare": "husky install",
     "lint": "pnpm run lint:ts && pnpm run lint:style",
     "lint:ts": "npx eslint --cache --fix",
-    "lint:style": "npx stylelint \\\"src/**/*.less\\\" --fix"
+    "lint:style": "npx stylelint \\\"src/**/*.less\\\" --fix",
+    "build:dev:verbose": "ng build --verbose --configuration=development"
   },
   "private": true,
   "dependencies": {
