@@ -19,12 +19,11 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'app-lock-widget',
-  templateUrl: './lock-widget.component.html',
-  styleUrls: ['./lock-widget.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzAvatarModule, FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzButtonModule, NzInputModule, NzIconModule, NzWaveModule]
+    selector: 'app-lock-widget',
+    templateUrl: './lock-widget.component.html',
+    styleUrls: ['./lock-widget.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzAvatarModule, FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzButtonModule, NzInputModule, NzIconModule, NzWaveModule]
 })
 export class LockWidgetComponent extends BasicConfirmModalComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);

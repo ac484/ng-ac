@@ -27,27 +27,26 @@ interface DataItem {
 }
 
 @Component({
-  selector: 'app-analysis',
-  templateUrl: './analysis.component.html',
-  styleUrls: ['./analysis.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    NzCardModule,
-    NzBreadCrumbModule,
-    NzGridModule,
-    NzIconModule,
-    NzButtonModule,
-    NzToolTipModule,
-    NzDividerModule,
-    NzTabsModule,
-    NzBadgeModule,
-    NzRadioModule,
-    NzDatePickerModule,
-    NzTypographyModule,
-    NzTableModule,
-    NumberLoopPipe
-  ]
+    selector: 'app-analysis',
+    templateUrl: './analysis.component.html',
+    styleUrls: ['./analysis.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NzCardModule,
+        NzBreadCrumbModule,
+        NzGridModule,
+        NzIconModule,
+        NzButtonModule,
+        NzToolTipModule,
+        NzDividerModule,
+        NzTabsModule,
+        NzBadgeModule,
+        NzRadioModule,
+        NzDatePickerModule,
+        NzTypographyModule,
+        NzTableModule,
+        NumberLoopPipe
+    ]
 })
 export class AnalysisComponent implements AfterViewInit {
   destroyRef = inject(DestroyRef);

@@ -8,8 +8,8 @@ import { ThemeOption, NgxEchartsModule } from 'ngx-echarts';
 import { CoolTheme } from './data';
 
 @Component({
-  selector: 'app-theme-charts',
-  template: `
+    selector: 'app-theme-charts',
+    template: `
     <div class="m-b-20">
       <button class="m-r-8 m-b-8" nz-button nzType="default" (click)="theme = 'dark'">dark主题</button>
       <button class="m-r-8 m-b-8" nz-button nzType="default" (click)="theme = 'macarons'">macarons主题</button>
@@ -17,10 +17,9 @@ import { CoolTheme } from './data';
     </div>
     <div class="demo-chart" echarts [options]="options" [theme]="theme"></div>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzButtonModule, NzWaveModule, NgxEchartsModule]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzButtonModule, NzWaveModule, NgxEchartsModule]
 })
 export class ThemeChartsComponent {
   theme: string | ThemeOption = 'dark';

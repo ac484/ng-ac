@@ -5,11 +5,10 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzIconModule, NzButtonModule, RouterOutlet]
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzIconModule, NzButtonModule, RouterOutlet]
 })
 export class LoginComponent {}

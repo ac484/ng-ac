@@ -5,11 +5,10 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { ColorPickerModule } from 'ngx-color-picker';
 
 @Component({
-  selector: 'app-color-sel',
-  templateUrl: './color-sel.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, ColorPickerModule]
+    selector: 'app-color-sel',
+    templateUrl: './color-sel.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, ColorPickerModule]
 })
 export class ColorSelComponent {
   public color: string = '#2889e9';

@@ -14,14 +14,13 @@ const Data = [
 ];
 
 @Component({
-  selector: 'app-draggable-charts',
-  template: `
+    selector: 'app-draggable-charts',
+    template: `
     <div echarts style="height: 600px;" [options]="options" (chartInit)="onChartReady($event)"></div>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgxEchartsModule]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgxEchartsModule]
 })
 export class DraggableChartsComponent implements OnDestroy {
   updatePosition: (() => void) | undefined;

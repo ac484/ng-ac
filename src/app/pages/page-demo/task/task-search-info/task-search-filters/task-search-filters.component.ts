@@ -7,11 +7,10 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
-  selector: 'app-task-search-filters',
-  standalone: true,
-  imports: [CommonModule, NzListModule, NzTypographyModule, NzAvatarModule, NzIconModule],
-  templateUrl: './task-search-filters.component.html',
-  styleUrls: ['./task-search-filters.component.less']
+    selector: 'app-task-search-filters',
+    imports: [CommonModule, NzListModule, NzTypographyModule, NzAvatarModule, NzIconModule],
+    templateUrl: './task-search-filters.component.html',
+    styleUrls: ['./task-search-filters.component.less']
 })
 export class TaskSearchFiltersComponent {
   data1 = [

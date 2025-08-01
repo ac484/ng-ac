@@ -52,13 +52,12 @@ export interface SortFile {
 }
 
 @Component({
-  selector: 'app-ant-table',
-  templateUrl: './ant-table.component.html',
-  styleUrls: ['./ant-table.component.less'],
-  providers: [{ provide: AntTableComponentToken, useExisting: AntTableComponent }],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzTableModule, NzResizableModule, NgClass, NgTemplateOutlet, MapPipe, TableFiledPipe]
+    selector: 'app-ant-table',
+    templateUrl: './ant-table.component.html',
+    styleUrls: ['./ant-table.component.less'],
+    providers: [{ provide: AntTableComponentToken, useExisting: AntTableComponent }],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzTableModule, NzResizableModule, NgClass, NgTemplateOutlet, MapPipe, TableFiledPipe]
 })
 export class AntTableComponent implements OnInit, OnChanges {
   _dataList!: NzSafeAny[];

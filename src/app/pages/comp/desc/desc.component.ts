@@ -9,11 +9,10 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @Component({
-  selector: 'app-desc',
-  templateUrl: './desc.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzGridModule, NzCardModule, NzDescriptionsModule, NzToolTipModule, NzIconModule, NzButtonModule]
+    selector: 'app-desc',
+    templateUrl: './desc.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzGridModule, NzCardModule, NzDescriptionsModule, NzToolTipModule, NzIconModule, NzButtonModule]
 })
 export class DescComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

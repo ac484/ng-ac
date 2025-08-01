@@ -7,8 +7,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 @Component({
-  selector: 'app-instance-opts-charts',
-  template: `
+    selector: 'app-instance-opts-charts',
+    template: `
     <div class="m-b-20">
       <button class="m-r-8 m-b-8" nz-button nzType="default" (click)="callMethod('getWidth')">getWidth()</button>
       <button class="m-r-8 m-b-8" nz-button nzType="default" (click)="callMethod('getHeight')">getHeight()</button>
@@ -18,10 +18,9 @@ import { NgxEchartsModule } from 'ngx-echarts';
     </div>
     <div class="demo-chart" echarts [options]="options" (chartInit)="onChartInit($event)"></div>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzButtonModule, NzWaveModule, NgxEchartsModule]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzButtonModule, NzWaveModule, NgxEchartsModule]
 })
 export class InstanceOptsChartsComponent {
   chartInstance: any;

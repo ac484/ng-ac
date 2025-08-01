@@ -40,33 +40,32 @@ enum TabEnum {
 }
 
 @Component({
-  selector: 'app-adv-detail',
-  templateUrl: './adv-detail.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzRadioModule,
-    NzDropDownModule,
-    NzIconModule,
-    NzButtonModule,
-    NzMenuModule,
-    NzWaveModule,
-    NzGridModule,
-    NzDescriptionsModule,
-    NzStatisticModule,
-    NzTabsModule,
-    NzCardModule,
-    WaterMarkComponent,
-    NzStepsModule,
-    NzPopoverModule,
-    NgTemplateOutlet,
-    NzBadgeModule,
-    NzToolTipModule,
-    NzDividerModule,
-    NzEmptyModule,
-    AntTableComponent
-  ]
+    selector: 'app-adv-detail',
+    templateUrl: './adv-detail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        NzRadioModule,
+        NzDropDownModule,
+        NzIconModule,
+        NzButtonModule,
+        NzMenuModule,
+        NzWaveModule,
+        NzGridModule,
+        NzDescriptionsModule,
+        NzStatisticModule,
+        NzTabsModule,
+        NzCardModule,
+        WaterMarkComponent,
+        NzStepsModule,
+        NzPopoverModule,
+        NgTemplateOutlet,
+        NzBadgeModule,
+        NzToolTipModule,
+        NzDividerModule,
+        NzEmptyModule,
+        AntTableComponent
+    ]
 })
 export class AdvDetailComponent implements OnInit, AfterViewInit {
   @ViewChild('headerExtra', { static: false }) headerExtra!: TemplateRef<NzSafeAny>;

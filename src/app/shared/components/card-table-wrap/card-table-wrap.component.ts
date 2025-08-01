@@ -26,28 +26,27 @@ interface TableSizeItem {
 }
 
 @Component({
-  selector: 'app-card-table-wrap',
-  templateUrl: './card-table-wrap.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    NzCardModule,
-    NgTemplateOutlet,
-    NzDividerModule,
-    NzSpaceModule,
-    NzIconModule,
-    NzButtonModule,
-    NzPopoverModule,
-    NzToolTipModule,
-    ScreenLessHiddenDirective,
-    NzDropDownModule,
-    NzMenuModule,
-    CdkDropList,
-    CdkDrag,
-    CdkDragHandle,
-    NzCheckboxModule,
-    NgStyle
-  ]
+    selector: 'app-card-table-wrap',
+    templateUrl: './card-table-wrap.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NzCardModule,
+        NgTemplateOutlet,
+        NzDividerModule,
+        NzSpaceModule,
+        NzIconModule,
+        NzButtonModule,
+        NzPopoverModule,
+        NzToolTipModule,
+        ScreenLessHiddenDirective,
+        NzDropDownModule,
+        NzMenuModule,
+        CdkDropList,
+        CdkDrag,
+        CdkDragHandle,
+        NzCheckboxModule,
+        NgStyle
+    ]
 })
 export class CardTableWrapComponent implements AfterContentInit {
   @Input() tableTitle: string | TemplateRef<NzSafeAny> | undefined;

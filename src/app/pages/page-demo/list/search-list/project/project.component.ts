@@ -17,27 +17,26 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
-  selector: 'app-project',
-  templateUrl: './project.component.html',
-  styleUrls: ['./project.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    NzCardModule,
-    WaterMarkComponent,
-    NzGridModule,
-    NgStyle,
-    NzTagModule,
-    NzIconModule,
-    NzButtonModule,
-    NzDividerModule,
-    NzSelectModule,
-    FormsModule,
-    NzTypographyModule,
-    NzAvatarModule,
-    NzToolTipModule,
-    NumberLoopPipe
-  ]
+    selector: 'app-project',
+    templateUrl: './project.component.html',
+    styleUrls: ['./project.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NzCardModule,
+        WaterMarkComponent,
+        NzGridModule,
+        NgStyle,
+        NzTagModule,
+        NzIconModule,
+        NzButtonModule,
+        NzDividerModule,
+        NzSelectModule,
+        FormsModule,
+        NzTypographyModule,
+        NzAvatarModule,
+        NzToolTipModule,
+        NumberLoopPipe
+    ]
 })
 export class ProjectComponent {
   expanded = false;

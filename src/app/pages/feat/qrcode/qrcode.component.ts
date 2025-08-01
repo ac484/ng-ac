@@ -5,12 +5,11 @@ import { PageHeaderComponent, PageHeaderType } from '@shared/components/page-hea
 import { NzQRCodeModule } from 'ng-zorro-antd/qr-code';
 
 @Component({
-  selector: 'app-qrcode',
-  standalone: true,
-  imports: [CommonModule, NzQRCodeModule, PageHeaderComponent],
-  templateUrl: './qrcode.component.html',
-  styleUrls: ['./qrcode.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-qrcode',
+    imports: [CommonModule, NzQRCodeModule, PageHeaderComponent],
+    templateUrl: './qrcode.component.html',
+    styleUrls: ['./qrcode.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QrcodeComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

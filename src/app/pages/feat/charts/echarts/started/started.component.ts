@@ -18,11 +18,10 @@ import { NzTabPosition } from 'ng-zorro-antd/tabs/interfaces';
 type targetComp = EventsChartsComponent | InitOptsChartsComponent | InstanceOptsChartsComponent | LoadingChartsComponent | MergeChartsComponent | SimpleChartComponent | ThemeChartsComponent;
 
 @Component({
-  selector: 'app-started',
-  templateUrl: './started.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzCardModule, NzTabsModule, PortalModule]
+    selector: 'app-started',
+    templateUrl: './started.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzCardModule, NzTabsModule, PortalModule]
 })
 export class StartedComponent implements OnInit {
   tabPosition: NzTabPosition = 'left';

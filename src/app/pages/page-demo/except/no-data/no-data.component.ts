@@ -5,11 +5,10 @@ import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 import { NzResultModule } from 'ng-zorro-antd/result';
 
 @Component({
-  selector: 'app-no-data',
-  templateUrl: './no-data.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzResultModule, NzButtonModule, NzWaveModule]
+    selector: 'app-no-data',
+    templateUrl: './no-data.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzResultModule, NzButtonModule, NzWaveModule]
 })
 export class NoDataComponent {
   img = '../../../../../assets/imgs/except/no-data.svg';

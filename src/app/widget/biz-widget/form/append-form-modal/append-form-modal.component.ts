@@ -15,11 +15,10 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzSliderModule } from 'ng-zorro-antd/slider';
 
 @Component({
-  selector: 'app-append-form-modal',
-  templateUrl: './append-form-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzInputModule, NzDatePickerModule, NzSliderModule]
+    selector: 'app-append-form-modal',
+    templateUrl: './append-form-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzInputModule, NzDatePickerModule, NzSliderModule]
 })
 export class AppendFormModalComponent implements OnInit {
   addEditForm!: FormGroup;

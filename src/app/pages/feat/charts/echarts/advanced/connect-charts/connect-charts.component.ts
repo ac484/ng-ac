@@ -6,8 +6,8 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 @Component({
-  selector: 'app-connect-charts',
-  template: `
+    selector: 'app-connect-charts',
+    template: `
     <div nz-row>
       <div nz-col nzSpan="12">
         <h5>id=chart1</h5>
@@ -19,10 +19,9 @@ import { NgxEchartsModule } from 'ngx-echarts';
       </div>
     </div>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzGridModule, NgxEchartsModule]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzGridModule, NgxEchartsModule]
 })
 export class ConnectChartsComponent implements AfterViewInit {
   options: EChartsOption = {

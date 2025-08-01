@@ -13,12 +13,11 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
-  selector: 'app-step-one',
-  templateUrl: './step-one.component.html',
-  styleUrls: ['./step-one.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzSelectModule, NzButtonModule, NzInputModule, NzWaveModule, NzDividerModule, NzTypographyModule]
+    selector: 'app-step-one',
+    templateUrl: './step-one.component.html',
+    styleUrls: ['./step-one.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzSelectModule, NzButtonModule, NzInputModule, NzWaveModule, NzDividerModule, NzTypographyModule]
 })
 export class StepOneComponent implements OnInit {
   @Input('stepDirection') stepDirection: 'horizontal' | 'vertical' = 'horizontal';

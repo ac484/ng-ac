@@ -14,12 +14,11 @@ type msgType = common | 'loading';
 type confirmType = common | 'info' | 'confirm';
 
 @Component({
-  selector: 'app-button',
-  templateUrl: './msg.component.html',
-  styleUrls: ['./msg.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule, NzIconModule, NzNotificationServiceModule]
+    selector: 'app-button',
+    templateUrl: './msg.component.html',
+    styleUrls: ['./msg.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule, NzIconModule, NzNotificationServiceModule]
 })
 export class MsgComponent {
   map = {

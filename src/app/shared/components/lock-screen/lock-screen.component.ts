@@ -23,12 +23,11 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { ChangNumberToChinesePipe } from '../../pipes/chang-number-to-chinese.pipe';
 
 @Component({
-  selector: 'app-lock-screen',
-  templateUrl: './lock-screen.component.html',
-  styleUrls: ['./lock-screen.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzIconModule, NzButtonModule, NzGridModule, NzAvatarModule, FormsModule, NzFormModule, ReactiveFormsModule, NzInputModule, ChangNumberToChinesePipe, AsyncPipe, DatePipe]
+    selector: 'app-lock-screen',
+    templateUrl: './lock-screen.component.html',
+    styleUrls: ['./lock-screen.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzIconModule, NzButtonModule, NzGridModule, NzAvatarModule, FormsModule, NzFormModule, ReactiveFormsModule, NzInputModule, ChangNumberToChinesePipe, AsyncPipe, DatePipe]
 })
 export class LockScreenComponent implements OnInit {
   public showUnlock = false;

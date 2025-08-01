@@ -10,11 +10,10 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 
 @Component({
-  selector: 'app-strength-meter',
-  templateUrl: './strength-meter.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzGridModule, NzCardModule, NzButtonModule, NzInputModule, FormsModule, PasswordStrengthMeterComponent, NzIconModule]
+    selector: 'app-strength-meter',
+    templateUrl: './strength-meter.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzGridModule, NzCardModule, NzButtonModule, NzInputModule, FormsModule, PasswordStrengthMeterComponent, NzIconModule]
 })
 export class StrengthMeterComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

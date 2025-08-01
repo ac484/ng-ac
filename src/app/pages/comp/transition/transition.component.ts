@@ -12,12 +12,11 @@ import { DemoOnEnterOnLeaveComponent } from './demo-on-enter-on-leave/demo-on-en
 import { ExperimentsComponent } from './experiments/experiments.component';
 
 @Component({
-  selector: 'app-transition',
-  templateUrl: './transition.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [fadeInOnEnterAnimation(), fadeOutOnLeaveAnimation(), rubberBandAnimation(), collapseAnimation()],
-  standalone: true,
-  imports: [PageHeaderComponent, NzButtonModule, NzWaveModule, NzCardModule, DemoMainComponent, DemoOnEnterOnLeaveComponent, DemoDynamicParamsComponent, ExperimentsComponent]
+    selector: 'app-transition',
+    templateUrl: './transition.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [fadeInOnEnterAnimation(), fadeOutOnLeaveAnimation(), rubberBandAnimation(), collapseAnimation()],
+    imports: [PageHeaderComponent, NzButtonModule, NzWaveModule, NzCardModule, DemoMainComponent, DemoOnEnterOnLeaveComponent, DemoDynamicParamsComponent, ExperimentsComponent]
 })
 export class TransitionComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

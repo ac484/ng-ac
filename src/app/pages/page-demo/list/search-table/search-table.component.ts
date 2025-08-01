@@ -26,25 +26,24 @@ interface SearchParam {
 }
 
 @Component({
-  selector: 'app-search-table',
-  templateUrl: './search-table.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzCardModule,
-    WaterMarkComponent,
-    FormsModule,
-    NzFormModule,
-    NzGridModule,
-    NzInputModule,
-    NzButtonModule,
-    NzWaveModule,
-    NzIconModule,
-    CardTableWrapComponent,
-    AntTableComponent,
-    NzBadgeModule
-  ]
+    selector: 'app-search-table',
+    templateUrl: './search-table.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        NzCardModule,
+        WaterMarkComponent,
+        FormsModule,
+        NzFormModule,
+        NzGridModule,
+        NzInputModule,
+        NzButtonModule,
+        NzWaveModule,
+        NzIconModule,
+        CardTableWrapComponent,
+        AntTableComponent,
+        NzBadgeModule
+    ]
 })
 export class SearchTableComponent implements OnInit {
   searchParam: Partial<SearchParam> = {};

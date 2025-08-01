@@ -10,11 +10,10 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 
 @Component({
-  selector: 'app-rich-text',
-  templateUrl: './rich-text.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, WaterMarkComponent, FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, EditorComponent]
+    selector: 'app-rich-text',
+    templateUrl: './rich-text.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, WaterMarkComponent, FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, EditorComponent]
 })
 export class RichTextComponent {
   private fb = inject(NonNullableFormBuilder);

@@ -18,17 +18,16 @@ enum TabEnum {
 type targetComp = StartedComponent | AdvancedComponent | SeriesComponent;
 
 @Component({
-  selector: 'app-echarts',
-  templateUrl: './echarts.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, PortalModule, NzTabsModule, NgxEchartsModule],
-  providers: [
-    {
-      provide: NGX_ECHARTS_CONFIG,
-      useFactory: () => ({ echarts: () => import('echarts') })
-    }
-  ]
+    selector: 'app-echarts',
+    templateUrl: './echarts.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, PortalModule, NzTabsModule, NgxEchartsModule],
+    providers: [
+        {
+            provide: NGX_ECHARTS_CONFIG,
+            useFactory: () => ({ echarts: () => import('echarts') })
+        }
+    ]
 })
 export class EchartsComponent implements OnInit, AfterViewInit {
   pageHeaderInfo: Partial<PageHeaderType> = {

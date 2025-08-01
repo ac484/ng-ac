@@ -12,11 +12,10 @@ import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @Component({
-  selector: 'app-dept-manage-modal',
-  templateUrl: './dept-manage-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzInputModule, NzRadioModule]
+    selector: 'app-dept-manage-modal',
+    templateUrl: './dept-manage-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzInputModule, NzRadioModule]
 })
 export class DeptManageModalComponent implements OnInit {
   addEditForm!: FormGroup;

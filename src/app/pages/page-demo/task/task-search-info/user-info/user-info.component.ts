@@ -7,10 +7,9 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzListModule } from 'ng-zorro-antd/list';
 
 @Component({
-  selector: 'app-user-info',
-  standalone: true,
-  imports: [CommonModule, NzCardModule, NzAvatarModule, NzIconModule, NzListModule, NgOptimizedImage],
-  templateUrl: './user-info.component.html',
-  styleUrls: ['./user-info.component.less']
+    selector: 'app-user-info',
+    imports: [CommonModule, NzCardModule, NzAvatarModule, NzIconModule, NzListModule, NgOptimizedImage],
+    templateUrl: './user-info.component.html',
+    styleUrls: ['./user-info.component.less']
 })
 export class UserInfoComponent {}

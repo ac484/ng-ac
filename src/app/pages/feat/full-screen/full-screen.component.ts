@@ -8,11 +8,10 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import screenfull from 'screenfull';
 
 @Component({
-  selector: 'app-full-screen',
-  templateUrl: './full-screen.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, NzSpaceModule, NzButtonModule, NzWaveModule]
+    selector: 'app-full-screen',
+    templateUrl: './full-screen.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, NzSpaceModule, NzButtonModule, NzWaveModule]
 })
 export class FullScreenComponent implements OnInit {
   pageHeaderInfo: Partial<PageHeaderType> = {

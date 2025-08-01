@@ -20,29 +20,28 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 
 @Component({
-  selector: 'app-standard-table',
-  templateUrl: './standard-table.component.html',
-  styleUrls: ['./standard-table.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzCardModule,
-    WaterMarkComponent,
-    NzGridModule,
-    NzStatisticModule,
-    NzDividerModule,
-    NzRadioModule,
-    NzButtonModule,
-    NzInputModule,
-    NzWaveModule,
-    NzIconModule,
-    NzListModule,
-    NzProgressModule,
-    NzDropDownModule,
-    NzMenuModule,
-    NzPaginationModule
-  ]
+    selector: 'app-standard-table',
+    templateUrl: './standard-table.component.html',
+    styleUrls: ['./standard-table.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        NzCardModule,
+        WaterMarkComponent,
+        NzGridModule,
+        NzStatisticModule,
+        NzDividerModule,
+        NzRadioModule,
+        NzButtonModule,
+        NzInputModule,
+        NzWaveModule,
+        NzIconModule,
+        NzListModule,
+        NzProgressModule,
+        NzDropDownModule,
+        NzMenuModule,
+        NzPaginationModule
+    ]
 })
 export class StandardTableComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

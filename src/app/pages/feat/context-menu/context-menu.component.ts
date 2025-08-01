@@ -8,11 +8,10 @@ import { NzContextMenuService, NzDropdownMenuComponent, NzDropDownModule } from 
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 
 @Component({
-  selector: 'app-context-menu',
-  templateUrl: './context-menu.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule, NzDropDownModule, NzMenuModule]
+    selector: 'app-context-menu',
+    templateUrl: './context-menu.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule, NzDropDownModule, NzMenuModule]
 })
 export class ContextMenuComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

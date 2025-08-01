@@ -17,12 +17,11 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 
 /*https://www.npmjs.com/package/angular-password-strength-meter*/
 @Component({
-  selector: 'app-regist-login',
-  templateUrl: './regist-login.component.html',
-  styleUrls: ['./regist-login.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzInputModule, NzButtonModule, NzWaveModule, NgStyle, PasswordStrengthMeterComponent, NzIconModule, NzCheckboxModule]
+    selector: 'app-regist-login',
+    templateUrl: './regist-login.component.html',
+    styleUrls: ['./regist-login.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzInputModule, NzButtonModule, NzWaveModule, NgStyle, PasswordStrengthMeterComponent, NzIconModule, NzCheckboxModule]
 })
 export class RegistLoginComponent implements OnInit {
   validateForm!: FormGroup;

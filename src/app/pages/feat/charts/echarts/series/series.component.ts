@@ -14,11 +14,10 @@ import { NzTabPosition } from 'ng-zorro-antd/tabs/interfaces';
 type targetComp = SimpleGraphComponent | FromLeftToRightComponent | RadialTreeComponent;
 
 @Component({
-  selector: 'app-series',
-  templateUrl: './series.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzCardModule, NzTabsModule, PortalModule]
+    selector: 'app-series',
+    templateUrl: './series.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzCardModule, NzTabsModule, PortalModule]
 })
 export class SeriesComponent implements OnInit {
   destroyRef = inject(DestroyRef);

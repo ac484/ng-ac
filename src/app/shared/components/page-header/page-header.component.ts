@@ -16,12 +16,11 @@ export interface PageHeaderType {
 }
 
 @Component({
-  selector: 'app-page-header',
-  templateUrl: './page-header.component.html',
-  styleUrls: ['./page-header.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzPageHeaderModule, NzBreadCrumbModule, NzOutletModule]
+    selector: 'app-page-header',
+    templateUrl: './page-header.component.html',
+    styleUrls: ['./page-header.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzPageHeaderModule, NzBreadCrumbModule, NzOutletModule]
 })
 export class PageHeaderComponent implements OnInit {
   private themesService = inject(ThemeService);

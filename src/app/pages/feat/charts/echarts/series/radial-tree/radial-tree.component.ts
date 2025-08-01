@@ -6,14 +6,13 @@ import { map } from 'rxjs/operators';
 
 import { NgxEchartsModule } from 'ngx-echarts';
 @Component({
-  selector: 'app-radial-tree',
-  template: `
+    selector: 'app-radial-tree',
+    template: `
     <div class="demo-chart" echarts [options]="options | async"></div>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgxEchartsModule, AsyncPipe]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgxEchartsModule, AsyncPipe]
 })
 export class RadialTreeComponent implements OnInit {
   // @ts-ignore

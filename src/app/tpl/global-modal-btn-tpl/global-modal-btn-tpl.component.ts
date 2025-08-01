@@ -13,12 +13,11 @@ export abstract class GlobalModalBtnTplComponentToken {
 }
 
 @Component({
-  selector: 'app-global-modal-btn-tpl',
-  standalone: true,
-  imports: [NzIconModule, AsyncPipe],
-  templateUrl: './global-modal-btn-tpl.component.html',
-  providers: [{ provide: GlobalModalBtnTplComponentToken, useExisting: GlobalModalBtnTplComponent }],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-global-modal-btn-tpl',
+    imports: [NzIconModule, AsyncPipe],
+    templateUrl: './global-modal-btn-tpl.component.html',
+    providers: [{ provide: GlobalModalBtnTplComponentToken, useExisting: GlobalModalBtnTplComponent }],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GlobalModalBtnTplComponent implements GlobalModalBtnTplComponentToken {
   @ViewChild('componentTpl', { static: true }) componentTpl!: TemplateRef<any>;

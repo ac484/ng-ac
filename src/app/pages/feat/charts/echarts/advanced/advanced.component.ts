@@ -13,11 +13,10 @@ import { NzTabPosition } from 'ng-zorro-antd/tabs/interfaces';
 type targetComp = ConnectChartsComponent | DraggableChartsComponent;
 
 @Component({
-  selector: 'app-advanced',
-  templateUrl: './advanced.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzCardModule, NzTabsModule, PortalModule]
+    selector: 'app-advanced',
+    templateUrl: './advanced.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzCardModule, NzTabsModule, PortalModule]
 })
 export class AdvancedComponent implements OnInit {
   componentPortal?: ComponentPortal<targetComp>;

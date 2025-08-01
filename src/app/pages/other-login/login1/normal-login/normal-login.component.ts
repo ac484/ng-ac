@@ -19,12 +19,11 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 
 @Component({
-  selector: 'app-normal-login',
-  templateUrl: './normal-login.component.html',
-  styleUrls: ['./normal-login.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzInputModule, NzButtonModule, NzIconModule, NzCheckboxModule, NzWaveModule, NzDividerModule]
+    selector: 'app-normal-login',
+    templateUrl: './normal-login.component.html',
+    styleUrls: ['./normal-login.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzInputModule, NzButtonModule, NzIconModule, NzCheckboxModule, NzWaveModule, NzDividerModule]
 })
 export class NormalLoginComponent implements OnInit {
   validateForm!: FormGroup;

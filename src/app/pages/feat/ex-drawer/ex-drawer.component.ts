@@ -10,11 +10,10 @@ import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 import { NzInputModule } from 'ng-zorro-antd/input';
 
 @Component({
-  selector: 'app-ex-drawer',
-  templateUrl: './ex-drawer.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzInputModule, FormsModule, NzButtonModule, NzWaveModule]
+    selector: 'app-ex-drawer',
+    templateUrl: './ex-drawer.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzInputModule, FormsModule, NzButtonModule, NzWaveModule]
 })
 export class ExDrawerComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

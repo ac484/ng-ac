@@ -38,27 +38,26 @@ interface SearchParam {
 }
 
 @Component({
-  selector: 'app-account',
-  templateUrl: './account.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzGridModule,
-    DeptTreeComponent,
-    NzCardModule,
-    FormsModule,
-    NzFormModule,
-    NzInputModule,
-    NzSelectModule,
-    NzButtonModule,
-    NzWaveModule,
-    NzIconModule,
-    CardTableWrapComponent,
-    AntTableComponent,
-    AuthDirective,
-    NzSwitchModule
-  ]
+    selector: 'app-account',
+    templateUrl: './account.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        NzGridModule,
+        DeptTreeComponent,
+        NzCardModule,
+        FormsModule,
+        NzFormModule,
+        NzInputModule,
+        NzSelectModule,
+        NzButtonModule,
+        NzWaveModule,
+        NzIconModule,
+        CardTableWrapComponent,
+        AntTableComponent,
+        AuthDirective,
+        NzSwitchModule
+    ]
 })
 export class AccountComponent implements OnInit {
   @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<any>;

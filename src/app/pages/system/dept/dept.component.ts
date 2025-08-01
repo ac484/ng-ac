@@ -36,27 +36,26 @@ interface SearchParam {
 }
 
 @Component({
-  selector: 'app-dept',
-  templateUrl: './dept.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzCardModule,
-    FormsModule,
-    NzFormModule,
-    NzGridModule,
-    NzInputModule,
-    NzSelectModule,
-    NzButtonModule,
-    NzWaveModule,
-    NzIconModule,
-    CardTableWrapComponent,
-    TreeTableComponent,
-    AuthDirective,
-    NgTemplateOutlet,
-    NzTagModule
-  ]
+    selector: 'app-dept',
+    templateUrl: './dept.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        NzCardModule,
+        FormsModule,
+        NzFormModule,
+        NzGridModule,
+        NzInputModule,
+        NzSelectModule,
+        NzButtonModule,
+        NzWaveModule,
+        NzIconModule,
+        CardTableWrapComponent,
+        TreeTableComponent,
+        AuthDirective,
+        NgTemplateOutlet,
+        NzTagModule
+    ]
 })
 export class DeptComponent implements OnInit {
   @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<NzSafeAny>;

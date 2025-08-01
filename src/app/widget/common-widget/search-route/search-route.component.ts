@@ -31,12 +31,11 @@ interface ResultItem {
 const passiveEventListenerOptions = <AddEventListenerOptions>normalizePassiveListenerOptions({ passive: true });
 
 @Component({
-  selector: 'app-search-route',
-  templateUrl: './search-route.component.html',
-  styleUrls: ['./search-route.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzButtonModule, NzInputModule, FormsModule, NzIconModule, NzEmptyModule, NzGridModule, NzDividerModule]
+    selector: 'app-search-route',
+    templateUrl: './search-route.component.html',
+    styleUrls: ['./search-route.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzButtonModule, NzInputModule, FormsModule, NzIconModule, NzEmptyModule, NzGridModule, NzDividerModule]
 })
 export class SearchRouteComponent extends BasicConfirmModalComponent implements OnInit, AfterViewInit {
   private cdr = inject(ChangeDetectorRef);

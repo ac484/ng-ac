@@ -8,12 +8,11 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 
 @Component({
-  selector: 'app-task',
-  standalone: true,
-  imports: [CommonModule, PageHeaderComponent, NzGridModule, TaskSearchInfoComponent, NzCardModule, TaskListPanelComponent],
-  templateUrl: './task.component.html',
-  styleUrls: ['./task.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-task',
+    imports: [CommonModule, PageHeaderComponent, NzGridModule, TaskSearchInfoComponent, NzCardModule, TaskListPanelComponent],
+    templateUrl: './task.component.html',
+    styleUrls: ['./task.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

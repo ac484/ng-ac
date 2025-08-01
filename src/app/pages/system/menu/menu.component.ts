@@ -37,28 +37,27 @@ interface SearchParam {
 }
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    WaterMarkComponent,
-    NzCardModule,
-    FormsModule,
-    NzFormModule,
-    NzGridModule,
-    NzInputModule,
-    NzSelectModule,
-    NzButtonModule,
-    NzWaveModule,
-    NzIconModule,
-    CardTableWrapComponent,
-    TreeTableComponent,
-    AuthDirective,
-    NgTemplateOutlet,
-    NzTagModule
-  ]
+    selector: 'app-menu',
+    templateUrl: './menu.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        WaterMarkComponent,
+        NzCardModule,
+        FormsModule,
+        NzFormModule,
+        NzGridModule,
+        NzInputModule,
+        NzSelectModule,
+        NzButtonModule,
+        NzWaveModule,
+        NzIconModule,
+        CardTableWrapComponent,
+        TreeTableComponent,
+        AuthDirective,
+        NgTemplateOutlet,
+        NzTagModule
+    ]
 })
 export class MenuComponent implements OnInit {
   @ViewChild('zorroIconTpl', { static: true }) zorroIconTpl!: TemplateRef<NzSafeAny>;

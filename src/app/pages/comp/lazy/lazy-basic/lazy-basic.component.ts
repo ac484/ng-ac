@@ -7,13 +7,12 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 
 @Component({
-  selector: 'app-lazy-basic',
-  templateUrl: './lazy-basic.component.html',
-  styleUrls: ['./lazy-basic.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [LazyServiceService],
-  standalone: true,
-  imports: [PageHeaderComponent, NzButtonModule, NzWaveModule, AdDirective]
+    selector: 'app-lazy-basic',
+    templateUrl: './lazy-basic.component.html',
+    styleUrls: ['./lazy-basic.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [LazyServiceService],
+    imports: [PageHeaderComponent, NzButtonModule, NzWaveModule, AdDirective]
 })
 export class LazyBasicComponent implements AfterViewInit {
   lazyServiceService = inject(LazyServiceService);

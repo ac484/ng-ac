@@ -15,8 +15,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { fadeRouteAnimation } from './animations/fade.animation';
 
 @Component({
-  selector: 'app-root',
-  template: `
+    selector: 'app-root',
+    template: `
     @if ((lockedState$ | async)!.locked) {
       <app-lock-screen></app-lock-screen>
     }
@@ -32,10 +32,9 @@ import { fadeRouteAnimation } from './animations/fade.animation';
       </div>
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [fadeRouteAnimation],
-  standalone: true,
-  imports: [LockScreenComponent, NzBackTopModule, RouterOutlet, NzSpinModule, AsyncPipe]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [fadeRouteAnimation],
+    imports: [LockScreenComponent, NzBackTopModule, RouterOutlet, NzSpinModule, AsyncPipe]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   private preloader = inject(PreloaderService);

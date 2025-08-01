@@ -4,8 +4,8 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import LinearGradient from 'zrender/lib/graphic/LinearGradient';
 
 @Component({
-  selector: 'app-events-charts',
-  template: `
+    selector: 'app-events-charts',
+    template: `
     <div
       class="demo-chart"
       echarts
@@ -22,10 +22,9 @@ import LinearGradient from 'zrender/lib/graphic/LinearGradient';
       (chartMouseUp)="onChartEvent($event, 'chartMouseUp')"
     ></div>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgxEchartsModule]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgxEchartsModule]
 })
 export class EventsChartsComponent implements OnInit {
   options: any;

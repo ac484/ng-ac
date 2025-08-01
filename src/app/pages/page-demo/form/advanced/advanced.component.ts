@@ -20,25 +20,24 @@ import { WarehouseManageFormComponent as WarehouseManageFormComponent_1 } from '
 // 自定义表单
 /*https://juejin.cn/post/6844904018922176520*/
 @Component({
-  selector: 'app-advanced',
-  templateUrl: './advanced.component.html',
-  styleUrls: ['./advanced.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    FormsModule,
-    NzFormModule,
-    ReactiveFormsModule,
-    NzCardModule,
-    WaterMarkComponent,
-    WarehouseManageFormComponent_1,
-    TaskManageFormComponent_1,
-    UserMemberManageComponent,
-    FooterSubmitComponent,
-    NzButtonModule,
-    NzWaveModule
-  ]
+    selector: 'app-advanced',
+    templateUrl: './advanced.component.html',
+    styleUrls: ['./advanced.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        FormsModule,
+        NzFormModule,
+        ReactiveFormsModule,
+        NzCardModule,
+        WaterMarkComponent,
+        WarehouseManageFormComponent_1,
+        TaskManageFormComponent_1,
+        UserMemberManageComponent,
+        FooterSubmitComponent,
+        NzButtonModule,
+        NzWaveModule
+    ]
 })
 export class AdvancedComponent implements OnInit {
   @ViewChild('warehouseManageComponent') warehouseManageComponent!: WarehouseManageFormComponent;

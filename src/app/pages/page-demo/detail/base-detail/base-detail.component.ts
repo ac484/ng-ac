@@ -18,11 +18,10 @@ interface ReturnObj {
 }
 
 @Component({
-  selector: 'app-base-detail',
-  templateUrl: './base-detail.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, WaterMarkComponent, NzDescriptionsModule, NzDividerModule, AntTableComponent]
+    selector: 'app-base-detail',
+    templateUrl: './base-detail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, WaterMarkComponent, NzDescriptionsModule, NzDividerModule, AntTableComponent]
 })
 export class BaseDetailComponent implements OnInit {
   @ViewChild('returnProductTpl', { static: true }) returnProductTpl!: TemplateRef<NzSafeAny>;

@@ -26,27 +26,26 @@ interface TabInterface {
 }
 
 @Component({
-  selector: 'app-personal-center',
-  templateUrl: './personal-center.component.html',
-  styleUrls: ['./personal-center.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    NzGridModule,
-    NzCardModule,
-    NzAvatarModule,
-    NzTypographyModule,
-    NzIconModule,
-    NzButtonModule,
-    NzDividerModule,
-    NzTagModule,
-    NzNoAnimationModule,
-    NzInputModule,
-    FormsModule,
-    NzTabsModule,
-    AdDirective,
-    NumberLoopPipe
-  ]
+    selector: 'app-personal-center',
+    templateUrl: './personal-center.component.html',
+    styleUrls: ['./personal-center.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NzGridModule,
+        NzCardModule,
+        NzAvatarModule,
+        NzTypographyModule,
+        NzIconModule,
+        NzButtonModule,
+        NzDividerModule,
+        NzTagModule,
+        NzNoAnimationModule,
+        NzInputModule,
+        FormsModule,
+        NzTabsModule,
+        AdDirective,
+        NumberLoopPipe
+    ]
 })
 export class PersonalCenterComponent implements OnInit {
   tagArray: string[] = ['很有想法的', '专注设计', '大长腿', '川妹子', '海纳百川'];

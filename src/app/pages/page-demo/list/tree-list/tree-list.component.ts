@@ -28,25 +28,24 @@ interface SearchParam {
 }
 
 @Component({
-  selector: 'app-tree-list',
-  templateUrl: './tree-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzCardModule,
-    WaterMarkComponent,
-    FormsModule,
-    NzFormModule,
-    NzGridModule,
-    NzInputModule,
-    NzButtonModule,
-    NzWaveModule,
-    NzIconModule,
-    CardTableWrapComponent,
-    TreeTableComponent,
-    NzBadgeModule
-  ]
+    selector: 'app-tree-list',
+    templateUrl: './tree-list.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        NzCardModule,
+        WaterMarkComponent,
+        FormsModule,
+        NzFormModule,
+        NzGridModule,
+        NzInputModule,
+        NzButtonModule,
+        NzWaveModule,
+        NzIconModule,
+        CardTableWrapComponent,
+        TreeTableComponent,
+        NzBadgeModule
+    ]
 })
 export class TreeListComponent implements OnInit {
   @ViewChild('highLightTpl', { static: true }) highLightTpl!: TemplateRef<NzSafeAny>;

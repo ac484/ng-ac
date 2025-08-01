@@ -5,12 +5,11 @@ import { PageHeaderComponent, PageHeaderType } from '@shared/components/page-hea
 import { NzWaterMarkModule } from 'ng-zorro-antd/water-mark';
 
 @Component({
-  selector: 'app-water-mark',
-  standalone: true,
-  imports: [CommonModule, NzWaterMarkModule, PageHeaderComponent],
-  templateUrl: './water-mark.component.html',
-  styleUrls: ['./water-mark.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-water-mark',
+    imports: [CommonModule, NzWaterMarkModule, PageHeaderComponent],
+    templateUrl: './water-mark.component.html',
+    styleUrls: ['./water-mark.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WaterMarkComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

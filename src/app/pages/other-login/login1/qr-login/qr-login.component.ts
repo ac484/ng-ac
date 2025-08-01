@@ -12,12 +12,11 @@ import { NzQRCodeModule } from 'ng-zorro-antd/qr-code';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
-  selector: 'app-qr-login',
-  templateUrl: './qr-login.component.html',
-  styleUrls: ['./qr-login.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzTypographyModule, NzButtonModule, NzWaveModule, NzQRCodeModule]
+    selector: 'app-qr-login',
+    templateUrl: './qr-login.component.html',
+    styleUrls: ['./qr-login.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzTypographyModule, NzButtonModule, NzWaveModule, NzQRCodeModule]
 })
 export class QrLoginComponent implements OnInit {
   validateForm!: FormGroup;

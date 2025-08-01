@@ -8,12 +8,11 @@ import { PageHeaderType, PageHeaderComponent } from '@shared/components/page-hea
 import { fnStopMouseEvent } from '@utils/tools';
 
 @Component({
-  selector: 'app-click-out-side',
-  templateUrl: './click-out-side.component.html',
-  styleUrls: ['./click-out-side.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent]
+    selector: 'app-click-out-side',
+    templateUrl: './click-out-side.component.html',
+    styleUrls: ['./click-out-side.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent]
 })
 export class ClickOutSideComponent implements OnInit, AfterViewInit {
   pageHeaderInfo: Partial<PageHeaderType> = {

@@ -11,12 +11,11 @@ import { AdDirective } from '@shared/directives/ad.directive';
 const passiveEventListenerOptions = normalizePassiveListenerOptions({ passive: true });
 
 @Component({
-  selector: 'app-lazy-scroll',
-  templateUrl: './lazy-scroll.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [LazyServiceService],
-  standalone: true,
-  imports: [PageHeaderComponent, AdDirective]
+    selector: 'app-lazy-scroll',
+    templateUrl: './lazy-scroll.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [LazyServiceService],
+    imports: [PageHeaderComponent, AdDirective]
 })
 export class LazyScrollComponent implements AfterViewInit {
   private lazyServiceService = inject(LazyServiceService);

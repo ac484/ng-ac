@@ -4,14 +4,13 @@ import { EChartsOption } from 'echarts/types/dist/echarts';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 @Component({
-  selector: 'app-simple-graph',
-  template: `
+    selector: 'app-simple-graph',
+    template: `
     <div class="demo-chart" echarts [options]="options"></div>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgxEchartsModule]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgxEchartsModule]
 })
 export class SimpleGraphComponent {
   options: EChartsOption = {

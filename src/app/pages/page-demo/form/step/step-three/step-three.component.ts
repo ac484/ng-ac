@@ -7,12 +7,11 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzResultModule } from 'ng-zorro-antd/result';
 
 @Component({
-  selector: 'app-step-three',
-  templateUrl: './step-three.component.html',
-  styleUrls: ['./step-three.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzResultModule, NzButtonModule, NzWaveModule, NzDescriptionsModule]
+    selector: 'app-step-three',
+    templateUrl: './step-three.component.html',
+    styleUrls: ['./step-three.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzResultModule, NzButtonModule, NzWaveModule, NzDescriptionsModule]
 })
 export class StepThreeComponent {
   @Input('stepDirection') stepDirection: 'horizontal' | 'vertical' = 'horizontal';

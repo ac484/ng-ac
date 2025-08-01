@@ -14,11 +14,10 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { webSocket } from 'rxjs/webSocket';
 
 @Component({
-  selector: 'app-websocket',
-  templateUrl: './websocket.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzGridModule, NzInputModule, FormsModule, NzButtonModule, NzWaveModule, NzCardModule, NzResultModule, NzTypographyModule]
+    selector: 'app-websocket',
+    templateUrl: './websocket.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzGridModule, NzInputModule, FormsModule, NzButtonModule, NzWaveModule, NzCardModule, NzResultModule, NzTypographyModule]
 })
 export class WebsocketComponent implements OnDestroy, AfterViewInit {
   concate = true;

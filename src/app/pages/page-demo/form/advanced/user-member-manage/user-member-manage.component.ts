@@ -15,11 +15,10 @@ interface ItemData {
 }
 
 @Component({
-  selector: 'app-user-member-manage',
-  templateUrl: './user-member-manage.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzTableModule, NzInputModule, FormsModule, NzPopconfirmModule, NzButtonModule, NzWaveModule, NzIconModule]
+    selector: 'app-user-member-manage',
+    templateUrl: './user-member-manage.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzTableModule, NzInputModule, FormsModule, NzPopconfirmModule, NzButtonModule, NzWaveModule, NzIconModule]
 })
 export class UserMemberManageComponent implements OnInit {
   // 表格

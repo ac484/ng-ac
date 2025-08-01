@@ -66,33 +66,32 @@ export enum TaskStateSearchCheckPeriodEnum {
 }
 
 @Component({
-  selector: 'app-append-form',
-  templateUrl: './append-form.component.html',
-  styleUrls: ['./append-form.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzCardModule,
-    NzGridModule,
-    NzTypographyModule,
-    NzDividerModule,
-    NzRadioModule,
-    FormsModule,
-    NzButtonModule,
-    NzInputModule,
-    NzWaveModule,
-    NzIconModule,
-    NzListModule,
-    NzDropDownModule,
-    NzMenuModule,
-    NzTagModule,
-    NzProgressModule,
-    NzPaginationModule,
-    DatePipe,
-    NzFormModule,
-    ReactiveFormsModule
-  ]
+    selector: 'app-append-form',
+    templateUrl: './append-form.component.html',
+    styleUrls: ['./append-form.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        NzCardModule,
+        NzGridModule,
+        NzTypographyModule,
+        NzDividerModule,
+        NzRadioModule,
+        FormsModule,
+        NzButtonModule,
+        NzInputModule,
+        NzWaveModule,
+        NzIconModule,
+        NzListModule,
+        NzDropDownModule,
+        NzMenuModule,
+        NzTagModule,
+        NzProgressModule,
+        NzPaginationModule,
+        DatePipe,
+        NzFormModule,
+        ReactiveFormsModule
+    ]
 })
 export class AppendFormComponent implements OnInit {
   destroyRef = inject(DestroyRef);

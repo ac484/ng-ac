@@ -17,27 +17,26 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
-  selector: 'app-article',
-  templateUrl: './article.component.html',
-  styleUrls: ['./article.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    NzCardModule,
-    WaterMarkComponent,
-    NzGridModule,
-    NgStyle,
-    NzTagModule,
-    NzIconModule,
-    NzButtonModule,
-    NzDividerModule,
-    NzSelectModule,
-    FormsModule,
-    NzListModule,
-    NzAvatarModule,
-    NzTypographyModule,
-    NumberLoopPipe
-  ]
+    selector: 'app-article',
+    templateUrl: './article.component.html',
+    styleUrls: ['./article.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NzCardModule,
+        WaterMarkComponent,
+        NzGridModule,
+        NgStyle,
+        NzTagModule,
+        NzIconModule,
+        NzButtonModule,
+        NzDividerModule,
+        NzSelectModule,
+        FormsModule,
+        NzListModule,
+        NzAvatarModule,
+        NzTypographyModule,
+        NumberLoopPipe
+    ]
 })
 export class ArticleComponent {
   expanded = false;

@@ -8,10 +8,9 @@ import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
-  selector: 'app-fail',
-  templateUrl: './fail.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzCardModule, NzResultModule, NzTypographyModule, NzIconModule, NzButtonModule, NzWaveModule]
+    selector: 'app-fail',
+    templateUrl: './fail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzCardModule, NzResultModule, NzTypographyModule, NzIconModule, NzButtonModule, NzWaveModule]
 })
 export class FailComponent {}

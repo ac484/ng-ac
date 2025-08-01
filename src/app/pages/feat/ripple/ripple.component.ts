@@ -9,12 +9,11 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { ColorPickerModule } from 'ngx-color-picker';
 
 @Component({
-  selector: 'app-ripple',
-  templateUrl: './ripple.component.html',
-  styleUrls: ['./ripple.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, NzCheckboxModule, FormsModule, NzInputNumberModule, ColorPickerModule, MatRippleModule]
+    selector: 'app-ripple',
+    templateUrl: './ripple.component.html',
+    styleUrls: ['./ripple.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, NzCheckboxModule, FormsModule, NzInputNumberModule, ColorPickerModule, MatRippleModule]
 })
 export class RippleComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

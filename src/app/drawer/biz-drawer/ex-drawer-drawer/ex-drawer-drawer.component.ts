@@ -8,11 +8,10 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzInputModule } from 'ng-zorro-antd/input';
 
 @Component({
-  selector: 'app-ex-drawer-drawer',
-  templateUrl: './ex-drawer-drawer.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NzGridModule, NzFormModule, NzInputModule]
+    selector: 'app-ex-drawer-drawer',
+    templateUrl: './ex-drawer-drawer.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, ReactiveFormsModule, NzGridModule, NzFormModule, NzInputModule]
 })
 export class ExDrawerDrawerComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);

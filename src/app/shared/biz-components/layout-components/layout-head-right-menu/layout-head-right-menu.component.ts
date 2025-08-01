@@ -24,12 +24,11 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { HomeNoticeComponent } from '../home-notice/home-notice.component';
 
 @Component({
-  selector: 'app-layout-head-right-menu',
-  templateUrl: './layout-head-right-menu.component.html',
-  styleUrls: ['./layout-head-right-menu.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgTemplateOutlet, ScreenLessHiddenDirective, NzToolTipModule, NzIconModule, NzButtonModule, ToggleFullscreenDirective, NzDropDownModule, NzBadgeModule, NzMenuModule, HomeNoticeComponent]
+    selector: 'app-layout-head-right-menu',
+    templateUrl: './layout-head-right-menu.component.html',
+    styleUrls: ['./layout-head-right-menu.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgTemplateOutlet, ScreenLessHiddenDirective, NzToolTipModule, NzIconModule, NzButtonModule, ToggleFullscreenDirective, NzDropDownModule, NzBadgeModule, NzMenuModule, HomeNoticeComponent]
 })
 export class LayoutHeadRightMenuComponent implements OnInit {
   user!: UserPsd;

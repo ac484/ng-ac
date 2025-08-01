@@ -6,11 +6,10 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 
 declare var BMap: any;
 @Component({
-  selector: 'app-baidu-map',
-  templateUrl: './baidu-map.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule]
+    selector: 'app-baidu-map',
+    templateUrl: './baidu-map.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule]
 })
 export class BaiduMapComponent implements OnInit {
   pageHeaderInfo: Partial<PageHeaderType> = {

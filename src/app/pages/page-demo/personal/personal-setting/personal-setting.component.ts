@@ -24,12 +24,11 @@ interface TabInterface {
 }
 
 @Component({
-  selector: 'app-personal-setting',
-  templateUrl: './personal-setting.component.html',
-  styleUrls: ['./personal-setting.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzCardModule, NgClass, NzMenuModule, NzButtonModule, NzGridModule, NzTypographyModule, AdDirective_1]
+    selector: 'app-personal-setting',
+    templateUrl: './personal-setting.component.html',
+    styleUrls: ['./personal-setting.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzCardModule, NgClass, NzMenuModule, NzButtonModule, NzGridModule, NzTypographyModule, AdDirective_1]
 })
 export class PersonalSettingComponent implements OnInit {
   @ViewChild(AdDirective, { static: true }) adHost!: AdDirective;

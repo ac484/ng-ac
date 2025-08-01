@@ -21,26 +21,25 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzResultModule } from 'ng-zorro-antd/result';
 
 @Component({
-  selector: 'app-set-role',
-  templateUrl: './set-role.component.html',
-  styleUrls: ['./set-role.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzCardModule,
-    NzCheckboxModule,
-    FormsModule,
-    NzIconModule,
-    NzButtonModule,
-    NzDividerModule,
-    NzResultModule,
-    NgTemplateOutlet,
-    NgStyle,
-    FooterSubmitComponent,
-    NzWaveModule
-  ]
+    selector: 'app-set-role',
+    templateUrl: './set-role.component.html',
+    styleUrls: ['./set-role.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
+    imports: [
+        PageHeaderComponent,
+        NzCardModule,
+        NzCheckboxModule,
+        FormsModule,
+        NzIconModule,
+        NzButtonModule,
+        NzDividerModule,
+        NzResultModule,
+        NgTemplateOutlet,
+        NgStyle,
+        FooterSubmitComponent,
+        NzWaveModule
+    ]
 })
 export class SetRoleComponent implements OnInit {
   pageHeaderInfo: Partial<PageHeaderType> = {

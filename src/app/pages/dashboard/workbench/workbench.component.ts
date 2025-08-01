@@ -20,26 +20,25 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
-  selector: 'app-workbench',
-  templateUrl: './workbench.component.html',
-  styleUrls: ['./workbench.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzGridModule,
-    WaterMarkComponent,
-    NzCardModule,
-    NzTypographyModule,
-    NzListModule,
-    NzButtonModule,
-    NzWaveModule,
-    NzIconModule,
-    NzAvatarModule,
-    NzStatisticModule,
-    DecimalPipe,
-    NumberLoopPipe
-  ]
+    selector: 'app-workbench',
+    templateUrl: './workbench.component.html',
+    styleUrls: ['./workbench.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        NzGridModule,
+        WaterMarkComponent,
+        NzCardModule,
+        NzTypographyModule,
+        NzListModule,
+        NzButtonModule,
+        NzWaveModule,
+        NzIconModule,
+        NzAvatarModule,
+        NzStatisticModule,
+        DecimalPipe,
+        NumberLoopPipe
+    ]
 })
 export class WorkbenchComponent implements OnInit, AfterViewInit {
   @ViewChild('pageHeaderContent', { static: false }) pageHeaderContent!: TemplateRef<NzSafeAny>;

@@ -6,11 +6,10 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 
 @Component({
-  selector: 'app-setup',
-  templateUrl: './setup.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzButtonModule, NzWaveModule]
+    selector: 'app-setup',
+    templateUrl: './setup.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzButtonModule, NzWaveModule]
 })
 export class SetupComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

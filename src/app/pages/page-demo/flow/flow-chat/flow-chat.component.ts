@@ -11,12 +11,11 @@ import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @Component({
-  selector: 'app-flow-chat',
-  templateUrl: './flow-chat.component.html',
-  styleUrls: ['./flow-chat.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, NzResultModule, NzGridModule, NzButtonModule, NzToolTipModule, NzIconModule]
+    selector: 'app-flow-chat',
+    templateUrl: './flow-chat.component.html',
+    styleUrls: ['./flow-chat.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, NzResultModule, NzGridModule, NzButtonModule, NzToolTipModule, NzIconModule]
 })
 export class FlowChatComponent implements AfterViewInit {
   pageHeaderInfo: Partial<PageHeaderType> = {

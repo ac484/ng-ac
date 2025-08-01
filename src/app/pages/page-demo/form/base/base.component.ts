@@ -17,27 +17,26 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @Component({
-  selector: 'app-base',
-  templateUrl: './base.component.html',
-  styleUrls: ['./base.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    NzCardModule,
-    WaterMarkComponent,
-    FormsModule,
-    NzFormModule,
-    ReactiveFormsModule,
-    NzGridModule,
-    NzInputModule,
-    NzDatePickerModule,
-    NzInputNumberModule,
-    NzRadioModule,
-    NzSelectModule,
-    NzButtonModule,
-    NzWaveModule
-  ]
+    selector: 'app-base',
+    templateUrl: './base.component.html',
+    styleUrls: ['./base.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PageHeaderComponent,
+        NzCardModule,
+        WaterMarkComponent,
+        FormsModule,
+        NzFormModule,
+        ReactiveFormsModule,
+        NzGridModule,
+        NzInputModule,
+        NzDatePickerModule,
+        NzInputNumberModule,
+        NzRadioModule,
+        NzSelectModule,
+        NzButtonModule,
+        NzWaveModule
+    ]
 })
 export class BaseComponent implements OnInit {
   @ViewChild('dragTpl', { static: true }) dragTpl!: TemplateRef<NzSafeAny>;

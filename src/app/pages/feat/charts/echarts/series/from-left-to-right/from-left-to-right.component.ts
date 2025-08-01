@@ -8,14 +8,13 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import * as util from 'zrender/lib/core/util';
 
 @Component({
-  selector: 'app-from-left-to-right',
-  template: `
+    selector: 'app-from-left-to-right',
+    template: `
     <div class="demo-chart" echarts [options]="options | async"></div>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgxEchartsModule, AsyncPipe]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgxEchartsModule, AsyncPipe]
 })
 export class FromLeftToRightComponent implements OnInit {
   // @ts-ignore

@@ -28,13 +28,12 @@ export abstract class AntTreeTableComponentToken {
 }
 
 @Component({
-  selector: 'app-tree-table',
-  templateUrl: './tree-table.component.html',
-  styleUrls: ['./tree-table.component.less'],
-  providers: [{ provide: AntTreeTableComponentToken, useExisting: TreeTableComponent }],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzTableModule, NzResizableModule, NgClass, NgTemplateOutlet, MapPipe, TableFiledPipe]
+    selector: 'app-tree-table',
+    templateUrl: './tree-table.component.html',
+    styleUrls: ['./tree-table.component.less'],
+    providers: [{ provide: AntTreeTableComponentToken, useExisting: TreeTableComponent }],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzTableModule, NzResizableModule, NgClass, NgTemplateOutlet, MapPipe, TableFiledPipe]
 })
 export class TreeTableComponent implements OnChanges {
   _dataList!: TreeNodeInterface[];

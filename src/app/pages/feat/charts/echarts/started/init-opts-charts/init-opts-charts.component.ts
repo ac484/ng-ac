@@ -4,14 +4,13 @@ import { EChartsOption } from 'echarts/types/dist/echarts';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 @Component({
-  selector: 'app-init-opts-charts',
-  template: `
+    selector: 'app-init-opts-charts',
+    template: `
     <echarts [initOpts]="initOpts" [options]="options"></echarts>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgxEchartsModule]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgxEchartsModule]
 })
 export class InitOptsChartsComponent {
   initOpts = {

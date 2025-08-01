@@ -22,12 +22,11 @@ const THUMBUP_ICON =
 `;
 
 @Component({
-  selector: 'app-icons',
-  templateUrl: './icons.component.html',
-  styleUrls: ['./icons.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule, NzInputModule, FormsModule, IconSelComponent, NzIconModule, MatIconModule]
+    selector: 'app-icons',
+    templateUrl: './icons.component.html',
+    styleUrls: ['./icons.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule, NzInputModule, FormsModule, IconSelComponent, NzIconModule, MatIconModule]
 })
 export class IconsComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

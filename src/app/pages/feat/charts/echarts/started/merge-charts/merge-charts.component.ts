@@ -3,14 +3,13 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestro
 import { NgxEchartsModule } from 'ngx-echarts';
 
 @Component({
-  selector: 'app-merge-charts',
-  template: `
+    selector: 'app-merge-charts',
+    template: `
     <div class="demo-chart" echarts [merge]="updateOptions" [options]="options"></div>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgxEchartsModule]
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgxEchartsModule]
 })
 export class MergeChartsComponent implements OnInit, OnDestroy {
   options: any;

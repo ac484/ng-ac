@@ -11,12 +11,11 @@ export abstract class GlobalDrawerFootTplComponentToken {
 }
 
 @Component({
-  selector: 'app-global-drawer-foot-tpl',
-  standalone: true,
-  imports: [NzButtonModule],
-  templateUrl: './global-drawer-foot-tpl.component.html',
-  providers: [{ provide: GlobalDrawerFootTplComponentToken, useExisting: GlobalDrawerFootTplComponent }],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-global-drawer-foot-tpl',
+    imports: [NzButtonModule],
+    templateUrl: './global-drawer-foot-tpl.component.html',
+    providers: [{ provide: GlobalDrawerFootTplComponentToken, useExisting: GlobalDrawerFootTplComponent }],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GlobalDrawerFootTplComponent implements GlobalDrawerFootTplComponentToken {
   @ViewChild('componentTpl', { static: true }) componentTpl!: TemplateRef<any>;

@@ -10,11 +10,10 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 
 @Component({
-  selector: 'app-download',
-  templateUrl: './download.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule]
+    selector: 'app-download',
+    templateUrl: './download.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule]
 })
 export class DownloadComponent implements OnInit {
   pageHeaderInfo: Partial<PageHeaderType> = {

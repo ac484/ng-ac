@@ -12,11 +12,10 @@ import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
-  selector: 'app-success',
-  templateUrl: './success.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzCardModule, NzResultModule, NzTypographyModule, NzGridModule, NzStepsModule, NzIconModule, NzButtonModule, NzWaveModule]
+    selector: 'app-success',
+    templateUrl: './success.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzCardModule, NzResultModule, NzTypographyModule, NzGridModule, NzStepsModule, NzIconModule, NzButtonModule, NzWaveModule]
 })
 export class SuccessComponent implements OnInit {
   stepDirection: 'horizontal' | 'vertical' = 'horizontal';

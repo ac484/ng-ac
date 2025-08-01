@@ -13,12 +13,11 @@ export enum LazySelPeopleEnum {
 }
 
 @Component({
-  selector: 'app-lazy-targ-comp',
-  templateUrl: './lazy-targ-comp.component.html',
-  styleUrls: ['./lazy-targ-comp.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzCardModule, NzAvatarModule, NzButtonModule, NzWaveModule]
+    selector: 'app-lazy-targ-comp',
+    templateUrl: './lazy-targ-comp.component.html',
+    styleUrls: ['./lazy-targ-comp.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzCardModule, NzAvatarModule, NzButtonModule, NzWaveModule]
 })
 export class LazyTargCompComponent implements OnChanges {
   @Input() purChoosePeople: LazySelPeopleEnum = LazySelPeopleEnum.YiLin;

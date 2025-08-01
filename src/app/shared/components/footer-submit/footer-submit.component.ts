@@ -12,12 +12,11 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 @Component({
-  selector: 'app-footer-submit',
-  templateUrl: './footer-submit.component.html',
-  styleUrls: ['./footer-submit.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzCardModule, NgTemplateOutlet]
+    selector: 'app-footer-submit',
+    templateUrl: './footer-submit.component.html',
+    styleUrls: ['./footer-submit.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzCardModule, NgTemplateOutlet]
 })
 export class FooterSubmitComponent implements OnInit {
   private splitNavStoreService = inject(SplitNavStoreService);

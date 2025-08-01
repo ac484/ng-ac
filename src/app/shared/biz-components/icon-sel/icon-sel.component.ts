@@ -20,11 +20,10 @@ interface IconItem {
 }
 
 @Component({
-  selector: 'app-icon-sel',
-  templateUrl: './icon-sel.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzIconModule, NzButtonModule, NzPopoverModule, NzInputModule, NzCardModule, NgStyle, NzEmptyModule, NzPaginationModule]
+    selector: 'app-icon-sel',
+    templateUrl: './icon-sel.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzIconModule, NzButtonModule, NzPopoverModule, NzInputModule, NzCardModule, NgStyle, NzEmptyModule, NzPaginationModule]
 })
 export class IconSelComponent implements OnInit, AfterViewInit {
   @Input({ transform: booleanAttribute }) visible = false;

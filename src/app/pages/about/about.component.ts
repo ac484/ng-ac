@@ -8,11 +8,10 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
-  selector: 'app-about',
-  templateUrl: './about.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, NzDescriptionsModule, NzTagModule, DatePipe]
+    selector: 'app-about',
+    templateUrl: './about.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, NzDescriptionsModule, NzTagModule, DatePipe]
 })
 export class AboutComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

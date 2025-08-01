@@ -15,12 +15,11 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { SideNavComponent } from '../side-nav/side-nav.component';
 
 @Component({
-  selector: 'app-nav-drawer',
-  templateUrl: './nav-drawer.component.html',
-  styleUrls: ['./nav-drawer.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NzDrawerModule, NzLayoutModule, SideNavComponent, AsyncPipe]
+    selector: 'app-nav-drawer',
+    templateUrl: './nav-drawer.component.html',
+    styleUrls: ['./nav-drawer.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NzDrawerModule, NzLayoutModule, SideNavComponent, AsyncPipe]
 })
 export class NavDrawerComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);

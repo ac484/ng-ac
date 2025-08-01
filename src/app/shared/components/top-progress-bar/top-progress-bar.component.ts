@@ -2,12 +2,11 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-top-progress-bar',
-  templateUrl: './top-progress-bar.component.html',
-  styleUrls: ['./top-progress-bar.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: []
+    selector: 'app-top-progress-bar',
+    templateUrl: './top-progress-bar.component.html',
+    styleUrls: ['./top-progress-bar.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: []
 })
 export class TopProgressBarComponent {
   isFetching = false;

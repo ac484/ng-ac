@@ -19,12 +19,11 @@ interface TabInterface {
 }
 
 @Component({
-  selector: 'app-search-list',
-  templateUrl: './search-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [fadeRouteAnimation],
-  standalone: true,
-  imports: [PageHeaderComponent, WaterMarkComponent, NzButtonModule, NzInputModule, NzWaveModule, NzTabsModule, RouterOutlet]
+    selector: 'app-search-list',
+    templateUrl: './search-list.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [fadeRouteAnimation],
+    imports: [PageHeaderComponent, WaterMarkComponent, NzButtonModule, NzInputModule, NzWaveModule, NzTabsModule, RouterOutlet]
 })
 export class SearchListComponent {
   @ViewChild('headerContent', { static: true }) headerContent!: TemplateRef<NzSafeAny>;

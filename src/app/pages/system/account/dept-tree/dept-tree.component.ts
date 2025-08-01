@@ -13,13 +13,12 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 
 @Component({
-  selector: 'app-dept-tree',
-  templateUrl: './dept-tree.component.html',
-  styleUrls: ['./dept-tree.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DeptTreeService, DeptTreeSearchService],
-  standalone: true,
-  imports: [NzCardModule, NzButtonModule, NzInputModule, FormsModule, NzIconModule, NzTreeViewModule, NzHighlightModule]
+    selector: 'app-dept-tree',
+    templateUrl: './dept-tree.component.html',
+    styleUrls: ['./dept-tree.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DeptTreeService, DeptTreeSearchService],
+    imports: [NzCardModule, NzButtonModule, NzInputModule, FormsModule, NzIconModule, NzTreeViewModule, NzHighlightModule]
 })
 export class DeptTreeComponent implements OnInit {
   selectListSelection: SelectionModel<FlatNode>;

@@ -7,10 +7,9 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 @Component({
-  selector: 'app-task-search-info',
-  standalone: true,
-  imports: [CommonModule, UserInfoComponent, TaskSearchFiltersComponent, NzDividerModule, NzCardModule],
-  templateUrl: './task-search-info.component.html',
-  styleUrls: ['./task-search-info.component.less']
+    selector: 'app-task-search-info',
+    imports: [CommonModule, UserInfoComponent, TaskSearchFiltersComponent, NzDividerModule, NzCardModule],
+    templateUrl: './task-search-info.component.html',
+    styleUrls: ['./task-search-info.component.less']
 })
 export class TaskSearchInfoComponent {}

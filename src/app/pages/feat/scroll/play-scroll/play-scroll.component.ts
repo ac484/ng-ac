@@ -10,12 +10,11 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 
 /*https://segmentfault.com/a/1190000020769492*/
 @Component({
-  selector: 'app-play-scroll',
-  templateUrl: './play-scroll.component.html',
-  styleUrls: ['./play-scroll.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzCardModule, NzGridModule, NzButtonModule, NzWaveModule]
+    selector: 'app-play-scroll',
+    templateUrl: './play-scroll.component.html',
+    styleUrls: ['./play-scroll.component.less'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzCardModule, NzGridModule, NzButtonModule, NzWaveModule]
 })
 export class PlayScrollComponent {
   pageHeaderInfo: Partial<PageHeaderType> = {

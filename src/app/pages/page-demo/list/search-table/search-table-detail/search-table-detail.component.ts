@@ -9,10 +9,9 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzInputModule } from 'ng-zorro-antd/input';
 
 @Component({
-  selector: 'app-search-table-detail',
-  templateUrl: './search-table-detail.component.html',
-  standalone: true,
-  imports: [PageHeaderComponent, NzInputModule, FormsModule, NzDividerModule, NzFormModule, ReactiveFormsModule, NzGridModule]
+    selector: 'app-search-table-detail',
+    templateUrl: './search-table-detail.component.html',
+    imports: [PageHeaderComponent, NzInputModule, FormsModule, NzDividerModule, NzFormModule, ReactiveFormsModule, NzGridModule]
 })
 export class SearchTableDetailComponent implements OnInit {
   pageHeaderInfo: Partial<PageHeaderType> = {

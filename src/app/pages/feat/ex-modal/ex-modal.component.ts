@@ -13,11 +13,10 @@ import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'app-ex-modal',
-  templateUrl: './ex-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeaderComponent, NzButtonModule, NzWaveModule, NzModalModule, ModalDragDirective, CdkDrag, CdkDragHandle]
+    selector: 'app-ex-modal',
+    templateUrl: './ex-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [PageHeaderComponent, NzButtonModule, NzWaveModule, NzModalModule, ModalDragDirective, CdkDrag, CdkDragHandle]
 })
 export class ExModalComponent {
   @ViewChild('dragTpl', { static: true }) dragTpl!: TemplateRef<NzSafeAny>;
