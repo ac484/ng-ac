@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
+// Firebase Auth imports
+import { FirebaseAuthService } from '@core/services/firebase/firebase-auth.service';
+
 import { LoginInOutService } from '@core/services/common/login-in-out.service';
 import { LoginService } from '@core/services/http/login/login.service';
 import { SpinService } from '@store/common-store/spin.service';
@@ -35,6 +38,7 @@ export class LoginFormComponent implements OnInit {
   private spinService = inject(SpinService);
   private dataService = inject(LoginService);
   private loginInOutService = inject(LoginInOutService);
+  private firebaseAuthService = inject(FirebaseAuthService);
 
   submitForm(): void {
     // 校验表单
@@ -82,6 +86,53 @@ export class LoginFormComponent implements OnInit {
             );
           });
       });
+  }
+
+  // Firebase 匿名登入
+  async signInAnonymously(): Promise<void> {
+    try {
+      this.spinService.setCurrentGlobalSpinStore(true);
+
+      // 使用 Firebase Auth 服務進行匿名登入
+      const { user, idToken } = await this.firebaseAuthService.signInAnonymously();
+
+      if (user) {
+        // 創建一個模擬的用戶 token 對象，與原有系統兼容
+        const mockUserToken = {
+          token: idToken,
+          uid: user.uid,
+          isAnonymous: user.isAnonymous,
+          firebaseUser: true
+        };
+
+        // 使用現有的登入服務處理 Firebase 用戶
+        await this.loginInOutService.loginIn(mockUserToken);
+
+        this.notification.success(
+          '登入成功',
+          '已使用匿名方式登入系統',
+          {
+            nzPlacement: 'top',
+            nzDuration: 3000
+          }
+        );
+
+        // 導航到主頁面
+        this.router.navigateByUrl('default/dashboard/analysis');
+      }
+    } catch (error: any) {
+      console.error('Firebase 匿名登入失敗:', error);
+      this.notification.error(
+        '登入失敗',
+        error.message || '匿名登入過程中發生錯誤',
+        {
+          nzPlacement: 'top',
+          nzDuration: 5000
+        }
+      );
+    } finally {
+      this.spinService.setCurrentGlobalSpinStore(false);
+    }
   }
 
   ngOnInit(): void {

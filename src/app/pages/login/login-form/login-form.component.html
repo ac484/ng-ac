@@ -12,7 +12,8 @@
         <nz-form-item>
           <nz-form-control nzErrorTip="密码：123456">
             <nz-input-group nzPrefixIcon="lock" [nzSize]="'large'">
-              <input type="password" autocomplete="on" formControlName="password" nz-input placeholder="密码" [placeholder]="'密码：123456'" />
+              <input type="password" autocomplete="on" formControlName="password" nz-input placeholder="密码"
+                [placeholder]="'密码：123456'" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -53,6 +54,8 @@
         <i nz-icon nzTheme="fill" nzType="alipay-circle"></i>
         <i nz-icon nzTheme="fill" nzType="taobao-circle"></i>
         <i nz-icon nzTheme="fill" nzType="weibo-circle"></i>
+        <i nz-icon nzTheme="outline" nzType="user" title="Firebase 匿名登入"
+          style="cursor: pointer; color: #1890ff; margin-left: 8px;" (click)="signInAnonymously()"></i>
       </div>
       <a routerLink="/login/register-form">注册用户</a>
     </div>
