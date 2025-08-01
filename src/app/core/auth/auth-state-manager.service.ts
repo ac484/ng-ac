@@ -19,6 +19,7 @@ import { AuthState } from './auth.types';
 export class AuthStateManagerService {
   private readonly firebaseAuth = inject(FirebaseAuthAdapterService);
   private readonly tokenSync = inject(TokenSyncService);
+  private readonly errorHandler = inject(FirebaseErrorHandlerService);
 
   // 內部狀態管理
   private readonly _authState$ = new BehaviorSubject<AuthState>({
@@ -63,8 +64,8 @@ export class AuthStateManagerService {
       switchMap(user => this.handleAuthStateChange(user)),
       tap(() => this.setLoading(false)),
       catchError(error => {
-        console.error('Auth state initialization error:', error);
-        this.setError(error.message || '認證初始化失敗');
+        this.errorHandler.handleAuthStateError(error);
+        this.setError('認證初始化失敗');
         this.setLoading(false);
         return EMPTY;
       }),
@@ -113,7 +114,7 @@ export class AuthStateManagerService {
           }
         }),
         catchError(error => {
-          console.error('Token sync error:', error);
+          this.errorHandler.handleSilentError(error);
           this.setError('Token 同步失敗');
           return of(void 0);
         })
@@ -131,7 +132,7 @@ export class AuthStateManagerService {
           });
         }),
         catchError(error => {
-          console.error('Clear tokens error:', error);
+          this.errorHandler.handleSilentError(error);
           this.setError('清除 Token 失敗');
           return of(void 0);
         })
