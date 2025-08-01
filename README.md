@@ -1,90 +1,260 @@
-<p align="center">
-  <a href="https://ng-alain.com">
-    <img width="100" src="https://ng-alain.com/assets/img/logo-color.svg">
-  </a>
-</p>
+# Memory Bank System v0.7-beta
 
-<h1 align="center">NG-ALAIN</h1>
+A token-optimized, hierarchical task management system that integrates with Cursor custom modes for efficient development workflows.
 
-<div align="center">
-  Out-of-box UI solution for enterprise applications, Let developers focus on business.
+```mermaid
+graph TD
+    Main["Memory Bank System"] --> Modes["Custom Modes"]
+    Main --> Rules["Hierarchical Rule Loading"]
+    Main --> Visual["Visual Process Maps"]
+    Main --> Token["Token Optimization"]
+    
+    Modes --> VAN["VAN: Initialization"]
+    Modes --> PLAN["PLAN: Task Planning"]
+    Modes --> CREATIVE["CREATIVE: Design"]
+    Modes --> IMPLEMENT["IMPLEMENT: Building"]
+    Modes --> REFLECT["REFLECT: Review"]
+    Modes --> ARCHIVE["ARCHIVE: Documentation"]
+    
+    style Main fill:#4da6ff,stroke:#0066cc,color:white
+    style Modes fill:#f8d486,stroke:#e8b84d
+    style Rules fill:#80ffaa,stroke:#4dbb5f
+    style Visual fill:#d9b3ff,stroke:#b366ff
+    style Token fill:#ff9980,stroke:#ff5533
+```
 
-  [![CI](https://github.com/ng-alain/ng-alain/actions/workflows/ci.yml/badge.svg)](https://github.com/ng-alain/ng-alain/actions/workflows/ci.yml)
-  [![Dependency Status](https://david-dm.org/ng-alain/ng-alain/status.svg?style=flat-square)](https://david-dm.org/ng-alain/ng-alain)
-  [![GitHub Release Date](https://img.shields.io/github/release-date/ng-alain/ng-alain.svg?style=flat-square)](https://github.com/ng-alain/ng-alain/releases)
-  [![NPM version](https://img.shields.io/npm/v/ng-alain.svg?style=flat-square)](https://www.npmjs.com/package/ng-alain)
-  [![prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://prettier.io/)
-  [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://github.com/ng-alain/ng-alain/blob/master/LICENSE)
-  [![Gitter](https://img.shields.io/gitter/room/ng-alain/ng-alain.svg?style=flat-square)](https://gitter.im/ng-alain/ng-alain)
-  [![ng-zorro-vscode](https://img.shields.io/badge/ng--zorro-VSCODE-brightgreen.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=cipchk.ng-zorro-vscode)
-  [![ng-alain-vscode](https://img.shields.io/badge/ng--alain-VSCODE-brightgreen.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=cipchk.ng-alain-vscode)
+> **Personal Note**: Memory Bank is my personal hobby project that I develop for my own use in coding projects. As this is a personal project, I don't maintain an issues tracker or actively collect feedback. However, if you're using these rules and encounter issues, one of the great advantages is that you can ask the Cursor AI directly to modify or update the rules to better suit your specific workflow. The system is designed to be adaptable by the AI, allowing you to customize it for your own needs without requiring external support.
 
-</div>
+## About Memory Bank
 
-English | [简体中文](README-zh_CN.md)
+Memory Bank is a personal project that provides a structured approach to development using specialized modes for different phases of the development process. It uses a hierarchical rule loading architecture that loads only the rules needed for each phase, optimizing token usage and providing tailored guidance.
 
-## Quickstart
+### Token-Optimized Architecture
 
-- [Getting Started](https://ng-alain.com/docs/getting-started)
+Version 0.7-beta introduces significant token optimization improvements:
 
-## Links
+- **Hierarchical Rule Loading**: Only loads essential rules initially with specialized lazy-loading
+- **Progressive Documentation**: Implements concise templates that scale with task complexity
+- **Optimized Mode Transitions**: Preserves critical context efficiently between modes
+- **Level-Specific Workflows**: Adapts documentation requirements to task complexity
 
-+ [Document](https://ng-alain.com) ([Surge Mirror](https://ng-alain-doc.surge.sh))
-+ [@delon Source](https://github.com/ng-alain/delon)
-+ [DEMO](https://ng-alain.surge.sh) ([国内镜像](https://ng-alain.gitee.io/))
+See the [Memory Bank Optimizations](MEMORY_BANK_OPTIMIZATIONS.md) document for detailed information about all optimization approaches.
 
-## Features
+### Beyond Basic Custom Modes
 
-+ `ng-zorro-antd` based
-+ Responsive Layout
-+ I18n
-+ [@delon](https://github.com/ng-alain/delon)
-+ Lazy load Assets
-+ UI Router States
-+ Customize Theme
-+ Less preprocessor
-+ RTL
-+ Well organized & commented code
-+ Simple upgrade
-+ Support Docker deploy
+While Cursor's documentation describes custom modes as primarily standalone configurations with basic prompts and tool selections, Memory Bank significantly extends this concept:
 
-## Architecture
+- **Graph-Based Mode Integration**: Modes are interconnected nodes in a development workflow rather than isolated tools
+- **Workflow Progression**: Modes are designed to transition from one to another in a logical sequence (VAN → PLAN → CREATIVE → IMPLEMENT → REFLECT → ARCHIVE)
+- **Shared Memory**: Persistent state maintained across mode transitions via Memory Bank files
+- **Adaptive Behavior**: Each mode adjusts its recommendations based on project complexity
+- **Built-in QA Functions**: QA capabilities can be called from any mode for technical validation
 
-![Architecture](https://raw.githubusercontent.com/ng-alain/delon/master/_screenshot/architecture.png)
+This approach transforms custom modes from simple AI personalities into components of a coordinated development system with specialized phases working together.
 
-> [delon](https://github.com/ng-alain/delon) is a production-ready solution for admin business components packages, Built on the design principles developed by Ant Design.
+### CREATIVE Mode and Claude's "Think" Tool
 
-## App Shots
+The CREATIVE mode in Memory Bank is conceptually based on Anthropic's Claude "Think" tool methodology, as described in their [engineering blog](https://www.anthropic.com/engineering/claude-think-tool). The v0.7-beta implements an optimized version with:
 
-![desktop](https://raw.githubusercontent.com/ng-alain/delon/master/_screenshot/desktop.png)
-![ipad](https://raw.githubusercontent.com/ng-alain/delon/master/_screenshot/ipad.png)
-![iphone](https://raw.githubusercontent.com/ng-alain/delon/master/_screenshot/iphone.png)
+- Progressive documentation with tabular option comparison
+- "Detail-on-demand" approach that preserves token efficiency
+- Structured templates that scale with complexity level
+- Efficient context preservation for implementation phases
 
-## Contributing
+For a detailed explanation of how Memory Bank implements these principles, see the [CREATIVE Mode and Claude's "Think" Tool](creative_mode_think_tool.md) document.
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/ng-alain/ng-alain/pulls)
+## Key Features
 
-We welcome all contributions. Please read our [CONTRIBUTING.md](https://github.com/ng-alain/ng-alain/blob/master/CONTRIBUTING.md) first. You can submit any ideas as [pull requests](https://github.com/ng-alain/ng-alain/pulls) or as [GitHub issues](https://github.com/ng-alain/ng-alain/issues).
+- **Hierarchical Rule Loading**: Load only the essential rules with specialized lazy-loading
+- **Progressive Documentation**: Concise templates that scale with task complexity
+- **Unified Context Transfer**: Efficient context preservation between modes
+- **Mode-Specific Visual Maps**: Clear visual representations for each development phase
+- **Level-Specific Workflows**: Adapted processes based on complexity (Levels 1-4)
+- **Platform-Aware Commands**: Automatically adapts commands to your operating system
 
-> If you're new to posting issues, we ask that you read [*How To Ask Questions The Smart Way*](http://www.catb.org/~esr/faqs/smart-questions.html) (**This guide does not provide actual support services for this project!**), [How to Ask a Question in Open Source Community](https://github.com/seajs/seajs/issues/545) and [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/~sgtatham/bugs.html) prior to posting. Well written bug reports help us help you!
+## Installation Instructions
 
-## Donation
+### Prerequisites
 
-ng-alain is an MIT-licensed open source project. In order to achieve better and sustainable development of the project, we expect to gain more backers. You can support us in any of the following ways:
+- **Cursor Editor**: Version 0.48 or higher is required.
+- **Custom Modes**: Feature must be enabled in Cursor (Settings → Features → Chat → Custom modes).
+- **AI Model**: Claude 3.7 Sonnet is recommended for best results, especially for CREATIVE mode's "Think" tool methodology.
 
-- [patreon](https://www.patreon.com/cipchk)
-- [opencollective](https://opencollective.com/ng-alain)
-- [paypal](https://www.paypal.me/cipchk)
-- [支付宝或微信](https://ng-alain.com/assets/donate.png)
+### Step 1: Get the Files
 
-Or purchasing our [business theme](https://e.ng-alain.com/).
+Simply clone this repository into your project directory:
 
-## Backers
+```
+git clone https://github.com/vanzan01/cursor-memory-bank.git
+```
 
-Thank you to all our backers! 🙏
+Alternatively, you can download the ZIP file from GitHub and extract it to your project folder.
 
-<a href="https://opencollective.com/ng-alain#backers" target="_blank"><img src="https://opencollective.com/ng-alain/backers.svg?width=890"></a>
+This provides you with all the necessary files, including:
+- Rule files in `.cursor/rules/isolation_rules/`
+- Mode instruction files in `custom_modes/` directory
+- Template Memory Bank files in `memory-bank/`
 
-### License
+### Step 2: Setting Up Custom Modes in Cursor
 
-The MIT License (see the [LICENSE](https://github.com/ng-alain/ng-alain/blob/master/LICENSE) file for the full text)
+**This is the most critical and challenging part of the setup.** You'll need to manually create six custom modes in Cursor and copy the instruction content from the provided files:
+
+#### How to Add a Custom Mode in Cursor
+
+1. Open Cursor and click on the mode selector in the chat panel
+2. Select "Add custom mode"
+3. In the configuration screen:
+   - Enter the mode name (you can include emoji icons like 🔍, 📋, 🎨, ⚒️ by copy-pasting them at the beginning of the name)
+   - Select an icon from Cursor's limited predefined options
+   - Add a shortcut (optional)
+   - Check the required tools
+   - Click on **Advanced options**
+   - In the empty text box that appears at the bottom, paste the custom instruction content from the corresponding file
+
+<table>
+  <tr>
+    <td align="center"><em>Example configuration screen:</em></td>
+    <td align="center"><em>Result in mode selection menu:</em></td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="assets/custom_mode_setup_1.png" alt="Custom Mode Configuration Screen" width="300"/>
+    </td>
+    <td valign="top">
+      <img src="assets/custom_mode_setup_2.png" alt="Custom Modes in Menu" width="300"/>
+    </td>
+  </tr>
+</table>
+
+#### Mode Configuration
+
+For each mode, configure as follows:
+
+1. **VAN MODE** (Initialization)
+   - **Name**: 🔍 VAN
+   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
+   - **Advanced options**: Paste from `custom_modes/van_instructions.md`
+
+2. **PLAN MODE** (Task Planning)
+   - **Name**: 📋 PLAN
+   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
+   - **Advanced options**: Paste from `custom_modes/plan_instructions.md`
+
+3. **CREATIVE MODE** (Design Decisions)
+   - **Name**: 🎨 CREATIVE
+   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory", "Edit File"
+   - **Advanced options**: Paste from `custom_modes/creative_instructions.md`
+
+4. **IMPLEMENT MODE** (Code Implementation)
+   - **Name**: ⚒️ IMPLEMENT
+   - **Tools**: Enable all tools
+   - **Advanced options**: Paste from `custom_modes/implement_instructions.md`
+
+5. **REFLECT MODE** (Review)
+   - **Name**: 🔍 REFLECT
+   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
+   - **Advanced options**: Paste from `custom_modes/reflect_instructions.md`
+
+6. **ARCHIVE MODE** (Documentation)
+   - **Name**: 📚 ARCHIVE
+   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory", "Edit File"
+   - **Advanced options**: Paste from `custom_modes/archive_instructions.md`
+
+For additional help on setting up custom modes in Cursor, refer to the [official Cursor documentation on custom modes](https://docs.cursor.com/chat/custom-modes).
+
+### QA Functionality
+
+QA is not a separate custom mode but rather a set of validation functions that can be called from any mode. You can invoke QA capabilities by typing "QA" in any mode when you need to perform technical validation. This approach provides flexibility to conduct verification at any point in the development process.
+
+## Basic Usage
+
+1. **Start with VAN Mode**:
+   - Switch to VAN mode in Cursor
+   - Type "VAN" to initiate the initialization process
+   - VAN will analyze your project structure and determine complexity
+
+2. **Follow the Workflow Based on Complexity**:
+   - **Level 1 tasks**: May proceed directly to IMPLEMENT after VAN
+   - **Level 2 tasks**: Simplified workflow (VAN → PLAN → IMPLEMENT → REFLECT)
+   - **Level 3-4 tasks**: Full workflow (VAN → PLAN → CREATIVE → IMPLEMENT → REFLECT → ARCHIVE)
+   - **At any point**: Type "QA" to perform technical validation
+
+3. **Mode-Specific Commands**:
+   ```
+   VAN - Initialize project and determine complexity
+   PLAN - Create detailed implementation plan
+   CREATIVE - Explore design options for complex components
+   IMPLEMENT - Systematically build planned components
+   REFLECT - Review and document lessons learned
+   ARCHIVE - Create comprehensive documentation
+   QA - Validate technical implementation (can be called from any mode)
+   ```
+
+## Core Files and Their Purposes
+
+```mermaid
+graph LR
+    subgraph "Memory Bank Files"
+        Tasks["tasks.md<br>Source of Truth"]
+        Active["activeContext.md<br>Current Focus"]
+        Progress["progress.md<br>Implementation Status"]
+        Creative["creative-*.md<br>Design Decisions"]
+        Reflect["reflect-*.md<br>Review Documents"]
+    end
+    
+    style Tasks fill:#f9d77e,stroke:#d9b95c,stroke-width:3px
+    style Active fill:#a8d5ff,stroke:#88b5e0
+    style Progress fill:#c5e8b7,stroke:#a5c897
+    style Creative fill:#f4b8c4,stroke:#d498a4
+    style Reflect fill:#b3e6cc,stroke:#66c999
+```
+
+- **tasks.md**: Central source of truth for task tracking
+- **activeContext.md**: Maintains focus of current development phase
+- **progress.md**: Tracks implementation status
+- **creative-*.md**: Design decision documents generated during CREATIVE mode
+- **reflect-*.md**: Review documents created during REFLECT mode
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Mode not responding correctly**:
+   - Verify custom instructions were copied completely (this is the most common issue)
+   - Ensure the correct tools are enabled for each mode
+   - Check that you've switched to the correct mode before issuing commands
+   - Make sure you pasted the instructions in the "Advanced options" text box
+
+2. **Rules not loading**:
+   - Make sure the `.cursor/rules/isolation_rules/` directory is in the correct location
+   - Verify file permissions allow reading the rule files
+
+3. **Command execution issues**:
+   - Ensure you're running commands from the correct directory
+   - Verify platform-specific commands are being used correctly
+
+## Version Information
+
+This is version v0.7-beta of the Memory Bank system. It introduces significant token optimization improvements over v0.6-beta while maintaining all functionality. See the [Release Notes](RELEASE_NOTES.md) for detailed information about the changes.
+
+### Ongoing Development
+
+The Memory Bank system is actively being developed and improved. Key points to understand:
+
+- **Work in Progress**: This is a beta version with ongoing development. Expect regular updates, optimizations, and new features.
+- **Feature Optimization**: The modular architecture enables continuous refinement without breaking existing functionality.
+- **Previous Version Available**: If you prefer the stability of the previous version (v0.1-legacy), you can continue using it while this version matures.
+- **Architectural Benefits**: Before deciding which version to use, please read the [Memory Bank Upgrade Guide](memory_bank_upgrade_guide.md) to understand the significant benefits of the new architecture.
+
+## Resources
+
+- [Memory Bank Optimizations](MEMORY_BANK_OPTIMIZATIONS.md) - Detailed overview of token efficiency improvements
+- [Release Notes](RELEASE_NOTES.md) - Information about the latest changes
+- [Cursor Custom Modes Documentation](https://docs.cursor.com/chat/custom-modes)
+- [Memory Bank Upgrade Guide](memory_bank_upgrade_guide.md)
+- [CREATIVE Mode and Claude's "Think" Tool](creative_mode_think_tool.md)
+- Mode-specific instruction files in the `custom_modes/` directory
+
+---
+
+*Note: This README is for v0.7-beta and subject to change as the system evolves.*
