@@ -77,9 +77,6 @@
         "-y", 
         "@modelcontextprotocol/server-github"
       ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
-      },
       "autoApprove": [
         "search_repositories",
         "get_file_contents", 
