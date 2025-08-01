@@ -7,7 +7,7 @@ import { I18NService, defaultInterceptor, provideStartup } from '@core';
 import { provideCellWidgets } from '@delon/abc/cell';
 import { provideSTWidgets } from '@delon/abc/st';
 import { authSimpleInterceptor, provideAuth } from '@delon/auth';
-import { firebaseTokenInterceptor } from '@core/auth';
+import { firebaseTokenInterceptor } from './core/auth';
 import { provideSFConfig } from '@delon/form';
 import { AlainProvideLang, provideAlain, zh_TW as delonLang } from '@delon/theme';
 import { AlainConfig } from '@delon/util/config';

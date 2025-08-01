@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { startPageGuard } from '@core';
-import { firebaseAuthGuard, firebaseAuthChildGuard } from '@core/auth';
+import { firebaseAuthGuard, firebaseAuthChildGuard } from '../core/auth';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutBasicComponent } from '../layout';
