@@ -19,6 +19,9 @@ Firebase 認證適配器，提供基本的認證操作。
 ### TokenSyncService
 Token 同步服務，負責將 Firebase ID token 轉換並同步到 ng-alain 系統。
 
+### AuthStateManagerService
+認證狀態管理器，統一管理 Firebase Auth 和 ng-alain 認證狀態，協調各個服務之間的互動。
+
 ## 基本使用
 
 ### 在組件中注入服務
@@ -125,11 +128,67 @@ export class AuthIntegrationComponent implements OnInit {
 }
 ```
 
+### 使用認證狀態管理器（推薦方式）
+
+```typescript
+export class AuthManagerComponent implements OnInit {
+  private authStateManager = inject(AuthStateManagerService);
+
+  ngOnInit() {
+    // 初始化認證狀態管理器
+    this.authStateManager.initialize().subscribe();
+
+    // 監聽統一的認證狀態
+    this.authStateManager.authState$.subscribe(state => {
+      console.log('認證狀態:', state);
+      if (state.isAuthenticated) {
+        console.log('使用者已登入:', state.user?.email);
+        console.log('當前 token:', state.token);
+      } else {
+        console.log('使用者未登入');
+      }
+      
+      if (state.loading) {
+        console.log('認證處理中...');
+      }
+      
+      if (state.error) {
+        console.error('認證錯誤:', state.error);
+      }
+    });
+
+    // 監聽特定狀態
+    this.authStateManager.isAuthenticated$.subscribe(isAuth => {
+      console.log('認證狀態變化:', isAuth);
+    });
+
+    this.authStateManager.user$.subscribe(user => {
+      console.log('使用者變化:', user);
+    });
+  }
+
+  // 清除會話（登出）
+  logout() {
+    this.authStateManager.clearSession().subscribe(() => {
+      console.log('已登出');
+    });
+  }
+
+  // 恢復會話
+  restoreSession() {
+    this.authStateManager.restoreSession().subscribe(hasSession => {
+      console.log('會話恢復結果:', hasSession);
+    });
+  }
+}
+```
+
 ### Token 管理
 
 ```typescript
 export class TokenManagementService {
   private tokenSync = inject(TokenSyncService);
+  private authStateManager = inject(AuthStateManagerService);
 
   // 檢查 token 是否即將過期
   checkTokenExpiration() {
@@ -137,7 +196,17 @@ export class TokenManagementService {
       if (isExpiring) {
         console.log('Token 即將過期，需要刷新');
         // 觸發 token 刷新邏輯
+        this.refreshToken();
       }
+    });
+  }
+
+  // 刷新 token
+  refreshToken() {
+    // 假設從 Firebase 取得新的 token
+    const newToken = 'new-firebase-token';
+    this.authStateManager.handleTokenRefresh(newToken).subscribe(() => {
+      console.log('Token 已刷新');
     });
   }
 
