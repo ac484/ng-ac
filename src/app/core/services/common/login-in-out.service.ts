@@ -52,30 +52,30 @@ export class LoginInOutService {
   }
 
   private handleFirebaseLogin(firebaseToken: any, resolve: () => void): void {
-    // 將 Firebase token 持久化缓存
-    this.windowServe.setSessionStorage(TokenKey, TokenPre + firebaseToken.token);
+    console.log('🔥 handleFirebaseLogin 開始處理:', firebaseToken);
 
-    // 創建 Firebase 用戶信息
-    const userInfo: UserInfo & {
-      firebaseUser?: boolean;
-      isAnonymous?: boolean;
-      token?: string;
-      userName?: string;
-    } = {
-      userId: parseInt(firebaseToken.uid.substring(0, 8), 16), // 將 Firebase UID 轉換為數字 ID
-      authCode: [ActionCode.TabsDetail, ActionCode.SearchTableDetail],
-      firebaseUser: true,
-      isAnonymous: firebaseToken.isAnonymous,
-      token: firebaseToken.token,
-      userName: firebaseToken.isAnonymous ? '匿名用戶' : 'Firebase用戶'
-    };
+    // 使用兼容的 JWT token，就像傳統登入一樣
+    const compatibleToken = firebaseToken.compatibleToken || firebaseToken.token;
+    console.log('🔥 使用的兼容 token:', compatibleToken);
+
+    // 將 token 持久化缓存，使用與傳統登入相同的方式
+    const fullToken = TokenPre + compatibleToken;
+    this.windowServe.setSessionStorage(TokenKey, fullToken);
+    console.log('🔥 Token 已存儲到 SessionStorage:', fullToken);
+
+    // 使用標準的 token 解析方法
+    const userInfo: UserInfo = this.userInfoService.parsToken(fullToken);
+    console.log('🔥 解析後的用戶信息:', userInfo);
 
     // 將用戶信息缓存到全局 service 中
     this.userInfoService.setUserInfo(userInfo);
 
     // Firebase 用戶使用預設菜單
     const defaultMenus = this.getDefaultMenusForFirebaseUser();
+    console.log('🔥 設置的預設菜單:', defaultMenus);
     this.menuService.setMenuArrayStore(defaultMenus);
+
+    console.log('🔥 handleFirebaseLogin 處理完成');
     resolve();
   }
 
@@ -121,6 +121,7 @@ export class LoginInOutService {
         menuType: 'C',
         path: '/default/dashboard',
         icon: 'dashboard',
+        code: 'TabsDetail', // 添加權限碼
         children: [
           {
             id: 11,
@@ -129,6 +130,7 @@ export class LoginInOutService {
             menuType: 'C',
             path: '/default/dashboard/analysis',
             icon: 'bar-chart',
+            code: 'TabsDetail', // 添加權限碼，與用戶的 authCode 匹配
             children: []
           }
         ]

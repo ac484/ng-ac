@@ -93,20 +93,37 @@ export class LoginFormComponent implements OnInit {
     try {
       this.spinService.setCurrentGlobalSpinStore(true);
 
+      console.log('🔥 開始 Firebase 匿名登入...');
+
       // 使用 Firebase Auth 服務進行匿名登入
-      const { user, idToken } = await this.firebaseAuthService.signInAnonymously();
+      const { user, idToken, compatibleToken } = await this.firebaseAuthService.signInAnonymously();
+
+      console.log('🔥 Firebase 匿名登入成功:', {
+        uid: user.uid,
+        isAnonymous: user.isAnonymous,
+        idTokenLength: idToken.length,
+        compatibleTokenLength: compatibleToken.length
+      });
+
+      console.log('🔥 Firebase ID Token:', idToken);
+      console.log('🔥 兼容 JWT Token:', compatibleToken);
 
       if (user) {
-        // 創建一個模擬的用戶 token 對象，與原有系統兼容
-        const mockUserToken = {
-          token: idToken,
+        // 創建一個與原有系統完全兼容的 token 對象
+        const firebaseUserToken = {
+          compatibleToken: compatibleToken, // 兼容的 JWT token
+          firebaseIdToken: idToken, // 原始 Firebase ID token
           uid: user.uid,
           isAnonymous: user.isAnonymous,
           firebaseUser: true
         };
 
-        // 使用現有的登入服務處理 Firebase 用戶
-        await this.loginInOutService.loginIn(mockUserToken);
+        console.log('🔥 準備調用 loginIn 服務:', firebaseUserToken);
+
+        // 使用現有的登入服務處理 Firebase 用戶，流程與傳統登入完全一致
+        await this.loginInOutService.loginIn(firebaseUserToken);
+
+        console.log('🔥 loginIn 服務調用成功');
 
         this.notification.success(
           '登入成功',
@@ -121,7 +138,7 @@ export class LoginFormComponent implements OnInit {
         this.router.navigateByUrl('default/dashboard/analysis');
       }
     } catch (error: any) {
-      console.error('Firebase 匿名登入失敗:', error);
+      console.error('🔥 Firebase 匿名登入失敗:', error);
       this.notification.error(
         '登入失敗',
         error.message || '匿名登入過程中發生錯誤',

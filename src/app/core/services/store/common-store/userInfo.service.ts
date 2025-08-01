@@ -15,14 +15,23 @@ export class UserInfoService {
   private userInfo$ = new BehaviorSubject<UserInfo>({ userId: -1, authCode: [] });
 
   parsToken(token: string): UserInfo {
+    console.log('🔥 parsToken 開始解析 token:', token);
     const helper = new JwtHelperService();
     try {
-      const { rol, userId } = helper.decodeToken(token);
-      return {
+      const decodedToken = helper.decodeToken(token);
+      console.log('🔥 JWT 解析成功:', decodedToken);
+
+      const { rol, userId } = decodedToken;
+      const userInfo = {
         userId,
         authCode: rol.split(',')
       };
+
+      console.log('🔥 解析後的用戶信息:', userInfo);
+      return userInfo;
     } catch (e) {
+      console.error('🔥 JWT 解析失敗:', e);
+      console.log('🔥 返回預設用戶信息');
       return {
         userId: -1,
         authCode: []

@@ -57,13 +57,14 @@ export class FirebaseAuthService {
     /**
      * 匿名登入
      */
-    async signInAnonymously(): Promise<{ user: User; idToken: string }> {
+    async signInAnonymously(): Promise<{ user: User; idToken: string; compatibleToken: string }> {
         try {
             const userCredential = await signInAnonymously(this.auth);
             const user = userCredential.user;
             const idToken = await user.getIdToken();
+            const compatibleToken = this.createCompatibleJWT(user);
 
-            return { user, idToken };
+            return { user, idToken, compatibleToken };
         } catch (error) {
             console.error('Firebase 匿名登入失敗:', error);
             throw error;
@@ -109,5 +110,34 @@ export class FirebaseAuthService {
             return await user.getIdToken(true); // 強制刷新
         }
         return null;
+    }
+
+    /**
+     * 創建兼容現有系統的 JWT token
+     * 這個方法將 Firebase 用戶信息包裝成現有系統期望的 JWT 格式
+     */
+    createCompatibleJWT(user: User): string {
+        // 創建一個模擬的 JWT payload，格式與後端返回的完全一致
+        const payload = {
+            userId: parseInt(user.uid.substring(0, 8), 16), // 將 Firebase UID 轉換為數字 ID
+            rol: 'TabsDetail,SearchTableDetail', // 預設權限，與 ActionCode 對應
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24), // 24小時後過期
+            iat: Math.floor(Date.now() / 1000)
+        };
+
+        // 創建標準的 JWT 格式（header.payload.signature）
+        const header = {
+            alg: 'HS256',
+            typ: 'JWT'
+        };
+
+        // 使用 base64url 編碼（移除 padding）
+        const headerEncoded = btoa(JSON.stringify(header)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+        const payloadEncoded = btoa(JSON.stringify(payload)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+
+        // 使用簡單的簽名（在實際應用中應該使用真正的 HMAC）
+        const signature = btoa('firebase-mock-signature').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+
+        return `${headerEncoded}.${payloadEncoded}.${signature}`;
     }
 }
