@@ -7,6 +7,7 @@ import { I18NService, defaultInterceptor, provideStartup } from '@core';
 import { provideCellWidgets } from '@delon/abc/cell';
 import { provideSTWidgets } from '@delon/abc/st';
 import { authSimpleInterceptor, provideAuth } from '@delon/auth';
+import { firebaseTokenInterceptor } from '@core/auth';
 import { provideSFConfig } from '@delon/form';
 import { AlainProvideLang, provideAlain, zh_TW as delonLang } from '@delon/theme';
 import { AlainConfig } from '@delon/util/config';
@@ -54,7 +55,7 @@ const routerFeatures: RouterFeatures[] = [
 if (environment.useHash) routerFeatures.push(withHashLocation());
 
 const providers: Array<Provider | EnvironmentProviders> = [
-  provideHttpClient(withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, defaultInterceptor])),
+  provideHttpClient(withInterceptors([...(environment.interceptorFns ?? []), firebaseTokenInterceptor, authSimpleInterceptor, defaultInterceptor])),
   provideAnimations(),
   provideRouter(routes, ...routerFeatures),
   provideAlain({ config: alainConfig, defaultLang, i18nClass: I18NService, icons: [...ICONS_AUTO, ...ICONS] }),
@@ -76,14 +77,14 @@ if (environment.api?.refreshTokenEnabled && environment.api.refreshTokenType ===
 
 // Firebase providers
 const firebaseProviders: Array<Provider | EnvironmentProviders> = [
-  provideFirebaseApp(() => initializeApp({ 
-    projectId: "ng-acc", 
-    appId: "1:289956121604:web:4dd9d608a2db962aeaf951", 
-    storageBucket: "ng-acc.firebasestorage.app", 
-    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", 
-    authDomain: "ng-acc.firebaseapp.com", 
-    messagingSenderId: "289956121604", 
-    measurementId: "G-6YM5S9LCNV" 
+  provideFirebaseApp(() => initializeApp({
+    projectId: "ng-acc",
+    appId: "1:289956121604:web:4dd9d608a2db962aeaf951",
+    storageBucket: "ng-acc.firebasestorage.app",
+    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ",
+    authDomain: "ng-acc.firebaseapp.com",
+    messagingSenderId: "289956121604",
+    measurementId: "G-6YM5S9LCNV"
   })),
   provideAuth_alias(() => getAuth()),
   provideAnalytics(() => getAnalytics()),

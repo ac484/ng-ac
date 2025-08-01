@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { startPageGuard } from '@core';
-import { authSimpleCanActivate, authSimpleCanActivateChild } from '@delon/auth';
+import { firebaseAuthGuard, firebaseAuthChildGuard } from '@core/auth';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutBasicComponent } from '../layout';
@@ -9,8 +9,8 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutBasicComponent,
-    canActivate: [startPageGuard, authSimpleCanActivate],
-    canActivateChild: [authSimpleCanActivateChild],
+    canActivate: [startPageGuard, firebaseAuthGuard],
+    canActivateChild: [firebaseAuthChildGuard],
     data: {},
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
