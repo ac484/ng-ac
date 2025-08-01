@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, Injectable, Provider, inject } from '@angular/core';
+import { ENVIRONMENT_INITIALIZER, Injectable, Provider, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { DA_SERVICE_TOKEN } from '@delon/auth';
@@ -17,9 +17,11 @@ export function provideStartup(): Provider[] {
   return [
     StartupService,
     {
-      provide: APP_INITIALIZER,
-      useFactory: (startupService: StartupService) => () => startupService.load(),
-      deps: [StartupService],
+      provide: ENVIRONMENT_INITIALIZER,
+      useValue: () => {
+        const startupService = inject(StartupService);
+        return startupService.load();
+      },
       multi: true
     }
   ];

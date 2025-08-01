@@ -5,4 +5,5 @@ export * from './firebase-token.interceptor';
 export * from './firebase-auth.guard';
 export * from './firebase-error-handler.service';
 export * from './session-manager.service';
+export * from './firebase-auth.providers';
 export * from './auth.types';

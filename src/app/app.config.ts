@@ -7,7 +7,7 @@ import { I18NService, defaultInterceptor, provideStartup } from '@core';
 import { provideCellWidgets } from '@delon/abc/cell';
 import { provideSTWidgets } from '@delon/abc/st';
 import { authSimpleInterceptor, provideAuth } from '@delon/auth';
-import { firebaseTokenInterceptor } from './core/auth';
+import { firebaseTokenInterceptor, provideFirebaseAuthIntegration } from './core/auth';
 import { provideSFConfig } from '@delon/form';
 import { AlainProvideLang, provideAlain, zh_TW as delonLang } from '@delon/theme';
 import { AlainConfig } from '@delon/util/config';
@@ -77,15 +77,7 @@ if (environment.api?.refreshTokenEnabled && environment.api.refreshTokenType ===
 
 // Firebase providers
 const firebaseProviders: Array<Provider | EnvironmentProviders> = [
-  provideFirebaseApp(() => initializeApp({
-    projectId: "ng-acc",
-    appId: "1:289956121604:web:4dd9d608a2db962aeaf951",
-    storageBucket: "ng-acc.firebasestorage.app",
-    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ",
-    authDomain: "ng-acc.firebaseapp.com",
-    messagingSenderId: "289956121604",
-    measurementId: "G-6YM5S9LCNV"
-  })),
+  provideFirebaseApp(() => initializeApp(environment['firebase'])),
   provideAuth_alias(() => getAuth()),
   provideAnalytics(() => getAnalytics()),
   ScreenTrackingService,
@@ -107,6 +99,7 @@ const firebaseProviders: Array<Provider | EnvironmentProviders> = [
 export const appConfig: ApplicationConfig = {
   providers: [
     ...providers,
-    ...firebaseProviders
+    ...firebaseProviders,
+    ...provideFirebaseAuthIntegration()
   ]
 };
