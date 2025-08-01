@@ -7,18 +7,18 @@ import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService, NzNotificationServiceModule } from 'ng-zorro-antd/notification';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 type common = 'info' | 'success' | 'warning' | 'error';
 type msgType = common | 'loading';
 type confirmType = common | 'info' | 'confirm';
 
 @Component({
-    selector: 'app-button',
-    templateUrl: './msg.component.html',
-    styleUrls: ['./msg.component.less'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule, NzIconModule, NzNotificationServiceModule]
+  selector: 'app-button',
+  templateUrl: './msg.component.html',
+  styleUrls: ['./msg.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [PageHeaderComponent, NzCardModule, NzButtonModule, NzWaveModule, NzIconModule]
 })
 export class MsgComponent {
   map = {

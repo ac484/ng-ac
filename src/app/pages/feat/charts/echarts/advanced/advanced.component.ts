@@ -8,15 +8,15 @@ import { ConnectChartsComponent } from '@app/pages/feat/charts/echarts/advanced/
 import { DraggableChartsComponent } from '@app/pages/feat/charts/echarts/advanced/draggable-charts/draggable-charts.component';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzTabPosition } from 'ng-zorro-antd/tabs/interfaces';
+import { NzTabPosition } from 'ng-zorro-antd/tabs';
 
 type targetComp = ConnectChartsComponent | DraggableChartsComponent;
 
 @Component({
-    selector: 'app-advanced',
-    templateUrl: './advanced.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [NzCardModule, NzTabsModule, PortalModule]
+  selector: 'app-advanced',
+  templateUrl: './advanced.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NzCardModule, NzTabsModule, PortalModule]
 })
 export class AdvancedComponent implements OnInit {
   componentPortal?: ComponentPortal<targetComp>;

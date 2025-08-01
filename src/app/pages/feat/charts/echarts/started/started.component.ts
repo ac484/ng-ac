@@ -13,15 +13,15 @@ import { SimpleChartComponent } from '@app/pages/feat/charts/echarts/started/sim
 import { ThemeChartsComponent } from '@app/pages/feat/charts/echarts/started/theme-charts/theme-charts.component';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzTabPosition } from 'ng-zorro-antd/tabs/interfaces';
+import { NzTabPosition } from 'ng-zorro-antd/tabs';
 
 type targetComp = EventsChartsComponent | InitOptsChartsComponent | InstanceOptsChartsComponent | LoadingChartsComponent | MergeChartsComponent | SimpleChartComponent | ThemeChartsComponent;
 
 @Component({
-    selector: 'app-started',
-    templateUrl: './started.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [NzCardModule, NzTabsModule, PortalModule]
+  selector: 'app-started',
+  templateUrl: './started.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NzCardModule, NzTabsModule, PortalModule]
 })
 export class StartedComponent implements OnInit {
   tabPosition: NzTabPosition = 'left';

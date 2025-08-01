@@ -9,15 +9,15 @@ import { RadialTreeComponent } from '@app/pages/feat/charts/echarts/series/radia
 import { SimpleGraphComponent } from '@app/pages/feat/charts/echarts/series/simple-graph/simple-graph.component';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzTabPosition } from 'ng-zorro-antd/tabs/interfaces';
+import { NzTabPosition } from 'ng-zorro-antd/tabs';
 
 type targetComp = SimpleGraphComponent | FromLeftToRightComponent | RadialTreeComponent;
 
 @Component({
-    selector: 'app-series',
-    templateUrl: './series.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [NzCardModule, NzTabsModule, PortalModule]
+  selector: 'app-series',
+  templateUrl: './series.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NzCardModule, NzTabsModule, PortalModule]
 })
 export class SeriesComponent implements OnInit {
   destroyRef = inject(DestroyRef);
