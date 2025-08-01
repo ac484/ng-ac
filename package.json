@@ -4,25 +4,26 @@
   "scripts": {
     "ng": "ng",
     "start": "ng s -o",
-    "build": "npm run ng-high-memory build",
+    "build": "pnpm run ng-high-memory build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:ng-ac": "node dist/ng-ac/server/server.mjs",
     "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng",
     "hmr": "ng s -o --hmr",
-    "analyze": "npm run ng-high-memory build -- --source-map",
-    "analyze:view": "source-map-explorer dist/**/*.js",
+    "analyze": "pnpm run ng-high-memory build -- --source-map",
+    "analyze:view": "pnpm exec source-map-explorer dist/**/*.js",
     "test-coverage": "ng test --code-coverage --watch=false",
     "color-less": "ng-alain-plugin-theme -t=colorLess",
     "theme": "ng-alain-plugin-theme -t=themeCss",
     "icon": "ng g ng-alain:plugin icon",
     "prepare": "husky install",
-    "lint": "npm run lint:ts && npm run lint:style",
+    "lint": "pnpm run lint:ts && pnpm run lint:style",
     "lint:ts": "npx eslint --cache --fix",
     "lint:style": "npx stylelint \\\"src/**/*.less\\\" --fix"
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.1.4",
     "@angular/common": "^19.2.0",
     "@angular/compiler": "^19.2.0",
     "@angular/core": "^19.2.0",
@@ -33,6 +34,7 @@
     "@angular/platform-server": "^19.2.0",
     "@angular/router": "^19.2.0",
     "@angular/ssr": "^19.2.15",
+    "@ant-design/icons-angular": "^20.0.0",
     "@delon/abc": "^19.2.0",
     "@delon/acl": "^19.2.0",
     "@delon/auth": "^19.2.0",
@@ -42,6 +44,7 @@
     "@delon/mock": "^19.2.0",
     "@delon/theme": "^19.2.0",
     "@delon/util": "^19.2.0",
+    "date-fns": "^4.1.0",
     "express": "^4.18.2",
     "firebase": "^11.10.0",
     "ng-alain": "19.2",
@@ -97,7 +100,7 @@
       "eslint --fix"
     ],
     "(src)/**/*.less": [
-      "npm run lint:style"
+      "pnpm run lint:style"
     ]
   }
 }
