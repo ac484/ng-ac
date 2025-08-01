@@ -85,6 +85,12 @@ export class I18NService extends AlainI18nBaseService {
     if (this.settings.layout.lang) {
       return this.settings.layout.lang;
     }
+
+    // 檢查是否在瀏覽器環境中
+    if (typeof navigator === 'undefined') {
+      return DEFAULT;
+    }
+
     let res = (navigator.languages ? navigator.languages[0] : null) || navigator.language;
     const arr = res.split('-');
     return arr.length <= 1 ? res : `${arr[0]}-${arr[1].toUpperCase()}`;

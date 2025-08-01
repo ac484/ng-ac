@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, HostListener, inject, PLATFORM_ID } from '@angular/core';
 import { I18nPipe } from '@delon/theme';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import screenfull from 'screenfull';
 
 @Component({
   selector: 'header-fullscreen',
@@ -16,17 +16,28 @@ import screenfull from 'screenfull';
   imports: [NzIconModule, I18nPipe]
 })
 export class HeaderFullScreenComponent {
+  private readonly platformId = inject(PLATFORM_ID);
   status = false;
 
   @HostListener('window:resize')
   _resize(): void {
-    this.status = screenfull.isFullscreen;
+    // 只在瀏覽器環境中執行 screenfull 操作
+    if (isPlatformBrowser(this.platformId)) {
+      import('screenfull').then(screenfull => {
+        this.status = screenfull.default.isFullscreen;
+      });
+    }
   }
 
   @HostListener('click')
   _click(): void {
-    if (screenfull.isEnabled) {
-      screenfull.toggle();
+    // 只在瀏覽器環境中執行 screenfull 操作
+    if (isPlatformBrowser(this.platformId)) {
+      import('screenfull').then(screenfull => {
+        if (screenfull.default.isEnabled) {
+          screenfull.default.toggle();
+        }
+      });
     }
   }
 }

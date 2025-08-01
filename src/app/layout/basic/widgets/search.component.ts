@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -9,7 +10,8 @@ import {
   Input,
   OnDestroy,
   Output,
-  inject
+  inject,
+  PLATFORM_ID
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { I18nPipe } from '@delon/theme';
@@ -54,6 +56,7 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged, tap } from 'rxjs';
 export class HeaderSearchComponent implements AfterViewInit, OnDestroy {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly platformId = inject(PLATFORM_ID);
   q = '';
   qIpt: HTMLInputElement | null = null;
   options: string[] = [];

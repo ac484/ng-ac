@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, Renderer2, inject } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Component, ElementRef, OnInit, Renderer2, inject, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, NavigationError, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router';
 import { TitleService, VERSION as VERSION_ALAIN, stepPreloader } from '@delon/theme';
 import { environment } from '@env/environment';
@@ -14,6 +15,8 @@ export class AppComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly titleSrv = inject(TitleService);
   private readonly modalSrv = inject(NzModalService);
+  private readonly doc = inject(DOCUMENT);
+  private readonly platformId = inject(PLATFORM_ID);
 
   private donePreloader = stepPreloader();
 
@@ -35,7 +38,12 @@ export class AppComponent implements OnInit {
           nzCancelDisabled: false,
           nzOkText: '刷新',
           nzCancelText: '忽略',
-          nzOnOk: () => location.reload()
+          nzOnOk: () => {
+            // 只在瀏覽器環境中執行頁面重載
+            if (isPlatformBrowser(this.platformId)) {
+              this.doc.location.reload();
+            }
+          }
         });
       }
       if (ev instanceof NavigationEnd) {
