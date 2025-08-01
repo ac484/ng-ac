@@ -2,8 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { DA_SERVICE_TOKEN } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
-import { Observable, from, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable, from, of, BehaviorSubject } from 'rxjs';
+import { map, catchError, shareReplay, distinctUntilChanged } from 'rxjs/operators';
+import { PerformanceMonitorService } from './performance-monitor.service';
 
 /**
  * Alain Token 格式介面
@@ -13,13 +14,13 @@ export interface AlainFirebaseToken {
   // 標準 Alain token 欄位
   token: string;           // Firebase ID Token
   expired: number;         // Token 過期時間戳
-  
+
   // Firebase 使用者資訊
   uid: string;            // Firebase 使用者 UID
   email?: string;         // 使用者 email
   name?: string;          // 使用者顯示名稱
   avatar?: string;        // 使用者頭像 URL
-  
+
   // 其他可能的欄位
   [key: string]: any;
 }
@@ -36,6 +37,11 @@ export interface AlainFirebaseToken {
 export class TokenSyncService {
   private readonly tokenService = inject(DA_SERVICE_TOKEN);
   private readonly settingsService = inject(SettingsService);
+  private readonly performanceMonitor = inject(PerformanceMonitorService);
+
+  // 緩存最後同步的 token 以避免重複操作
+  private lastSyncedToken: string | null = null;
+  private readonly tokenExpiration$ = new BehaviorSubject<boolean>(false);
 
   /**
    * 同步 Firebase token 到 Alain 系統
@@ -43,12 +49,19 @@ export class TokenSyncService {
    * @param user Firebase 使用者物件
    */
   syncFirebaseToken(firebaseToken: string, user: User): Observable<void> {
+    // 性能優化：避免重複同步相同的 token
+    if (this.lastSyncedToken === firebaseToken) {
+      return of(void 0);
+    }
+
+    this.performanceMonitor.startTimer('token-sync');
+
     try {
       const alainToken = this.convertToAlainFormat(firebaseToken, user);
-      
+
       // 設定 Alain token
       this.tokenService.set(alainToken);
-      
+
       // 同步使用者資訊到 SettingsService
       this.settingsService.setUser({
         name: user.displayName || user.email || 'User',
@@ -57,9 +70,16 @@ export class TokenSyncService {
         token: firebaseToken
       });
 
+      // 緩存已同步的 token
+      this.lastSyncedToken = firebaseToken;
+
+      // 記錄性能指標
+      this.performanceMonitor.endTimer('token-sync');
+
       return of(void 0);
     } catch (error) {
       console.error('Token sync error:', error);
+      this.performanceMonitor.endTimer('token-sync');
       return of(void 0);
     }
   }
@@ -121,7 +141,7 @@ export class TokenSyncService {
     const now = Date.now();
     const expiredTime = tokenData.expired;
     const timeUntilExpiry = expiredTime - now;
-    
+
     // 如果剩餘時間少於 5 分鐘，視為即將過期
     return timeUntilExpiry < (5 * 60 * 1000);
   }

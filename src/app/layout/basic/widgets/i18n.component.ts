@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, booleanAttribute, inject } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Input, booleanAttribute, inject, PLATFORM_ID } from '@angular/core';
 import { I18NService } from '@core';
 import { ALAIN_I18N_TOKEN, I18nPipe, SettingsService } from '@delon/theme';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
@@ -39,6 +39,8 @@ export class HeaderI18nComponent {
   private readonly settings = inject(SettingsService);
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly doc = inject(DOCUMENT);
+  private readonly platformId = inject(PLATFORM_ID);
+
   /** Whether to display language text */
   @Input({ transform: booleanAttribute }) showLangText = true;
 
@@ -51,15 +53,22 @@ export class HeaderI18nComponent {
   }
 
   change(lang: string): void {
-    const spinEl = this.doc.createElement('div');
-    spinEl.setAttribute('class', `page-loading ant-spin ant-spin-lg ant-spin-spinning`);
-    spinEl.innerHTML = `<span class="ant-spin-dot ant-spin-dot-spin"><i></i><i></i><i></i><i></i></span>`;
-    this.doc.body.appendChild(spinEl);
+    // 只在瀏覽器環境中執行 DOM 操作
+    if (isPlatformBrowser(this.platformId)) {
+      const spinEl = this.doc.createElement('div');
+      spinEl.setAttribute('class', `page-loading ant-spin ant-spin-lg ant-spin-spinning`);
+      spinEl.innerHTML = `<span class="ant-spin-dot ant-spin-dot-spin"><i></i><i></i><i></i><i></i></span>`;
+      this.doc.body.appendChild(spinEl);
+    }
 
     this.i18n.loadLangData(lang).subscribe(res => {
       this.i18n.use(lang, res);
       this.settings.setLayout('lang', lang);
-      setTimeout(() => this.doc.location.reload());
+
+      // 只在瀏覽器環境中執行頁面重載
+      if (isPlatformBrowser(this.platformId)) {
+        setTimeout(() => this.doc.location.reload());
+      }
     });
   }
 }

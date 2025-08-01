@@ -47,6 +47,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "verbose": true,
+            "extractLicenses": false,
+            "sourceMap": true,
+            "optimization": false,
             "outputPath": "dist/ng-ac",
             "index": "src/index.html",
             "browser": "src/main.ts",

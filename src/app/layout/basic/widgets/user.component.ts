@@ -6,13 +6,16 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { AsyncPipe } from '@angular/common';
+import { FirebaseAuthAdapterService } from '../../../core/auth/firebase-auth-adapter.service';
+import { AuthStateManagerService } from '../../../core/auth/auth-state-manager.service';
 
 @Component({
   selector: 'header-user',
   template: `
     <div class="alain-default__nav-item d-flex align-items-center px-sm" nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="userMenu">
-      <nz-avatar [nzSrc]="user.avatar" nzSize="small" class="mr-sm" />
-      {{ user.name }}
+      <nz-avatar [nzSrc]="(currentUser$ | async)?.photoURL || user.avatar" nzSize="small" class="mr-sm" />
+      {{ (currentUser$ | async)?.displayName || (currentUser$ | async)?.email || user.name }}
     </div>
     <nz-dropdown-menu #userMenu="nzDropdownMenu">
       <div nz-menu class="width-sm">
@@ -37,18 +40,34 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     </nz-dropdown-menu>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, NzDropDownModule, NzMenuModule, NzIconModule, I18nPipe, NzAvatarModule]
+  imports: [RouterLink, NzDropDownModule, NzMenuModule, NzIconModule, I18nPipe, NzAvatarModule, AsyncPipe]
 })
 export class HeaderUserComponent {
   private readonly settings = inject(SettingsService);
   private readonly router = inject(Router);
   private readonly tokenService = inject(DA_SERVICE_TOKEN);
+  private readonly firebaseAuth = inject(FirebaseAuthAdapterService);
+  private readonly authStateManager = inject(AuthStateManagerService);
+
+  // Firebase 用戶信息流
+  readonly currentUser$ = this.firebaseAuth.authState$;
+
   get user(): User {
     return this.settings.user;
   }
 
   logout(): void {
-    this.tokenService.clear();
-    this.router.navigateByUrl(this.tokenService.login_url!);
+    // 使用 AuthStateManagerService 來清理 Firebase 和 Alain 狀態
+    this.authStateManager.clearSession().subscribe({
+      next: () => {
+        this.router.navigateByUrl(this.tokenService.login_url!);
+      },
+      error: (error) => {
+        console.error('Logout error:', error);
+        // 即使出錯也要清理本地狀態並重定向
+        this.tokenService.clear();
+        this.router.navigateByUrl(this.tokenService.login_url!);
+      }
+    });
   }
 }

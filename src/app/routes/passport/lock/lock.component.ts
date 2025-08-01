@@ -8,17 +8,23 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { AsyncPipe } from '@angular/common';
+import { FirebaseAuthAdapterService } from '../../../core/auth/firebase-auth-adapter.service';
 
 @Component({
   selector: 'passport-lock',
   templateUrl: './lock.component.html',
   styleUrls: ['./lock.component.less'],
-  imports: [ReactiveFormsModule, I18nPipe, NzAvatarModule, NzFormModule, NzGridModule, NzButtonModule, NzInputModule]
+  imports: [ReactiveFormsModule, I18nPipe, NzAvatarModule, NzFormModule, NzGridModule, NzButtonModule, NzInputModule, AsyncPipe]
 })
 export class UserLockComponent {
   private readonly tokenService = inject(DA_SERVICE_TOKEN);
   private readonly settings = inject(SettingsService);
   private readonly router = inject(Router);
+  private readonly firebaseAuth = inject(FirebaseAuthAdapterService);
+
+  // Firebase 用戶信息流
+  readonly currentUser$ = this.firebaseAuth.authState$;
 
   f = new FormGroup({
     password: new FormControl('', { nonNullable: true, validators: [Validators.required] })

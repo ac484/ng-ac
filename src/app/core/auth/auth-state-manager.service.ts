@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { Observable, BehaviorSubject, combineLatest, EMPTY, of } from 'rxjs';
-import { map, switchMap, catchError, tap, distinctUntilChanged } from 'rxjs/operators';
+import { map, switchMap, catchError, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { FirebaseAuthAdapterService } from './firebase-auth-adapter.service';
 import { TokenSyncService } from './token-sync.service';
 import { FirebaseErrorHandlerService } from './firebase-error-handler.service';
 import { SessionManagerService } from './session-manager.service';
+import { PerformanceMonitorService } from './performance-monitor.service';
 import { AuthState } from './auth.types';
 
 /**
@@ -22,6 +23,7 @@ export class AuthStateManagerService {
   private readonly tokenSync = inject(TokenSyncService);
   private readonly errorHandler = inject(FirebaseErrorHandlerService);
   private readonly sessionManager = inject(SessionManagerService);
+  private readonly performanceMonitor = inject(PerformanceMonitorService);
 
   // 內部狀態管理
   private readonly _authState$ = new BehaviorSubject<AuthState>({
@@ -61,14 +63,20 @@ export class AuthStateManagerService {
    * 設定 Firebase Auth 狀態監聽和自動同步
    */
   initialize(): Observable<void> {
+    this.performanceMonitor.startTimer('auth-initialization');
+
     return this.firebaseAuth.authState$.pipe(
       tap(() => this.setLoading(true)),
       switchMap(user => this.handleAuthStateChange(user)),
-      tap(() => this.setLoading(false)),
+      tap(() => {
+        this.setLoading(false);
+        this.performanceMonitor.endTimer('auth-initialization');
+      }),
       catchError(error => {
         this.errorHandler.handleAuthStateError(error);
         this.setError('認證初始化失敗');
         this.setLoading(false);
+        this.performanceMonitor.endTimer('auth-initialization');
         return EMPTY;
       }),
       map(() => void 0)

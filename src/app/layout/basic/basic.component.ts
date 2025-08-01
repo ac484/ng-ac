@@ -9,6 +9,8 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { AsyncPipe } from '@angular/common';
+import { FirebaseAuthAdapterService } from '../../core/auth/firebase-auth-adapter.service';
 
 import { HeaderClearStorageComponent } from './widgets/clear-storage.component';
 import { HeaderFullScreenComponent } from './widgets/fullscreen.component';
@@ -61,10 +63,10 @@ import { HeaderI18nComponent } from './widgets/i18n.component';
       </layout-default-header-item>
       <ng-template #asideUserTpl>
         <div nz-dropdown nzTrigger="click" [nzDropdownMenu]="userMenu" class="alain-default__aside-user">
-          <nz-avatar class="alain-default__aside-user-avatar" [nzSrc]="user.avatar" />
+          <nz-avatar class="alain-default__aside-user-avatar" [nzSrc]="(currentUser$ | async)?.photoURL || user.avatar" />
           <div class="alain-default__aside-user-info">
-            <strong>{{ user.name }}</strong>
-            <p class="mb0">{{ user.email }}</p>
+            <strong>{{ (currentUser$ | async)?.displayName || (currentUser$ | async)?.email || user.name }}</strong>
+            <p class="mb0">{{ (currentUser$ | async)?.email || user.email }}</p>
           </div>
         </div>
         <nz-dropdown-menu #userMenu="nzDropdownMenu">
@@ -94,6 +96,7 @@ import { HeaderI18nComponent } from './widgets/i18n.component';
     NzMenuModule,
     NzDropDownModule,
     NzAvatarModule,
+    AsyncPipe,
     HeaderSearchComponent,
     HeaderClearStorageComponent,
     HeaderFullScreenComponent,
@@ -103,6 +106,11 @@ import { HeaderI18nComponent } from './widgets/i18n.component';
 })
 export class LayoutBasicComponent {
   private readonly settings = inject(SettingsService);
+  private readonly firebaseAuth = inject(FirebaseAuthAdapterService);
+
+  // Firebase 用戶信息流
+  readonly currentUser$ = this.firebaseAuth.authState$;
+
   options: LayoutDefaultOptions = {
     logoExpanded: `./assets/logo-full.svg`,
     logoCollapsed: `./assets/logo.svg`
