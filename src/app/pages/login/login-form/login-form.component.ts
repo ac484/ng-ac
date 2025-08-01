@@ -152,6 +152,87 @@ export class LoginFormComponent implements OnInit {
     }
   }
 
+  // Firebase Google 登入
+  async signInWithGoogle(): Promise<void> {
+    try {
+      this.spinService.setCurrentGlobalSpinStore(true);
+
+      console.log('🔥 開始 Firebase Google 登入...');
+
+      // 使用 Firebase Auth 服務進行 Google 登入
+      const { user, idToken, compatibleToken } = await this.firebaseAuthService.signInWithGoogle();
+
+      console.log('🔥 Firebase Google 登入成功:', {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        isAnonymous: user.isAnonymous,
+        idTokenLength: idToken.length,
+        compatibleTokenLength: compatibleToken.length
+      });
+
+      if (user) {
+        // 創建一個與原有系統完全兼容的 token 對象
+        const firebaseUserToken = {
+          compatibleToken: compatibleToken, // 兼容的 JWT token
+          firebaseIdToken: idToken, // 原始 Firebase ID token
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          isAnonymous: user.isAnonymous,
+          firebaseUser: true
+        };
+
+        console.log('🔥 準備調用 loginIn 服務:', firebaseUserToken);
+
+        // 使用現有的登入服務處理 Firebase 用戶，流程與傳統登入完全一致
+        await this.loginInOutService.loginIn(firebaseUserToken);
+
+        console.log('🔥 loginIn 服務調用成功');
+
+        this.notification.success(
+          '登入成功',
+          `歡迎 ${user.displayName || user.email}！已使用 Google 帳號登入系統`,
+          {
+            nzPlacement: 'top',
+            nzDuration: 3000
+          }
+        );
+
+        // 導航到主頁面
+        this.router.navigateByUrl('default/dashboard/analysis');
+      }
+    } catch (error: any) {
+      console.error('🔥 Firebase Google 登入失敗:', error);
+
+      let errorMessage = 'Google 登入過程中發生錯誤';
+
+      // 處理常見的 Google 登入錯誤
+      if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = '登入視窗已關閉，請重新嘗試';
+      } else if (error.code === 'auth/popup-blocked') {
+        errorMessage = '彈出視窗被阻擋，請允許彈出視窗後重試';
+      } else if (error.code === 'auth/cancelled-popup-request') {
+        errorMessage = '登入請求已取消';
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = '網路連線失敗，請檢查網路狀態';
+      }
+
+      this.notification.error(
+        '登入失敗',
+        errorMessage,
+        {
+          nzPlacement: 'top',
+          nzDuration: 5000
+        }
+      );
+    } finally {
+      this.spinService.setCurrentGlobalSpinStore(false);
+    }
+  }
+
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       userName: [null, [Validators.required]],

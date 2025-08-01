@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, User, authState, signInAnonymously, signOut } from '@angular/fire/auth';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Auth, User, authState, signInAnonymously, signInWithPopup, GoogleAuthProvider, signOut } from '@angular/fire/auth';
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface FirebaseUserInfo {
@@ -67,6 +67,28 @@ export class FirebaseAuthService {
             return { user, idToken, compatibleToken };
         } catch (error) {
             console.error('Firebase 匿名登入失敗:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Google 登入
+     */
+    async signInWithGoogle(): Promise<{ user: User; idToken: string; compatibleToken: string }> {
+        try {
+            const provider = new GoogleAuthProvider();
+            // 設置 Google 登入的範圍
+            provider.addScope('profile');
+            provider.addScope('email');
+
+            const userCredential = await signInWithPopup(this.auth, provider);
+            const user = userCredential.user;
+            const idToken = await user.getIdToken();
+            const compatibleToken = this.createCompatibleJWT(user);
+
+            return { user, idToken, compatibleToken };
+        } catch (error) {
+            console.error('Firebase Google 登入失敗:', error);
             throw error;
         }
     }
