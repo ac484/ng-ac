@@ -5,6 +5,18 @@ import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from '@angula
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, RouteReuseStrategy, TitleStrategy, withComponentInputBinding, withHashLocation, withInMemoryScrolling, withPreloading } from '@angular/router';
 
+// Firebase 相關導入
+import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getFunctions, provideFunctions } from '@angular/fire/functions';
+import { getMessaging, provideMessaging } from '@angular/fire/messaging';
+import { getPerformance, providePerformance } from '@angular/fire/performance';
+import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+
 import { DashboardOutline, FormOutline, MenuFoldOutline, MenuUnfoldOutline } from '@ant-design/icons-angular/icons';
 import { appRoutes } from '@app/app-routing';
 import interceptors from '@app/core/services/interceptors';
@@ -18,6 +30,7 @@ import { SubLockedStatusService } from '@core/services/common/sub-locked-status.
 import { SubWindowWithService } from '@core/services/common/sub-window-with.service';
 import { ThemeSkinService } from '@core/services/common/theme-skin.service';
 import { StartupService } from '@core/startup/startup.service';
+import { environment } from '@env/environment';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import { NZ_ICONS } from 'ng-zorro-antd/icon';
@@ -49,7 +62,7 @@ export function SubWindowWithServiceFactory(subWindowWithService: SubWindowWithS
   return () => subWindowWithService.subWindowWidth();
 }
 
-const APPINIT_PROVIDES = [
+const APPINIT_PROVIDERS = [
   // 项目启动
   {
     provide: APP_INITIALIZER,
@@ -119,8 +132,42 @@ export const appConfig: ApplicationConfig = {
     ),
     importProvidersFrom(NzDrawerModule, NzModalModule),
     ...interceptors, // http拦截器
-    ...APPINIT_PROVIDES, // 项目启动之前，需要调用的一系列方法
+    ...APPINIT_PROVIDERS, // 项目启动之前，需要调用的一系列方法
     provideAnimationsAsync(), // 开启延迟加载动画，ng17新增特性，如果想要项目启动时就加载动画，可以使用provideAnimations()
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()),
+
+    // Firebase 配置
+    provideFirebaseApp(() =>
+      initializeApp({
+        projectId: environment.firebase.projectId,
+        appId: environment.firebase.appId,
+        storageBucket: environment.firebase.storageBucket,
+        apiKey: environment.firebase.apiKey,
+        authDomain: environment.firebase.authDomain,
+        messagingSenderId: environment.firebase.messagingSenderId,
+        measurementId: environment.firebase.measurementId
+      })
+    ),
+
+    // Firebase 核心服务
+    provideAuth(() => getAuth()), // 认证服务
+    provideAnalytics(() => getAnalytics()), // 分析服务
+    ScreenTrackingService, // 屏幕追踪服务
+    UserTrackingService, // 用户追踪服务
+
+    // Firebase 安全服务
+    provideAppCheck(() => {
+      // TODO: 获取 reCAPTCHA Enterprise 密钥 https://console.cloud.google.com/security/recaptcha?project=_
+      const provider = new ReCaptchaEnterpriseProvider('6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo');
+      return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
+    }),
+
+    // Firebase 数据和功能服务
+    provideFirestore(() => getFirestore()), // Firestore 数据库
+    provideFunctions(() => getFunctions()), // 云端函数
+    provideMessaging(() => getMessaging()), // 推送通知
+    providePerformance(() => getPerformance()), // 性能监控
+    provideStorage(() => getStorage()), // 文件存储
+    provideRemoteConfig(() => getRemoteConfig()) // 远程配置
   ]
 };
