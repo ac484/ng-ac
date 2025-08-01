@@ -112,7 +112,7 @@ export class LoginInOutService {
   }
 
   private getDefaultMenusForFirebaseUser(): Menu[] {
-    // 為 Firebase 用戶提供預設菜單
+    // 為 Firebase 用戶提供完整的菜單結構
     return [
       {
         id: 1,
@@ -121,7 +121,7 @@ export class LoginInOutService {
         menuType: 'C',
         path: '/default/dashboard',
         icon: 'dashboard',
-        code: 'TabsDetail', // 添加權限碼
+        code: 'TabsDetail',
         children: [
           {
             id: 11,
@@ -130,10 +130,245 @@ export class LoginInOutService {
             menuType: 'C',
             path: '/default/dashboard/analysis',
             icon: 'bar-chart',
-            code: 'TabsDetail', // 添加權限碼，與用戶的 authCode 匹配
+            code: 'TabsDetail',
+            children: []
+          },
+          {
+            id: 12,
+            fatherId: 1,
+            menuName: '監控頁',
+            menuType: 'C',
+            path: '/default/dashboard/monitor',
+            icon: 'monitor',
+            code: 'TabsDetail',
+            children: []
+          },
+          {
+            id: 13,
+            fatherId: 1,
+            menuName: '工作台',
+            menuType: 'C',
+            path: '/default/dashboard/workbench',
+            icon: 'desktop',
+            code: 'TabsDetail',
             children: []
           }
         ]
+      },
+      {
+        id: 2,
+        fatherId: 0,
+        menuName: '頁面範例',
+        menuType: 'C',
+        path: '/default/page-demo',
+        icon: 'file-text',
+        code: 'TabsDetail',
+        children: [
+          {
+            id: 21,
+            fatherId: 2,
+            menuName: '列表頁面',
+            menuType: 'C',
+            path: '/default/page-demo/list',
+            icon: 'table',
+            code: 'TabsDetail',
+            children: [
+              {
+                id: 211,
+                fatherId: 21,
+                menuName: '查詢表格',
+                menuType: 'C',
+                path: '/default/page-demo/list/search-table',
+                icon: 'search',
+                code: 'TabsDetail',
+                children: []
+              },
+              {
+                id: 212,
+                fatherId: 21,
+                menuName: '標準表格',
+                menuType: 'C',
+                path: '/default/page-demo/list/standard-table',
+                icon: 'table',
+                code: 'TabsDetail',
+                children: []
+              },
+              {
+                id: 213,
+                fatherId: 21,
+                menuName: '樹狀表格',
+                menuType: 'C',
+                path: '/default/page-demo/list/tree-list',
+                icon: 'cluster',
+                code: 'TabsDetail',
+                children: []
+              },
+              {
+                id: 214,
+                fatherId: 21,
+                menuName: '卡片列表',
+                menuType: 'C',
+                path: '/default/page-demo/list/card-table',
+                icon: 'credit-card',
+                code: 'TabsDetail',
+                children: []
+              }
+            ]
+          },
+          {
+            id: 22,
+            fatherId: 2,
+            menuName: '表單頁面',
+            menuType: 'C',
+            path: '/default/page-demo/form',
+            icon: 'form',
+            code: 'TabsDetail',
+            children: [
+              {
+                id: 221,
+                fatherId: 22,
+                menuName: '基礎表單',
+                menuType: 'C',
+                path: '/default/page-demo/form/base-form',
+                icon: 'edit',
+                code: 'TabsDetail',
+                children: []
+              },
+              {
+                id: 222,
+                fatherId: 22,
+                menuName: '分步表單',
+                menuType: 'C',
+                path: '/default/page-demo/form/step-form',
+                icon: 'ordered-list',
+                code: 'TabsDetail',
+                children: []
+              },
+              {
+                id: 223,
+                fatherId: 22,
+                menuName: '高級表單',
+                menuType: 'C',
+                path: '/default/page-demo/form/advanced-form',
+                icon: 'setting',
+                code: 'TabsDetail',
+                children: []
+              }
+            ]
+          },
+          {
+            id: 23,
+            fatherId: 2,
+            menuName: '詳情頁面',
+            menuType: 'C',
+            path: '/default/page-demo/detail',
+            icon: 'profile',
+            code: 'TabsDetail',
+            children: [
+              {
+                id: 231,
+                fatherId: 23,
+                menuName: '基礎詳情頁',
+                menuType: 'C',
+                path: '/default/page-demo/detail/base-detail',
+                icon: 'file-text',
+                code: 'TabsDetail',
+                children: []
+              },
+              {
+                id: 232,
+                fatherId: 23,
+                menuName: '高級詳情頁',
+                menuType: 'C',
+                path: '/default/page-demo/detail/adv-detail',
+                icon: 'file-done',
+                code: 'TabsDetail',
+                children: []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 3,
+        fatherId: 0,
+        menuName: '系統管理',
+        menuType: 'C',
+        path: '/default/system',
+        icon: 'setting',
+        code: 'TabsDetail',
+        children: [
+          {
+            id: 31,
+            fatherId: 3,
+            menuName: '菜單管理',
+            menuType: 'C',
+            path: '/default/system/menu',
+            icon: 'menu',
+            code: 'TabsDetail',
+            children: []
+          },
+          {
+            id: 32,
+            fatherId: 3,
+            menuName: '帳號管理',
+            menuType: 'C',
+            path: '/default/system/account',
+            icon: 'user',
+            code: 'TabsDetail',
+            children: []
+          },
+          {
+            id: 33,
+            fatherId: 3,
+            menuName: '部門管理',
+            menuType: 'C',
+            path: '/default/system/dept',
+            icon: 'team',
+            code: 'TabsDetail',
+            children: []
+          },
+          {
+            id: 34,
+            fatherId: 3,
+            menuName: '角色管理',
+            menuType: 'C',
+            path: '/default/system/role-manager',
+            icon: 'safety-certificate',
+            code: 'TabsDetail',
+            children: []
+          }
+        ]
+      },
+      {
+        id: 4,
+        fatherId: 0,
+        menuName: '功能特性',
+        menuType: 'C',
+        path: '/default/feat',
+        icon: 'rocket',
+        code: 'TabsDetail',
+        children: []
+      },
+      {
+        id: 5,
+        fatherId: 0,
+        menuName: '組件展示',
+        menuType: 'C',
+        path: '/default/comp',
+        icon: 'appstore',
+        code: 'TabsDetail',
+        children: []
+      },
+      {
+        id: 6,
+        fatherId: 0,
+        menuName: '關於',
+        menuType: 'C',
+        path: '/default/about',
+        icon: 'info-circle',
+        code: 'TabsDetail',
+        children: []
       }
     ];
   }
