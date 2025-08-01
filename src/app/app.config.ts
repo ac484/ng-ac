@@ -160,7 +160,7 @@ export const appConfig: ApplicationConfig = {
     provideAppCheck(() => {
       // TODO: 获取 reCAPTCHA Enterprise 密钥 https://console.cloud.google.com/security/recaptcha?project=_
       const provider = new ReCaptchaEnterpriseProvider('6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo');
-      return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
+      return initializeAppCheck(undefined, { provider: provider as any, isTokenAutoRefreshEnabled: true });
     }),
 
     // Firebase 数据和功能服务

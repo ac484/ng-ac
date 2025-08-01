@@ -52,7 +52,7 @@ export class MsgComponent {
     });
   }
 
-  createBasicNotification(template: TemplateRef<{}>): void {
+  createBasicNotification(template: TemplateRef<any>): void {
     this.notification.template(template);
   }
 }

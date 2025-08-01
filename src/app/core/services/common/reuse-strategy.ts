@@ -115,7 +115,7 @@ export class SimpleReuseStrategy implements RouteReuseStrategy {
   }
 
   // 获取存储路由
-  retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
+  retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
     const key = fnGetReuseStrategyKeyFn(route);
     return !key ? null : SimpleReuseStrategy.handlers[key];
   }
