@@ -50,12 +50,9 @@
     <button class="login-form-button login-form-margin" nz-button nzSize="large" [nzType]="'primary'">登 录</button>
     <div class="other-way">
       <div class="other-login">
-        <span>其他方式登陆</span>
-        <i nz-icon nzTheme="fill" nzType="alipay-circle"></i>
-        <i nz-icon nzTheme="fill" nzType="taobao-circle"></i>
-        <i nz-icon nzTheme="fill" nzType="weibo-circle"></i>
+        <span>匿名登入</span>
         <i nz-icon nzTheme="outline" nzType="user" title="Firebase 匿名登入"
-          style="cursor: pointer; color: #1890ff; margin-left: 8px;" (click)="signInAnonymously()"></i>
+          style="cursor: pointer; color: #1890ff; font-size: 24px; margin-left: 8px;" (click)="signInAnonymously()"></i>
       </div>
       <a routerLink="/login/register-form">注册用户</a>
     </div>
