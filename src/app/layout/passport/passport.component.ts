@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { GlobalFooterModule } from '@delon/abc/global-footer';
 import { DA_SERVICE_TOKEN } from '@delon/auth';
@@ -33,6 +34,7 @@ import { HeaderI18nComponent } from '../basic/widgets/i18n.component';
 })
 export class LayoutPassportComponent implements OnInit {
   private tokenService = inject(DA_SERVICE_TOKEN);
+  private platformId = inject(PLATFORM_ID);
 
   links = [
     {
@@ -50,6 +52,9 @@ export class LayoutPassportComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.tokenService.clear();
+    // 只在瀏覽器環境中清除 token
+    if (isPlatformBrowser(this.platformId)) {
+      this.tokenService.clear();
+    }
   }
 }

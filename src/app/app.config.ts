@@ -6,7 +6,7 @@ import { provideRouter, withComponentInputBinding, withViewTransitions, withInMe
 import { I18NService, defaultInterceptor, provideStartup } from '@core';
 import { provideCellWidgets } from '@delon/abc/cell';
 import { provideSTWidgets } from '@delon/abc/st';
-import { authSimpleInterceptor, provideAuth } from '@delon/auth';
+import { authSimpleInterceptor, provideAuth, DA_STORE_TOKEN, MemoryStore } from '@delon/auth';
 import { firebaseTokenInterceptor, provideFirebaseAuthIntegration } from './core/auth';
 import { provideSFConfig } from '@delon/form';
 import { AlainProvideLang, provideAlain, zh_TW as delonLang } from '@delon/theme';
@@ -61,6 +61,8 @@ const providers: Array<Provider | EnvironmentProviders> = [
   provideAlain({ config: alainConfig, defaultLang, i18nClass: I18NService, icons: [...ICONS_AUTO, ...ICONS] }),
   provideNzConfig(ngZorroConfig),
   provideAuth(),
+  // 為 SSR 提供 MemoryStore 而不是 LocalStorage
+  { provide: DA_STORE_TOKEN, useClass: MemoryStore },
   provideCellWidgets(...CELL_WIDGETS),
   provideSTWidgets(...ST_WIDGETS),
   provideSFConfig({
@@ -75,16 +77,23 @@ if (environment.api?.refreshTokenEnabled && environment.api.refreshTokenType ===
   providers.push(provideBindAuthRefresh());
 }
 
-// Firebase providers
+// Firebase providers - 完整的 Firebase 服務配置
 const firebaseProviders: Array<Provider | EnvironmentProviders> = [
-  provideFirebaseApp(() => initializeApp(environment['firebase'])),
+  provideFirebaseApp(() => initializeApp({
+    projectId: "ng-acc",
+    appId: "1:289956121604:web:4dd9d608a2db962aeaf951",
+    storageBucket: "ng-acc.firebasestorage.app",
+    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ",
+    authDomain: "ng-acc.firebaseapp.com",
+    messagingSenderId: "289956121604",
+    measurementId: "G-6YM5S9LCNV"
+  })),
   provideAuth_alias(() => getAuth()),
   provideAnalytics(() => getAnalytics()),
   ScreenTrackingService,
   UserTrackingService,
   provideAppCheck(() => {
-    // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
-    const provider = new ReCaptchaEnterpriseProvider("6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo");
+    const provider = new ReCaptchaEnterpriseProvider('6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo');
     return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
   }),
   provideFirestore(() => getFirestore()),
