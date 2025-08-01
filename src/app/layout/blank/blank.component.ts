@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'layout-blank',
-  template: `<router-outlet />`,
-  host: {
-    '[class.alain-blank]': 'true'
-  },
+  selector: 'app-blank',
+  template: `
+    <router-outlet></router-outlet>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [RouterOutlet]
 })
-export class LayoutBlankComponent {}
+export class BlankComponent {}

@@ -1,114 +1,126 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { default as ngLang } from '@angular/common/locales/zh-Hant';
-import { ApplicationConfig, EnvironmentProviders, Provider } from '@angular/core';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideRouter, withComponentInputBinding, withViewTransitions, withInMemoryScrolling, withHashLocation, RouterFeatures } from '@angular/router';
-import { I18NService, defaultInterceptor, provideStartup } from '@core';
-import { provideCellWidgets } from '@delon/abc/cell';
-import { provideSTWidgets } from '@delon/abc/st';
-import { authSimpleInterceptor, provideAuth, DA_STORE_TOKEN, MemoryStore } from '@delon/auth';
-import { firebaseTokenInterceptor, provideFirebaseAuthIntegration } from './core/auth';
-import { provideSFConfig } from '@delon/form';
-import { AlainProvideLang, provideAlain, zh_TW as delonLang } from '@delon/theme';
-import { AlainConfig } from '@delon/util/config';
-import { environment } from '@env/environment';
-import { CELL_WIDGETS, ST_WIDGETS, SF_WIDGETS } from '@shared';
-import { zhTW as dateLang } from 'date-fns/locale';
-import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
-import { zh_TW as zorroLang } from 'ng-zorro-antd/i18n';
+import { DOCUMENT, registerLocaleData } from '@angular/common';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import zh from '@angular/common/locales/zh';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideRouter, RouteReuseStrategy, TitleStrategy, withComponentInputBinding, withHashLocation, withInMemoryScrolling, withPreloading } from '@angular/router';
 
-import { provideBindAuthRefresh } from './core/net';
-import { routes } from './routes/routes';
-import { ICONS } from '../style-icons';
-import { ICONS_AUTO } from '../style-icons-auto';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth as provideAuth_alias } from '@angular/fire/auth';
-import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
-import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getFunctions, provideFunctions } from '@angular/fire/functions';
-import { getMessaging, provideMessaging } from '@angular/fire/messaging';
-import { getPerformance, providePerformance } from '@angular/fire/performance';
-import { getStorage, provideStorage } from '@angular/fire/storage';
-import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
-import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
+import { DashboardOutline, FormOutline, MenuFoldOutline, MenuUnfoldOutline } from '@ant-design/icons-angular/icons';
+import { appRoutes } from '@app/app-routing';
+import interceptors from '@app/core/services/interceptors';
+import { CustomPageTitleResolverService } from '@core/services/common/custom-page-title-resolver.service';
+import { InitThemeService } from '@core/services/common/init-theme.service';
+import { LoadAliIconCdnService } from '@core/services/common/load-ali-icon-cdn.service';
+import { SimpleReuseStrategy } from '@core/services/common/reuse-strategy';
+import { ScrollService } from '@core/services/common/scroll.service';
+import { SelectivePreloadingStrategyService } from '@core/services/common/selective-preloading-strategy.service';
+import { SubLockedStatusService } from '@core/services/common/sub-locked-status.service';
+import { SubWindowWithService } from '@core/services/common/sub-window-with.service';
+import { ThemeSkinService } from '@core/services/common/theme-skin.service';
+import { StartupService } from '@core/startup/startup.service';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
+import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
-const defaultLang: AlainProvideLang = {
-  abbr: 'zh-Hant',
-  ng: ngLang,
-  zorro: zorroLang,
-  date: dateLang,
-  delon: delonLang
-};
+const icons = [MenuFoldOutline, MenuUnfoldOutline, DashboardOutline, FormOutline];
 
-const alainConfig: AlainConfig = {
-  auth: { login_url: '/passport/login' }
-};
+registerLocaleData(zh);
 
-const ngZorroConfig: NzConfig = {};
-
-const routerFeatures: RouterFeatures[] = [
-  withComponentInputBinding(),
-  withViewTransitions(),
-  withInMemoryScrolling({ scrollPositionRestoration: 'top' })
-];
-if (environment.useHash) routerFeatures.push(withHashLocation());
-
-const providers: Array<Provider | EnvironmentProviders> = [
-  provideHttpClient(withInterceptors([...(environment.interceptorFns ?? []), firebaseTokenInterceptor, authSimpleInterceptor, defaultInterceptor])),
-  provideAnimations(),
-  provideRouter(routes, ...routerFeatures),
-  provideAlain({ config: alainConfig, defaultLang, i18nClass: I18NService, icons: [...ICONS_AUTO, ...ICONS] }),
-  provideNzConfig(ngZorroConfig),
-  provideAuth(),
-  // 為 SSR 提供 MemoryStore 而不是 LocalStorage
-  { provide: DA_STORE_TOKEN, useClass: MemoryStore },
-  provideCellWidgets(...CELL_WIDGETS),
-  provideSTWidgets(...ST_WIDGETS),
-  provideSFConfig({
-    widgets: [...SF_WIDGETS]
-  }),
-  provideStartup(),
-  ...(environment.providers || [])
-];
-
-// If you use `@delon/auth` to refresh the token, additional registration `provideBindAuthRefresh` is required
-if (environment.api?.refreshTokenEnabled && environment.api.refreshTokenType === 'auth-refresh') {
-  providers.push(provideBindAuthRefresh());
+export function StartupServiceFactory(startupService: StartupService) {
+  return () => startupService.load();
 }
 
-// Firebase providers - 完整的 Firebase 服務配置
-const firebaseProviders: Array<Provider | EnvironmentProviders> = [
-  provideFirebaseApp(() => initializeApp({
-    projectId: "ng-acc",
-    appId: "1:289956121604:web:4dd9d608a2db962aeaf951",
-    storageBucket: "ng-acc.firebasestorage.app",
-    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ",
-    authDomain: "ng-acc.firebaseapp.com",
-    messagingSenderId: "289956121604",
-    measurementId: "G-6YM5S9LCNV"
-  })),
-  provideAuth_alias(() => getAuth()),
-  provideAnalytics(() => getAnalytics()),
-  ScreenTrackingService,
-  UserTrackingService,
-  provideAppCheck(() => {
-    const provider = new ReCaptchaEnterpriseProvider('6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo');
-    return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
-  }),
-  provideFirestore(() => getFirestore()),
-  provideFunctions(() => getFunctions()),
-  provideMessaging(() => getMessaging()),
-  providePerformance(() => getPerformance()),
-  provideStorage(() => getStorage()),
-  provideRemoteConfig(() => getRemoteConfig()),
-  provideVertexAI(() => getVertexAI())
+export function LoadAliIconCdnFactory(loadAliIconCdnService: LoadAliIconCdnService) {
+  return () => loadAliIconCdnService.load();
+}
+
+export function InitThemeServiceFactory(initThemeService: InitThemeService) {
+  return async (): Promise<void> => await initThemeService.initTheme();
+}
+
+// 监听锁屏状态
+export function InitLockedStatusServiceFactory(subLockedStatusService: SubLockedStatusService) {
+  return () => subLockedStatusService.initLockedStatus();
+}
+
+// 开启监听屏幕宽度
+export function SubWindowWithServiceFactory(subWindowWithService: SubWindowWithService) {
+  return () => subWindowWithService.subWindowWidth();
+}
+
+const APPINIT_PROVIDES = [
+  // 项目启动
+  {
+    provide: APP_INITIALIZER,
+    useFactory: StartupServiceFactory,
+    deps: [StartupService],
+    multi: true
+  },
+  // load阿里图标库cdn
+  {
+    provide: APP_INITIALIZER,
+    useFactory: LoadAliIconCdnFactory,
+    deps: [LoadAliIconCdnService],
+    multi: true
+  },
+  // 初始化锁屏服务
+  {
+    provide: APP_INITIALIZER,
+    useFactory: InitLockedStatusServiceFactory,
+    deps: [SubLockedStatusService],
+    multi: true
+  },
+  // 初始化主题
+  {
+    provide: APP_INITIALIZER,
+    useFactory: InitThemeServiceFactory,
+    deps: [InitThemeService],
+    multi: true
+  },
+  // 初始化监听屏幕宽度服务
+  {
+    provide: APP_INITIALIZER,
+    useFactory: SubWindowWithServiceFactory,
+    deps: [SubWindowWithService],
+    multi: true
+  },
+  // 初始化暗黑模式还是default模式的css
+  {
+    provide: APP_INITIALIZER,
+    useFactory: (themeService: ThemeSkinService) => () => {
+      return themeService.loadTheme();
+    },
+    deps: [ThemeSkinService],
+    multi: true
+  }
 ];
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    ...providers,
-    ...firebaseProviders,
-    ...provideFirebaseAuthIntegration()
+    { provide: RouteReuseStrategy, useClass: SimpleReuseStrategy, deps: [DOCUMENT, ScrollService] }, // 路由复用
+    {
+      provide: TitleStrategy, // 相关资料：https://dev.to/brandontroberts/setting-page-titles-natively-with-the-angular-router-393j
+      useClass: CustomPageTitleResolverService // 自定义路由切换时，浏览器title的显示，在ng14以上支持。旧版本使用方式请看我的github v16tag以下版本代码
+    },
+    { provide: NZ_I18N, useValue: zh_CN }, // zorro国际化
+    { provide: NZ_ICONS, useValue: icons }, // zorro图标
+    provideRouter(
+      appRoutes, // 路由
+      withPreloading(SelectivePreloadingStrategyService), // 自定义模块预加载
+      // withViewTransitions({
+      //   skipInitialTransition: true
+      // }), // 路由切换过渡，ng17新增实验性特性参考资料https://netbasal.com/angular-v17s-view-transitions-navigate-in-elegance-f2d48fd8ceda
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top'
+      }),
+      withHashLocation(), // 使用哈希路由
+      withComponentInputBinding() // 开启路由参数绑定到组件的输入属性,ng16新增特性
+    ),
+    importProvidersFrom(NzDrawerModule, NzModalModule),
+    ...interceptors, // http拦截器
+    ...APPINIT_PROVIDES, // 项目启动之前，需要调用的一系列方法
+    provideAnimationsAsync(), // 开启延迟加载动画，ng17新增特性，如果想要项目启动时就加载动画，可以使用provideAnimations()
+    provideHttpClient(withInterceptorsFromDi())
   ]
 };

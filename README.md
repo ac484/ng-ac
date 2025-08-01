@@ -1,260 +1,161 @@
-# Memory Bank System v0.7-beta
+# ng-ant-admin
+[![CodeFactor](https://www.codefactor.io/repository/github/huajian123/ng-ant-admin/badge)](https://www.codefactor.io/repository/github/huajian123/ng-ant-admin)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+[![Angular](https://img.shields.io/badge/Build%20with-Angular%20CLI-red?logo=angular)](https://www.github.com/angular/angular)
 
-A token-optimized, hierarchical task management system that integrates with Cursor custom modes for efficient development workflows.
+## ✨前言
+- 本项目作为我为angular社区尽一点力所能及之力，希望大家喜欢这个模板，也希望更多的国内开发者能重新审视angular这一前端框架，我相信angular会越来越好，我也会一直维护下去，如果您有什么好的建议，可以加入qq群一起讨论，群号：376065816。
+- 本项目也有一点点教学性质，其中用到大量angular新特性，有详细的注释以及参考文章链接在代码中，大家可以看看源码，有问题与我讨论，有改进处可以提pr，我们一起进步
 
-```mermaid
-graph TD
-    Main["Memory Bank System"] --> Modes["Custom Modes"]
-    Main --> Rules["Hierarchical Rule Loading"]
-    Main --> Visual["Visual Process Maps"]
-    Main --> Token["Token Optimization"]
-    
-    Modes --> VAN["VAN: Initialization"]
-    Modes --> PLAN["PLAN: Task Planning"]
-    Modes --> CREATIVE["CREATIVE: Design"]
-    Modes --> IMPLEMENT["IMPLEMENT: Building"]
-    Modes --> REFLECT["REFLECT: Review"]
-    Modes --> ARCHIVE["ARCHIVE: Documentation"]
-    
-    style Main fill:#4da6ff,stroke:#0066cc,color:white
-    style Modes fill:#f8d486,stroke:#e8b84d
-    style Rules fill:#80ffaa,stroke:#4dbb5f
-    style Visual fill:#d9b3ff,stroke:#b366ff
-    style Token fill:#ff9980,stroke:#ff5533
+## ✨特性
+
+- 支持最新angular版本
+- Support the latest angular version
+- 所有组件onPush,性能卓越
+- All components onPush, excellent performance
+- 代码示例丰富，有完整服务端后台，前后端分离示例
+- Rich code examples, complete server background, front-end and back-end separation examples
+- 常用工具类，服务， 指令，管道，封装了表格，抽屉，对话框等常用功能
+- Common tools, services, instructions, pipelines。Encapsulates common functions such as tables, drawers, and dialog boxes
+- <font color=red size=6>全部组件均为独立组件，文件量减少（如果需要module版本，请看[这里](https://github.com/huajian123/ng-ant-admin/releases/tag/v15.0)）</font>
+- <font color=red size=6>Standalone Components（module style is [here](https://github.com/huajian123/ng-ant-admin/releases/tag/v15.0)）</font>
+
+
+## 文档
+
+有关文档与示例，请访问 [doc](http://1.117.181.242:8081/)
+<br>
+<br>
+angular这1年来的更新，比以往几年来更新都多，api有不少写法不一致，所以未及时更新schematic，现在single只是开发者预览版，为了保证生产，我在ng16版本也没有使用，我想等api写法稳定后再更新schematic，如果你想用我提供的schematic，目前只能适配ng15版本的，采用module而不是独立组件的版本。
+
+# 项目介绍
+1.如果您用我的项目进行学习或者参考，请先确定您使用的是angular哪个版本，因为angular15后写法有部分不一样，所以我的建议是，您正在使用angular什么版本，则下载对应版本的ng-ant-admin,最新版本直接从master分支下载即可，历史版本在这个链接进行下载[这里](https://github.com/huajian123/ng-ant-admin/releases)。<br>
+1.If you use my project for study or reference, please first determine which version of angular you are using, because some of the writing methods are different after angular15, so my suggestion is, what version of angular are you using, then download the corresponding version of ng -ant-admin, the latest version can be downloaded directly from the master branch, and the historical version can be downloaded from this link [here](https://github.com/huajian123/ng-ant-admin/releases)。<br>
+<br>
+<br>
+2.账号admin，密码123456 ,系统管理菜单下都为真是api接口调用示例，数据库每10分钟从备份恢复一次<br>
+2.Account admin, password 123456, under the system management menu are real api interface call examples, the database is restored from backup every 10 minutes<br>
+<br>
+<br>
+3.默认登录超时时间为1h，上传，下载，websocket，系统管理模块均为真实接口调用展示。<br>
+3.The default login timeout is 1h, upload, download, websocket, and system management modules are all real interface call display。<br>
+<br>
+<br>
+4.完成最常用的权限控制，人员账号管理，角色管理，菜单管理，登录超时等。添加了大量业务示例，开箱即用。<br>
+4.Complete the most commonly used permission control, personnel account management, role management, menu management, login timeout, etc. Added a lot of business examples, out of the box。<br>
+<br>
+<br>
+5.使用本项目遇到问题，可以加入376065816 qq群号与我沟通。<br>
+5.If you encounter problems using this project, you can join the 376065816 qq group number to communicate with me。<br>
+<br>
+<br>
+快速二开使用详解 [快速二开使用详解](https://www.bilibili.com/video/BV1gF411x7rN/)<br>
+项目搭建简易教程 [项目搭建简易教程](https://www.bilibili.com/video/BV1EM4y1w7zd/)<br>
+online demo地址 [demo](http://1.117.181.242/)<br>
+纯净版项目地址 [pure](https://gitee.com/hjxiaoqianduan/ng-ant-admin-pure/)<br>
+pure project address [pure](https://gitee.com/hjxiaoqianduan/ng-ant-admin-pure/)<br>
+服务端源码地址 [serviceApi](https://github.com/huajian123/ng-ant-admin-api)<br>
+serviceApi address [serviceApi](https://github.com/huajian123/ng-ant-admin-api)<br>
+线上swagger地址 [swagger](http://1.117.181.242:8003/swagger-ui.html#/)<br>
+
+
+# 路由的key(routing key)
+key需要设置成路由地址最后一个'/'后的字符串，并且要唯一<br>
+The key needs to be set to the string after the last '/' of the routing address, and it must be unique<br>
+```typescript
+const routes: Routes = [
+  {path: '', data: {key: 'login', shouldDetach: 'no'}, component: LoginFormComponent}
+];
+```
+# 栅格系统监听(grid system monitoring) 
+```angular2html
+enum EquipmentWidth {
+  xs,  // (max-width: 575.98px)
+  sm,  // (min-width: 576px) and (max-width: 767.98px)
+  md,  // (min-width: 768px) and (max-width: 991.98px)
+  lg,  // (min-width: 992px) and (max-width: 1199.98px)
+  xl,  // (min-width: 1200px) and (max-width: 1599.98px)
+  xxl  // (min-width: 1600px)
+}
+```
+使用方式(How to use)
+```
+  constructor(private windowsWidthService: WindowsWidthService) {
+  }
+  
+  this.windowsWidthService.getWindowWidthStore().pipe(takeUntil(this.destory$)).subscribe(res => {
+    this.currentEquipmentWidth = res;
+    this.cdr.markForCheck();
+  })
 ```
 
-> **Personal Note**: Memory Bank is my personal hobby project that I develop for my own use in coding projects. As this is a personal project, I don't maintain an issues tracker or actively collect feedback. However, if you're using these rules and encounter issues, one of the great advantages is that you can ask the Cursor AI directly to modify or update the rules to better suit your specific workflow. The system is designed to be adaptable by the AI, allowing you to customize it for your own needs without requiring external support.
 
-## About Memory Bank
+# 模块不需要预加载(Modules do not need to be preloaded)
 
-Memory Bank is a personal project that provides a structured approach to development using specialized modes for different phases of the development process. It uses a hierarchical rule loading architecture that loads only the rules needed for each phase, optimizing token usage and providing tailored guidance.
-
-### Token-Optimized Architecture
-
-Version 0.7-beta introduces significant token optimization improvements:
-
-- **Hierarchical Rule Loading**: Only loads essential rules initially with specialized lazy-loading
-- **Progressive Documentation**: Implements concise templates that scale with task complexity
-- **Optimized Mode Transitions**: Preserves critical context efficiently between modes
-- **Level-Specific Workflows**: Adapts documentation requirements to task complexity
-
-See the [Memory Bank Optimizations](MEMORY_BANK_OPTIMIZATIONS.md) document for detailed information about all optimization approaches.
-
-### Beyond Basic Custom Modes
-
-While Cursor's documentation describes custom modes as primarily standalone configurations with basic prompts and tool selections, Memory Bank significantly extends this concept:
-
-- **Graph-Based Mode Integration**: Modes are interconnected nodes in a development workflow rather than isolated tools
-- **Workflow Progression**: Modes are designed to transition from one to another in a logical sequence (VAN → PLAN → CREATIVE → IMPLEMENT → REFLECT → ARCHIVE)
-- **Shared Memory**: Persistent state maintained across mode transitions via Memory Bank files
-- **Adaptive Behavior**: Each mode adjusts its recommendations based on project complexity
-- **Built-in QA Functions**: QA capabilities can be called from any mode for technical validation
-
-This approach transforms custom modes from simple AI personalities into components of a coordinated development system with specialized phases working together.
-
-### CREATIVE Mode and Claude's "Think" Tool
-
-The CREATIVE mode in Memory Bank is conceptually based on Anthropic's Claude "Think" tool methodology, as described in their [engineering blog](https://www.anthropic.com/engineering/claude-think-tool). The v0.7-beta implements an optimized version with:
-
-- Progressive documentation with tabular option comparison
-- "Detail-on-demand" approach that preserves token efficiency
-- Structured templates that scale with complexity level
-- Efficient context preservation for implementation phases
-
-For a detailed explanation of how Memory Bank implements these principles, see the [CREATIVE Mode and Claude's "Think" Tool](creative_mode_think_tool.md) document.
-
-## Key Features
-
-- **Hierarchical Rule Loading**: Load only the essential rules with specialized lazy-loading
-- **Progressive Documentation**: Concise templates that scale with task complexity
-- **Unified Context Transfer**: Efficient context preservation between modes
-- **Mode-Specific Visual Maps**: Clear visual representations for each development phase
-- **Level-Specific Workflows**: Adapted processes based on complexity (Levels 1-4)
-- **Platform-Aware Commands**: Automatically adapts commands to your operating system
-
-## Installation Instructions
-
-### Prerequisites
-
-- **Cursor Editor**: Version 0.48 or higher is required.
-- **Custom Modes**: Feature must be enabled in Cursor (Settings → Features → Chat → Custom modes).
-- **AI Model**: Claude 3.7 Sonnet is recommended for best results, especially for CREATIVE mode's "Think" tool methodology.
-
-### Step 1: Get the Files
-
-Simply clone this repository into your project directory:
-
-```
-git clone https://github.com/vanzan01/cursor-memory-bank.git
+```typescript
+export const routes: Routes = [
+  {
+    path: 'contact',
+    loadChildren: import(() => './contact/contact.module').then(m => m.ContactModule),
+    data: {
+      preload: false
+    }
+  }
+];
 ```
 
-Alternatively, you can download the ZIP file from GitHub and extract it to your project folder.
 
-This provides you with all the necessary files, including:
-- Rule files in `.cursor/rules/isolation_rules/`
-- Mode instruction files in `custom_modes/` directory
-- Template Memory Bank files in `memory-bank/`
+# 模块不需要保存状态(Modules don't need to save state)
 
-### Step 2: Setting Up Custom Modes in Cursor
-
-**This is the most critical and challenging part of the setup.** You'll need to manually create six custom modes in Cursor and copy the instruction content from the provided files:
-
-#### How to Add a Custom Mode in Cursor
-
-1. Open Cursor and click on the mode selector in the chat panel
-2. Select "Add custom mode"
-3. In the configuration screen:
-   - Enter the mode name (you can include emoji icons like 🔍, 📋, 🎨, ⚒️ by copy-pasting them at the beginning of the name)
-   - Select an icon from Cursor's limited predefined options
-   - Add a shortcut (optional)
-   - Check the required tools
-   - Click on **Advanced options**
-   - In the empty text box that appears at the bottom, paste the custom instruction content from the corresponding file
-
-<table>
-  <tr>
-    <td align="center"><em>Example configuration screen:</em></td>
-    <td align="center"><em>Result in mode selection menu:</em></td>
-  </tr>
-  <tr>
-    <td valign="top">
-      <img src="assets/custom_mode_setup_1.png" alt="Custom Mode Configuration Screen" width="300"/>
-    </td>
-    <td valign="top">
-      <img src="assets/custom_mode_setup_2.png" alt="Custom Modes in Menu" width="300"/>
-    </td>
-  </tr>
-</table>
-
-#### Mode Configuration
-
-For each mode, configure as follows:
-
-1. **VAN MODE** (Initialization)
-   - **Name**: 🔍 VAN
-   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
-   - **Advanced options**: Paste from `custom_modes/van_instructions.md`
-
-2. **PLAN MODE** (Task Planning)
-   - **Name**: 📋 PLAN
-   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
-   - **Advanced options**: Paste from `custom_modes/plan_instructions.md`
-
-3. **CREATIVE MODE** (Design Decisions)
-   - **Name**: 🎨 CREATIVE
-   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory", "Edit File"
-   - **Advanced options**: Paste from `custom_modes/creative_instructions.md`
-
-4. **IMPLEMENT MODE** (Code Implementation)
-   - **Name**: ⚒️ IMPLEMENT
-   - **Tools**: Enable all tools
-   - **Advanced options**: Paste from `custom_modes/implement_instructions.md`
-
-5. **REFLECT MODE** (Review)
-   - **Name**: 🔍 REFLECT
-   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
-   - **Advanced options**: Paste from `custom_modes/reflect_instructions.md`
-
-6. **ARCHIVE MODE** (Documentation)
-   - **Name**: 📚 ARCHIVE
-   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory", "Edit File"
-   - **Advanced options**: Paste from `custom_modes/archive_instructions.md`
-
-For additional help on setting up custom modes in Cursor, refer to the [official Cursor documentation on custom modes](https://docs.cursor.com/chat/custom-modes).
-
-### QA Functionality
-
-QA is not a separate custom mode but rather a set of validation functions that can be called from any mode. You can invoke QA capabilities by typing "QA" in any mode when you need to perform technical validation. This approach provides flexibility to conduct verification at any point in the development process.
-
-## Basic Usage
-
-1. **Start with VAN Mode**:
-   - Switch to VAN mode in Cursor
-   - Type "VAN" to initiate the initialization process
-   - VAN will analyze your project structure and determine complexity
-
-2. **Follow the Workflow Based on Complexity**:
-   - **Level 1 tasks**: May proceed directly to IMPLEMENT after VAN
-   - **Level 2 tasks**: Simplified workflow (VAN → PLAN → IMPLEMENT → REFLECT)
-   - **Level 3-4 tasks**: Full workflow (VAN → PLAN → CREATIVE → IMPLEMENT → REFLECT → ARCHIVE)
-   - **At any point**: Type "QA" to perform technical validation
-
-3. **Mode-Specific Commands**:
-   ```
-   VAN - Initialize project and determine complexity
-   PLAN - Create detailed implementation plan
-   CREATIVE - Explore design options for complex components
-   IMPLEMENT - Systematically build planned components
-   REFLECT - Review and document lessons learned
-   ARCHIVE - Create comprehensive documentation
-   QA - Validate technical implementation (can be called from any mode)
-   ```
-
-## Core Files and Their Purposes
-
-```mermaid
-graph LR
-    subgraph "Memory Bank Files"
-        Tasks["tasks.md<br>Source of Truth"]
-        Active["activeContext.md<br>Current Focus"]
-        Progress["progress.md<br>Implementation Status"]
-        Creative["creative-*.md<br>Design Decisions"]
-        Reflect["reflect-*.md<br>Review Documents"]
-    end
-    
-    style Tasks fill:#f9d77e,stroke:#d9b95c,stroke-width:3px
-    style Active fill:#a8d5ff,stroke:#88b5e0
-    style Progress fill:#c5e8b7,stroke:#a5c897
-    style Creative fill:#f4b8c4,stroke:#d498a4
-    style Reflect fill:#b3e6cc,stroke:#66c999
+```typescript
+const routes: Routes = [
+  {path: '', data: {key: 'login', shouldDetach: 'no'}, component: LoginFormComponent}
+];
 ```
 
-- **tasks.md**: Central source of truth for task tracking
-- **activeContext.md**: Maintains focus of current development phase
-- **progress.md**: Tracks implementation status
-- **creative-*.md**: Design decision documents generated during CREATIVE mode
-- **reflect-*.md**: Review documents created during REFLECT mode
+# 模块中打开新tab页来展示详情，必须设置参数如下(Open a new tab page in the module to display the details, and the parameters must be set as follows)
+在data中设置(newTab Set newTab in data)
+```typescript
+const routes: Routes = [
+  {path: '', component: TabsComponent, data: {title: '标签页操作', key: 'tabs'}},
+  {path: 'example-detail', component: DetailComponent, data: {newTab:'true', title: '演示详情', key: 'example-detail'}}
+];
+```
 
-## Troubleshooting
+# 缓存页面中指定容器的滚动条(The scroll bar of the specified container in the cache page)
+在data中设置scrollContain 为元素选择器 (Set scrollContain as element selector in data)
+```typescript
+  {path: '', component: KeepScrollPageComponent, data: {title: '缓存滚动条', key: 'keep-scroll-page',scrollContain:['#div-scroll1','#div-scroll2']}}
 
-### Common Issues
+```
 
-1. **Mode not responding correctly**:
-   - Verify custom instructions were copied completely (this is the most common issue)
-   - Ensure the correct tools are enabled for each mode
-   - Check that you've switched to the correct mode before issuing commands
-   - Make sure you pasted the instructions in the "Advanced options" text box
+# 路由复用下切换tab调用的临时声明周期如下(The temporary statement cycle of switching tab calls is as follows)
 
-2. **Rules not loading**:
-   - Make sure the `.cursor/rules/isolation_rules/` directory is in the correct location
-   - Verify file permissions allow reading the rule files
+```typescript
+_onReuseInit: () => void;
+_onReuseDestroy: () => void;
 
-3. **Command execution issues**:
-   - Ensure you're running commands from the correct directory
-   - Verify platform-specific commands are being used correctly
+```
+直接在目标组件中写出方法名为_onReuseInit或者_onReuseDestroy的方法即可实现<br>
+It can be realized by directly writing the method named _onReuseInit or _onReuseDestroy in the target component<br>
 
-## Version Information
+## 系统截图(System screenshot)
+![ScreenShot](https://github.com/huajian123/ng-ant-admin/blob/master/projectImg/11.png)
 
-This is version v0.7-beta of the Memory Bank system. It introduces significant token optimization improvements over v0.6-beta while maintaining all functionality. See the [Release Notes](RELEASE_NOTES.md) for detailed information about the changes.
+## star支持
+我是自费服务器搭建后端服务接口,所以如果本项目对您有用，如果您也愿意的话，麻烦举起您性感的小手帮我点个免费的star以资鼓励，谢谢啊<br>
+<br>
+if help you, if you want ,please give me a star ,thank you<br>
 
-### Ongoing Development
 
-The Memory Bank system is actively being developed and improved. Key points to understand:
+## 捐赠
+如果本项目对您有用，正巧您如果也想请我喝一杯咖啡，请扫下面的码，哈哈<br>
+If this project is useful to you, and you happen to want to invite me for a cup of coffee, please scan Alipay or WeChat<br>
+![ScreenShot](https://github.com/huajian123/ng-ant-admin/blob/master/projectImg/weixin.jpeg)
+![ScreenShot](https://github.com/huajian123/ng-ant-admin/blob/master/projectImg/zhifubao.jpeg)
 
-- **Work in Progress**: This is a beta version with ongoing development. Expect regular updates, optimizations, and new features.
-- **Feature Optimization**: The modular architecture enables continuous refinement without breaking existing functionality.
-- **Previous Version Available**: If you prefer the stability of the previous version (v0.1-legacy), you can continue using it while this version matures.
-- **Architectural Benefits**: Before deciding which version to use, please read the [Memory Bank Upgrade Guide](memory_bank_upgrade_guide.md) to understand the significant benefits of the new architecture.
 
-## Resources
 
-- [Memory Bank Optimizations](MEMORY_BANK_OPTIMIZATIONS.md) - Detailed overview of token efficiency improvements
-- [Release Notes](RELEASE_NOTES.md) - Information about the latest changes
-- [Cursor Custom Modes Documentation](https://docs.cursor.com/chat/custom-modes)
-- [Memory Bank Upgrade Guide](memory_bank_upgrade_guide.md)
-- [CREATIVE Mode and Claude's "Think" Tool](creative_mode_think_tool.md)
-- Mode-specific instruction files in the `custom_modes/` directory
+### 🏴授权协议License
 
----
-
-*Note: This README is for v0.7-beta and subject to change as the system evolves.*
+MIT 

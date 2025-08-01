@@ -1,56 +1,68 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer2, inject, PLATFORM_ID } from '@angular/core';
-import { NavigationEnd, NavigationError, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router';
-import { TitleService, VERSION as VERSION_ALAIN, stepPreloader } from '@delon/theme';
-import { environment } from '@env/environment';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd/version';
+import { AsyncPipe } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs/operators';
+
+import { PreloaderService } from '@core/services/common/preloader.service';
+import { LockScreenComponent } from '@shared/components/lock-screen/lock-screen.component';
+import { LockScreenStoreService } from '@store/common-store/lock-screen-store.service';
+import { SpinService } from '@store/common-store/spin.service';
+import { NzBackTopModule } from 'ng-zorro-antd/back-top';
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+
+import { fadeRouteAnimation } from './animations/fade.animation';
 
 @Component({
   selector: 'app-root',
-  template: `<router-outlet />`,
-  imports: [RouterOutlet]
+  template: `
+    @if ((lockedState$ | async)!.locked) {
+      <app-lock-screen></app-lock-screen>
+    }
+    <nz-back-top></nz-back-top>
+    <div class="full-height" [@fadeRouteAnimation]="prepareRoute(outlet)">
+      <router-outlet #outlet="outlet"></router-outlet>
+    </div>
+    @if (loading$ | async) {
+      <div style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:1001;background:rgba(24,144,255,0.1);">
+        <div style="position:absolute;top: 50%;left:50%;margin:-16px 0 0 -16px;">
+          <nz-spin nzSize="large"></nz-spin>
+        </div>
+      </div>
+    }
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [fadeRouteAnimation],
+  standalone: true,
+  imports: [LockScreenComponent, NzBackTopModule, RouterOutlet, NzSpinModule, AsyncPipe]
 })
-export class AppComponent implements OnInit {
-  private readonly router = inject(Router);
-  private readonly titleSrv = inject(TitleService);
-  private readonly modalSrv = inject(NzModalService);
-  private readonly doc = inject(DOCUMENT);
-  private readonly platformId = inject(PLATFORM_ID);
+export class AppComponent implements OnInit, AfterViewInit {
+  private preloader = inject(PreloaderService);
+  private lockScreenStoreService = inject(LockScreenStoreService);
+  private spinService = inject(SpinService);
+  private router = inject(Router);
 
-  private donePreloader = stepPreloader();
+  loading$ = this.spinService.getCurrentGlobalSpinStore();
+  lockedState$ = this.lockScreenStoreService.getLockScreenStore();
+  destroyRef = inject(DestroyRef);
 
-  constructor(el: ElementRef, renderer: Renderer2) {
-    renderer.setAttribute(el.nativeElement, 'ng-alain-version', VERSION_ALAIN.full);
-    renderer.setAttribute(el.nativeElement, 'ng-zorro-version', VERSION_ZORRO.full);
+  prepareRoute(outlet: RouterOutlet): string {
+    return outlet?.activatedRouteData?.['key'];
   }
 
   ngOnInit(): void {
-    let configLoad = false;
-    this.router.events.subscribe(ev => {
-      if (ev instanceof RouteConfigLoadStart) {
-        configLoad = true;
-      }
-      if (configLoad && ev instanceof NavigationError) {
-        this.modalSrv.confirm({
-          nzTitle: `提醒`,
-          nzContent: environment.production ? `应用可能已发布新版本，请点击刷新才能生效。` : `无法加载路由：${ev.url}`,
-          nzCancelDisabled: false,
-          nzOkText: '刷新',
-          nzCancelText: '忽略',
-          nzOnOk: () => {
-            // 只在瀏覽器環境中執行頁面重載
-            if (isPlatformBrowser(this.platformId)) {
-              this.doc.location.reload();
-            }
-          }
-        });
-      }
-      if (ev instanceof NavigationEnd) {
-        this.donePreloader();
-        this.titleSrv.setTitle();
-        this.modalSrv.closeAll();
-      }
-    });
+    this.router.events
+      .pipe(
+        filter((event: NzSafeAny) => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.spinService.setCurrentGlobalSpinStore(false);
+      });
+  }
+
+  ngAfterViewInit(): void {
+    this.preloader.removePreLoader();
   }
 }
