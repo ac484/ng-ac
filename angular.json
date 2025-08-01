@@ -86,7 +86,8 @@
               "includePaths": [
                 "node_modules/"
               ]
-            }
+            },
+            "namedChunks": true
           },
           "configurations": {
             "production": {
