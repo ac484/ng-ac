@@ -20,6 +20,7 @@ import { finalize, switchMap } from 'rxjs';
 // Firebase Auth 相關 imports
 import { FirebaseAuthAdapterService } from '../../../core/auth/firebase-auth-adapter.service';
 import { AuthStateManagerService } from '../../../core/auth/auth-state-manager.service';
+import { FirebaseErrorHandlerService } from '../../../core/auth/firebase-error-handler.service';
 
 @Component({
   selector: 'passport-login',
@@ -50,10 +51,11 @@ export class UserLoginComponent implements OnDestroy {
   private readonly startupSrv = inject(StartupService);
   private readonly http = inject(_HttpClient);
   private readonly cdr = inject(ChangeDetectorRef);
-  
+
   // Firebase Auth 服務
   private readonly firebaseAuth = inject(FirebaseAuthAdapterService);
   private readonly authStateManager = inject(AuthStateManagerService);
+  private readonly errorHandler = inject(FirebaseErrorHandlerService);
 
   form = inject(FormBuilder).nonNullable.group({
     userName: ['', [Validators.required, Validators.email]], // 改為 email 驗證
@@ -91,7 +93,7 @@ export class UserLoginComponent implements OnDestroy {
 
   submit(): void {
     this.error = '';
-    
+
     if (this.type === 0) {
       // Email/Password 登入
       const { userName, password } = this.form.controls;
@@ -115,7 +117,7 @@ export class UserLoginComponent implements OnDestroy {
             }
             // 清空路由復用信息
             this.reuseTabService?.clear();
-            
+
             // 重新獲取 StartupService 內容
             return this.startupSrv.load();
           }),
@@ -135,7 +137,7 @@ export class UserLoginComponent implements OnDestroy {
           },
           error: (error: any) => {
             // 處理 Firebase Auth 錯誤
-            this.error = this.getFirebaseErrorMessage(error);
+            this.error = this.errorHandler.handleError(error, false); // 不顯示通知，只返回錯誤訊息
             this.cdr.detectChanges();
           }
         });
@@ -234,31 +236,7 @@ export class UserLoginComponent implements OnDestroy {
     }
   }
 
-  /**
-   * 將 Firebase 錯誤轉換為用戶友好的訊息
-   */
-  private getFirebaseErrorMessage(error: any): string {
-    const errorCode = error?.code || error?.message || '';
-    
-    switch (errorCode) {
-      case 'auth/user-not-found':
-        return '找不到此用戶，請檢查 email 是否正確';
-      case 'auth/wrong-password':
-        return '密碼錯誤，請重新輸入';
-      case 'auth/invalid-email':
-        return 'Email 格式不正確';
-      case 'auth/user-disabled':
-        return '此帳戶已被停用';
-      case 'auth/too-many-requests':
-        return '登入嘗試次數過多，請稍後再試';
-      case 'auth/network-request-failed':
-        return '網路連線失敗，請檢查網路狀態';
-      case 'auth/invalid-credential':
-        return 'Email 或密碼錯誤';
-      default:
-        return error?.message || '登入失敗，請稍後再試';
-    }
-  }
+
 
   ngOnDestroy(): void {
     if (this.interval$) {

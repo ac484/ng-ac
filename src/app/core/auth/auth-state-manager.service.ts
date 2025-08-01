@@ -157,7 +157,7 @@ export class AuthStateManagerService {
           });
         }),
         catchError(error => {
-          console.error('Token refresh sync error:', error);
+          this.errorHandler.handleTokenRefreshError(error);
           this.setError('Token 刷新失敗');
           return EMPTY;
         })
@@ -175,7 +175,7 @@ export class AuthStateManagerService {
     return this.firebaseAuth.getCurrentUser().pipe(
       map(user => !!user),
       catchError(error => {
-        console.error('Session restore error:', error);
+        this.errorHandler.handleSessionRestoreError(error);
         this.setError('會話恢復失敗');
         return EMPTY;
       })
@@ -201,7 +201,7 @@ export class AuthStateManagerService {
         });
       }),
       catchError(error => {
-        console.error('Clear session error:', error);
+        this.errorHandler.handleSilentError(error);
         this.setError('登出失敗');
         this.setLoading(false);
         return EMPTY;
