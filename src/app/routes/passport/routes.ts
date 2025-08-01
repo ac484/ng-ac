@@ -36,5 +36,4 @@ export const routes: Routes = [
     ]
   },
   // 单页不包裹Layout
-  { path: 'passport/callback/:type', component: CallbackComponent }
 ];
