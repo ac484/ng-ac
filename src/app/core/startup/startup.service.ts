@@ -5,7 +5,8 @@ import { DA_SERVICE_TOKEN } from '@delon/auth';
 import { ALAIN_I18N_TOKEN, MenuService, SettingsService, TitleService } from '@delon/theme';
 import { ACLService } from '@delon/acl';
 import { I18NService } from '../i18n/i18n.service';
-import { Observable, zip, of, catchError, map } from 'rxjs';
+import { AuthStateManagerService, SessionManagerService } from '../auth';
+import { Observable, zip, of, catchError, map, switchMap } from 'rxjs';
 import type { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 /**
@@ -34,6 +35,10 @@ export class StartupService {
   private httpClient = inject(HttpClient);
   private router = inject(Router);
   private i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
+
+  // Firebase Auth 服務
+  private authStateManager = inject(AuthStateManagerService);
+  private sessionManager = inject(SessionManagerService);
   // If http request allows anonymous access, you need to add `ALLOW_ANONYMOUS`:
   // this.httpClient.get('/app', { context: new HttpContext().set(ALLOW_ANONYMOUS, true) })
   private appData$ = this.httpClient.get('./assets/tmp/app-data.json').pipe(
@@ -57,7 +62,7 @@ export class StartupService {
     this.titleService.suffix = res.app?.name;
   }
 
-  
+
   private viaHttp(): Observable<void> {
     const defaultLang = this.i18n.defaultLang;
     return zip(this.i18n.loadLangData(defaultLang), this.appData$).pipe(
@@ -69,20 +74,20 @@ export class StartupService {
       })
     );
   }
-  
 
-  
+
+
   private viaMockI18n(): Observable<void> {
     const defaultLang = this.i18n.defaultLang;
     return this.i18n.loadLangData(defaultLang).pipe(
-        map((langData: NzSafeAny) => {
-          this.i18n.use(defaultLang, langData);
+      map((langData: NzSafeAny) => {
+        this.i18n.use(defaultLang, langData);
 
-          this.viaMock();
-        })
-      );
+        this.viaMock();
+      })
+    );
   }
-  
+
   private viaMock(): Observable<void> {
     // const tokenData = this.tokenService.get();
     // if (!tokenData.token) {
@@ -131,6 +136,27 @@ export class StartupService {
     // return this.viaHttp();
     // mock: Don’t use it in a production environment. ViaMock is just to simulate some data to make the scaffolding work normally
     // mock：请勿在生产环境中这么使用，viaMock 单纯只是为了模拟一些数据使脚手架一开始能正常运行
-    return this.viaMockI18n();
+    // 首先嘗試恢復 Firebase Auth 會話
+    return this.sessionManager.restoreSession().pipe(
+      switchMap((sessionRestored) => {
+        if (sessionRestored) {
+          // 會話恢復成功，初始化認證狀態管理器
+          return this.authStateManager.initialize().pipe(
+            switchMap(() => this.viaMockI18n()),
+            catchError(() => {
+              // 如果認證狀態初始化失敗，繼續正常啟動流程
+              return this.viaMockI18n();
+            })
+          );
+        } else {
+          // 沒有有效會話，直接進行正常啟動流程
+          return this.viaMockI18n();
+        }
+      }),
+      catchError(() => {
+        // 會話恢復失敗，繼續正常啟動流程
+        return this.viaMockI18n();
+      })
+    );
   }
 }

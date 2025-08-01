@@ -5,6 +5,7 @@ import { map, switchMap, catchError, tap, distinctUntilChanged } from 'rxjs/oper
 import { FirebaseAuthAdapterService } from './firebase-auth-adapter.service';
 import { TokenSyncService } from './token-sync.service';
 import { FirebaseErrorHandlerService } from './firebase-error-handler.service';
+import { SessionManagerService } from './session-manager.service';
 import { AuthState } from './auth.types';
 
 /**
@@ -20,6 +21,7 @@ export class AuthStateManagerService {
   private readonly firebaseAuth = inject(FirebaseAuthAdapterService);
   private readonly tokenSync = inject(TokenSyncService);
   private readonly errorHandler = inject(FirebaseErrorHandlerService);
+  private readonly sessionManager = inject(SessionManagerService);
 
   // 內部狀態管理
   private readonly _authState$ = new BehaviorSubject<AuthState>({
@@ -99,6 +101,7 @@ export class AuthStateManagerService {
         switchMap(token => {
           if (token) {
             return this.tokenSync.syncFirebaseToken(token, user).pipe(
+              switchMap(() => this.sessionManager.saveSession(user)),
               tap(() => {
                 this.updateAuthState({
                   isAuthenticated: true,
@@ -120,8 +123,9 @@ export class AuthStateManagerService {
         })
       );
     } else {
-      // 使用者已登出，清除 token
+      // 使用者已登出，清除 token 和會話
       return this.tokenSync.clearTokens().pipe(
+        switchMap(() => this.sessionManager.clearSession()),
         tap(() => {
           this.updateAuthState({
             isAuthenticated: false,
@@ -191,6 +195,7 @@ export class AuthStateManagerService {
 
     return this.firebaseAuth.signOut().pipe(
       switchMap(() => this.tokenSync.clearTokens()),
+      switchMap(() => this.sessionManager.clearSession()),
       tap(() => {
         this.updateAuthState({
           isAuthenticated: false,
