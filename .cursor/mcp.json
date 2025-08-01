@@ -8,7 +8,6 @@
         "./",
         "./.cursor",
         "./src",
-        "./functions",
         "./custom_modes",
         "./memory-bank"
       ],
