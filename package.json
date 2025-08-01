@@ -86,5 +86,8 @@
     "stylelint-declaration-block-no-ignored-properties": "^2.8.0",
     "stylelint-order": "^6.0.4",
     "typescript": "~5.5.4"
+  },
+  "overrides": {
+    "esbuild": "^0.25.8"
   }
 }
