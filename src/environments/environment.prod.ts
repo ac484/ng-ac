@@ -1,6 +1,7 @@
-export const ip = '1.117.181.242';
-export const port = '80';
-export const localUrl = `http://${ip}:${port}/api`;
+// 生產環境配置 - 使用你的實際生產域名
+export const ip = 'your-production-domain.com';
+export const port = '443';
+export const localUrl = `https://${ip}/api`;
 
 export const environment = {
   production: true,
