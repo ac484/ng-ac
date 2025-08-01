@@ -28,6 +28,7 @@
     "@angular/platform-browser": "^20.1.4",
     "@angular/platform-browser-dynamic": "^20.1.4",
     "@angular/router": "^20.1.4",
+    "@ant-design/icons-angular": "^20.0.0",
     "@antv/g2": "^4.2.8",
     "@antv/g2plot": "^2.3.32",
     "@antv/x6": "^2.15.6",
