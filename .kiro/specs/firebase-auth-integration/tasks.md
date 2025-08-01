@@ -51,7 +51,9 @@
   - Add proper error handling and user feedback for Firebase auth errors
   - _Requirements: 2.1, 2.2, 2.3, 8.1, 8.2_
 
-- [-] 6. Integrate with existing ng-alain guards and interceptors
+- [x] 6. Integrate with existing ng-alain guards and interceptors
+
+
 
   - Update authSimpleCanActivate guard to work with Firebase Auth state
   - Modify authSimpleInterceptor to use Firebase ID tokens
@@ -59,7 +61,8 @@
   - Test guard behavior with Firebase authentication status
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 7. Implement comprehensive error handling system
+- [-] 7. Implement comprehensive error handling system
+
   - Create error mapping from Firebase Auth errors to user-friendly messages
   - Integrate with existing ng-alain error notification system
   - Add specific error handling for token refresh failures

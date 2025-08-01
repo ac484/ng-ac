@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, combineLatest, EMPTY, of } from 'rxjs';
 import { map, switchMap, catchError, tap, distinctUntilChanged } from 'rxjs/operators';
 import { FirebaseAuthAdapterService } from './firebase-auth-adapter.service';
 import { TokenSyncService } from './token-sync.service';
+import { FirebaseErrorHandlerService } from './firebase-error-handler.service';
 import { AuthState } from './auth.types';
 
 /**
@@ -144,7 +145,7 @@ export class AuthStateManagerService {
    */
   handleTokenRefresh(token: string): Observable<void> {
     const currentState = this._authState$.value;
-    
+
     if (currentState.user && currentState.isAuthenticated) {
       return this.tokenSync.syncFirebaseToken(token, currentState.user).pipe(
         tap(() => {
@@ -186,7 +187,7 @@ export class AuthStateManagerService {
    */
   clearSession(): Observable<void> {
     this.setLoading(true);
-    
+
     return this.firebaseAuth.signOut().pipe(
       switchMap(() => this.tokenSync.clearTokens()),
       tap(() => {

@@ -3,4 +3,5 @@ export * from './token-sync.service';
 export * from './auth-state-manager.service';
 export * from './firebase-token.interceptor';
 export * from './firebase-auth.guard';
+export * from './firebase-error-handler.service';
 export * from './auth.types';

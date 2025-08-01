@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Auth, User, authState, signInWithEmailAndPassword, signOut, getIdToken } from '@angular/fire/auth';
 import { Observable, BehaviorSubject, from, of, EMPTY } from 'rxjs';
 import { map, catchError, switchMap, shareReplay } from 'rxjs/operators';
+import { FirebaseErrorHandlerService } from './firebase-error-handler.service';
 
 /**
  * Firebase Auth 適配器服務
@@ -14,12 +15,13 @@ import { map, catchError, switchMap, shareReplay } from 'rxjs/operators';
 })
 export class FirebaseAuthAdapterService {
   private readonly auth = inject(Auth);
-  
+  private readonly errorHandler = inject(FirebaseErrorHandlerService);
+
   // 認證狀態流，使用 shareReplay 避免重複訂閱
   readonly authState$ = authState(this.auth).pipe(
     shareReplay(1)
   );
-  
+
   // 認證狀態布林值
   readonly isAuthenticated$ = this.authState$.pipe(
     map(user => !!user)
@@ -32,7 +34,7 @@ export class FirebaseAuthAdapterService {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       map(credential => credential.user),
       catchError(error => {
-        console.error('Firebase Auth sign in error:', error);
+        this.errorHandler.handleError(error);
         throw error;
       })
     );
@@ -44,7 +46,7 @@ export class FirebaseAuthAdapterService {
   signOut(): Observable<void> {
     return from(signOut(this.auth)).pipe(
       catchError(error => {
-        console.error('Firebase Auth sign out error:', error);
+        this.errorHandler.handleSilentError(error);
         throw error;
       })
     );
@@ -69,7 +71,7 @@ export class FirebaseAuthAdapterService {
         }
         return from(getIdToken(user, forceRefresh)).pipe(
           catchError(error => {
-            console.error('Firebase get ID token error:', error);
+            this.errorHandler.handleSilentError(error);
             return of(null);
           })
         );

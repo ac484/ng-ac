@@ -1,102 +1,143 @@
 import { TestBed } from '@angular/core/testing';
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { provideAuth, getAuth, connectAuthEmulator } from '@angular/fire/auth';
-import { DA_SERVICE_TOKEN } from '@delon/auth';
-import { SettingsService } from '@delon/theme';
-import { FirebaseAuthAdapterService } from './firebase-auth-adapter.service';
-import { TokenSyncService } from './token-sync.service';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { of } from 'rxjs';
 
-describe('Auth Integration', () => {
-  let authAdapter: FirebaseAuthAdapterService;
-  let tokenSync: TokenSyncService;
-  let mockTokenService: jasmine.SpyObj<any>;
-  let mockSettingsService: jasmine.SpyObj<SettingsService>;
+import { firebaseAuthGuard } from './firebase-auth.guard';
+import { firebaseTokenInterceptor } from './firebase-token.interceptor';
+import { AuthStateManagerService } from './auth-state-manager.service';
+import { FirebaseAuthAdapterService } from './firebase-auth-adapter.service';
+import { ALLOW_ANONYMOUS } from '@delon/auth';
+
+describe('Firebase Auth Integration', () => {
+  let httpClient: HttpClient;
+  let httpTestingController: HttpTestingController;
+  let mockAuthStateManager: jasmine.SpyObj<AuthStateManagerService>;
+  let mockFirebaseAuth: jasmine.SpyObj<FirebaseAuthAdapterService>;
+  let mockRouter: jasmine.SpyObj<Router>;
+
+  const mockAuthenticatedState = {
+    isAuthenticated: true,
+    user: { uid: 'test-uid', email: 'test@example.com' },
+    token: 'mock-firebase-token',
+    loading: false,
+    error: null
+  };
+
+  const mockUnauthenticatedState = {
+    isAuthenticated: false,
+    user: null,
+    token: null,
+    loading: false,
+    error: null
+  };
 
   beforeEach(() => {
-    const tokenSpy = jasmine.createSpyObj('TokenService', ['set', 'clear', 'get']);
-    const settingsSpy = jasmine.createSpyObj('SettingsService', ['setUser']);
+    const authStateManagerSpy = jasmine.createSpyObj('AuthStateManagerService',
+      ['getCurrentState', 'handleTokenRefresh', 'clearSession'],
+      { authState$: of(mockAuthenticatedState) }
+    );
+    const firebaseAuthSpy = jasmine.createSpyObj('FirebaseAuthAdapterService', ['getIdToken']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
       providers: [
-        provideFirebaseApp(() => initializeApp({
-          projectId: 'test-project',
-          apiKey: 'test-api-key',
-          authDomain: 'test-project.firebaseapp.com'
-        })),
-        provideAuth(() => {
-          const auth = getAuth();
-          connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
-          return auth;
-        }),
-        { provide: DA_SERVICE_TOKEN, useValue: tokenSpy },
-        { provide: SettingsService, useValue: settingsSpy }
+        provideHttpClient(withInterceptors([firebaseTokenInterceptor])),
+        provideHttpClientTesting(),
+        { provide: AuthStateManagerService, useValue: authStateManagerSpy },
+        { provide: FirebaseAuthAdapterService, useValue: firebaseAuthSpy },
+        { provide: Router, useValue: routerSpy }
       ]
     });
-    
-    authAdapter = TestBed.inject(FirebaseAuthAdapterService);
-    tokenSync = TestBed.inject(TokenSyncService);
-    mockTokenService = TestBed.inject(DA_SERVICE_TOKEN) as jasmine.SpyObj<any>;
-    mockSettingsService = TestBed.inject(SettingsService) as jasmine.SpyObj<SettingsService>;
+
+    httpClient = TestBed.inject(HttpClient);
+    httpTestingController = TestBed.inject(HttpTestingController);
+    mockAuthStateManager = TestBed.inject(AuthStateManagerService) as jasmine.SpyObj<AuthStateManagerService>;
+    mockFirebaseAuth = TestBed.inject(FirebaseAuthAdapterService) as jasmine.SpyObj<FirebaseAuthAdapterService>;
+    mockRouter = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+
+    // 設定預設的 mock 回傳值
+    mockAuthStateManager.getCurrentState.and.returnValue(mockAuthenticatedState);
+    mockAuthStateManager.handleTokenRefresh.and.returnValue(of(void 0));
+    mockAuthStateManager.clearSession.and.returnValue(of(void 0));
   });
 
-  it('should create both services', () => {
-    expect(authAdapter).toBeTruthy();
-    expect(tokenSync).toBeTruthy();
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
-  it('should work together for token synchronization', (done) => {
-    const mockUser = {
-      uid: 'test-uid',
-      email: 'test@example.com',
-      displayName: 'Test User',
-      photoURL: 'https://example.com/avatar.jpg'
-    } as any;
+  describe('Guard and Interceptor Integration', () => {
+    it('should allow authenticated requests with Firebase token', (done) => {
+      const mockRoute = {} as ActivatedRouteSnapshot;
+      const mockState = { url: '/dashboard' } as RouterStateSnapshot;
 
-    const mockToken = 'mock-firebase-token';
+      // 測試 guard 允許認證用戶訪問
+      TestBed.runInInjectionContext(() => {
+        const guardResult = firebaseAuthGuard(mockRoute, mockState);
+        if (typeof guardResult === 'object' && 'subscribe' in guardResult) {
+          guardResult.subscribe(canActivate => {
+            expect(canActivate).toBe(true);
+            expect(mockRouter.navigate).not.toHaveBeenCalled();
 
-    // 模擬 token 同步流程
-    tokenSync.syncFirebaseToken(mockToken, mockUser).subscribe(() => {
-      // 驗證 token 服務被正確呼叫
-      expect(mockTokenService.set).toHaveBeenCalledWith(jasmine.objectContaining({
-        token: mockToken,
-        uid: mockUser.uid,
-        email: mockUser.email
-      }));
+            // 測試 interceptor 添加 token 到請求
+            httpClient.get('/api/test').subscribe(response => {
+              expect(response).toBeTruthy();
+              done();
+            });
 
-      // 驗證設定服務被正確呼叫
-      expect(mockSettingsService.setUser).toHaveBeenCalledWith({
-        name: mockUser.displayName,
-        avatar: mockUser.photoURL,
-        email: mockUser.email,
-        token: mockToken
+            const req = httpTestingController.expectOne('/api/test');
+            expect(req.request.headers.get('Authorization')).toBe('Bearer mock-firebase-token');
+            req.flush({ success: true });
+          });
+        }
+      });
+    });
+
+    it('should redirect unauthenticated users and not add token', (done) => {
+      Object.defineProperty(mockAuthStateManager, 'authState$', {
+        value: of(mockUnauthenticatedState)
+      });
+      mockAuthStateManager.getCurrentState.and.returnValue(mockUnauthenticatedState);
+
+      const mockRoute = {} as ActivatedRouteSnapshot;
+      const mockState = { url: '/dashboard' } as RouterStateSnapshot;
+
+      // 測試 guard 重定向未認證用戶
+      TestBed.runInInjectionContext(() => {
+        const guardResult = firebaseAuthGuard(mockRoute, mockState);
+        if (typeof guardResult === 'object' && 'subscribe' in guardResult) {
+          guardResult.subscribe(canActivate => {
+            expect(canActivate).toBe(false);
+            expect(mockRouter.navigate).toHaveBeenCalledWith(['/passport/login']);
+
+            // 測試 interceptor 不添加 token 到未認證請求
+            httpClient.get('/api/test').subscribe(response => {
+              expect(response).toBeTruthy();
+              done();
+            });
+
+            const req = httpTestingController.expectOne('/api/test');
+            expect(req.request.headers.has('Authorization')).toBe(false);
+            req.flush({ success: true });
+          });
+        }
+      });
+    });
+
+    it('should skip token for anonymous requests', (done) => {
+      // 測試 ALLOW_ANONYMOUS 請求不添加 token
+      const context = new HttpContext().set(ALLOW_ANONYMOUS, true);
+
+      httpClient.get('/api/public', { context }).subscribe(response => {
+        expect(response).toBeTruthy();
+        done();
       });
 
-      done();
+      const req = httpTestingController.expectOne('/api/public');
+      expect(req.request.headers.has('Authorization')).toBe(false);
+      req.flush({ success: true });
     });
-  });
-
-  it('should handle token format conversion correctly', () => {
-    const mockUser = {
-      uid: 'test-uid-123',
-      email: 'user@test.com',
-      displayName: 'Test User Name',
-      photoURL: null
-    } as any;
-
-    const firebaseToken = 'firebase-id-token-example';
-    const alainToken = tokenSync.convertToAlainFormat(firebaseToken, mockUser);
-
-    expect(alainToken).toEqual(jasmine.objectContaining({
-      token: firebaseToken,
-      uid: mockUser.uid,
-      email: mockUser.email,
-      name: mockUser.displayName,
-      avatar: undefined,
-      expired: jasmine.any(Number)
-    }));
-
-    // 驗證過期時間設定合理（應該是未來的時間）
-    expect(alainToken.expired).toBeGreaterThan(Date.now());
-    expect(alainToken.expired).toBeLessThan(Date.now() + (2 * 60 * 60 * 1000)); // 不超過 2 小時
   });
 });
