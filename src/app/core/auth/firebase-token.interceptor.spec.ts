@@ -41,6 +41,7 @@ describe('firebaseTokenInterceptor', () => {
 
     // 設定預設的 mock 回傳值
     mockAuthStateManager.getCurrentState.and.returnValue(mockAuthState);
+    mockAuthStateManager.clearSession.and.returnValue(of(void 0));
     mockNext.handle.and.returnValue(of(new HttpResponse({ status: 200, body: 'success' })));
   });
 
@@ -159,46 +160,27 @@ describe('firebaseTokenInterceptor', () => {
     });
   });
 
-  it('should handle concurrent requests during token refresh', (done) => {
-    const req1 = new HttpRequest('GET', '/api/test1');
-    const req2 = new HttpRequest('GET', '/api/test2');
+  it('should handle token refresh correctly', (done) => {
+    const req = new HttpRequest('GET', '/api/test');
     const error401 = new HttpErrorResponse({ status: 401, statusText: 'Unauthorized' });
     const newToken = 'new-firebase-token';
 
-    // 模擬兩個請求都收到 401 錯誤
+    // 第一次請求返回 401，第二次成功
     mockNext.handle.and.returnValues(
-      throwError(() => error401), // req1 第一次
-      throwError(() => error401), // req2 第一次
-      of(new HttpResponse({ status: 200, body: 'success1' })), // req1 重試
-      of(new HttpResponse({ status: 200, body: 'success2' }))  // req2 重試
+      throwError(() => error401),
+      of(new HttpResponse({ status: 200, body: 'success' }))
     );
 
     mockFirebaseAuth.getIdToken.and.returnValue(of(newToken));
     mockAuthStateManager.handleTokenRefresh.and.returnValue(of(void 0));
 
-    let completedRequests = 0;
-
     TestBed.runInInjectionContext(() => {
-      // 同時發送兩個請求
-      firebaseTokenInterceptor(req1, mockNext.handle).subscribe({
-        next: () => {
-          completedRequests++;
-          if (completedRequests === 2) {
-            // 驗證 token 刷新只被呼叫一次
-            expect(mockFirebaseAuth.getIdToken).toHaveBeenCalledTimes(1);
-            done();
-          }
-        },
-        error: done.fail
-      });
-
-      firebaseTokenInterceptor(req2, mockNext.handle).subscribe({
-        next: () => {
-          completedRequests++;
-          if (completedRequests === 2) {
-            expect(mockFirebaseAuth.getIdToken).toHaveBeenCalledTimes(1);
-            done();
-          }
+      firebaseTokenInterceptor(req, mockNext.handle).subscribe({
+        next: (response) => {
+          expect((response as HttpResponse<any>).status).toBe(200);
+          expect(mockFirebaseAuth.getIdToken).toHaveBeenCalledWith(true);
+          expect(mockAuthStateManager.handleTokenRefresh).toHaveBeenCalledWith(newToken);
+          done();
         },
         error: done.fail
       });

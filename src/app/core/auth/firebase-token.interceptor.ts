@@ -93,16 +93,14 @@ function handle401Error(
           );
         } else {
           // Token 刷新失敗，清除會話
-          return authStateManager.clearSession().pipe(
-            switchMap(() => throwError(() => new Error('Token refresh failed')))
-          );
+          authStateManager.clearSession().subscribe();
+          return throwError(() => new Error('Token refresh failed'));
         }
       }),
       catchError((error) => {
         // Token 刷新失敗，清除會話
-        return authStateManager.clearSession().pipe(
-          switchMap(() => throwError(() => error))
-        );
+        authStateManager.clearSession().subscribe();
+        return throwError(() => error);
       }),
       finalize(() => {
         isRefreshing = false;
