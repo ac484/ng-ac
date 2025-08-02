@@ -7,6 +7,7 @@ import { WorkbenchComponent } from './dashboard/workbench/workbench.component';
 import { MonitorComponent } from './dashboard/monitor/monitor.component';
 import { AnalysisComponent } from './dashboard/analysis/analysis.component';
 import { ContractsComponent } from './dashboard/contracts/contracts.component';
+import { TreeListComponent } from './dashboard/tree-list/tree-list.component';
 import { LayoutBasicComponent } from '../layout';
 import { tabGuard } from '../core/guards/tab.guard';
 
@@ -46,6 +47,12 @@ export const routes: Routes = [
             component: ContractsComponent,
             canActivate: [tabGuard],
             data: { title: '合約管理' }
+          },
+          { 
+            path: 'tree-list', 
+            component: TreeListComponent,
+            canActivate: [tabGuard],
+            data: { title: '樹狀表格' }
           }
         ]
       }

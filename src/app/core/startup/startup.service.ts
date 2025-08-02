@@ -123,6 +123,11 @@ export class StartupService {
             icon: { type: 'icon', value: 'monitor' }
           },
           {
+            text: '樹狀結構',
+            link: '/dashboard/tree-list',
+            icon: { type: 'icon', value: 'file-text' }
+          },
+          {
             text: '合約管理',
             link: '/dashboard/contracts',
             icon: { type: 'icon', value: 'file-text' }

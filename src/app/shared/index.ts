@@ -2,6 +2,8 @@
 export * from './components/ant-table/ant-table.component';
 export * from './components/tree-table/tree-table.component';
 export * from './components/card-table-wrap/card-table-wrap.component';
+export * from './components/page-header/page-header.component';
+export * from './components/water-mark/water-mark.component';
 
 // Pipes
 export * from './pipes/map.pipe';
