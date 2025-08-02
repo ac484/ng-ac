@@ -101,44 +101,44 @@ interface ClientWithExpand extends Client {
             </tr>
             <tr [nzExpand]="client.expand">
               <td colspan="6">
-                <button nz-button (click)="addContact(client)" nzType="primary" style="margin-bottom: 8px;">新增聯絡人</button>
-                <nz-table #innerTable [nzData]="client.contacts || []" nzSize="middle" [nzShowPagination]="false">
-                  <thead>
-                    <tr>
-                      <th>聯絡人姓名</th>
-                      <th>電話號碼</th>
-                      <th>電子郵件</th>
-                      <th>操作</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (contact of innerTable.data; track contact.id || contact.name) {
-                      <tr class="editable-row">
-                        <td>
-                          <div class="editable-cell" [hidden]="editContactId === (contact.id || contact.name)" (click)="startEditContact(contact.id || contact.name)">
-                            {{ contact.name }}
-                          </div>
-                          <input [hidden]="editContactId !== (contact.id || contact.name)" type="text" nz-input [(ngModel)]="contact.name" (blur)="stopEditContact()" />
-                        </td>
-                        <td>
-                          <div class="editable-cell" [hidden]="editContactPhone === contact.phone" (click)="startEditContactPhone(contact.phone)">
-                            {{ contact.phone }}
-                          </div>
-                          <input [hidden]="editContactPhone !== contact.phone" type="text" nz-input [(ngModel)]="contact.phone" (blur)="stopEditContactPhone()" />
-                        </td>
-                        <td>
-                          <div class="editable-cell" [hidden]="editContactEmail === contact.email" (click)="startEditContactEmail(contact.email)">
-                            {{ contact.email }}
-                          </div>
-                          <input [hidden]="editContactEmail !== contact.email" type="text" nz-input [(ngModel)]="contact.email" (blur)="stopEditContactEmail()" />
-                        </td>
-                        <td>
-                          <a nz-popconfirm nzPopconfirmTitle="確定要刪除此聯絡人嗎?" (nzOnConfirm)="deleteContact(client, contact)">刪除</a>
-                        </td>
+                <div style="padding: 16px; background-color: #fafafa;">
+                  <nz-table #innerTable [nzData]="getContactsList(client)" nzSize="small" [nzShowPagination]="false">
+                    <thead>
+                      <tr>
+                        <th>聯絡人姓名</th>
+                        <th>電話號碼</th>
+                        <th>電子郵件</th>
+                        <th>操作</th>
                       </tr>
-                    }
-                  </tbody>
-                </nz-table>
+                    </thead>
+                    <tbody>
+                      @for (contact of innerTable.data; track $index) {
+                        <tr [style.background-color]="!contact.id ? '#f0f9ff' : ''">
+                          <td>
+                            <input nz-input [(ngModel)]="contact.name"
+                              (blur)="onContactSave(client, contact, $index)"
+                              [placeholder]="!contact.id ? '新增聯絡人姓名' : ''" />
+                          </td>
+                          <td>
+                            <input nz-input [(ngModel)]="contact.phone"
+                              (blur)="onContactSave(client, contact, $index)"
+                              [placeholder]="!contact.id ? '電話號碼' : ''" />
+                          </td>
+                          <td>
+                            <input nz-input [(ngModel)]="contact.email"
+                              (blur)="onContactSave(client, contact, $index)"
+                              [placeholder]="!contact.id ? '電子郵件' : ''" />
+                          </td>
+                          <td>
+                            @if (contact.id) {
+                              <a nz-popconfirm nzPopconfirmTitle="確定要刪除此聯絡人嗎?" (nzOnConfirm)="deleteContact(client, contact)">刪除</a>
+                            }
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </nz-table>
+                </div>
               </td>
             </tr>
           }
@@ -170,10 +170,7 @@ export class ClientsComponent implements OnInit {
   editing = false;
   editingClientId: string | null = null;
   
-  // 聯絡人編輯狀態
-  editContactId: string | null = null;
-  editContactPhone: string | null = null;
-  editContactEmail: string | null = null;
+  // 移除舊的聯絡人編輯相關方法（startEditContact, stopEditContact 等）
   
   statusOptions = [
     { label: '啟用', value: 'active' },
@@ -277,52 +274,34 @@ export class ClientsComponent implements OnInit {
     });
   }
 
-  // 聯絡人編輯方法
-  startEditContact(name: string): void {
-    this.editContactId = name;
+  // 取得聯絡人列表，最後添加一個空行用於新增
+  getContactsList(client: Client): ContactInfo[] {
+    const contacts = client.contacts || [];
+    return [...contacts, { id: '', name: '', phone: '', email: '' }];
   }
 
-  stopEditContact(): void {
-    this.editContactId = null;
-  }
-
-  startEditContactPhone(phone: string): void {
-    this.editContactPhone = phone;
-  }
-
-  stopEditContactPhone(): void {
-    this.editContactPhone = null;
-  }
-
-  startEditContactEmail(email: string): void {
-    this.editContactEmail = email;
-  }
-
-  stopEditContactEmail(): void {
-    this.editContactEmail = null;
-  }
-
-  addContact(client: Client): void {
-    if (!client.contacts) {
-      client.contacts = [];
+  // 聯絡人保存邏輯
+  onContactSave(client: Client, contact: ContactInfo, index: number): void {
+    if (!contact.id && (contact.name || contact.phone || contact.email)) {
+      // 新增聯絡人
+      contact.id = this.generateContactId();
+      if (!client.contacts) client.contacts = [];
+      client.contacts.push({ ...contact });
+      this.saveContact(client);
+    } else if (contact.id) {
+      // 更新現有聯絡人
+      this.saveContact(client);
     }
-    client.contacts.push({
-      id: this.generateContactId(),
-      name: '新聯絡人',
-      phone: '',
-      email: ''
-    });
-    this.updateClientContacts(client);
   }
 
   deleteContact(client: Client, contact: ContactInfo): void {
-    if (client.contacts) {
+    if (client.contacts && contact.id) {
       client.contacts = client.contacts.filter(c => c.id !== contact.id);
-      this.updateClientContacts(client);
+      this.saveContact(client);
     }
   }
 
-  private updateClientContacts(client: Client): void {
+  private saveContact(client: Client): void {
     this.clientService.update(client.id!, { contacts: client.contacts }).subscribe({
       error: () => this.loadClients()
     });
