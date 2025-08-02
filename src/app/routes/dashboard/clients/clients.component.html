@@ -73,7 +73,7 @@
         </nz-select>
       </td>
       <td class="payment-flow-cell">
-        <nz-transfer [nzDataSource]="paymentFlowOptions" [nzTitles]="['可選', '已選']" [nzOperations]="['→', '←']"
+        <nz-transfer [nzDataSource]="paymentFlowOptions" [nzTitles]="['已選', '可選']" [nzOperations]="['←', '→']"
           [nzListStyle]="{ 'width': '120px', 'height': '120px' }" [nzShowSearch]="false" [nzShowSelectAll]="true"
           [nzSelectedKeys]="getClientPaymentFlows(client)" (nzChange)="onPaymentFlowChange(client.id!, $event)">
         </nz-transfer>

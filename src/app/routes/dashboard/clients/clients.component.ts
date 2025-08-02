@@ -150,9 +150,17 @@ export class ClientsComponent implements OnInit {
     });
   }
 
-  // 獲取客戶的請款流程
+  // 獲取客戶的請款流程（已選中的項目）
   getClientPaymentFlows(client: Client): PaymentFlowStatus[] {
     return client.paymentFlow || [];
+  }
+
+  // 獲取可選的請款流程（未選中的項目）
+  getAvailablePaymentFlows(client: Client): PaymentFlowStatus[] {
+    const selectedFlows = this.getClientPaymentFlows(client);
+    return this.paymentFlowOptions
+      .map(option => option.key)
+      .filter(key => !selectedFlows.includes(key));
   }
 
   // 獲取客戶的請款流程選項
