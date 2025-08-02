@@ -168,7 +168,12 @@ export class ContractsComponent implements OnInit {
     
     const searchConditions = this.buildSearchConditions();
     
-    (this.contractService as any).queryContracts(searchConditions).subscribe({
+    // 修復：使用 findAll() 方法而不是 queryContracts()
+    (this.contractService as any).findAll(
+      searchConditions.where || [],
+      searchConditions.order || [],
+      searchConditions.limit
+    ).subscribe({
       next: (contracts: Contract[]) => {
         console.log('✅ Firestore 查詢成功:', contracts);
         this.contractList = contracts;
@@ -195,9 +200,21 @@ export class ContractsComponent implements OnInit {
   loadStats(): void {
     console.log('📊 開始載入統計數據...');
     
-    (this.contractService as any).getContractStats().subscribe({
-      next: (stats: ContractStats) => {
-        console.log('✅ 統計數據載入成功:', stats);
+    // 修復：使用 findAll() 方法來獲取統計數據
+    (this.contractService as any).findAll().subscribe({
+      next: (contracts: Contract[]) => {
+        console.log('✅ 統計數據載入成功:', contracts);
+        
+        // 手動計算統計數據
+        const stats: ContractStats = {
+          total: contracts.length,
+          draft: contracts.filter(c => c.status === 'draft').length,
+          preparing: contracts.filter(c => c.status === 'preparing').length,
+          active: contracts.filter(c => c.status === 'active').length,
+          completed: contracts.filter(c => c.status === 'completed').length,
+          totalAmount: contracts.reduce((sum, contract) => sum + (contract.totalAmount || 0), 0)
+        };
+        
         this.contractStats = stats;
         this.cdr.markForCheck();
       },
@@ -221,6 +238,7 @@ export class ContractsComponent implements OnInit {
   private buildSearchConditions(): any {
     const conditions: any = {};
     const where: any[] = [];
+    const order: any[] = [];
     
     if (this.searchParam.contractCode) {
       where.push({ field: 'contractCode', operator: '>=', value: this.searchParam.contractCode });
@@ -244,8 +262,15 @@ export class ContractsComponent implements OnInit {
       where.push({ field: 'totalAmount', operator: '<=', value: this.searchParam.maxAmount });
     }
 
+    // 添加默認排序
+    order.push({ field: 'createdAt', direction: 'desc' });
+
     if (where.length > 0) {
       conditions.where = where;
+    }
+    
+    if (order.length > 0) {
+      conditions.order = order;
     }
 
     conditions.limit = 50;

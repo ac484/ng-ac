@@ -3,7 +3,7 @@
  * 專門處理合約列表的顯示、操作和模板
  */
 
-import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { Contract } from '../../../../core/services/firestore/contract.service';
@@ -111,7 +111,7 @@ import { NzProgressModule } from 'ng-zorro-antd/progress';
     NzProgressModule
   ]
 })
-export class ContractTableComponent {
+export class ContractTableComponent implements AfterViewInit {
   @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
   @ViewChild('progressTpl', { static: true }) progressTpl!: TemplateRef<any>;
   @ViewChild('amountTpl', { static: true }) amountTpl!: TemplateRef<any>;
