@@ -1,0 +1,372 @@
+<!--頭部版塊-->
+<app-page-header [pageHeaderInfo]="pageHeaderInfo" />
+
+<div class="firestore-demo-container">
+    <nz-tabset nzType="card">
+
+        <!-- 用戶管理 -->
+        <nz-tab nzTitle="用戶管理">
+            <nz-card nzTitle="創建用戶" class="mb-16">
+                <form nz-form [formGroup]="userForm" (ngSubmit)="createUser()">
+                    <div nz-row [nzGutter]="16">
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>用戶 UID</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="uid" placeholder="請輸入用戶 UID" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>郵箱</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="email" placeholder="請輸入郵箱" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>顯示名稱</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="displayName" placeholder="請輸入顯示名稱" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label>電話號碼</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="phoneNumber" placeholder="請輸入電話號碼" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-control>
+                                    <button nz-button nzType="primary" [disabled]="!userForm.valid">創建用戶</button>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </form>
+            </nz-card>
+
+            <nz-card nzTitle="用戶列表">
+                <nz-spin [nzSpinning]="loading.users">
+                    <nz-list [nzDataSource]="users" nzItemLayout="horizontal">
+                        @for (user of users; track user.id) {
+                        <nz-list-item>
+                            <nz-list-item-meta [nzTitle]="user.displayName || user.email" [nzDescription]="user.email">
+                            </nz-list-item-meta>
+                            <ul nz-list-item-actions>
+                                <nz-list-item-action>
+                                    <nz-tag [nzColor]="user.isActive ? 'success' : 'default'">
+                                        {{ user.isActive ? '活躍' : '停用' }}
+                                    </nz-tag>
+                                </nz-list-item-action>
+                                <nz-list-item-action>
+                                    <span>{{ formatDate(user.lastLoginAt) }}</span>
+                                </nz-list-item-action>
+                            </ul>
+                        </nz-list-item>
+                        }
+                    </nz-list>
+                </nz-spin>
+            </nz-card>
+        </nz-tab>
+
+        <!-- 文章管理 -->
+        <nz-tab nzTitle="文章管理">
+            <nz-card nzTitle="創建文章" class="mb-16">
+                <form nz-form [formGroup]="articleForm" (ngSubmit)="createArticle()">
+                    <div nz-row [nzGutter]="16">
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>標題</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="title" placeholder="請輸入文章標題" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>Slug</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="slug" placeholder="請輸入文章 slug" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>作者 ID</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="authorId" placeholder="請輸入作者 ID" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>作者名稱</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="authorName" placeholder="請輸入作者名稱" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label>分類 ID</nz-form-label>
+                                <nz-form-control>
+                                    <nz-select formControlName="categoryId" nzPlaceHolder="請選擇分類">
+                                        @for (category of categories; track category.id) {
+                                        <nz-option [nzValue]="category.id" [nzLabel]="category.name"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label>標籤</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="tags" placeholder="請輸入標籤，用逗號分隔" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>內容</nz-form-label>
+                                <nz-form-control>
+                                    <textarea nz-input formControlName="content" rows="4"
+                                        placeholder="請輸入文章內容"></textarea>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-control>
+                                    <button nz-button nzType="primary" [disabled]="!articleForm.valid">創建文章</button>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </form>
+            </nz-card>
+
+            <nz-card nzTitle="文章列表">
+                <nz-spin [nzSpinning]="loading.articles">
+                    <nz-list [nzDataSource]="articles" nzItemLayout="horizontal">
+                        @for (article of articles; track article.id) {
+                        <nz-list-item>
+                            <nz-list-item-meta [nzTitle]="article.title"
+                                [nzDescription]="article.excerpt || article.content.substring(0, 100) + '...'">
+                            </nz-list-item-meta>
+                            <ul nz-list-item-actions>
+                                <nz-list-item-action>
+                                    <nz-tag [nzColor]="getStatusColor(article.status)">
+                                        {{ article.status }}
+                                    </nz-tag>
+                                </nz-list-item-action>
+                                <nz-list-item-action>
+                                    <span>瀏覽: {{ article.viewCount }}</span>
+                                </nz-list-item-action>
+                                @if (article.status === 'draft') {
+                                <nz-list-item-action>
+                                    <button nz-button nzType="link" nzSize="small"
+                                        (click)="publishArticle(article.id!)">發布</button>
+                                </nz-list-item-action>
+                                }
+                            </ul>
+                        </nz-list-item>
+                        }
+                    </nz-list>
+                </nz-spin>
+            </nz-card>
+        </nz-tab>
+
+        <!-- 分類管理 -->
+        <nz-tab nzTitle="分類管理">
+            <nz-card nzTitle="創建分類" class="mb-16">
+                <form nz-form [formGroup]="categoryForm" (ngSubmit)="createCategory()">
+                    <div nz-row [nzGutter]="16">
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>分類名稱</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="name" placeholder="請輸入分類名稱" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>Slug</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="slug" placeholder="請輸入分類 slug" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label>父分類</nz-form-label>
+                                <nz-form-control>
+                                    <nz-select formControlName="parentId" nzPlaceHolder="請選擇父分類" nzAllowClear>
+                                        @for (category of categories; track category.id) {
+                                        <nz-option [nzValue]="category.id" [nzLabel]="category.name"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label>排序</nz-form-label>
+                                <nz-form-control>
+                                    <nz-input-number formControlName="sortOrder" [nzMin]="0"
+                                        nzPlaceHolder="排序權重"></nz-input-number>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-label>描述</nz-form-label>
+                                <nz-form-control>
+                                    <textarea nz-input formControlName="description" rows="3"
+                                        placeholder="請輸入分類描述"></textarea>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-control>
+                                    <button nz-button nzType="primary" [disabled]="!categoryForm.valid">創建分類</button>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </form>
+            </nz-card>
+
+            <nz-card nzTitle="分類列表">
+                <nz-spin [nzSpinning]="loading.categories">
+                    <nz-list [nzDataSource]="categories" nzItemLayout="horizontal">
+                        @for (category of categories; track category.id) {
+                        <nz-list-item>
+                            <nz-list-item-meta [nzTitle]="category.name" [nzDescription]="category.description">
+                            </nz-list-item-meta>
+                            <ul nz-list-item-actions>
+                                <nz-list-item-action>
+                                    <nz-tag [nzColor]="category.isActive ? 'success' : 'default'">
+                                        {{ category.isActive ? '啟用' : '停用' }}
+                                    </nz-tag>
+                                </nz-list-item-action>
+                                <nz-list-item-action>
+                                    <span>文章數: {{ category.articleCount }}</span>
+                                </nz-list-item-action>
+                                <nz-list-item-action>
+                                    <span>層級: {{ category.level }}</span>
+                                </nz-list-item-action>
+                            </ul>
+                        </nz-list-item>
+                        }
+                    </nz-list>
+                </nz-spin>
+            </nz-card>
+        </nz-tab>
+
+        <!-- 評論管理 -->
+        <nz-tab nzTitle="評論管理">
+            <nz-card nzTitle="創建評論" class="mb-16">
+                <form nz-form [formGroup]="commentForm" (ngSubmit)="createComment()">
+                    <div nz-row [nzGutter]="16">
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>文章 ID</nz-form-label>
+                                <nz-form-control>
+                                    <nz-select formControlName="articleId" nzPlaceHolder="請選擇文章">
+                                        @for (article of articles; track article.id) {
+                                        <nz-option [nzValue]="article.id" [nzLabel]="article.title"></nz-option>
+                                        }
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>評論者名稱</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="authorName" placeholder="請輸入評論者名稱" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>評論者郵箱</nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input formControlName="authorEmail" placeholder="請輸入評論者郵箱" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label>狀態</nz-form-label>
+                                <nz-form-control>
+                                    <nz-select formControlName="status">
+                                        <nz-option nzValue="pending" nzLabel="待審核"></nz-option>
+                                        <nz-option nzValue="approved" nzLabel="已批准"></nz-option>
+                                        <nz-option nzValue="rejected" nzLabel="已拒絕"></nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-label nzRequired>評論內容</nz-form-label>
+                                <nz-form-control>
+                                    <textarea nz-input formControlName="content" rows="4"
+                                        placeholder="請輸入評論內容"></textarea>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-control>
+                                    <button nz-button nzType="primary" [disabled]="!commentForm.valid">創建評論</button>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </form>
+            </nz-card>
+
+            <nz-card nzTitle="評論列表">
+                <nz-spin [nzSpinning]="loading.comments">
+                    <nz-list [nzDataSource]="comments" nzItemLayout="horizontal">
+                        @for (comment of comments; track comment.id) {
+                        <nz-list-item>
+                            <nz-list-item-meta [nzTitle]="comment.authorName" [nzDescription]="comment.content">
+                            </nz-list-item-meta>
+                            <ul nz-list-item-actions>
+                                <nz-list-item-action>
+                                    <nz-tag [nzColor]="getStatusColor(comment.status)">
+                                        {{ comment.status }}
+                                    </nz-tag>
+                                </nz-list-item-action>
+                                <nz-list-item-action>
+                                    <span>👍 {{ comment.likeCount }}</span>
+                                </nz-list-item-action>
+                                @if (comment.status === 'pending') {
+                                <nz-list-item-action>
+                                    <button nz-button nzType="link" nzSize="small"
+                                        (click)="approveComment(comment.id!)">批准</button>
+                                </nz-list-item-action>
+                                }
+                            </ul>
+                        </nz-list-item>
+                        }
+                    </nz-list>
+                </nz-spin>
+            </nz-card>
+        </nz-tab>
+
+    </nz-tabset>
+</div>

@@ -3,4 +3,8 @@
  */
 
 export * from './firebase-auth.service';
+export * from './google-maps.service';
 export * from './tab.service';
+
+// Firestore 服務
+export * from './firestore';

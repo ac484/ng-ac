@@ -8,6 +8,7 @@ import { MonitorComponent } from './dashboard/monitor/monitor.component';
 import { AnalysisComponent } from './dashboard/analysis/analysis.component';
 import { ContractsComponent } from './dashboard/contracts/contracts.component';
 import { TreeListComponent } from './dashboard/tree-list/tree-list.component';
+import { FirestoreDemoComponent } from './dashboard/firestore-demo/firestore-demo.component';
 import { LayoutBasicComponent } from '../layout';
 import { tabGuard } from '../core/guards/tab.guard';
 
@@ -53,6 +54,12 @@ export const routes: Routes = [
             component: TreeListComponent,
             canActivate: [tabGuard],
             data: { title: '樹狀表格' }
+          },
+          { 
+            path: 'firestore-demo', 
+            component: FirestoreDemoComponent,
+            canActivate: [tabGuard],
+            data: { title: 'Firestore 範例' }
           }
         ]
       }
