@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth, User, authState, signInAnonymously, signInWithPopup, GoogleAuthProvider, signOut } from '@angular/fire/auth';
-import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, interval, Subscription } from 'rxjs';
+import { map, switchMap, filter } from 'rxjs/operators';
+import { WindowService } from '@core/services/common/window.service';
+import { TokenKey, TokenPre } from '@config/constant';
 
 export interface FirebaseUserInfo {
     uid: string;
@@ -17,7 +19,9 @@ export interface FirebaseUserInfo {
 })
 export class FirebaseAuthService {
     private auth = inject(Auth);
+    private windowService = inject(WindowService);
     private currentUserSubject = new BehaviorSubject<FirebaseUserInfo | null>(null);
+    private tokenRefreshSubscription?: Subscription;
 
     // 當前用戶狀態
     public currentUser$ = this.currentUserSubject.asObservable();
@@ -48,8 +52,14 @@ export class FirebaseAuthService {
                     emailVerified: user.emailVerified
                 };
                 this.currentUserSubject.next(userInfo);
+
+                // 用戶登入後啟動自動 token 續簽
+                this.startTokenRefresh();
             } else {
                 this.currentUserSubject.next(null);
+
+                // 用戶登出後停止自動 token 續簽
+                this.stopTokenRefresh();
             }
         });
     }
@@ -135,6 +145,87 @@ export class FirebaseAuthService {
     }
 
     /**
+     * 啟動自動 token 續簽
+     * 每 50 分鐘刷新一次 token（Firebase token 預設 1 小時過期）
+     */
+    private startTokenRefresh(): void {
+        // 先停止之前的續簽
+        this.stopTokenRefresh();
+
+        console.log('🔥 啟動 Firebase Token 自動續簽機制');
+
+        // 每 50 分鐘刷新一次 token
+        this.tokenRefreshSubscription = interval(50 * 60 * 1000)
+            .pipe(
+                filter(() => !!this.auth.currentUser),
+                switchMap(() => this.refreshAndUpdateToken())
+            )
+            .subscribe({
+                next: (success) => {
+                    if (success) {
+                        console.log('🔥 Token 自動續簽成功');
+                    } else {
+                        console.warn('🔥 Token 自動續簽失敗');
+                    }
+                },
+                error: (error) => {
+                    console.error('🔥 Token 自動續簽過程中發生錯誤:', error);
+                }
+            });
+    }
+
+    /**
+     * 停止自動 token 續簽
+     */
+    private stopTokenRefresh(): void {
+        if (this.tokenRefreshSubscription) {
+            this.tokenRefreshSubscription.unsubscribe();
+            this.tokenRefreshSubscription = undefined;
+            console.log('🔥 停止 Firebase Token 自動續簽機制');
+        }
+    }
+
+    /**
+     * 刷新並更新 token 到 SessionStorage
+     */
+    private async refreshAndUpdateToken(): Promise<boolean> {
+        try {
+            const user = this.auth.currentUser;
+            if (!user) {
+                return false;
+            }
+
+            // 強制刷新 Firebase ID Token
+            const newIdToken = await user.getIdToken(true);
+
+            // 創建新的兼容 token
+            const newCompatibleToken = this.createCompatibleJWT(user);
+
+            // 更新 SessionStorage 中的 token
+            const fullToken = TokenPre + newCompatibleToken;
+            this.windowService.setSessionStorage(TokenKey, fullToken);
+
+            console.log('🔥 Token 已自動更新:', {
+                uid: user.uid,
+                newIdTokenLength: newIdToken.length,
+                newCompatibleTokenLength: newCompatibleToken.length
+            });
+
+            return true;
+        } catch (error) {
+            console.error('🔥 刷新 token 失敗:', error);
+            return false;
+        }
+    }
+
+    /**
+     * 手動刷新 token（供外部調用）
+     */
+    async manualRefreshToken(): Promise<boolean> {
+        return await this.refreshAndUpdateToken();
+    }
+
+    /**
      * 創建兼容現有系統的 JWT token
      * 這個方法將 Firebase 用戶信息包裝成現有系統期望的 JWT 格式
      */
@@ -161,5 +252,12 @@ export class FirebaseAuthService {
         const signature = btoa('firebase-mock-signature').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 
         return `${headerEncoded}.${payloadEncoded}.${signature}`;
+    }
+
+    /**
+     * 清理資源（在服務銷毀時調用）
+     */
+    ngOnDestroy(): void {
+        this.stopTokenRefresh();
     }
 }
