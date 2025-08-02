@@ -15,12 +15,16 @@ export enum PaymentFlowStatus {
   CANCELLED = 'cancelled'    // 已取消
 }
 
+export interface ContactInfo {
+  name: string;              // 聯絡人姓名
+  phone: string;             // 電話號碼
+  email: string;             // 電子郵件
+}
+
 export interface Client extends BaseEntity {
   clientCode: string;        // 客戶編號
   clientName: string;        // 客戶名稱
-  contactPerson: string;     // 聯絡人
-  phoneNumber: string;       // 電話號碼
-  email: string;             // 電子郵件
+  contacts: ContactInfo[];   // 聯絡人陣列
   address: string;           // 地址
   industry: string;          // 產業別
   companySize: string;       // 公司規模
@@ -33,7 +37,6 @@ export interface Client extends BaseEntity {
 export interface ClientQuery {
   clientCode?: string;
   clientName?: string;
-  contactPerson?: string;
   industry?: string;
   status?: Client['status'];
   sortBy?: 'createdAt' | 'clientName' | 'clientCode';
@@ -89,7 +92,6 @@ export class ClientService {
     const ol: OrderCondition[] = [];
     if (query.clientCode) wl.push({ field: 'clientCode', operator: '>=', value: query.clientCode }, { field: 'clientCode', operator: '<=', value: query.clientCode + '\uF8FF' });
     if (query.clientName) wl.push({ field: 'clientName', operator: '>=', value: query.clientName }, { field: 'clientName', operator: '<=', value: query.clientName + '\uF8FF' });
-    if (query.contactPerson) wl.push({ field: 'contactPerson', operator: '>=', value: query.contactPerson }, { field: 'contactPerson', operator: '<=', value: query.contactPerson + '\uF8FF' });
     if (query.industry) wl.push({ field: 'industry', operator: '==', value: query.industry });
     if (query.status) wl.push({ field: 'status', operator: '==', value: query.status });
     if (query.sortBy) ol.push({ field: query.sortBy, direction: query.sortOrder || 'asc' });
