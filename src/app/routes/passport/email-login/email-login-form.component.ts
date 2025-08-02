@@ -1,18 +1,17 @@
 /**
  * 郵箱登入表單元件
  *
- * 本檔案依據 Firebase Console 專案設定，使用 Firebase Client SDK 操作 Authentication
- * 提供郵箱登入功能，整合 ng-alain 認證系統
+ * 使用 FirebaseAuthService 提供郵箱登入功能
+ * 整合 @delon/auth 認證系統，確保與既有流程無縫銜接
  */
 
 import { Component, inject } from '@angular/core';
-import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { FirebaseAuthService } from '../../../core/services/firebase-auth.service';
 
 @Component({
   selector: 'app-email-login-form',
@@ -36,17 +35,18 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
       <nz-form-item>
         <nz-form-control [nzOffset]="6" [nzSpan]="18">
-          <button nz-button nzType="primary" [nzLoading]="loading" [disabled]="loginForm.invalid"> 登入 </button>
+          <button nz-button nzType="primary" [nzLoading]="loading" [disabled]="loginForm.invalid"> 
+            登入 
+          </button>
         </nz-form-control>
       </nz-form-item>
     </form>
   `
 })
 export class EmailLoginFormComponent {
-  private readonly router = inject(Router);
   private readonly message = inject(NzMessageService);
-  private readonly auth = inject(Auth);
   private readonly fb = inject(FormBuilder);
+  private readonly firebaseAuthService = inject(FirebaseAuthService);
 
   loading = false;
   loginForm = this.fb.nonNullable.group({
@@ -54,34 +54,36 @@ export class EmailLoginFormComponent {
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
-  async onSubmit(): Promise<void> {
+  onSubmit(): void {
     if (this.loginForm.invalid) {
+      Object.values(this.loginForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
       return;
     }
 
     this.loading = true;
     const { email, password } = this.loginForm.value;
 
-    try {
-      await signInWithEmailAndPassword(this.auth, email!, password!);
-
-      // 登入成功後跳轉到 Firebase callback 路由，讓 callback 統一處理
-      this.router.navigateByUrl('/passport/callback/firebase');
-    } catch (error: any) {
-      console.error('郵箱登入失敗:', error);
-      let errorMessage = '登入失敗，請稍後再試';
-
-      if (error.code === 'auth/user-not-found') {
-        errorMessage = '用戶不存在';
-      } else if (error.code === 'auth/wrong-password') {
-        errorMessage = '密碼錯誤';
-      } else if (error.code === 'auth/invalid-email') {
-        errorMessage = '郵箱格式無效';
+    this.firebaseAuthService.signInWithEmail({ 
+      email: email!, 
+      password: password! 
+    }).subscribe({
+      next: async (result) => {
+        if (result.success && result.user) {
+          await this.firebaseAuthService.handleAuthSuccess(result.user);
+        }
+      },
+      error: (error) => {
+        this.message.error(error.message || '登入失敗，請稍後再試');
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
       }
-
-      this.message.error(errorMessage);
-    } finally {
-      this.loading = false;
-    }
+    });
   }
 }

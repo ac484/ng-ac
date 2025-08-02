@@ -1,17 +1,17 @@
 /**
  * 郵箱註冊表單元件
  *
- * 本檔案依據 Firebase Console 專案設定，使用 Firebase Client SDK 操作 Authentication
- * 提供郵箱註冊功能
+ * 使用 FirebaseAuthService 提供郵箱註冊功能
+ * 整合 @delon/auth 認證系統，確保與既有流程無縫銜接
  */
 
 import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { createUserWithEmailAndPassword, sendEmailVerification, Auth } from '@angular/fire/auth';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { FirebaseAuthService } from '../../../core/services/firebase-auth.service';
 
 @Component({
   selector: 'app-email-register-form',
@@ -26,6 +26,15 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
+      
+      <nz-form-item>
+        <nz-form-control nzErrorTip="請輸入顯示名稱">
+          <nz-input-group nzSize="large" nzPrefixIcon="user">
+            <input nz-input formControlName="displayName" placeholder="顯示名稱（可選）" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      
       <nz-form-item>
         <nz-form-control nzErrorTip="密碼至少6位">
           <nz-input-group nzSize="large" nzPrefixIcon="lock">
@@ -33,6 +42,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
+      
       <nz-form-item>
         <nz-form-control nzErrorTip="請確認密碼">
           <nz-input-group nzSize="large" nzPrefixIcon="lock">
@@ -40,8 +50,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
+      
       <nz-form-item>
-        <button nz-button type="submit" nzType="primary" nzSize="large" [nzLoading]="loading" nzBlock> 註冊 </button>
+        <button nz-button type="submit" nzType="primary" nzSize="large" [nzLoading]="loading" nzBlock> 
+          註冊 
+        </button>
       </nz-form-item>
     </form>
   `,
@@ -55,8 +68,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 })
 export class EmailRegisterFormComponent {
   private readonly message = inject(NzMessageService);
-  private readonly auth = inject(Auth);
   private readonly fb = inject(FormBuilder);
+  private readonly firebaseAuthService = inject(FirebaseAuthService);
 
   @Output() registerSuccess = new EventEmitter<void>();
 
@@ -65,67 +78,65 @@ export class EmailRegisterFormComponent {
   registerForm = this.fb.nonNullable.group(
     {
       email: ['', [Validators.required, Validators.email]],
+      displayName: [''],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
     },
     { validators: this.passwordMatchValidator }
   );
 
-  passwordMatchValidator(group: any): Record<string, any> | null {
-    const password = group.get('password');
-    const confirmPassword = group.get('confirmPassword');
-    return password && confirmPassword && password.value !== confirmPassword.value ? { passwordMismatch: true } : null;
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+    
+    if (!password || !confirmPassword) {
+      return null;
+    }
+    
+    return password.value !== confirmPassword.value ? { passwordMismatch: true } : null;
   }
 
-  async register(): Promise<void> {
+  register(): void {
     if (this.registerForm.invalid) {
       this.markFormGroupTouched(this.registerForm);
       return;
     }
 
     this.loading = true;
-    const { email, password } = this.registerForm.value;
+    const { email, password, displayName } = this.registerForm.value;
 
-    try {
-      const credential = await createUserWithEmailAndPassword(this.auth, email!, password!);
-      const user = credential.user;
-
-      // 發送郵箱驗證
-      await sendEmailVerification(user);
-
-      // 註冊成功，觸發事件讓父元件處理
-      this.message.success('郵箱註冊成功！請檢查郵箱進行驗證。');
-      this.registerSuccess.emit();
-    } catch (error: any) {
-      console.error('註冊失敗:', error);
-      this.message.error(this.getErrorMessage(error.code));
-    } finally {
-      this.loading = false;
-    }
-  }
-
-  private markFormGroupTouched(formGroup: any): void {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.controls[key];
-      control.markAsTouched();
-      if (control.controls) {
-        this.markFormGroupTouched(control);
+    this.firebaseAuthService.createUserWithEmail({
+      email: email!,
+      password: password!,
+      displayName: displayName || undefined
+    }).subscribe({
+      next: async (result) => {
+        if (result.success && result.user) {
+          this.message.success('註冊成功！正在為您登入...');
+          this.registerSuccess.emit();
+          // 註冊成功後自動登入
+          await this.firebaseAuthService.handleAuthSuccess(result.user);
+        }
+      },
+      error: (error) => {
+        this.message.error(error.message || '註冊失敗，請稍後再試');
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }
 
-  private getErrorMessage(errorCode: string): string {
-    switch (errorCode) {
-      case 'auth/email-already-in-use':
-        return '郵箱已被使用';
-      case 'auth/weak-password':
-        return '密碼強度太弱';
-      case 'auth/invalid-email':
-        return '郵箱格式無效';
-      case 'auth/too-many-requests':
-        return '請求過於頻繁，請稍後再試';
-      default:
-        return '註冊失敗，請稍後再試';
-    }
+  private markFormGroupTouched(formGroup: AbstractControl): void {
+    Object.keys(formGroup.value).forEach(key => {
+      const control = formGroup.get(key);
+      if (control) {
+        control.markAsTouched();
+        if (control instanceof FormBuilder) {
+          this.markFormGroupTouched(control);
+        }
+      }
+    });
   }
 }
