@@ -9,7 +9,7 @@ import { provideRouter, RouteReuseStrategy, TitleStrategy, withComponentInputBin
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { initializeAppCheck, provideAppCheck } from '@angular/fire/app-check';
-import { ReCaptchaEnterpriseProvider } from 'firebase/app-check';
+import { ReCaptchaEnterpriseProvider } from '@angular/fire/app-check';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
@@ -158,9 +158,11 @@ export const appConfig: ApplicationConfig = {
 
     // Firebase 安全服务
     provideAppCheck(() => {
-      // TODO: 获取 reCAPTCHA Enterprise 密钥 https://console.cloud.google.com/security/recaptcha?project=_
-      const provider = new ReCaptchaEnterpriseProvider('6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo');
-      return initializeAppCheck(undefined, { provider: provider as any, isTokenAutoRefreshEnabled: true });
+      const provider = new ReCaptchaEnterpriseProvider(environment.recaptcha.siteKey);
+      return initializeAppCheck(undefined, {
+        provider,
+        isTokenAutoRefreshEnabled: true
+      });
     }),
 
     // Firebase 数据和功能服务
