@@ -75,30 +75,7 @@
       <td class="payment-flow-cell">
         <nz-transfer [nzDataSource]="paymentFlowOptions" [nzTitles]="['已選', '可選']" [nzOperations]="['←', '→']"
           [nzShowSearch]="false" [nzShowSelectAll]="true" [nzSelectedKeys]="getClientPaymentFlows(client)"
-          (nzChange)="onPaymentFlowChange(client.id!, $event)" [nzRenderList]="[renderList, renderList]">
-          <ng-template #renderList let-items let-direction="direction" let-stat="stat" let-disabled="disabled"
-            let-onItemSelectAll="onItemSelectAll" let-onItemSelect="onItemSelect">
-            <nz-table #t [nzData]="$asTransferItems(items)" nzSize="small">
-              <thead>
-                <tr>
-                  <th [nzDisabled]="disabled" [nzChecked]="stat.checkAll" [nzIndeterminate]="stat.checkHalf"
-                    (nzCheckedChange)="onItemSelectAll($event)"></th>
-                  <th>名稱</th>
-                  <th>描述</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (data of t.data; track data) {
-                  <tr (click)="onItemSelect(data)" style="cursor: pointer;">
-                    <td [nzChecked]="!!data.checked" [nzDisabled]="disabled || data.disabled" (nzCheckedChange)="onItemSelect(data)">
-                    </td>
-                    <td>{{ data.title }}</td>
-                    <td>{{ data['description'] }}</td>
-                  </tr>
-                }
-              </tbody>
-            </nz-table>
-          </ng-template>
+          (nzChange)="onPaymentFlowChange(client.id!, $event)" [nzListStyle]="{ 'width': '180px', 'height': '200px' }">
         </nz-transfer>
       </td>
       <td>

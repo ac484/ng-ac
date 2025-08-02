@@ -85,12 +85,12 @@ export class ClientsComponent implements OnInit {
       { key: PaymentFlowStatus.CANCELLED, title: '已取消', description: '流程已取消', order: 8 }
     ];
 
-    // 按順序排序並轉換為TransferItem格式
+    // 按順序排序並轉換為TransferItem格式，將描述合併到title中
     this.paymentFlowOptions = flowOptions
       .sort((a, b) => a.order - b.order)
       .map(option => ({
         key: option.key,
-        title: option.title,
+        title: `${option.title} - ${option.description}`,
         description: option.description,
         disabled: false,
         checked: false
@@ -114,6 +114,10 @@ export class ClientsComponent implements OnInit {
       return;
     }
     const formValue = this.addForm.getRawValue();
+    
+    // 移除paymentFlow，讓它保持undefined，這樣transfer組件會正確處理
+    delete formValue.paymentFlow;
+    
     if (this.editing && this.editingClientId) {
       this.clientService.update(this.editingClientId, formValue).subscribe(() => {
         this.resetForm();
@@ -163,18 +167,32 @@ export class ClientsComponent implements OnInit {
   onPaymentFlowChange(clientId: string, change: TransferChange): void {
     // 從TransferChange中提取已選中的項目
     const flows = change.list.map(item => item['key'] as PaymentFlowStatus);
-    this.clientService.update(clientId, { paymentFlow: flows }).subscribe(() => {
-      // 更新本地數據
-      const client = this.clients.find(c => c.id === clientId);
-      if (client) {
-        client.paymentFlow = flows;
+    
+    // 立即更新本地數據，防止重新渲染問題
+    const client = this.clients.find(c => c.id === clientId);
+    if (client) {
+      client.paymentFlow = flows;
+    }
+    
+    // 異步更新Firestore，不等待響應
+    this.clientService.update(clientId, { paymentFlow: flows }).subscribe({
+      error: (error) => {
+        console.error('更新請款流程失敗:', error);
+        // 如果更新失敗，恢復本地數據
+        if (client) {
+          this.loadClients();
+        }
       }
     });
   }
 
   // 獲取客戶的請款流程（已選中的項目）
   getClientPaymentFlows(client: Client): PaymentFlowStatus[] {
-    return client.paymentFlow || [];
+    // 確保返回正確的數據類型
+    if (!client.paymentFlow) {
+      return [];
+    }
+    return Array.isArray(client.paymentFlow) ? client.paymentFlow : [];
   }
 
   // 新增請款流程選項
@@ -189,6 +207,11 @@ export class ClientsComponent implements OnInit {
     return this.paymentFlowOptions
       .map(option => option['key'])
       .filter(key => !selectedFlows.includes(key));
+  }
+
+  // 重新初始化請款流程選項（用於數據更新後）
+  refreshPaymentFlowOptions(): void {
+    this.initPaymentFlowOptions();
   }
 
   onCancel(): void {
