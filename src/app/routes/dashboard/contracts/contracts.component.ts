@@ -191,8 +191,14 @@ export class ContractsComponent implements OnInit {
           showSort: true
         },
         {
+          title: '專案經理',
+          field: 'projectManager',
+          width: 120,
+          showSort: true
+        },
+        {
           title: '總金額',
-          field: 'amount',
+          field: 'totalAmount',
           width: 150,
           tdTemplate: this.amountTpl,
           showSort: true
@@ -210,21 +216,6 @@ export class ContractsComponent implements OnInit {
           width: 100,
           tdTemplate: this.statusTpl,
           showSort: true
-        },
-        {
-          title: '客戶代表',
-          field: 'clientRepresentative',
-          width: 120
-        },
-        {
-          title: '我方業務',
-          field: 'contactPerson',
-          width: 120
-        },
-        {
-          title: '版本',
-          field: 'version',
-          width: 80
         },
         {
           title: '創建時間',
