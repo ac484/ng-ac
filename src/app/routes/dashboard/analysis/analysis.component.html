@@ -1,0 +1,237 @@
+<!-- 麵包屑導航 -->
+<nz-card [nzBodyStyle]="{ padding: '10px 24px' }" [nzBordered]="false">
+    <div class="left-start-center">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>首頁</nz-breadcrumb-item>
+            <nz-breadcrumb-item>Dashboard</nz-breadcrumb-item>
+            <nz-breadcrumb-item>分析頁</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+</nz-card>
+
+<section class="content-wrap">
+    <!-- 頂部統計卡片 -->
+    <section class="ant-row" nz-row [nzGutter]="[32, 16]">
+        <!-- 總銷售額 -->
+        <div nz-col [nzLg]="12" [nzMd]="12" [nzSm]="12" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+            <div class="card-wrap">
+                <nz-card [nzBodyStyle]="cardPadding" [nzBordered]="false">
+                    <div class="card-top">
+                        <div class="title">總銷售額</div>
+                        <div class="number">{{ salesData.total }}</div>
+                        <i nz-icon nz-tooltip nzTheme="outline" nzTooltipTitle="指標說明" nzType="info-circle"></i>
+                    </div>
+                    <div class="card-mid">
+                        <div class="mid-text">
+                            <span>
+                                日同比 {{ salesData.dayCompare }}
+                                <i nz-icon nzTheme="outline" nzType="caret-down"
+                                    style="color: green; font-size: 12px"></i>
+                            </span>
+                        </div>
+                        <div class="mid-text">
+                            <span>
+                                週同比 {{ salesData.weekCompare }}
+                                <i nz-icon nzTheme="outline" nzType="caret-up" style="color: red; font-size: 12px"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <nz-divider class="m-0"></nz-divider>
+                    <div class="card-footer">日銷售額 {{ salesData.daily }}</div>
+                </nz-card>
+            </div>
+        </div>
+
+        <!-- 訪問量 -->
+        <div nz-col [nzLg]="12" [nzMd]="12" [nzSm]="12" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+            <div class="card-wrap">
+                <nz-card [nzBodyStyle]="cardPadding" [nzBordered]="false">
+                    <div class="card-top">
+                        <div class="title">訪問量</div>
+                        <div class="number">{{ visitData.total }}</div>
+                        <i nz-icon nz-tooltip nzTheme="outline" nzTooltipTitle="指標說明" nzType="info-circle"></i>
+                    </div>
+                    <div class="card-mid">
+                        <div id="miniArea"></div>
+                    </div>
+                    <nz-divider class="m-0"></nz-divider>
+                    <div class="card-footer">日訪問量 {{ visitData.daily }}</div>
+                </nz-card>
+            </div>
+        </div>
+
+        <!-- 支付筆數 -->
+        <div nz-col [nzLg]="12" [nzMd]="12" [nzSm]="12" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+            <div class="card-wrap">
+                <nz-card [nzBodyStyle]="cardPadding" [nzBordered]="false">
+                    <div class="card-top">
+                        <div class="title">支付筆數</div>
+                        <div class="number">{{ paymentData.total }}</div>
+                        <i nz-icon nz-tooltip nzTheme="outline" nzTooltipTitle="指標說明" nzType="info-circle"></i>
+                    </div>
+                    <div class="card-mid">
+                        <div id="miniBar"></div>
+                    </div>
+                    <nz-divider class="m-0"></nz-divider>
+                    <div class="card-footer">轉化率 {{ paymentData.conversion }}</div>
+                </nz-card>
+            </div>
+        </div>
+
+        <!-- 運營活動效果 -->
+        <div nz-col [nzLg]="12" [nzMd]="12" [nzSm]="12" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+            <div class="card-wrap">
+                <nz-card [nzBodyStyle]="cardPadding" [nzBordered]="false">
+                    <div class="card-top">
+                        <div class="title">運營活動效果</div>
+                        <div class="number">{{ activityData.total }}</div>
+                        <i nz-icon nz-tooltip nzTheme="outline" nzTooltipTitle="指標說明" nzType="info-circle"></i>
+                    </div>
+                    <div class="card-mid">
+                        <div id="progress"></div>
+                    </div>
+                    <nz-divider class="m-0"></nz-divider>
+                    <div class="card-footer">日銷售額 {{ activityData.daily }}</div>
+                </nz-card>
+            </div>
+        </div>
+    </section>
+
+    <!-- 銷售趨勢圖表 -->
+    <section class="flow-wrap m-t-20">
+        <nz-card [nzBodyStyle]="{ padding: 0 }" [nzBordered]="true">
+            <nz-tabset [nzAnimated]="false" [nzTabBarExtraContent]="extraTemplate"
+                [nzTabBarStyle]="{ padding: '0 10px', fontSize: '16px' }">
+                <nz-tab nzTitle="銷售額">
+                    <div nz-row>
+                        <div nz-col [nzLg]="12" [nzMd]="13" [nzSm]="24" [nzXl]="17" [nzXs]="24">
+                            <h3 class="p-l-35">銷售趨勢</h3>
+                            <div id="histogram"></div>
+                        </div>
+                        <div nz-col [nzLg]="12" [nzMd]="11" [nzSm]="24" [nzXl]="7" [nzXs]="24">
+                            <h3 class="p-l-35 m-b-20">門店銷售額排名</h3>
+                            @for (store of storeRankings; track store.rank; let i = $index) {
+                            <div class="rank-list" [title]="store.name">
+                                <div class="center">
+                                    <nz-badge [nzCount]="store.rank"
+                                        [nzStyle]="{ background: i < 4 ? '#314659' : '#fafafa', color: i < 4 ? '#fff' : 'black' }">
+                                    </nz-badge>
+                                    <span class="m-l-5">{{ store.name }}</span>
+                                </div>
+                                <div>{{ store.sales | number }}</div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </nz-tab>
+                <nz-tab nzTitle="訪問量">
+                    <div class="placeholder-content">
+                        <h3>🚀 訪問量分析功能開發中...</h3>
+                        <p>這裡將展示詳細的訪問量分析數據和圖表</p>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+        </nz-card>
+
+        <ng-template #extraTemplate>
+            <nz-radio-group nzSize="small">
+                <label nz-radio-button nzValue="A">今日</label>
+                <label nz-radio-button nzValue="B">本週</label>
+                <label nz-radio-button nzValue="C">本月</label>
+                <label nz-radio-button nzValue="D">全年</label>
+            </nz-radio-group>
+            <nz-range-picker class="m-l-20"></nz-range-picker>
+        </ng-template>
+    </section>
+
+    <!-- 搜索分析和銷售占比 -->
+    <section class="m-t-20" nz-row [nzGutter]="[16, 0]">
+        <!-- 線上熱門搜索 -->
+        <div class="hot-search-wrap" nz-col nzSpan="12" [nzLg]="12" [nzMd]="24" [nzSm]="24" [nzXl]="12" [nzXs]="24"
+            [nzXXl]="12">
+            <nz-card [nzBodyStyle]="{ height: '500px' }" [nzExtra]="hotExtra" [nzTitle]="'線上熱門搜索'">
+                <div class="search-wrap" nz-row>
+                    <!-- 搜索用戶數 -->
+                    <div class="search-block" nz-col [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXl]="12" [nzXs]="24"
+                        [nzXXl]="12">
+                        <div>
+                            <div>
+                                <span nz-typography nzType="secondary">
+                                    搜索用戶數
+                                    <i nz-icon nz-tooltip nzTheme="outline" nzTooltipTitle="指標說明"
+                                        nzType="info-circle"></i>
+                                </span>
+                            </div>
+                            <div>
+                                <h3 class="d-i-b m-r-30" nz-typography>12,321</h3>
+                                <span>
+                                    17.1
+                                    <i nz-icon nzTheme="outline" nzType="caret-up"
+                                        style="color: red; font-size: 12px"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div id="searchUserChart"></div>
+                    </div>
+
+                    <!-- 人均搜索次數 -->
+                    <div class="search-block" nz-col [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXl]="12" [nzXs]="24"
+                        [nzXXl]="12">
+                        <div>
+                            <div>
+                                <span nz-typography nzType="secondary">
+                                    人均搜索次數
+                                    <i nz-icon nz-tooltip nzTheme="outline" nzTooltipTitle="指標說明"
+                                        nzType="info-circle"></i>
+                                </span>
+                            </div>
+                            <div>
+                                <h3 class="d-i-b m-r-30" nz-typography>2.7</h3>
+                                <span>
+                                    26.2
+                                    <i nz-icon nzTheme="outline" nzType="caret-down"
+                                        style="color: green; font-size: 12px"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div id="searchUserAvgChart"></div>
+                    </div>
+
+                    <!-- 搜索關鍵詞表格 -->
+                    <nz-table #sortTable class="m-t-25" nzSize="small" nzTableLayout="fixed" [nzData]="listOfData">
+                        <thead>
+                            <tr>
+                                @for (column of listOfColumn; track column) {
+                                <th [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}
+                                </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (data of sortTable.data; track data; let i = $index) {
+                            <tr>
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ data.name }}</td>
+                                <td>{{ data.math | number }}</td>
+                                <td>{{ data.english }}%</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-card>
+            <ng-template #hotExtra>
+                <a>更多</a>
+            </ng-template>
+        </div>
+
+        <!-- 銷售額類別占比 -->
+        <div class="pipe-wrap" nz-col nzSpan="12" [nzLg]="12" [nzMd]="24" [nzSm]="24" [nzXl]="12" [nzXs]="24"
+            [nzXXl]="12">
+            <nz-card [nzBodyStyle]="{ height: '500px' }" [nzTitle]="'銷售額類別占比'">
+                <h4>銷售額</h4>
+                <div id="ringPie"></div>
+            </nz-card>
+        </div>
+    </section>
+</section>

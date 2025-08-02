@@ -5,6 +5,7 @@ import { authSimpleCanActivate, authSimpleCanActivateChild } from '@delon/auth';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WorkbenchComponent } from './dashboard/workbench/workbench.component';
 import { MonitorComponent } from './dashboard/monitor/monitor.component';
+import { AnalysisComponent } from './dashboard/analysis/analysis.component';
 import { LayoutBasicComponent } from '../layout';
 import { tabGuard } from '../core/guards/tab.guard';
 
@@ -34,6 +35,12 @@ export const routes: Routes = [
         component: MonitorComponent,
         canActivate: [tabGuard],
         data: { title: '監控頁' }
+      },
+      { 
+        path: 'analysis', 
+        component: AnalysisComponent,
+        canActivate: [tabGuard],
+        data: { title: '分析頁' }
       }
     ]
   },
