@@ -215,7 +215,7 @@ export class ContractModalComponent implements OnInit, OnChanges {
       contractName: ['', [Validators.required]],
       totalAmount: [null, [Validators.required, Validators.min(0)]],
       progress: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      status: ['active', [Validators.required]],
+      status: ['draft', [Validators.required]],
       description: ['']
     });
 
@@ -278,7 +278,7 @@ export class ContractModalComponent implements OnInit, OnChanges {
       contractName: '',
       totalAmount: null,
       progress: 0,
-      status: 'active',
+      status: 'draft',
       description: ''
     });
   }

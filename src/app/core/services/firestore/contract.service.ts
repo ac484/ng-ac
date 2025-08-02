@@ -131,12 +131,26 @@ export class ContractService {
 
   /** 查詢單筆合約 */
   findById(id: string): Observable<Contract | null> {
-    return this.baseService.findById<Contract>(this.collectionName, id);
+    return this.baseService.findById<Contract>(this.collectionName, id)
+      .pipe(
+        map(contract => contract ? {
+          ...contract,
+          totalAmount: Number(contract.totalAmount) || 0,
+          status: (contract.status || '').trim().toLowerCase() as Contract['status']
+        } : null)
+      );
   }
 
   /** 查詢多筆合約 */
   findAll(whereConditions: WhereCondition[] = [], orderConditions: OrderCondition[] = [], limitCount?: number): Observable<Contract[]> {
-    return this.baseService.findAll<Contract>(this.collectionName, whereConditions, orderConditions, limitCount);
+    return this.baseService.findAll<Contract>(this.collectionName, whereConditions, orderConditions, limitCount)
+      .pipe(
+        map(contracts => contracts.map(c => ({
+          ...c,
+          totalAmount: Number(c.totalAmount) || 0,
+          status: (c.status || '').trim().toLowerCase() as Contract['status']
+        })))
+      );
   }
 
   /** 更新合約 */

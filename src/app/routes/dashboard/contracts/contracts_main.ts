@@ -176,6 +176,7 @@ export class ContractsComponent implements OnInit {
     ).subscribe({
       next: (contracts: Contract[]) => {
         console.log('✅ Firestore 查詢成功:', contracts);
+        
         console.log('📊 合約數據詳情:', contracts.map(c => ({
           id: c.id,
           contractCode: c.contractCode,
@@ -288,7 +289,16 @@ export class ContractsComponent implements OnInit {
 
   // 搜索事件處理
   onSearch(searchParam: SearchParam): void {
-    this.searchParam = { ...searchParam };
+    // 極簡型別轉換：確保搜尋金額為 number
+    const cleanedParam = { ...searchParam };
+    if (cleanedParam.minAmount) {
+      cleanedParam.minAmount = Number(cleanedParam.minAmount) || undefined;
+    }
+    if (cleanedParam.maxAmount) {
+      cleanedParam.maxAmount = Number(cleanedParam.maxAmount) || undefined;
+    }
+    
+    this.searchParam = cleanedParam;
     this.loadContracts();
   }
 
