@@ -329,6 +329,8 @@ export class ContractModalComponent implements OnInit, OnChanges {
   onSave(): void {
     if (this.contractForm.valid) {
       const formData = this.contractForm.value;
+      console.log('💰 表單數據:', formData);
+      console.log('💰 金額字段:', formData.totalAmount, typeof formData.totalAmount);
       
       // 準備保存的數據，移除不需要的字段
       const contractData = {
@@ -342,6 +344,7 @@ export class ContractModalComponent implements OnInit, OnChanges {
         description: formData.description
       };
       
+      console.log('💰 準備保存的合約數據:', contractData);
       this.save.emit(contractData);
     }
   }
@@ -354,11 +357,12 @@ export class ContractModalComponent implements OnInit, OnChanges {
 
   // 數字格式化方法
   formatNumber = (value: number): string => {
-    if (!value) return '';
+    if (value === null || value === undefined) return '';
     return `NT$ ${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
 
   parseNumber = (value: string): number => {
+    if (!value) return 0;
     return parseFloat(value.replace(/NT\$\s?|(,*)/g, '')) || 0;
   };
 }

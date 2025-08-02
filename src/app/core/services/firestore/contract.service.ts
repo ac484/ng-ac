@@ -120,11 +120,11 @@ export class ContractService {
   // ===== 基礎 CRUD 操作 =====
 
   /** 新增合約 */
-  create(data: Omit<Contract, 'id' | 'createdAt' | 'updatedAt' | 'versions' | 'totalAmount' | 'lastModified'>): Observable<string> {
+  create(data: Omit<Contract, 'id' | 'createdAt' | 'updatedAt' | 'versions' | 'lastModified'>): Observable<string> {
     const contractData = {
       ...data,
       versions: [],
-      totalAmount: 0
+      totalAmount: data.totalAmount || 0
     };
     return this.baseService.create<Contract>(this.collectionName, contractData);
   }

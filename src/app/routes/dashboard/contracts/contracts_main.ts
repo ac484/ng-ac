@@ -316,6 +316,9 @@ export class ContractsComponent implements OnInit {
   }
 
   saveContract(contractData: any): void {
+    console.log('💾 準備保存合約數據:', contractData);
+    console.log('💾 金額字段:', contractData.totalAmount, typeof contractData.totalAmount);
+    
     if (this.editingContract) {
       // 更新
       (this.contractService as any).update(this.editingContract.id!, contractData).subscribe({

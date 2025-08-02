@@ -156,10 +156,14 @@ export class BaseFirestoreService {
       return from(getDocs(q)).pipe(
         map(querySnapshot => {
           console.log(`✅ ${collectionName} 查詢成功，找到 ${querySnapshot.docs.length} 筆資料`);
-          return querySnapshot.docs.map(doc => {
+          const results = querySnapshot.docs.map(doc => {
             const data = doc.data();
-            return { id: doc.id, ...(data as any) } as T;
+            const result = { id: doc.id, ...(data as any) } as T;
+            console.log(`📄 文檔 ${doc.id} 數據:`, result);
+            return result;
           });
+          console.log(`📊 ${collectionName} 最終結果:`, results);
+          return results;
         }),
         catchError(error => {
           console.error(`❌ ${collectionName} 查詢失敗:`, error);
