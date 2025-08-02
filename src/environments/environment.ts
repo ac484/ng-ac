@@ -1,6 +1,9 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+const ip = 'localhost';
+const port = '4201';
+export const localUrl = `http://${ip}:${port}`;
 
 export const environment = {
   production: false,
@@ -16,10 +19,33 @@ export const environment = {
     measurementId: "G-6YM5S9LCNV"
   },
 
+  // 應用程式配置
+  app: {
+    name: 'NG-AC Admin',
+    version: '1.0.0'
+  },
+
   // reCAPTCHA 配置
   recaptcha: {
-    siteKey: '6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo'
-  }
+    siteKey: '6Lfet5crAAAAAFDXayzMocp-GhB88FewdQ8Z9E69'
+  },
+
+  // API 配置
+  api: {
+    baseUrl: localUrl,
+    timeout: 30000,
+    refreshTokenEnabled: true,
+    refreshTokenType: 'auth-refresh'
+  },
+
+  // 路由配置
+  useHash: false,
+
+  // 攔截器配置
+  interceptorFns: [],
+
+  // 額外提供者
+  providers: []
 };
 
 /*

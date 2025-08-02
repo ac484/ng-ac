@@ -129,7 +129,7 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({
         scrollPositionRestoration: 'top'
       }),
-      withHashLocation(), // 使用哈希路由
+      ...(environment.useHash ? [withHashLocation()] : []), // 根據環境配置決定是否使用哈希路由
       withComponentInputBinding() // 开启路由参数绑定到组件的输入属性,ng16新增特性
     ),
     importProvidersFrom(NzDrawerModule, NzModalModule),
@@ -147,7 +147,7 @@ export const appConfig: ApplicationConfig = {
     ScreenTrackingService, // 屏幕追踪服务
     UserTrackingService, // 用户追踪服务
 
-    // Firebase App Check 強制模式 - 開發環境使用 Debug Token
+    // Firebase App Check 強制模式 - 開發和生產環境都啟用
     provideAppCheck(() => {
       const provider = new ReCaptchaEnterpriseProvider(environment.recaptcha.siteKey);
       return initializeAppCheck(undefined, {
