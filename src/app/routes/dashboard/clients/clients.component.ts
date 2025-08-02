@@ -6,7 +6,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzTransferModule, TransferItem, TransferChange } from 'ng-zorro-antd/transfer';
+import { NzTransferModule, TransferItem } from 'ng-zorro-antd/transfer';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
@@ -107,8 +107,8 @@ export class ClientsComponent implements OnInit {
     this.isModalVisible = true;
   }
 
-  onFlowChange({ to }: TransferChange): void {
-    this.selectedFlowKeys = to;
+  onFlowChange(keys: string[]): void {
+    this.selectedFlowKeys = keys;
     this.clientForm.patchValue({ paymentFlow: this.selectedFlowKeys });
   }
 
@@ -117,23 +117,27 @@ export class ClientsComponent implements OnInit {
     const obs = this.isEdit
       ? this.clientService.update(data.id, data)
       : this.clientService.create(data);
-    obs.subscribe({
-      next: () => {
+    (obs as any).subscribe(
+      () => {
         this.message.success('保存成功');
         this.isModalVisible = false;
         this.loadClients();
       },
-      error: () => this.message.error('保存失敗')
-    });
+      () => {
+        this.message.error('保存失敗');
+      }
+    );
   }
 
   deleteClient(client: Client): void {
-    this.clientService.delete(client.id!).subscribe({
-      next: () => {
+    (this.clientService.delete(client.id!) as any).subscribe(
+      () => {
         this.message.success('刪除成功');
         this.loadClients();
       },
-      error: () => this.message.error('刪除失敗')
-    });
+      () => {
+        this.message.error('刪除失敗');
+      }
+    );
   }
 }
