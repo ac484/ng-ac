@@ -1,0 +1,103 @@
+<!-- 麵包屑導航 -->
+<nz-card [nzBodyStyle]="{ padding: '10px 24px' }" [nzBordered]="false">
+    <div class="left-start-center">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>首頁</nz-breadcrumb-item>
+            <nz-breadcrumb-item>Dashboard</nz-breadcrumb-item>
+            <nz-breadcrumb-item>監控頁</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+</nz-card>
+
+<!-- 主要內容 -->
+<section class="content-wrap">
+    <section nz-row [nzGutter]="[16, 16]">
+        <!-- 左側主要區域 -->
+        <div nz-col [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXl]="18" [nzXs]="24" [nzXXl]="18">
+            <nz-card nzTitle="活動實時交易情況">
+                <div nz-row [nzGutter]="[40, 16]">
+                    <!-- 統計數據 -->
+                    <div nz-col [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXl]="12" [nzXs]="24" [nzXXl]="12">
+                        <nz-row [nzGutter]="16">
+                            <nz-col [nzLg]="12" [nzMd]="24" [nzSm]="24" [nzXl]="12" [nzXs]="24" [nzXXl]="12">
+                                <nz-statistic [nzTitle]="'今日交易總額'" [nzValue]="(todayTransaction | number)! + '元'">
+                                </nz-statistic>
+                            </nz-col>
+                            <nz-col [nzLg]="12" [nzMd]="24" [nzSm]="24" [nzXl]="12" [nzXs]="24" [nzXXl]="12">
+                                <nz-statistic [nzTitle]="'銷售目標完成率'" [nzValue]="(salesTarget | percent)!">
+                                </nz-statistic>
+                            </nz-col>
+                        </nz-row>
+                    </div>
+
+                    <div nz-col [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXl]="12" [nzXs]="24" [nzXXl]="12">
+                        <nz-row [nzGutter]="16">
+                            <nz-col [nzLg]="12" [nzMd]="24" [nzSm]="24" [nzXl]="12" [nzXs]="24" [nzXXl]="12">
+                                <nz-countdown [nzFormat]="'HH:mm:ss:SSS'" [nzTitle]="'活動剩餘時間'" [nzValue]="deadline">
+                                </nz-countdown>
+                            </nz-col>
+                            <nz-col [nzLg]="12" [nzMd]="24" [nzSm]="24" [nzXl]="12" [nzXs]="24" [nzXXl]="12">
+                                <nz-statistic [nzTitle]="'每秒交易總額'" [nzValue]="(transactionPerSecond | number)! + '元'">
+                                </nz-statistic>
+                            </nz-col>
+                        </nz-row>
+                    </div>
+
+                    <!-- 地圖區域 -->
+                    <div nz-col nzSpan="24" style="min-height: 430px">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </nz-card>
+        </div>
+
+        <!-- 右側側邊欄 -->
+        <div nz-col [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+            <div class="card-wrap-line">
+                <!-- 活動情況預測 -->
+                <nz-card nzTitle="活動情況預測">
+                    <div class="card-top">
+                        <div nz-typography nzType="secondary">目標評估</div>
+                        <div class="title">有望達到預期</div>
+                    </div>
+                    <div>
+                        <div id="miniArea"></div>
+                    </div>
+                </nz-card>
+
+                <!-- 券核效率 -->
+                <nz-card class="m-t-15" nzTitle="券核效率">
+                    <div id="dashBoard"></div>
+                </nz-card>
+            </div>
+        </div>
+
+        <!-- 各品類占比 -->
+        <div nz-col [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXl]="12" [nzXs]="24" [nzXXl]="12">
+            <nz-card nzTitle="各品類占比">
+                <div nz-row>
+                    <div id="ringProgress1" class="pipe-height center" nz-col [nzLg]="8" [nzMd]="8" [nzSm]="8"
+                        [nzXl]="8" [nzXs]="8" [nzXXl]="8"></div>
+                    <div id="ringProgress2" class="pipe-height center" nz-col [nzLg]="8" [nzMd]="8" [nzSm]="8"
+                        [nzXl]="8" [nzXs]="8" [nzXXl]="8"></div>
+                    <div id="ringProgress3" class="pipe-height center" nz-col [nzLg]="8" [nzMd]="8" [nzSm]="8"
+                        [nzXl]="8" [nzXs]="8" [nzXXl]="8"></div>
+                </div>
+            </nz-card>
+        </div>
+
+        <!-- 熱門搜索 -->
+        <div nz-col [nzLg]="12" [nzMd]="24" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+            <nz-card nzTitle="熱門搜索">
+                <div id="wordCloud" class="pipe-height"></div>
+            </nz-card>
+        </div>
+
+        <!-- 資源剩餘 -->
+        <div nz-col [nzLg]="12" [nzMd]="24" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+            <nz-card nzTitle="資源剩餘">
+                <div id="liquidPlot" class="pipe-height"></div>
+            </nz-card>
+        </div>
+    </section>
+</section>
