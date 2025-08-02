@@ -132,7 +132,7 @@ export class BaseFirestoreService {
     
     try {
       let q: any = this.getCollection(collectionName);
-      const constraints: QueryConstraint[] = [];
+      const constraints: any[] = [];
 
       // 添加 where 條件
       whereConditions.forEach(condition => {

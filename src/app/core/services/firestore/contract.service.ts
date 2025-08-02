@@ -8,7 +8,7 @@
 
 import { Injectable, inject } from '@angular/core';
 import { Observable, combineLatest, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { BaseFirestoreService, BaseEntity, WhereCondition, OrderCondition } from './base-firestore.service';
 import { Timestamp, serverTimestamp, FieldValue } from '@angular/fire/firestore';
 import { Contract, ContractStatus, AmountValue, ContractStats, ContractError, ContractErrorType } from '../../types/contract.types';
@@ -228,34 +228,62 @@ export class ContractService {
 
   /** 新增版本 */
   addVersion(contractId: string, version: Omit<ContractVersion, 'versionNumber' | 'createdAt'>): Observable<void> {
-    return this.baseService.atomicUpdateWithCondition(
-      this.collectionName,
-      contractId,
-      (contract: Contract) => contract.status !== 'completed',
-      {
-        lastModified: serverTimestamp() as any
-      }
-    ).pipe(
-      map(() => {
-        // 這裡需要額外的邏輯來處理版本陣列更新
-        // 由於 atomicUpdateWithCondition 的限制，我們需要分兩步處理
-        return;
-      })
+    return this.findById(contractId).pipe(
+      switchMap(contract => {
+        if (!contract) {
+          throw new Error('Contract not found');
+        }
+        if (contract.status === 'completed') {
+          throw new Error('Cannot add version to completed contract');
+        }
+        
+        const versions = contract.versions || [];
+        const newVersion: ContractVersion = {
+          ...version,
+          versionNumber: versions.length + 1,
+          createdAt: serverTimestamp() as any
+        };
+        
+        return this.update(contractId, {
+          versions: [...versions, newVersion],
+          lastModified: serverTimestamp() as any
+        });
+      }),
+      catchError(error => this.handleError(error))
     );
   }
 
   /** 審批版本 */
   approveVersion(contractId: string, versionNumber: number, approvedBy: string): Observable<void> {
-    return this.baseService.atomicUpdateWithCondition(
-      this.collectionName,
-      contractId,
-      (contract: Contract) => {
-        const version = contract.versions?.find(v => v.versionNumber === versionNumber);
-        return Boolean(version && !version.approvedBy);
-      },
-      {
-        lastModified: serverTimestamp() as any
-      }
+    return this.findById(contractId).pipe(
+      switchMap(contract => {
+        if (!contract) {
+          throw new Error('Contract not found');
+        }
+        
+        const versions = contract.versions || [];
+        const versionIndex = versions.findIndex(v => v.versionNumber === versionNumber);
+        
+        if (versionIndex === -1) {
+          throw new Error('Version not found');
+        }
+        
+        if (versions[versionIndex].approvedBy) {
+          throw new Error('Version already approved');
+        }
+        
+        const updatedVersions = [...versions];
+        updatedVersions[versionIndex] = {
+          ...updatedVersions[versionIndex],
+          approvedBy
+        };
+        
+        return this.update(contractId, {
+          versions: updatedVersions,
+          lastModified: serverTimestamp() as any
+        });
+      }),
+      catchError(error => this.handleError(error))
     );
   }
 
@@ -277,14 +305,22 @@ export class ContractService {
 
   /** 更新狀態 */
   updateStatus(contractId: string, newStatus: ContractStatus): Observable<void> {
-    return this.baseService.atomicUpdateWithCondition(
-      this.collectionName,
-      contractId,
-      (contract: Contract) => this.canTransitionTo(contract.status, newStatus),
-      { 
-        status: newStatus, 
-        lastModified: serverTimestamp() as any
-      }
+    return this.findById(contractId).pipe(
+      switchMap(contract => {
+        if (!contract) {
+          throw new Error('Contract not found');
+        }
+        
+        if (!this.canTransitionTo(contract.status, newStatus)) {
+          throw new Error(`Invalid status transition from ${contract.status} to ${newStatus}`);
+        }
+        
+        return this.update(contractId, { 
+          status: newStatus, 
+          lastModified: serverTimestamp() as any
+        });
+      }),
+      catchError(error => this.handleError(error))
     );
   }
 
@@ -310,7 +346,8 @@ export class ContractService {
           completed: completed.length,
           totalAmount
         };
-      })
+      }),
+      catchError(error => this.handleError(error))
     );
   }
 
@@ -326,6 +363,16 @@ export class ContractService {
           return ContractErrorType.UNAVAILABLE;
         case 'unauthenticated':
           return ContractErrorType.UNAUTHENTICATED;
+        case 'not-found':
+          return ContractErrorType.CONTRACT_NOT_FOUND;
+        case 'already-exists':
+          return ContractErrorType.DUPLICATE_CONTRACT_CODE;
+        case 'resource-exhausted':
+          return ContractErrorType.AMOUNT_VALIDATION_FAILED;
+        case 'failed-precondition':
+          return ContractErrorType.INVALID_STATUS_TRANSITION;
+        case 'aborted':
+          return ContractErrorType.VERSION_CONFLICT;
         default:
           return ContractErrorType.CONTRACT_NOT_FOUND;
       }

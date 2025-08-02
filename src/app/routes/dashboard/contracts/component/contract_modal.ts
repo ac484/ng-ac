@@ -206,9 +206,7 @@ export class ContractModalComponent implements OnInit, OnChanges {
     this.contractForm = this.fb.group({
       contractCode: ['', [Validators.required]],
       clientId: ['', [Validators.required]],
-      clientName: ['', [Validators.required]],
       contactId: ['', [Validators.required]],
-      projectManager: ['', [Validators.required]],
       contractName: ['', [Validators.required]],
       totalAmount: [null, [Validators.required, Validators.min(0)]],
       progress: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -236,9 +234,7 @@ export class ContractModalComponent implements OnInit, OnChanges {
         this.contractForm.patchValue({
           contractCode: this.editingContract.contractCode,
           clientId: client.id,
-          clientName: this.editingContract.clientName,
           contactId: contact?.id || '',
-          projectManager: this.editingContract.projectManager,
           contractName: this.editingContract.contractName,
           totalAmount: this.editingContract.totalAmount,
           progress: this.editingContract.progress,
@@ -251,9 +247,7 @@ export class ContractModalComponent implements OnInit, OnChanges {
         this.contractForm.patchValue({
           contractCode: this.editingContract.contractCode,
           clientId: '',
-          clientName: this.editingContract.clientName,
           contactId: '',
-          projectManager: this.editingContract.projectManager,
           contractName: this.editingContract.contractName,
           totalAmount: this.editingContract.totalAmount,
           progress: this.editingContract.progress,
@@ -269,9 +263,7 @@ export class ContractModalComponent implements OnInit, OnChanges {
     this.contractForm.reset({
       contractCode: this.defaultContractCode,
       clientId: '',
-      clientName: '',
       contactId: '',
-      projectManager: '',
       contractName: '',
       totalAmount: null,
       progress: 0,
@@ -284,43 +276,25 @@ export class ContractModalComponent implements OnInit, OnChanges {
     if (clientId) {
       const selectedClient = this.clientList.find(client => client.id === clientId);
       if (selectedClient) {
-        // 更新客戶名稱
-        this.contractForm.patchValue({
-          clientName: selectedClient.clientName
-        });
-        
         // 更新聯絡人列表
         this.contactList = selectedClient.contacts || [];
         
         // 清空聯絡人選擇
         this.contractForm.patchValue({
-          contactId: '',
-          projectManager: ''
+          contactId: ''
         });
       }
     } else {
       this.contactList = [];
       this.contractForm.patchValue({
-        clientName: '',
-        contactId: '',
-        projectManager: ''
+        contactId: ''
       });
     }
   }
 
   onContactChange(contactId: string): void {
-    if (contactId) {
-      const selectedContact = this.contactList.find(contact => contact.id === contactId);
-      if (selectedContact) {
-        this.contractForm.patchValue({
-          projectManager: selectedContact.name
-        });
-      }
-    } else {
-      this.contractForm.patchValue({
-        projectManager: ''
-      });
-    }
+    // 聯絡人選擇變化時不需要額外處理
+    // 因為我們只需要保存 contactId，不需要計算字段
   }
 
   onSave(): void {
@@ -329,11 +303,15 @@ export class ContractModalComponent implements OnInit, OnChanges {
       console.log('💰 表單數據:', formData);
       console.log('💰 金額字段:', formData.totalAmount, typeof formData.totalAmount);
       
-      // 準備保存的數據，移除不需要的字段
+      // 獲取客戶和聯絡人信息
+      const selectedClient = this.clientList.find(client => client.id === formData.clientId);
+      const selectedContact = this.contactList.find(contact => contact.id === formData.contactId);
+      
+      // 準備保存的數據
       const contractData = {
         contractCode: formData.contractCode,
-        clientName: formData.clientName,
-        projectManager: formData.projectManager,
+        clientName: selectedClient?.clientName || '',
+        projectManager: selectedContact?.name || '',
         contractName: formData.contractName,
         totalAmount: formData.totalAmount,
         progress: formData.progress,
@@ -354,10 +332,12 @@ export class ContractModalComponent implements OnInit, OnChanges {
 
   // 數字格式化方法 - 使用統一的型別轉換工具
   formatNumber = (value: AmountValue): string => {
+    if (value === null || value === undefined) return '';
     return AmountConverter.format(value).formatted;
   };
 
   parseNumber = (value: string): number => {
+    if (!value || value.trim() === '') return 0;
     const result = AmountConverter.parse(value);
     return result.success && result.data !== null && result.data !== undefined ? result.data : 0;
   };

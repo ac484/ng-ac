@@ -45,17 +45,17 @@ export class FormattingService {
    * 驗證並清理搜索參數
    */
   cleanSearchParam<T extends Record<string, any>>(param: T): T {
-    const cleaned = { ...param };
+    const cleaned = { ...param } as T;
     
-    // 處理金額字段
-    if ('minAmount' in cleaned && typeof cleaned.minAmount === 'string') {
-      const result = this.parseAmount(cleaned.minAmount);
-      cleaned.minAmount = result.success ? result.data : null;
+    // 處理金額字段 - 使用方括號記法訪問索引簽名屬性
+    if ('minAmount' in cleaned && typeof cleaned['minAmount'] === 'string') {
+      const result = this.parseAmount(cleaned['minAmount']);
+      (cleaned as any)['minAmount'] = result.success ? result.data : null;
     }
     
-    if ('maxAmount' in cleaned && typeof cleaned.maxAmount === 'string') {
-      const result = this.parseAmount(cleaned.maxAmount);
-      cleaned.maxAmount = result.success ? result.data : null;
+    if ('maxAmount' in cleaned && typeof cleaned['maxAmount'] === 'string') {
+      const result = this.parseAmount(cleaned['maxAmount']);
+      (cleaned as any)['maxAmount'] = result.success ? result.data : null;
     }
 
     return cleaned;

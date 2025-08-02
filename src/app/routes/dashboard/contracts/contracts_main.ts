@@ -3,10 +3,10 @@
  * 將原本的功能拆分成多個子組件，保持邏輯清晰
  */
 
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { ContractService } from '../../../core/services/firestore/contract.service';
 import { ClientService, Client } from '../../../core/services/firestore/client.service';
@@ -36,7 +36,16 @@ export class ErrorHandlingService {
         'permission-denied': '權限不足，請檢查 Firestore 安全規則',
         'unavailable': 'Firestore 服務暫時無法使用，請稍後再試',
         'unauthenticated': '未驗證用戶，請重新登入',
-        'failed-precondition': 'Firestore 索引可能需要建立，請檢查控制台'
+        'failed-precondition': 'Firestore 索引可能需要建立，請檢查控制台',
+        'not-found': '請求的資源不存在',
+        'already-exists': '資源已存在',
+        'resource-exhausted': '資源已耗盡，請稍後再試',
+        'aborted': '操作被中止，請重試',
+        'out-of-range': '操作超出有效範圍',
+        'unimplemented': '功能尚未實現',
+        'internal': '內部錯誤，請聯繫技術支援',
+        'data-loss': '數據丟失或損壞',
+        'deadline-exceeded': '操作超時，請重試'
       };
       
       this.message.error(errorMessages[error.code] || `操作失敗: ${error.message || '未知錯誤'}`);
@@ -140,7 +149,7 @@ export class FormattingService {
     ContractModalComponent
   ]
 })
-export class ContractsComponent implements OnInit {
+export class ContractsComponent implements OnInit, OnDestroy {
   // 表格配置
   tableConfig!: AntTableConfig;
   
@@ -193,15 +202,32 @@ export class ContractsComponent implements OnInit {
   private formattingService = inject(FormattingService);
   private contractCache = new Map<string, Contract[]>();
   private searchDebounce = new Subject<SearchParam>();
+  private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
+    // 初始化表格配置
+    this.initTable();
+    
+    // 載入初始數據
+    this.loadClients();
+    this.loadStats();
+    this.loadContracts({});
+    
     // 實現搜索防抖
     this.searchDebounce.pipe(
       debounceTime(300),
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
     ).subscribe(searchParam => {
       this.performSearch(searchParam);
     });
+  }
+
+  ngOnDestroy(): void {
+    // 清理訂閱
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.searchDebounce.complete();
   }
 
   private performSearch(searchParam: SearchParam): void {
@@ -414,7 +440,7 @@ export class ContractsComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('更新合約失敗:', error);
-          this.message.error('更新合約失敗');
+          this.errorHandlingService.handleFirestoreError(error, '更新合約');
         }
       });
     } else {
@@ -428,7 +454,7 @@ export class ContractsComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('新增合約失敗:', error);
-          this.message.error('新增合約失敗');
+          this.errorHandlingService.handleFirestoreError(error, '新增合約');
         }
       });
     }
@@ -451,7 +477,7 @@ export class ContractsComponent implements OnInit {
           },
           error: (error: any) => {
             console.error('刪除合約失敗:', error);
-            this.message.error('刪除合約失敗');
+            this.errorHandlingService.handleFirestoreError(error, '刪除合約');
           }
         });
       }
@@ -482,7 +508,7 @@ export class ContractsComponent implements OnInit {
           },
           error: (error: any) => {
             console.error('批量刪除失敗:', error);
-            this.message.error('批量刪除失敗');
+            this.errorHandlingService.handleFirestoreError(error, '批量刪除合約');
           }
         });
       }
