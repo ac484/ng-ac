@@ -15,6 +15,7 @@ import { HeaderFullScreenComponent } from './widgets/fullscreen.component';
 import { HeaderSearchComponent } from './widgets/search.component';
 import { HeaderUserComponent } from './widgets/user.component';
 import { HeaderI18nComponent } from './widgets/i18n.component';
+import { TabComponent } from '../../shared/components/tab/tab.component';
 
 @Component({
   selector: 'layout-basic',
@@ -75,6 +76,7 @@ import { HeaderI18nComponent } from './widgets/i18n.component';
         </nz-dropdown-menu>
       </ng-template>
       <ng-template #contentTpl>
+        <app-tab />
         <router-outlet />
       </ng-template>
     </layout-default>
@@ -98,7 +100,8 @@ import { HeaderI18nComponent } from './widgets/i18n.component';
     HeaderClearStorageComponent,
     HeaderFullScreenComponent,
     HeaderUserComponent,
-    HeaderI18nComponent
+    HeaderI18nComponent,
+    TabComponent
   ]
 })
 export class LayoutBasicComponent {
