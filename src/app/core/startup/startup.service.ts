@@ -113,9 +113,9 @@ export class StartupService {
         group: true,
         children: [
           {
-            text: '工作臺',
-            link: '/dashboard/workbench',
-            icon: { type: 'icon', value: 'dashboard' }
+            text: '分析頁',
+            link: '/dashboard/analysis',
+            icon: { type: 'icon', value: 'bar-chart' }
           },
           {
             text: '監控頁',
@@ -123,15 +123,15 @@ export class StartupService {
             icon: { type: 'icon', value: 'monitor' }
           },
           {
-            text: '分析頁',
-            link: '/dashboard/analysis',
-            icon: { type: 'icon', value: 'bar-chart' }
-          },
-          {
             text: '合約管理',
             link: '/dashboard/contracts',
             icon: { type: 'icon', value: 'file-text' }
-          }
+          },
+          {
+            text: '工作臺',
+            link: '/dashboard/workbench',
+            icon: { type: 'icon', value: 'dashboard' }
+          },
         ]
       }
     ]);
