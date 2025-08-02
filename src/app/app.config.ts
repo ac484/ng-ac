@@ -157,7 +157,7 @@ export const appConfig: ApplicationConfig = {
     ScreenTrackingService, // 屏幕追踪服务
     UserTrackingService, // 用户追踪服务
 
-    // Firebase 安全服务
+    // Firebase App Check 強制模式 - 提供最高安全性
     provideAppCheck(() => {
       const provider = new ReCaptchaEnterpriseProvider(environment.recaptcha.siteKey);
       return initializeAppCheck(undefined, {
@@ -172,7 +172,7 @@ export const appConfig: ApplicationConfig = {
     provideMessaging(() => getMessaging()), // 推送通知
     providePerformance(() => getPerformance()), // 性能监控
     provideStorage(() => getStorage()), // 文件存储
-    provideRemoteConfig(() => getRemoteConfig()) // 远程配置
+    provideRemoteConfig(() => getRemoteConfig()), // 远程配置
     provideVertexAI(() => getVertexAI()) // Vertex AI 服務
 
   ]
