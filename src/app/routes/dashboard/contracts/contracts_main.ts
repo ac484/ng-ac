@@ -5,6 +5,8 @@
 
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ContractService } from '../../../core/services/firestore/contract.service';
 import { ClientService, Client } from '../../../core/services/firestore/client.service';
@@ -20,6 +22,64 @@ import { ContractTableComponent } from './component/contract_table';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { Injectable } from '@angular/core';
+
+@Injectable({ providedIn: 'root' })
+export class ErrorHandlingService {
+  constructor(private message: NzMessageService) {}
+
+  handleFirestoreError(error: any, context: string): void {
+    console.error(`${context} 錯誤:`, error);
+    
+    if (error && typeof error.code === 'string') {
+      const errorMessages: Record<string, string> = {
+        'permission-denied': '權限不足，請檢查 Firestore 安全規則',
+        'unavailable': 'Firestore 服務暫時無法使用，請稍後再試',
+        'unauthenticated': '未驗證用戶，請重新登入',
+        'failed-precondition': 'Firestore 索引可能需要建立，請檢查控制台'
+      };
+      
+      this.message.error(errorMessages[error.code] || `操作失敗: ${error.message || '未知錯誤'}`);
+    } else {
+      this.message.error('網路連接問題，請檢查網路狀態');
+    }
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class FormattingService {
+  constructor(private message: NzMessageService) {}
+
+  formatAmount(amount: AmountValue): string {
+    return AmountConverter.format(amount).formatted;
+  }
+  
+  parseAmount(value: string): number {
+    try {
+      const result = AmountConverter.parse(value);
+      return result.success && typeof result.data === 'number' ? result.data : 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  cleanSearchParam(param: SearchParam): SearchParam {
+    const cleaned = { ...param };
+    
+    // 處理金額字段
+    if (cleaned.minAmount && typeof cleaned.minAmount === 'string') {
+      const result = AmountConverter.parse(cleaned.minAmount);
+      cleaned.minAmount = result.success ? result.data : null;
+    }
+    
+    if (cleaned.maxAmount && typeof cleaned.maxAmount === 'string') {
+      const result = AmountConverter.parse(cleaned.maxAmount);
+      cleaned.maxAmount = result.success ? result.data : null;
+    }
+
+    return cleaned;
+  }
+}
 
 @Component({
   selector: 'app-contracts',
@@ -129,12 +189,31 @@ export class ContractsComponent implements OnInit {
   private modal = inject(NzModalService);
   private contractService = inject(ContractService);
   private clientService = inject(ClientService);
+  private errorHandlingService = inject(ErrorHandlingService);
+  private formattingService = inject(FormattingService);
+  private contractCache = new Map<string, Contract[]>();
+  private searchDebounce = new Subject<SearchParam>();
 
   ngOnInit(): void {
-    this.initTable();
-    this.loadClients();
-    this.loadContracts();
-    this.loadStats();
+    // 實現搜索防抖
+    this.searchDebounce.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(searchParam => {
+      this.performSearch(searchParam);
+    });
+  }
+
+  private performSearch(searchParam: SearchParam): void {
+    const cacheKey = JSON.stringify(searchParam);
+    
+    if (this.contractCache.has(cacheKey)) {
+      this.contractList = this.contractCache.get(cacheKey)!;
+      this.cdr.markForCheck();
+      return;
+    }
+    
+    this.loadContracts(searchParam);
   }
 
   private initTable(): void {
@@ -150,28 +229,27 @@ export class ContractsComponent implements OnInit {
 
   // 載入客戶列表
   loadClients(): void {
-    (this.clientService as any).findAll().subscribe({
+    this.clientService.findAll().subscribe({
       next: (clients: Client[]) => {
         this.clientList = clients;
         this.cdr.markForCheck();
       },
       error: (error: any) => {
-        console.error('載入客戶列表失敗:', error);
-        this.message.error('載入客戶列表失敗');
+        this.errorHandlingService.handleFirestoreError(error, '載入客戶列表');
       }
     });
   }
 
   // 載入合約列表
-  loadContracts(): void {
+  loadContracts(searchParam: SearchParam): void {
     console.log('🔥 開始從 Firestore 載入合約...');
     this.tableConfig.loading = true;
     this.cdr.markForCheck();
     
-    const searchConditions = this.buildSearchConditions();
+    const searchConditions = this.buildSearchConditions(searchParam);
     
     // 修復：使用 findAll() 方法而不是 queryContracts()
-    (this.contractService as any).findAll(
+    this.contractService.findAll(
       searchConditions.where || [],
       searchConditions.order || [],
       searchConditions.limit
@@ -197,7 +275,7 @@ export class ContractsComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('❌ Firestore 查詢失敗:', error);
-        this.handleFirestoreError(error);
+        this.errorHandlingService.handleFirestoreError(error, '載入合約列表');
         this.contractList = [];
         this.tableConfig.total = 0;
         this.tableConfig.loading = false;
@@ -211,7 +289,7 @@ export class ContractsComponent implements OnInit {
     console.log('📊 開始載入統計數據...');
     
     // 修復：使用 findAll() 方法來獲取統計數據
-    (this.contractService as any).findAll().subscribe({
+    this.contractService.findAll().subscribe({
       next: (contracts: Contract[]) => {
         console.log('✅ 統計數據載入成功:', contracts);
         
@@ -230,7 +308,7 @@ export class ContractsComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('❌ 統計數據載入失敗:', error);
-        this.handleFirestoreError(error);
+        this.errorHandlingService.handleFirestoreError(error, '載入統計數據');
         this.contractStats = {
           total: 0,
           draft: 0,
@@ -245,31 +323,31 @@ export class ContractsComponent implements OnInit {
   }
 
   // 構建搜索條件
-  private buildSearchConditions(): any {
+  private buildSearchConditions(searchParam: SearchParam): any {
     const conditions: any = {};
     const where: any[] = [];
     const order: any[] = [];
     
-    if (this.searchParam.contractCode) {
-      where.push({ field: 'contractCode', operator: '>=', value: this.searchParam.contractCode });
-      where.push({ field: 'contractCode', operator: '<=', value: this.searchParam.contractCode + '\uf8ff' });
+    if (searchParam.contractCode) {
+      where.push({ field: 'contractCode', operator: '>=', value: searchParam.contractCode });
+      where.push({ field: 'contractCode', operator: '<=', value: searchParam.contractCode + '\uf8ff' });
     }
     
-    if (this.searchParam.clientName) {
-      where.push({ field: 'clientName', operator: '>=', value: this.searchParam.clientName });
-      where.push({ field: 'clientName', operator: '<=', value: this.searchParam.clientName + '\uf8ff' });
+    if (searchParam.clientName) {
+      where.push({ field: 'clientName', operator: '>=', value: searchParam.clientName });
+      where.push({ field: 'clientName', operator: '<=', value: searchParam.clientName + '\uf8ff' });
     }
     
-    if (this.searchParam.status) {
-      where.push({ field: 'status', operator: '==', value: this.searchParam.status });
+    if (searchParam.status) {
+      where.push({ field: 'status', operator: '==', value: searchParam.status });
     }
     
-    if (this.searchParam.minAmount) {
-      where.push({ field: 'totalAmount', operator: '>=', value: this.searchParam.minAmount });
+    if (searchParam.minAmount) {
+      where.push({ field: 'totalAmount', operator: '>=', value: searchParam.minAmount });
     }
     
-    if (this.searchParam.maxAmount) {
-      where.push({ field: 'totalAmount', operator: '<=', value: this.searchParam.maxAmount });
+    if (searchParam.maxAmount) {
+      where.push({ field: 'totalAmount', operator: '<=', value: searchParam.maxAmount });
     }
 
     // 添加默認排序
@@ -291,22 +369,16 @@ export class ContractsComponent implements OnInit {
 
   // 搜索事件處理
   onSearch(searchParam: SearchParam): void {
-    // 極簡型別轉換：確保搜尋金額為 number
-    const cleanedParam = { ...searchParam };
-    if (cleanedParam.minAmount) {
-      cleanedParam.minAmount = Number(cleanedParam.minAmount) || undefined;
-    }
-    if (cleanedParam.maxAmount) {
-      cleanedParam.maxAmount = Number(cleanedParam.maxAmount) || undefined;
-    }
+    // 使用型別安全的參數清理
+    const cleanedParam = this.formattingService.cleanSearchParam(searchParam);
     
     this.searchParam = cleanedParam;
-    this.loadContracts();
+    this.searchDebounce.next(cleanedParam);
   }
 
   onResetSearch(): void {
     this.searchParam = {};
-    this.loadContracts();
+    this.searchDebounce.next({});
   }
 
   onCollapseChange(isCollapse: boolean): void {
@@ -333,11 +405,11 @@ export class ContractsComponent implements OnInit {
     
     if (this.editingContract) {
       // 更新
-      (this.contractService as any).update(this.editingContract.id!, contractData).subscribe({
+      this.contractService.update(this.editingContract.id!, contractData).subscribe({
         next: () => {
           this.message.success('合約更新成功');
           this.isModalVisible = false;
-          this.loadContracts();
+          this.loadContracts(this.searchParam);
           this.loadStats();
         },
         error: (error: any) => {
@@ -347,11 +419,11 @@ export class ContractsComponent implements OnInit {
       });
     } else {
       // 新增
-      (this.contractService as any).create(contractData).subscribe({
+      this.contractService.create(contractData).subscribe({
         next: () => {
           this.message.success('合約新增成功');
           this.isModalVisible = false;
-          this.loadContracts();
+          this.loadContracts(this.searchParam);
           this.loadStats();
         },
         error: (error: any) => {
@@ -371,10 +443,10 @@ export class ContractsComponent implements OnInit {
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
-        (this.contractService as any).delete(contract.id!).subscribe({
+        this.contractService.delete(contract.id!).subscribe({
           next: () => {
             this.message.success('合約刪除成功');
-            this.loadContracts();
+            this.loadContracts(this.searchParam);
             this.loadStats();
           },
           error: (error: any) => {
@@ -401,11 +473,11 @@ export class ContractsComponent implements OnInit {
       nzOkDanger: true,
       nzOnOk: () => {
         const ids = contracts.map(contract => contract.id!);
-        (this.contractService as any).deleteBatch(ids).subscribe({
+        this.contractService.deleteBatch(ids).subscribe({
           next: () => {
             this.message.success('批量刪除成功');
             this.checkedCashArray = [];
-            this.loadContracts();
+            this.loadContracts(this.searchParam);
             this.loadStats();
           },
           error: (error: any) => {
@@ -420,12 +492,12 @@ export class ContractsComponent implements OnInit {
   // 表格事件處理
   onTableChange(event?: any): void {
     console.log('表格變更事件:', event);
-    this.loadContracts();
+    this.loadContracts(this.searchParam);
   }
 
   onPageSizeChange(pageSize: number): void {
     this.tableConfig.pageSize = pageSize;
-    this.loadContracts();
+    this.loadContracts(this.searchParam);
   }
 
   onSelectionChange(selectedContracts: Contract[]): void {
@@ -439,7 +511,7 @@ export class ContractsComponent implements OnInit {
 
   // 刷新表格
   reloadTable(): void {
-    this.loadContracts();
+    this.loadContracts(this.searchParam);
     this.loadStats();
   }
 
@@ -450,27 +522,6 @@ export class ContractsComponent implements OnInit {
 
   // Firestore 錯誤處理
   private handleFirestoreError(error: any): void {
-    console.error('Firestore 錯誤詳情:', error);
-    
-    if (error.code) {
-      switch (error.code) {
-        case 'permission-denied':
-          this.message.error('權限不足，請檢查 Firestore 安全規則');
-          break;
-        case 'unavailable':
-          this.message.error('Firestore 服務暫時無法使用，請稍後再試');
-          break;
-        case 'unauthenticated':
-          this.message.error('未驗證用戶，請重新登入');
-          break;
-        case 'failed-precondition':
-          this.message.error('Firestore 索引可能需要建立，請檢查控制台');
-          break;
-        default:
-          this.message.error(`Firestore 錯誤: ${error.message || '未知錯誤'}`);
-      }
-    } else {
-      this.message.error('網路連接問題，請檢查網路狀態');
-    }
+    this.errorHandlingService.handleFirestoreError(error, 'Firestore 操作');
   }
 }
