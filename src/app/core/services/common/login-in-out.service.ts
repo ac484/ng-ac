@@ -152,6 +152,16 @@ export class LoginInOutService {
             icon: 'desktop',
             code: 'TabsDetail',
             children: []
+          },
+          {
+            id: 14,
+            fatherId: 1,
+            menuName: '合約管理',
+            menuType: 'C',
+            path: '/default/dashboard/contracts',
+            icon: 'file-text',
+            code: 'TabsDetail',
+            children: []
           }
         ]
       },
