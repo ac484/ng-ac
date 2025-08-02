@@ -1,7 +1,7 @@
 /**
- * Firestore 服務使用範例
+ * Firestore 服務使用範例 - 工業應用簡化版
  * 
- * 展示如何使用各種 Firestore 服務進行 CRUD 操作
+ * 展示如何使用 Firestore 服務進行 CRUD 操作
  */
 
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
@@ -9,13 +9,9 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 
 import { 
   UserService, 
-  ArticleService, 
-  CategoryService, 
-  CommentService,
+  ContractService,
   User,
-  Article,
-  Category,
-  Comment
+  Contract
 } from '../../../core/services';
 import { PageHeaderType, PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
 import { CommonModule } from '@angular/common';
@@ -59,37 +55,29 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 export class FirestoreDemoComponent implements OnInit {
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: 'Firestore 服務範例',
-    desc: '展示如何使用 Firestore 服務進行 CRUD 操作',
+    desc: '展示如何使用 Firestore 服務進行用戶和合約管理',
     breadcrumb: ['首頁', '儀表板', 'Firestore 範例']
   };
 
   // 表單
   userForm!: FormGroup;
-  articleForm!: FormGroup;
-  categoryForm!: FormGroup;
-  commentForm!: FormGroup;
+  contractForm!: FormGroup;
 
   // 數據
   users: User[] = [];
-  articles: Article[] = [];
-  categories: Category[] = [];
-  comments: Comment[] = [];
+  contracts: Contract[] = [];
 
   // 載入狀態
   loading = {
     users: false,
-    articles: false,
-    categories: false,
-    comments: false
+    contracts: false
   };
 
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
   private message = inject(NzMessageService);
   private userService = inject(UserService);
-  private articleService = inject(ArticleService);
-  private categoryService = inject(CategoryService);
-  private commentService = inject(CommentService);
+  private contractService = inject(ContractService);
 
   ngOnInit(): void {
     this.initForms();
@@ -103,46 +91,30 @@ export class FirestoreDemoComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       displayName: ['', [Validators.required]],
       phoneNumber: [''],
+      department: [''],
+      position: [''],
+      employeeId: [''],
       isActive: [true]
     });
 
-    // 文章表單
-    this.articleForm = this.fb.group({
-      title: ['', [Validators.required]],
-      content: ['', [Validators.required]],
-      slug: ['', [Validators.required]],
-      authorId: ['', [Validators.required]],
-      authorName: ['', [Validators.required]],
-      categoryId: [''],
-      tags: [''],
-      status: ['draft', [Validators.required]]
-    });
-
-    // 分類表單
-    this.categoryForm = this.fb.group({
-      name: ['', [Validators.required]],
-      slug: ['', [Validators.required]],
-      description: [''],
-      parentId: [''],
-      isActive: [true],
-      sortOrder: [0]
-    });
-
-    // 評論表單
-    this.commentForm = this.fb.group({
-      articleId: ['', [Validators.required]],
-      authorName: ['', [Validators.required]],
-      authorEmail: ['', [Validators.required, Validators.email]],
-      content: ['', [Validators.required]],
-      status: ['pending', [Validators.required]]
+    // 合約表單
+    this.contractForm = this.fb.group({
+      contractCode: ['', [Validators.required]],
+      clientName: ['', [Validators.required]],
+      clientRepresentative: ['', [Validators.required]],
+      contactPerson: ['', [Validators.required]],
+      contractName: ['', [Validators.required]],
+      amount: [null, [Validators.required, Validators.min(0)]],
+      version: ['V1.0', [Validators.required]],
+      progress: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      status: ['active', [Validators.required]],
+      description: ['']
     });
   }
 
   private loadAllData(): void {
     this.loadUsers();
-    this.loadArticles();
-    this.loadCategories();
-    this.loadComments();
+    this.loadContracts();
   }
 
   // 用戶操作
@@ -168,10 +140,8 @@ export class FirestoreDemoComponent implements OnInit {
       const userData = {
         ...this.userForm.value,
         emailVerified: false,
-        isAnonymous: false,
         lastLoginAt: new Date(),
-        roles: ['user'],
-        permissions: []
+        roles: ['user']
       };
 
       this.userService.createWithId(userData.uid, userData).subscribe({
@@ -188,159 +158,58 @@ export class FirestoreDemoComponent implements OnInit {
     }
   }
 
-  // 文章操作
-  loadArticles(): void {
-    this.loading.articles = true;
-    this.articleService.getPublishedArticles({ limit: 10 }).subscribe({
-      next: (articles) => {
-        this.articles = articles;
-        this.loading.articles = false;
+  // 合約操作
+  loadContracts(): void {
+    this.loading.contracts = true;
+    this.contractService.getAll({ limit: 10 }).subscribe({
+      next: (contracts) => {
+        this.contracts = contracts;
+        this.loading.contracts = false;
         this.cdr.markForCheck();
       },
       error: (error) => {
-        console.error('載入文章失敗:', error);
-        this.message.error('載入文章失敗');
-        this.loading.articles = false;
+        console.error('載入合約失敗:', error);
+        this.message.error('載入合約失敗');
+        this.loading.contracts = false;
         this.cdr.markForCheck();
       }
     });
   }
 
-  createArticle(): void {
-    if (this.articleForm.valid) {
-      const formValue = this.articleForm.value;
-      const articleData = {
-        ...formValue,
-        excerpt: formValue.content.substring(0, 200),
-        tags: formValue.tags ? formValue.tags.split(',').map((tag: string) => tag.trim()) : [],
-        viewCount: 0,
-        likeCount: 0,
-        commentCount: 0,
-        shareCount: 0,
-        allowComments: true,
-        isFeatured: false,
-        isSticky: false
+  createContract(): void {
+    if (this.contractForm.valid) {
+      const contractData = {
+        ...this.contractForm.value,
+        contractCode: this.contractService.generateContractCode()
       };
 
-      this.articleService.create(articleData).subscribe({
+      this.contractService.create(contractData).subscribe({
         next: () => {
-          this.message.success('文章創建成功');
-          this.articleForm.reset();
-          this.loadArticles();
+          this.message.success('合約創建成功');
+          this.contractForm.reset({
+            version: 'V1.0',
+            progress: 0,
+            status: 'active'
+          });
+          this.loadContracts();
         },
         error: (error) => {
-          console.error('創建文章失敗:', error);
-          this.message.error('創建文章失敗');
+          console.error('創建合約失敗:', error);
+          this.message.error('創建合約失敗');
         }
       });
     }
   }
 
-  publishArticle(articleId: string): void {
-    this.articleService.publishArticle(articleId).subscribe({
+  updateContractProgress(contractId: string, progress: number): void {
+    this.contractService.updateProgress(contractId, progress).subscribe({
       next: () => {
-        this.message.success('文章發布成功');
-        this.loadArticles();
+        this.message.success('合約進度更新成功');
+        this.loadContracts();
       },
       error: (error) => {
-        console.error('發布文章失敗:', error);
-        this.message.error('發布文章失敗');
-      }
-    });
-  }
-
-  // 分類操作
-  loadCategories(): void {
-    this.loading.categories = true;
-    this.categoryService.getVisibleCategories().subscribe({
-      next: (categories) => {
-        this.categories = categories;
-        this.loading.categories = false;
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('載入分類失敗:', error);
-        this.message.error('載入分類失敗');
-        this.loading.categories = false;
-        this.cdr.markForCheck();
-      }
-    });
-  }
-
-  createCategory(): void {
-    if (this.categoryForm.valid) {
-      const categoryData = {
-        ...this.categoryForm.value,
-        isVisible: true,
-        articleCount: 0
-      };
-
-      this.categoryService.createCategory(categoryData).subscribe({
-        next: () => {
-          this.message.success('分類創建成功');
-          this.categoryForm.reset();
-          this.loadCategories();
-        },
-        error: (error) => {
-          console.error('創建分類失敗:', error);
-          this.message.error('創建分類失敗');
-        }
-      });
-    }
-  }
-
-  // 評論操作
-  loadComments(): void {
-    this.loading.comments = true;
-    this.commentService.getLatestComments(10).subscribe({
-      next: (comments) => {
-        this.comments = comments;
-        this.loading.comments = false;
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('載入評論失敗:', error);
-        this.message.error('載入評論失敗');
-        this.loading.comments = false;
-        this.cdr.markForCheck();
-      }
-    });
-  }
-
-  createComment(): void {
-    if (this.commentForm.valid) {
-      const commentData = {
-        ...this.commentForm.value,
-        articleTitle: '範例文章',
-        level: 0,
-        likeCount: 0,
-        dislikeCount: 0,
-        replyCount: 0
-      };
-
-      this.commentService.createComment(commentData).subscribe({
-        next: () => {
-          this.message.success('評論創建成功');
-          this.commentForm.reset();
-          this.loadComments();
-        },
-        error: (error) => {
-          console.error('創建評論失敗:', error);
-          this.message.error('創建評論失敗');
-        }
-      });
-    }
-  }
-
-  approveComment(commentId: string): void {
-    this.commentService.approveComment(commentId, 'admin').subscribe({
-      next: () => {
-        this.message.success('評論已批准');
-        this.loadComments();
-      },
-      error: (error) => {
-        console.error('批准評論失敗:', error);
-        this.message.error('批准評論失敗');
+        console.error('更新合約進度失敗:', error);
+        this.message.error('更新合約進度失敗');
       }
     });
   }
@@ -348,15 +217,28 @@ export class FirestoreDemoComponent implements OnInit {
   // 工具方法
   getStatusColor(status: string): string {
     const colors: { [key: string]: string } = {
-      'draft': 'default',
-      'published': 'success',
-      'archived': 'warning',
-      'pending': 'processing',
-      'approved': 'success',
-      'rejected': 'error',
-      'spam': 'error'
+      'active': 'processing',
+      'completed': 'success',
+      'cancelled': 'error'
     };
     return colors[status] || 'default';
+  }
+
+  getStatusText(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'active': '進行中',
+      'completed': '已完成',
+      'cancelled': '已取消'
+    };
+    return statusMap[status] || status;
+  }
+
+  formatAmount(amount: number): string {
+    return new Intl.NumberFormat('zh-TW', {
+      style: 'currency',
+      currency: 'TWD',
+      minimumFractionDigits: 0
+    }).format(amount);
   }
 
   formatDate(date: any): string {

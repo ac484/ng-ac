@@ -23,14 +23,12 @@ import {
   startAfter, 
   endBefore,
   DocumentReference, 
-  DocumentSnapshot, 
-  QuerySnapshot,
+  DocumentSnapshot,
   QueryConstraint,
   CollectionReference,
   DocumentData,
   WithFieldValue,
   UpdateData,
-  PartialWithFieldValue,
   serverTimestamp,
   Timestamp
 } from '@angular/fire/firestore';

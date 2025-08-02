@@ -7,7 +7,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BaseFirestoreService, BaseEntity, QueryOptions } from './base-firestore.service';
+import { BaseFirestoreService, BaseEntity } from './base-firestore.service';
 
 export interface Contract extends BaseEntity {
   // 基本資訊
@@ -219,49 +219,11 @@ export class ContractService extends BaseFirestoreService<Contract> {
   }
 
   /**
-   * 獲取即將到期的合約
-   */
-  getExpiringContracts(days: number = 30): Observable<Contract[]> {
-    const futureDate = new Date();
-    futureDate.setDate(futureDate.getDate() + days);
-
-    return this.getAll({
-      where: [
-        { field: 'status', operator: '==', value: 'active' },
-        { field: 'endDate', operator: '<=', value: futureDate }
-      ],
-      orderBy: [{ field: 'endDate', direction: 'asc' }]
-    });
-  }
-
-  /**
-   * 獲取高價值合約（金額超過指定數額）
-   */
-  getHighValueContracts(minAmount: number = 1000000): Observable<Contract[]> {
-    return this.getAll({
-      where: [
-        { field: 'amount', operator: '>=', value: minAmount }
-      ],
-      orderBy: [{ field: 'amount', direction: 'desc' }]
-    });
-  }
-
-  /**
    * 根據專案經理獲取合約
    */
   getByProjectManager(projectManager: string): Observable<Contract[]> {
     return this.getAll({
       where: [{ field: 'projectManager', operator: '==', value: projectManager }],
-      orderBy: [{ field: 'createdAt', direction: 'desc' }]
-    });
-  }
-
-  /**
-   * 根據業務負責人獲取合約
-   */
-  getBySalesPerson(salesPerson: string): Observable<Contract[]> {
-    return this.getAll({
-      where: [{ field: 'salesPerson', operator: '==', value: salesPerson }],
       orderBy: [{ field: 'createdAt', direction: 'desc' }]
     });
   }

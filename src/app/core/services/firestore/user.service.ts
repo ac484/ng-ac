@@ -1,5 +1,5 @@
 /**
- * 用戶管理服務
+ * 用戶管理服務 - 工業應用簡化版
  * 
  * 管理用戶資料的 CRUD 操作
  */
@@ -16,35 +16,18 @@ export interface User extends BaseEntity {
   photoURL?: string;
   phoneNumber?: string;
   emailVerified: boolean;
-  isAnonymous: boolean;
   
-  // 擴展用戶資料
+  // 工業應用基本資料
   firstName?: string;
   lastName?: string;
-  dateOfBirth?: Date;
-  gender?: 'male' | 'female' | 'other';
-  address?: {
-    street?: string;
-    city?: string;
-    state?: string;
-    zipCode?: string;
-    country?: string;
-  };
-  preferences?: {
-    language?: string;
-    theme?: string;
-    notifications?: {
-      email?: boolean;
-      push?: boolean;
-      sms?: boolean;
-    };
-  };
+  department?: string;      // 部門
+  position?: string;        // 職位
+  employeeId?: string;      // 員工編號
   
   // 系統欄位
   isActive: boolean;
   lastLoginAt?: Date;
-  roles?: string[];
-  permissions?: string[];
+  roles?: string[];         // 角色：admin, manager, user
 }
 
 @Injectable({
@@ -88,11 +71,9 @@ export class UserService extends BaseFirestoreService<User> {
       photoURL: authUser.photoURL || '',
       phoneNumber: authUser.phoneNumber || '',
       emailVerified: authUser.emailVerified || false,
-      isAnonymous: authUser.isAnonymous || false,
       isActive: true,
       lastLoginAt: new Date(),
-      roles: ['user'], // 預設角色
-      permissions: []
+      roles: ['user'] // 預設角色
     };
 
     // 使用 UID 作為文檔 ID
@@ -111,29 +92,11 @@ export class UserService extends BaseFirestoreService<User> {
   }
 
   /**
-   * 更新用戶偏好設定
-   */
-  updatePreferences(uid: string, preferences: User['preferences']): Observable<void> {
-    return this.update(uid, {
-      preferences
-    } as any);
-  }
-
-  /**
    * 更新用戶角色
    */
   updateRoles(uid: string, roles: string[]): Observable<void> {
     return this.update(uid, {
       roles
-    } as any);
-  }
-
-  /**
-   * 更新用戶權限
-   */
-  updatePermissions(uid: string, permissions: string[]): Observable<void> {
-    return this.update(uid, {
-      permissions
     } as any);
   }
 
@@ -177,20 +140,28 @@ export class UserService extends BaseFirestoreService<User> {
   }
 
   /**
-   * 搜尋用戶（根據顯示名稱或郵箱）
+   * 根據部門獲取用戶
    */
-  searchUsers(searchTerm: string, options?: QueryOptions): Observable<User[]> {
-    // 注意：Firestore 不支援全文搜尋，這裡使用簡單的前綴匹配
-    // 在生產環境中，建議使用 Algolia 或 Elasticsearch 進行全文搜尋
-    const queryOptions: QueryOptions = {
-      ...options,
+  getUsersByDepartment(department: string): Observable<User[]> {
+    return this.getAll({
       where: [
-        ...(options?.where || []),
+        { field: 'department', operator: '==', value: department },
+        { field: 'isActive', operator: '==', value: true }
+      ],
+      orderBy: [{ field: 'displayName', direction: 'asc' }]
+    });
+  }
+
+  /**
+   * 搜尋用戶（根據顯示名稱或員工編號）
+   */
+  searchUsers(searchTerm: string): Observable<User[]> {
+    return this.getAll({
+      where: [
         { field: 'displayName', operator: '>=', value: searchTerm },
         { field: 'displayName', operator: '<=', value: searchTerm + '\uf8ff' }
-      ]
-    };
-
-    return this.getAll(queryOptions);
+      ],
+      orderBy: [{ field: 'displayName', direction: 'asc' }]
+    });
   }
 }

@@ -77,7 +77,7 @@ interface SearchParam {
     NzProgressModule,
     NzStatisticModule,
     NzModalModule,
-    MapPipe
+
   ]
 })
 export class ContractsComponent implements OnInit {
@@ -488,7 +488,7 @@ export class ContractsComponent implements OnInit {
 
   // 表格事件處理
   onTableChange(e: NzTableQueryParams): void {
-    this.loadContracts(e);
+    this.loadContracts();
   }
 
   onPageSizeChange(pageSize: number): void {
@@ -547,5 +547,15 @@ export class ContractsComponent implements OnInit {
   // 模態框事件
   handleCancel(): void {
     this.isModalVisible = false;
+  }
+
+  // 數字格式化方法
+  formatNumber(value: number): string {
+    if (!value) return '';
+    return `NT$ ${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  }
+
+  parseNumber(value: string): number {
+    return parseFloat(value.replace(/NT\$\s?|(,*)/g, '')) || 0;
   }
 }

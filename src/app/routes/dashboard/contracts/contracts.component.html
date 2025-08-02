@@ -20,7 +20,7 @@
     <div nz-col [nzSpan]="6">
         <nz-card>
             <nz-statistic nzTitle="總金額" [nzValue]="contractStats.totalAmount" nzPrefix="💰"
-                [nzValueStyle]="{ color: '#faad14' }" [nzFormatter]="amountFormatter">
+                [nzValueStyle]="{ color: '#faad14' }">
             </nz-statistic>
         </nz-card>
     </div>
@@ -80,9 +80,8 @@
                 <nz-form-item>
                     <nz-form-label>最小金額</nz-form-label>
                     <nz-form-control>
-                        <nz-input-number formControlName="minAmount" [nzMin]="0"
-                            [nzFormatter]="value => `NT$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                            [nzParser]="value => value.replace(/NT\$\s?|(,*)/g, '')" nzPlaceHolder="最小金額">
+                        <nz-input-number formControlName="minAmount" [nzMin]="0" [nzFormatter]="formatNumber"
+                            [nzParser]="parseNumber" nzPlaceHolder="最小金額">
                         </nz-input-number>
                     </nz-form-control>
                 </nz-form-item>
@@ -91,9 +90,8 @@
                 <nz-form-item>
                     <nz-form-label>最大金額</nz-form-label>
                     <nz-form-control>
-                        <nz-input-number formControlName="maxAmount" [nzMin]="0"
-                            [nzFormatter]="value => `NT$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                            [nzParser]="value => value.replace(/NT\$\s?|(,*)/g, '')" nzPlaceHolder="最大金額">
+                        <nz-input-number formControlName="maxAmount" [nzMin]="0" [nzFormatter]="formatNumber"
+                            [nzParser]="parseNumber" nzPlaceHolder="最大金額">
                         </nz-input-number>
                     </nz-form-control>
                 </nz-form-item>
@@ -248,10 +246,8 @@
                     <nz-form-item>
                         <nz-form-label nzRequired>總金額</nz-form-label>
                         <nz-form-control nzErrorTip="請輸入總金額">
-                            <nz-input-number formControlName="amount" [nzMin]="0"
-                                [nzFormatter]="value => `NT$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                [nzParser]="value => value.replace(/NT\$\s?|(,*)/g, '')" nzPlaceHolder="請輸入總金額"
-                                style="width: 100%">
+                            <nz-input-number formControlName="amount" [nzMin]="0" [nzFormatter]="formatNumber"
+                                [nzParser]="parseNumber" nzPlaceHolder="請輸入總金額" style="width: 100%">
                             </nz-input-number>
                         </nz-form-control>
                     </nz-form-item>
