@@ -220,5 +220,132 @@ export class BaseFirestoreService {
     );
   }
 
+  // ===== 語意命名原子操作 =====
+
+  /** 查詢單筆（by id） */
+  findById<T extends BaseEntity>(collectionName: string, id: string): Observable<T | null> {
+    return this.getDocumentById<T>(collectionName, id);
+  }
+
+  /** 查詢多筆（可加條件/排序/限制） */
+  findAll<T extends BaseEntity>(
+    collectionName: string,
+    whereConditions: WhereCondition[] = [],
+    orderConditions: OrderCondition[] = [],
+    limitCount?: number
+  ): Observable<T[]> {
+    return this.queryDocuments<T>(collectionName, whereConditions, orderConditions, limitCount);
+  }
+
+  /** 新增 */
+  create<T extends BaseEntity>(collectionName: string, data: Omit<T, 'id' | 'createdAt' | 'updatedAt'>): Observable<string> {
+    return this.addDocument<T>(collectionName, data);
+  }
+
+  /** 覆蓋（指定 id） */
+  replace<T extends BaseEntity>(collectionName: string, id: string, data: Omit<T, 'id' | 'createdAt' | 'updatedAt'>): Observable<void> {
+    return this.setDocument<T>(collectionName, id, data);
+  }
+
+  /** 局部修改 */
+  modify<T extends BaseEntity>(collectionName: string, id: string, data: Partial<T>): Observable<void> {
+    return this.updateDocument<T>(collectionName, id, data);
+  }
+
+  /** 刪除單筆 */
+  remove(collectionName: string, id: string): Observable<void> {
+    return this.deleteDocument(collectionName, id);
+  }
+
+  /** 批量刪除 */
+  bulkRemove(collectionName: string, ids: string[]): Observable<void[]> {
+    return this.deleteDocuments(collectionName, ids);
+  }
+
+  /** 檢查是否存在 */
+  exists(collectionName: string, id: string): Observable<boolean> {
+    return this.documentExists(collectionName, id);
+  }
+
+  // ===== 進階原子操作（atomic 前綴） =====
+
+  /** 條件式原子更新（Update with Condition） */
+  atomicUpdateWithCondition<T extends BaseEntity>(
+    collectionName: string,
+    id: string,
+    condition: (data: T) => boolean,
+    update: Partial<T>
+  ): Observable<void> {
+    return from(runTransaction(this.firestore, async (tx) => {
+      const ref = this.getDocument(collectionName, id);
+      const snap = await tx.get(ref);
+      if (!snap.exists()) throw new Error('Document not found');
+      const data = snap.data() as T;
+      if (!condition(data)) throw new Error('Condition not met');
+      tx.update(ref, { ...update, updatedAt: serverTimestamp() });
+    })).pipe(catchError(error => {
+      console.error(`atomicUpdateWithCondition failed [${collectionName}/${id}]:`, error);
+      return throwError(() => error);
+    }));
+  }
+
+  /** 轉移（A 減少、B 增加，需原子性） */
+  atomicTransfer(
+    collectionA: string, idA: string, fieldA: string, deltaA: number,
+    collectionB: string, idB: string, fieldB: string, deltaB: number
+  ): Observable<void> {
+    return from(runTransaction(this.firestore, async (tx) => {
+      const refA = this.getDocument(collectionA, idA);
+      const refB = this.getDocument(collectionB, idB);
+      tx.update(refA, { [fieldA]: increment(deltaA) });
+      tx.update(refB, { [fieldB]: increment(deltaB) });
+    })).pipe(catchError(error => {
+      console.error(`atomicTransfer failed [${collectionA}/${idA} <-> ${collectionB}/${idB}]:`, error);
+      return throwError(() => error);
+    }));
+  }
+
+  /** 增量更新（Increment/Decrement） */
+  atomicIncrement(
+    collectionName: string, id: string, field: string, value: number
+  ): Observable<void> {
+    return from(updateDoc(this.getDocument(collectionName, id), { [field]: increment(value), updatedAt: serverTimestamp() }))
+      .pipe(catchError(error => {
+        console.error(`atomicIncrement failed [${collectionName}/${id}]:`, error);
+        return throwError(() => error);
+      }));
+  }
+
+  /** 批次原子更新（多筆一起） */
+  atomicBatchUpdate(
+    updates: { collection: string, id: string, data: any }[]
+  ): Observable<void> {
+    return from(runTransaction(this.firestore, async (tx) => {
+      for (const { collection, id, data } of updates) {
+        tx.update(this.getDocument(collection, id), data);
+      }
+    })).pipe(catchError(error => {
+      console.error('atomicBatchUpdate failed:', error);
+      return throwError(() => error);
+    }));
+  }
+
+  /** 比對更新（Compare-And-Swap, CAS） */
+  atomicCAS<T extends BaseEntity>(
+    collectionName: string, id: string, expectedVersion: number, update: Partial<T>
+  ): Observable<void> {
+    return from(runTransaction(this.firestore, async (tx) => {
+      const ref = this.getDocument(collectionName, id);
+      const snap = await tx.get(ref);
+      if (!snap.exists()) throw new Error('Document not found');
+      const data = snap.data() as any;
+      if (data.version !== expectedVersion) throw new Error('Version mismatch');
+      tx.update(ref, { ...update, version: expectedVersion + 1, updatedAt: serverTimestamp() });
+    })).pipe(catchError(error => {
+      console.error(`atomicCAS failed [${collectionName}/${id}]:`, error);
+      return throwError(() => error);
+    }));
+  }
+
 
 }
