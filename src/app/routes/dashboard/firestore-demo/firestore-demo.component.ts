@@ -233,7 +233,10 @@ export class FirestoreDemoComponent implements OnInit {
     return statusMap[status] || status;
   }
 
-  formatAmount(amount: number): string {
+  formatAmount(amount: number | null): string {
+    if (amount === null || amount === undefined) {
+      return 'NT$ 0';
+    }
     return new Intl.NumberFormat('zh-TW', {
       style: 'currency',
       currency: 'TWD',
