@@ -46,10 +46,6 @@ export class ClientsComponent implements OnInit {
 
   // 請款流程選項 - 使用TransferItem格式
   paymentFlowOptions: TransferItem[] = [];
-  $asTransferItems = (data: unknown): TransferItem[] => data as TransferItem[];
-
-  // 當前選中的請款流程
-  selectedPaymentFlows: PaymentFlowStatus[] = [];
 
   constructor(private fb: FormBuilder, private clientService: ClientService) {
     this.addForm = this.fb.group({
@@ -86,6 +82,7 @@ export class ClientsComponent implements OnInit {
     ];
 
     // 按順序排序並轉換為TransferItem格式，將描述合併到title中
+    // 設置direction為'right'，讓所有項目預設在右側（可選）
     this.paymentFlowOptions = flowOptions
       .sort((a, b) => a.order - b.order)
       .map(option => ({
@@ -93,7 +90,8 @@ export class ClientsComponent implements OnInit {
         title: `${option.title} - ${option.description}`,
         description: option.description,
         disabled: false,
-        checked: false
+        checked: false,
+        direction: 'right' // 預設在右側（可選）
       }));
   }
 
@@ -188,30 +186,17 @@ export class ClientsComponent implements OnInit {
 
   // 獲取客戶的請款流程（已選中的項目）
   getClientPaymentFlows(client: Client): PaymentFlowStatus[] {
-    // 確保返回正確的數據類型
-    if (!client.paymentFlow) {
-      return [];
-    }
-    return Array.isArray(client.paymentFlow) ? client.paymentFlow : [];
-  }
-
-  // 新增請款流程選項
-  addPaymentFlowOption(): void {
-    console.log('新增請款流程選項');
-    // TODO: 實現彈窗表單來新增請款流程選項
-  }
-
-  // 獲取可選的請款流程（未選中的項目）
-  getAvailablePaymentFlows(client: Client): PaymentFlowStatus[] {
-    const selectedFlows = this.getClientPaymentFlows(client);
-    return this.paymentFlowOptions
-      .map(option => option['key'])
-      .filter(key => !selectedFlows.includes(key));
-  }
-
-  // 重新初始化請款流程選項（用於數據更新後）
-  refreshPaymentFlowOptions(): void {
-    this.initPaymentFlowOptions();
+    // 動態更新paymentFlowOptions的direction
+    this.paymentFlowOptions.forEach(option => {
+      const key = option['key'] as PaymentFlowStatus;
+      if (client.paymentFlow && client.paymentFlow.includes(key)) {
+        option.direction = 'left'; // 已選項目在左側
+      } else {
+        option.direction = 'right'; // 未選項目在右側
+      }
+    });
+    
+    return client.paymentFlow || [];
   }
 
   onCancel(): void {

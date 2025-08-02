@@ -73,9 +73,11 @@
         </nz-select>
       </td>
       <td class="payment-flow-cell">
+        <!-- 隱藏調用，確保更新direction -->
+        <div style="display: none;">{{ getClientPaymentFlows(client) }}</div>
         <nz-transfer [nzDataSource]="paymentFlowOptions" [nzTitles]="['已選', '可選']" [nzOperations]="['←', '→']"
-          [nzShowSearch]="false" [nzShowSelectAll]="true" [nzSelectedKeys]="getClientPaymentFlows(client)"
-          (nzChange)="onPaymentFlowChange(client.id!, $event)" [nzListStyle]="{ 'width': '180px', 'height': '200px' }">
+          [nzShowSearch]="false" [nzShowSelectAll]="true" (nzChange)="onPaymentFlowChange(client.id!, $event)"
+          [nzListStyle]="{ 'width': '180px', 'height': '200px' }">
         </nz-transfer>
       </td>
       <td>
