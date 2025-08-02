@@ -1,21 +1,343 @@
-<!-- 麵包屑導航 -->
-<nz-card [nzBodyStyle]="{ padding: '10px 24px' }" [nzBordered]="false">
-    <div class="left-start-center">
-        <nz-breadcrumb>
-            <nz-breadcrumb-item>首頁</nz-breadcrumb-item>
-            <nz-breadcrumb-item>Dashboard</nz-breadcrumb-item>
-            <nz-breadcrumb-item>合約管理</nz-breadcrumb-item>
-        </nz-breadcrumb>
+<!--頁面標題-->
+<app-page-header [pageHeaderInfo]="pageHeaderInfo" />
+
+<!--統計卡片-->
+<div nz-row [nzGutter]="16" class="mb-16">
+    <div nz-col [nzSpan]="6">
+        <nz-card>
+            <nz-statistic nzTitle="總合約數" [nzValue]="contractStats.total" nzPrefix="📋"
+                [nzValueStyle]="{ color: '#1890ff' }">
+            </nz-statistic>
+        </nz-card>
     </div>
+    <div nz-col [nzSpan]="6">
+        <nz-card>
+            <nz-statistic nzTitle="進行中" [nzValue]="contractStats.active" nzPrefix="🔄"
+                [nzValueStyle]="{ color: '#52c41a' }">
+            </nz-statistic>
+        </nz-card>
+    </div>
+    <div nz-col [nzSpan]="6">
+        <nz-card>
+            <nz-statistic nzTitle="總金額" [nzValue]="contractStats.totalAmount" nzPrefix="💰"
+                [nzValueStyle]="{ color: '#faad14' }" [nzFormatter]="amountFormatter">
+            </nz-statistic>
+        </nz-card>
+    </div>
+    <div nz-col [nzSpan]="6">
+        <nz-card>
+            <nz-statistic nzTitle="平均進度" [nzValue]="contractStats.averageProgress" nzSuffix="%" nzPrefix="📊"
+                [nzValueStyle]="{ color: '#722ed1' }">
+            </nz-statistic>
+        </nz-card>
+    </div>
+</div>
+
+<!--搜索表單-->
+<nz-card class="mb-16" [nzBodyStyle]="{ 'padding-bottom': 0 }">
+    <app-water-mark text="合約管理系統" />
+    <form nz-form [formGroup]="searchForm">
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+            <div nz-col [nzLg]="8" [nzMd]="12" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+                <nz-form-item>
+                    <nz-form-label>合約編號</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input formControlName="contractCode" placeholder="請輸入合約編號" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzLg]="8" [nzMd]="12" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+                <nz-form-item>
+                    <nz-form-label>客戶名稱</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input formControlName="clientName" placeholder="請輸入客戶名稱" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzLg]="8" [nzMd]="12" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+                <nz-form-item>
+                    <nz-form-label>合約名稱</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input formControlName="contractName" placeholder="請輸入合約名稱" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzLg]="8" [nzMd]="12" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+                <nz-form-item>
+                    <nz-form-label>合約狀態</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="status" nzPlaceHolder="請選擇狀態" nzAllowClear>
+                            @for (option of statusOptions; track option.value) {
+                            <nz-option [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            @if (!isCollapse) {
+            <div nz-col [nzLg]="8" [nzMd]="12" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+                <nz-form-item>
+                    <nz-form-label>最小金額</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-number formControlName="minAmount" [nzMin]="0"
+                            [nzFormatter]="value => `NT$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                            [nzParser]="value => value.replace(/NT\$\s?|(,*)/g, '')" nzPlaceHolder="最小金額">
+                        </nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzLg]="8" [nzMd]="12" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+                <nz-form-item>
+                    <nz-form-label>最大金額</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-number formControlName="maxAmount" [nzMin]="0"
+                            [nzFormatter]="value => `NT$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                            [nzParser]="value => value.replace(/NT\$\s?|(,*)/g, '')" nzPlaceHolder="最大金額">
+                        </nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            }
+
+            <div class="text-right p-0" nz-col [nzLg]="8" [nzMd]="12" [nzSm]="24" [nzXl]="6" [nzXs]="24" [nzXXl]="6">
+                <button nz-button nzType="primary" appDebounceClick [debounceTime]="500" (debounceClick)="search()">
+                    <i nz-icon nzType="search"></i>
+                    搜索
+                </button>
+                <button class="ml-8" nz-button (click)="resetSearch()">
+                    <i nz-icon nzType="close-circle"></i>
+                    重置
+                </button>
+                <button class="ml-8" nz-button appToggleFullscreen #fullscreen="appToggleFullscreen">
+                    <i nz-icon [nzType]="fullscreen.isFullscreenFlag ? 'fullscreen' : 'fullscreen-exit'"></i>
+                </button>
+                <a class="collapse operate-text ml-8" (click)="toggleCollapse()">
+                    @if (isCollapse) {
+                    <span>展開</span>
+                    <i nz-icon nzType="down"></i>
+                    } @else {
+                    <span>收起</span>
+                    <i nz-icon nzType="up"></i>
+                    }
+                </a>
+            </div>
+        </div>
+    </form>
 </nz-card>
 
-<!-- 主要內容 -->
-<section class="content-wrap">
-    <nz-card nzTitle="合約管理">
-        <div class="placeholder-content">
-            <h3>📋 合約管理功能開發中...</h3>
-            <p>這裡將展示合約管理的相關功能和數據</p>
-            <p>包括合約列表、創建、編輯、審核等功能</p>
+<!--表格-->
+<app-card-table-wrap [btnTpl]="tableBtns" (reload)="reloadTable()">
+    <app-ant-table [checkedCashArrayFromComment]="checkedCashArray" [tableConfig]="tableConfig"
+        [tableData]="contractList" (changePageNum)="onTableChange($event)" (changePageSize)="onPageSizeChange($event)"
+        (selectedChange)="onSelectionChange($event)" (sortFn)="onSort($event)">
+    </app-ant-table>
+
+    <!--表格按鈕-->
+    <ng-template #tableBtns>
+        <button class="mr-8" nz-button nzType="primary" (click)="addContract()">
+            <i nz-icon nzType="plus"></i>
+            新增合約
+        </button>
+        <button nz-button nzType="default" nzDanger (click)="batchDelete()">
+            <i nz-icon nzType="delete"></i>
+            批量刪除
+        </button>
+    </ng-template>
+
+    <!--合約編號模板-->
+    <ng-template #contractCodeTpl let-contractCode="contractCode" let-id="id">
+        <div class="flex items-center">
+            <span class="mr-8">{{ contractCode }}</span>
+            <app-copy-text [text]="contractCode" tooltipTitle="複製合約編號">
+                <i nz-icon nzType="copy"></i>
+            </app-copy-text>
         </div>
-    </nz-card>
-</section>
+    </ng-template>
+
+    <!--金額模板-->
+    <ng-template #amountTpl let-amount="amount">
+        <span class="font-medium text-green-600">{{ formatAmount(amount) }}</span>
+    </ng-template>
+
+    <!--進度模板-->
+    <ng-template #progressTpl let-progress="progress" let-status="status">
+        <div class="flex items-center">
+            <nz-progress [nzPercent]="progress" nzSize="small"
+                [nzStatus]="status === 'cancelled' ? 'exception' : (progress === 100 ? 'success' : 'active')"
+                class="mr-8">
+            </nz-progress>
+            <span class="text-xs">{{ progress }}%</span>
+        </div>
+    </ng-template>
+
+    <!--狀態模板-->
+    <ng-template #statusTpl let-status="status">
+        <nz-tag [nzColor]="getStatusColor(status)">
+            {{ getStatusText(status) }}
+        </nz-tag>
+    </ng-template>
+
+    <!--操作模板-->
+    <ng-template #operationTpl let-contract="$implicit">
+        <div class="flex items-center space-x-2">
+            <button nz-button nzType="link" nzSize="small" (click)="editContract(contract)">
+                <i nz-icon nzType="edit"></i>
+                編輯
+            </button>
+            <button nz-button nzType="link" nzSize="small" nzDanger (click)="deleteContract(contract)">
+                <i nz-icon nzType="delete"></i>
+                刪除
+            </button>
+            <app-copy-text [text]="'合約編號: ' + contract.contractCode + ', 客戶: ' + contract.clientName"
+                tooltipTitle="複製合約資訊">
+                複製
+            </app-copy-text>
+        </div>
+    </ng-template>
+</app-card-table-wrap>
+
+<!--新增/編輯合約模態框-->
+<nz-modal [(nzVisible)]="isModalVisible" [nzTitle]="modalTitle" [nzWidth]="800" [nzFooter]="modalFooter"
+    (nzOnCancel)="handleCancel()">
+
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="contractForm" nzLayout="vertical">
+            <div nz-row [nzGutter]="16">
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>合約編號</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入合約編號">
+                            <input nz-input formControlName="contractCode" placeholder="請輸入合約編號" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>客戶名稱</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入客戶名稱">
+                            <input nz-input formControlName="clientName" placeholder="請輸入客戶名稱" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>客戶代表</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入客戶代表">
+                            <input nz-input formControlName="clientRepresentative" placeholder="請輸入客戶代表" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>客戶窗口</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入客戶窗口">
+                            <input nz-input formControlName="contactPerson" placeholder="請輸入客戶窗口" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>合約名稱</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入合約名稱">
+                            <input nz-input formControlName="contractName" placeholder="請輸入合約名稱" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>總金額</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入總金額">
+                            <nz-input-number formControlName="amount" [nzMin]="0"
+                                [nzFormatter]="value => `NT$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                [nzParser]="value => value.replace(/NT\$\s?|(,*)/g, '')" nzPlaceHolder="請輸入總金額"
+                                style="width: 100%">
+                            </nz-input-number>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>版本</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入版本">
+                            <input nz-input formControlName="version" placeholder="如: V1.0" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>進度</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入進度">
+                            <nz-input-number formControlName="progress" [nzMin]="0" [nzMax]="100" nzPlaceHolder="0-100"
+                                style="width: 100%">
+                            </nz-input-number>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>狀態</nz-form-label>
+                        <nz-form-control>
+                            <nz-select formControlName="status">
+                                @for (option of statusOptions; track option.value) {
+                                <nz-option [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                                }
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-form-item>
+                        <nz-form-label>開始日期</nz-form-label>
+                        <nz-form-control>
+                            <nz-date-picker formControlName="startDate" style="width: 100%"></nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-form-item>
+                        <nz-form-label>結束日期</nz-form-label>
+                        <nz-form-control>
+                            <nz-date-picker formControlName="endDate" style="width: 100%"></nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label>專案經理</nz-form-label>
+                        <nz-form-control>
+                            <input nz-input formControlName="projectManager" placeholder="請輸入專案經理" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label>業務負責人</nz-form-label>
+                        <nz-form-control>
+                            <input nz-input formControlName="salesPerson" placeholder="請輸入業務負責人" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24">
+                    <nz-form-item>
+                        <nz-form-label>合約描述</nz-form-label>
+                        <nz-form-control>
+                            <textarea nz-input formControlName="description" rows="3" placeholder="請輸入合約描述"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+
+    <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+        <button nz-button nzType="primary" [nzLoading]="tableConfig.loading" (click)="saveContract()">
+            {{ editingContract ? '更新' : '新增' }}
+        </button>
+    </ng-template>
+</nz-modal>
+
+<ng-template #amountFormatter let-value>
+    {{ formatAmount(value) }}
+</ng-template>
