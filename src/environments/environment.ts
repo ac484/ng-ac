@@ -25,6 +25,11 @@ export const environment = {
     version: '1.0.0'
   },
 
+  // reCAPTCHA 配置
+  recaptcha: {
+    siteKey: '6LdMz5YrAAAAAJE130XrD8SxJ3Ijn2ZATV-BQQwo'
+  },
+
   // API 配置
   api: {
     baseUrl: localUrl,
