@@ -1,0 +1,37 @@
+<nz-card class="tab-container" [nzBodyStyle]="{ padding: 0 }" [nzBordered]="false">
+    <nz-tabset [nzHideAdd]="true" [nzSelectedIndex]="currentIndex" [nzTabBarStyle]="{ height: '40px' }"
+        [nzTabPosition]="'top'" [nzType]="'editable-card'" (nzClose)="clickCloseIcon($event)">
+
+        @for (tab of tabsSourceData$ | async; track trackByTab(i, tab); let i = $index) {
+        <nz-tab nzClosable [nzTitle]="tab.title" (nzClick)="goPage(tab)" (nzContextmenu)="contextMenu($event, menu)">
+
+            <!-- 右鍵菜單 -->
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                    <li nz-menu-item [nzDisabled]="router.url !== tab.path" (click)="refresh()">
+                        <i nz-icon nzType="reload"></i>
+                        <span>刷新</span>
+                    </li>
+                    <li nz-menu-item [nzDisabled]="tabsSourceData.length <= 1" (click)="closeTab(tab, $event, i)">
+                        <i nz-icon nzType="close"></i>
+                        <span>關閉標籤</span>
+                    </li>
+                    <li nz-menu-item [nzDisabled]="tabsSourceData.length <= 1" (click)="closeOtherTab(tab, $event, i)">
+                        <i nz-icon nzType="close-circle"></i>
+                        <span>關閉其他標籤</span>
+                    </li>
+                    <li nz-menu-item [nzDisabled]="tabsSourceData.length - 1 === i"
+                        (click)="closeRightTab(tab, $event, i)">
+                        <i nz-icon nzType="arrow-right"></i>
+                        <span>關閉右側標籤</span>
+                    </li>
+                    <li nz-menu-item [nzDisabled]="i === 0" (click)="closeLeftTab(tab, $event, i)">
+                        <i nz-icon nzType="arrow-left"></i>
+                        <span>關閉左側標籤</span>
+                    </li>
+                </ul>
+            </nz-dropdown-menu>
+        </nz-tab>
+        }
+    </nz-tabset>
+</nz-card>
