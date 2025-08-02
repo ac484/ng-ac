@@ -36,7 +36,7 @@ interface ClientWithExpand extends Client {
   template: `
     <form nz-form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="add-form">
       <nz-row nzGutter="16">
-        <nz-col nzSpan="6">
+        <nz-col nzSpan="8">
           <nz-form-item>
             <nz-form-label nzFor="clientCode">客戶編號</nz-form-label>
             <nz-form-control>
@@ -44,7 +44,7 @@ interface ClientWithExpand extends Client {
             </nz-form-control>
           </nz-form-item>
         </nz-col>
-        <nz-col nzSpan="6">
+        <nz-col nzSpan="8">
           <nz-form-item nzRequired>
             <nz-form-label nzFor="clientName">客戶名稱</nz-form-label>
             <nz-form-control nzErrorTip="請輸入客戶名稱">
@@ -52,15 +52,7 @@ interface ClientWithExpand extends Client {
             </nz-form-control>
           </nz-form-item>
         </nz-col>
-        <nz-col nzSpan="6">
-          <nz-form-item>
-            <nz-form-label nzFor="address">地址</nz-form-label>
-            <nz-form-control>
-              <input nz-input formControlName="address" id="address" />
-            </nz-form-control>
-          </nz-form-item>
-        </nz-col>
-        <nz-col nzSpan="6" class="form-action">
+        <nz-col nzSpan="8" class="form-action">
           <button nz-button nzType="primary" [disabled]="addForm.invalid">{{ editing ? '更新客戶' : '新增客戶' }}</button>
           <button nz-button (click)="onCancel()" *ngIf="editing" style="margin-left:8px;">取消</button>
         </nz-col>
@@ -73,8 +65,6 @@ interface ClientWithExpand extends Client {
           <th></th>
           <th>編號</th>
           <th>名稱</th>
-          <th>地址</th>
-          <th>產業</th>
           <th>狀態</th>
           <th>請款流程</th>
           <th>操作</th>
@@ -86,8 +76,6 @@ interface ClientWithExpand extends Client {
             <td [(nzExpand)]="client.expand"></td>
             <td>{{ client.clientCode }}</td>
             <td>{{ client.clientName }}</td>
-            <td>{{ client.address }}</td>
-            <td>{{ client.industry }}</td>
             <td>
               <nz-select [ngModel]="client.status" (ngModelChange)="updateStatus(client.id!, $event)" style="width: 100px;">
                 @for (o of statusOptions; track o.value) {
@@ -164,8 +152,6 @@ export class ClientsComponent implements OnInit {
     this.addForm = this.fb.group({
       clientCode: [{ value: this.clientService.generateClientCode(), disabled: true }],
       clientName: ['', Validators.required],
-      address: [''],
-      industry: [''],
       companySize: [''],
       status: ['active'],
       notes: [''],
@@ -220,8 +206,6 @@ export class ClientsComponent implements OnInit {
     this.addForm.patchValue({
       clientCode: client.clientCode,
       clientName: client.clientName,
-      address: client.address,
-      industry: client.industry,
       companySize: client.companySize,
       status: client.status,
       notes: client.notes,
@@ -270,8 +254,6 @@ export class ClientsComponent implements OnInit {
     this.addForm.reset({
       clientCode: this.clientService.generateClientCode(),
       clientName: '',
-      address: '',
-      industry: '',
       companySize: '',
       status: 'active',
       notes: '',
