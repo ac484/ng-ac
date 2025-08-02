@@ -102,11 +102,11 @@ export class ContractsComponent implements OnInit {
   // 統計數據
   contractStats = {
     total: 0,
+    draft: 0,
+    preparing: 0,
     active: 0,
     completed: 0,
-    cancelled: 0,
-    totalAmount: 0,
-    averageProgress: 0
+    totalAmount: 0
   };
 
   // 頁面配置
@@ -268,8 +268,8 @@ export class ContractsComponent implements OnInit {
     // 構建查詢條件
     const searchConditions = this.buildSearchConditions();
     
-    this.contractService.getAll(searchConditions).subscribe({
-      next: (contracts) => {
+    this.contractService.queryContracts(searchConditions).subscribe({
+      next: (contracts: Contract[]) => {
         console.log('✅ Firestore 查詢成功:', contracts);
         this.contractList = contracts;
         this.tableConfig.total = contracts.length;
@@ -280,7 +280,7 @@ export class ContractsComponent implements OnInit {
           this.message.info('目前沒有合約資料，可以開始新增合約');
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('❌ Firestore 查詢失敗:', error);
         this.handleFirestoreError(error);
         this.contractList = [];
@@ -301,17 +301,17 @@ export class ContractsComponent implements OnInit {
         this.contractStats = stats;
         this.cdr.markForCheck();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('❌ 統計數據載入失敗:', error);
         this.handleFirestoreError(error);
         // 設置預設值
         this.contractStats = {
           total: 0,
+          draft: 0,
+          preparing: 0,
           active: 0,
           completed: 0,
-          cancelled: 0,
-          totalAmount: 0,
-          averageProgress: 0
+          totalAmount: 0
         };
         this.cdr.markForCheck();
       }
@@ -499,13 +499,16 @@ export class ContractsComponent implements OnInit {
 
   // 更新進度
   updateProgress(contract: Contract, progress: number): void {
-    this.contractService.updateProgress(contract.id!, progress).subscribe({
+    this.contractService.update(contract.id!, {
+      progress,
+      status: progress >= 100 ? 'completed' : 'active'
+    }).subscribe({
       next: () => {
         this.message.success('進度更新成功');
         this.loadContracts();
         this.loadStats();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('更新進度失敗:', error);
         this.message.error('更新進度失敗');
       }
