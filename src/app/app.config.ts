@@ -8,8 +8,7 @@ import { provideRouter, RouteReuseStrategy, TitleStrategy, withComponentInputBin
 // Firebase 相關導入
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { initializeAppCheck, provideAppCheck } from '@angular/fire/app-check';
-import { ReCaptchaEnterpriseProvider } from '@angular/fire/app-check';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
@@ -17,6 +16,8 @@ import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
+
 
 import { DashboardOutline, FormOutline, MenuFoldOutline, MenuUnfoldOutline } from '@ant-design/icons-angular/icons';
 import { appRoutes } from '@app/app-routing';
@@ -172,5 +173,7 @@ export const appConfig: ApplicationConfig = {
     providePerformance(() => getPerformance()), // 性能监控
     provideStorage(() => getStorage()), // 文件存储
     provideRemoteConfig(() => getRemoteConfig()) // 远程配置
+    provideVertexAI(() => getVertexAI()) // Vertex AI 服務
+
   ]
 };
