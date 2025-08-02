@@ -1,4 +1,4 @@
-import { NgClass, NgStyle, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
@@ -24,8 +24,6 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
     NzDropDownModule, 
     NzMenuModule, 
     NzButtonModule, 
-    NgClass, 
-    NgStyle, 
     NzIconModule, 
     AsyncPipe
   ]

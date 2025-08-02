@@ -1,5 +1,6 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, NgZone, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, NgZone } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DecimalPipe } from '@angular/common';
 
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
@@ -13,7 +14,6 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 interface DataItem {
@@ -30,12 +30,12 @@ interface DataItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
+    DecimalPipe,
     NzCardModule,
     NzBreadCrumbModule,
     NzGridModule,
     NzIconModule,
     NzButtonModule,
-    NzToolTipModule,
     NzDividerModule,
     NzTabsModule,
     NzBadgeModule,
