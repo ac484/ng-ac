@@ -42,14 +42,14 @@ export class ClientsComponent implements OnInit {
 
   // 請款流程選項
   paymentFlowOptions = [
-    { key: PaymentFlowStatus.DRAFT, title: '草稿' },
-    { key: PaymentFlowStatus.SUBMITTED, title: '已提交' },
-    { key: PaymentFlowStatus.REVIEWING, title: '審核中' },
-    { key: PaymentFlowStatus.APPROVED, title: '已核准' },
-    { key: PaymentFlowStatus.REJECTED, title: '已拒絕' },
-    { key: PaymentFlowStatus.PROCESSING, title: '處理中' },
-    { key: PaymentFlowStatus.COMPLETED, title: '已完成' },
-    { key: PaymentFlowStatus.CANCELLED, title: '已取消' }
+    { key: PaymentFlowStatus.DRAFT, title: '草稿', disabled: false },
+    { key: PaymentFlowStatus.SUBMITTED, title: '已提交', disabled: false },
+    { key: PaymentFlowStatus.REVIEWING, title: '審核中', disabled: false },
+    { key: PaymentFlowStatus.APPROVED, title: '已核准', disabled: false },
+    { key: PaymentFlowStatus.REJECTED, title: '已拒絕', disabled: false },
+    { key: PaymentFlowStatus.PROCESSING, title: '處理中', disabled: false },
+    { key: PaymentFlowStatus.COMPLETED, title: '已完成', disabled: false },
+    { key: PaymentFlowStatus.CANCELLED, title: '已取消', disabled: false }
   ];
 
   // 當前選中的請款流程
@@ -155,10 +155,14 @@ export class ClientsComponent implements OnInit {
     return client.paymentFlow || [];
   }
 
-  // 獲取可選的請款流程選項
-  getAvailablePaymentFlows(client: Client): Array<{ key: PaymentFlowStatus; title: string }> {
+  // 獲取客戶的請款流程選項
+  getClientPaymentFlowOptions(client: Client): Array<{ key: PaymentFlowStatus; title: string; disabled: boolean }> {
     const currentFlows = this.getClientPaymentFlows(client);
-    return this.paymentFlowOptions.filter(option => !currentFlows.includes(option.key));
+    // 左邊顯示已選項目，右邊顯示可選項目
+    return this.paymentFlowOptions.map(option => ({
+      ...option,
+      disabled: !currentFlows.includes(option.key) // 已選的項目在左邊，未選的在右邊
+    }));
   }
 
   onCancel(): void {
