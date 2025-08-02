@@ -32,6 +32,7 @@ import { SubLockedStatusService } from '@core/services/common/sub-locked-status.
 import { SubWindowWithService } from '@core/services/common/sub-window-with.service';
 import { ThemeSkinService } from '@core/services/common/theme-skin.service';
 import { StartupService } from '@core/startup/startup.service';
+import { FirebaseInitService } from '@core/services/firebase/firebase-init.service';
 import { environment } from '@env/environment';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
@@ -64,7 +65,31 @@ export function SubWindowWithServiceFactory(subWindowWithService: SubWindowWithS
   return () => subWindowWithService.subWindowWidth();
 }
 
+// Firebase App Check 初始化
+export function FirebaseInitServiceFactory(firebaseInitService: FirebaseInitService) {
+  return async (): Promise<void> => {
+    try {
+      await firebaseInitService.initializeAppCheck();
+    } catch (error) {
+      // 在開發環境中，App Check 錯誤不應該阻止應用啟動
+      if (!environment.production) {
+        console.warn('🔥 開發環境中 App Check 初始化失敗，繼續啟動應用:', error);
+        return;
+      }
+      // 生產環境中重新拋出錯誤
+      throw error;
+    }
+  };
+}
+
 const APPINIT_PROVIDERS = [
+  // Firebase App Check 初始化 - 必須在其他 Firebase 服務之前初始化
+  {
+    provide: APP_INITIALIZER,
+    useFactory: FirebaseInitServiceFactory,
+    deps: [FirebaseInitService],
+    multi: true
+  },
   // 项目启动
   {
     provide: APP_INITIALIZER,

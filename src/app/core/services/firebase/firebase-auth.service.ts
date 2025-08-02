@@ -3,6 +3,7 @@ import { Auth, User, authState, signInAnonymously, signInWithPopup, GoogleAuthPr
 import { BehaviorSubject, interval, Subscription } from 'rxjs';
 import { map, switchMap, filter } from 'rxjs/operators';
 import { WindowService } from '@core/services/common/window.service';
+import { FirebaseInitService } from './firebase-init.service';
 import { TokenKey, TokenPre } from '@config/constant';
 
 export interface FirebaseUserInfo {
@@ -20,6 +21,7 @@ export interface FirebaseUserInfo {
 export class FirebaseAuthService {
     private auth = inject(Auth);
     private windowService = inject(WindowService);
+    private firebaseInitService = inject(FirebaseInitService);
     private currentUserSubject = new BehaviorSubject<FirebaseUserInfo | null>(null);
     private tokenRefreshSubscription?: Subscription;
 
@@ -69,14 +71,19 @@ export class FirebaseAuthService {
      */
     async signInAnonymously(): Promise<{ user: User; idToken: string; compatibleToken: string }> {
         try {
+            // 確保 App Check 已經準備好
+            await this.ensureAppCheckReady();
+
             const userCredential = await signInAnonymously(this.auth);
             const user = userCredential.user;
             const idToken = await user.getIdToken();
             const compatibleToken = this.createCompatibleJWT(user);
 
+            console.log('🔥 Firebase 匿名登入成功:', { uid: user.uid });
+
             return { user, idToken, compatibleToken };
         } catch (error) {
-            console.error('Firebase 匿名登入失敗:', error);
+            console.error('🔥 Firebase 匿名登入失敗:', error);
             throw error;
         }
     }
@@ -86,19 +93,43 @@ export class FirebaseAuthService {
      */
     async signInWithGoogle(): Promise<{ user: User; idToken: string; compatibleToken: string }> {
         try {
+            // 確保 App Check 已經準備好
+            await this.ensureAppCheckReady();
+
             const provider = new GoogleAuthProvider();
             // 設置 Google 登入的範圍
             provider.addScope('profile');
             provider.addScope('email');
+
+            // 設置自定義參數以避免某些錯誤
+            provider.setCustomParameters({
+                'prompt': 'select_account'
+            });
 
             const userCredential = await signInWithPopup(this.auth, provider);
             const user = userCredential.user;
             const idToken = await user.getIdToken();
             const compatibleToken = this.createCompatibleJWT(user);
 
+            console.log('🔥 Firebase Google 登入成功:', {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName
+            });
+
             return { user, idToken, compatibleToken };
         } catch (error) {
-            console.error('Firebase Google 登入失敗:', error);
+            console.error('🔥 Firebase Google 登入失敗:', error);
+
+            // 提供更詳細的錯誤信息
+            if (error instanceof Error) {
+                console.error('🔥 錯誤詳情:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+            }
+
             throw error;
         }
     }
@@ -252,6 +283,24 @@ export class FirebaseAuthService {
         const signature = btoa('firebase-mock-signature').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 
         return `${headerEncoded}.${payloadEncoded}.${signature}`;
+    }
+
+    /**
+     * 確保 App Check 已經準備好
+     * 在進行任何需要 App Check 保護的 Firebase 操作之前調用
+     */
+    private async ensureAppCheckReady(): Promise<void> {
+        try {
+            const isReady = await this.firebaseInitService.isAppCheckReady();
+            if (!isReady) {
+                console.warn('🔥 App Check 尚未準備好，嘗試重新初始化...');
+                await this.firebaseInitService.initializeAppCheck();
+            }
+        } catch (error) {
+            console.error('🔥 確保 App Check 準備狀態時發生錯誤:', error);
+            // 在開發環境中，不阻止認證操作
+            // 在生產環境中，你可能想要更嚴格的處理
+        }
     }
 
     /**
