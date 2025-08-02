@@ -70,9 +70,11 @@
 </form>
 <div class="other">
   {{ 'app.login.sign-in-with' | i18n }}
-  <!-- Firebase 認證組件 -->
-  <app-google-auth></app-google-auth>
-  <app-email-login></app-email-login>
-  <app-anonymous-login></app-anonymous-login>
+  <!-- Firebase 認證圖示 - 完整流程 -->
+  <i nz-tooltip nzTooltipTitle="Google 登入" (click)="openFirebase('google')" nz-icon nzType="google" class="icon"
+    [class.loading]="firebaseLoading"></i>
+  <i nz-tooltip nzTooltipTitle="郵箱登入" (click)="openFirebase('email')" nz-icon nzType="mail" class="icon"></i>
+  <i nz-tooltip nzTooltipTitle="匿名登入" (click)="openFirebase('anonymous')" nz-icon nzType="user" class="icon"
+    [class.loading]="firebaseLoading"></i>
   <a class="register" routerLink="/passport/register">{{ 'app.login.signup' | i18n }}</a>
 </div>

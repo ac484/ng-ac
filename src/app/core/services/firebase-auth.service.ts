@@ -48,7 +48,7 @@ export class FirebaseAuthService {
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
   private readonly message = inject(NzMessageService);
-  private readonly socialService = inject(SocialService);
+  private readonly socialService = inject(SocialService, { optional: true });
   private readonly tokenService = inject(DA_SERVICE_TOKEN);
   private readonly settingsService = inject(SettingsService);
   private readonly startupService = inject(StartupService);
@@ -282,8 +282,10 @@ export class FirebaseAuthService {
       // 設置 token 到 @delon/auth
       this.tokenService.set(tokenModel);
 
-      // 調用 @delon/auth 的 social service callback
-      this.socialService.callback(tokenModel);
+      // 調用 @delon/auth 的 social service callback（如果可用）
+      if (this.socialService) {
+        this.socialService.callback(tokenModel);
+      }
 
       // 重新獲取 StartupService 內容
       this.startupService.load().subscribe(() => {

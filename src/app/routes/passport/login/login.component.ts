@@ -17,10 +17,8 @@ import { NzTabChangeEvent, NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { finalize } from 'rxjs';
 
-// Firebase 認證組件
-import { AnonymousLoginComponent } from '../anonymous-login/anonymous-login.component';
-import { EmailLoginComponent } from '../email-login/email-login.component';
-import { GoogleAuthComponent } from '../google-auth/google-auth.component';
+// Firebase 認證服務
+import { FirebaseAuthService } from '../../../core/services/firebase-auth.service';
 
 @Component({
   selector: 'passport-login',
@@ -39,11 +37,7 @@ import { GoogleAuthComponent } from '../google-auth/google-auth.component';
     NzInputModule,
     NzButtonModule,
     NzToolTipModule,
-    NzIconModule,
-    // Firebase 認證組件
-    AnonymousLoginComponent,
-    EmailLoginComponent,
-    GoogleAuthComponent
+    NzIconModule
   ]
 })
 export class UserLoginComponent implements OnDestroy {
@@ -55,6 +49,7 @@ export class UserLoginComponent implements OnDestroy {
   private readonly startupSrv = inject(StartupService);
   private readonly http = inject(_HttpClient);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly firebaseAuthService = inject(FirebaseAuthService);
 
   form = inject(FormBuilder).nonNullable.group({
     userName: ['', [Validators.required, Validators.pattern(/^(admin|user)$/)]],
@@ -69,6 +64,9 @@ export class UserLoginComponent implements OnDestroy {
 
   count = 0;
   interval$: any;
+
+  // Firebase 認證狀態
+  firebaseLoading = false;
 
   switch({ index }: NzTabChangeEvent): void {
     this.type = index!;
@@ -194,6 +192,67 @@ export class UserLoginComponent implements OnDestroy {
       this.socialService.login(url, '/', {
         type: 'href'
       });
+    }
+  }
+
+  /**
+   * Firebase 認證處理方法
+   * 流程：UI組件 → firebase-auth.service.ts → callback.component.ts
+   */
+  openFirebase(type: string): void {
+    if (this.firebaseLoading) return;
+
+    this.error = '';
+    this.firebaseLoading = true;
+    this.cdr.detectChanges();
+
+    switch (type) {
+      case 'google':
+        this.firebaseAuthService.signInWithGoogle().subscribe({
+          next: (result) => {
+            if (result.success) {
+              // 登入成功，跳轉到 callback.component.ts 處理
+              this.router.navigateByUrl('/passport/callback/firebase');
+            } else {
+              this.error = result.message || 'Google 登入失敗';
+              this.firebaseLoading = false;
+              this.cdr.detectChanges();
+            }
+          },
+          error: (error) => {
+            this.error = 'Google 登入失敗，請稍後再試';
+            this.firebaseLoading = false;
+            this.cdr.detectChanges();
+          }
+        });
+        break;
+
+      case 'anonymous':
+        this.firebaseAuthService.signInAnonymously().subscribe({
+          next: (result) => {
+            if (result.success) {
+              // 登入成功，跳轉到 callback.component.ts 處理
+              this.router.navigateByUrl('/passport/callback/firebase');
+            } else {
+              this.error = result.message || '匿名登入失敗';
+              this.firebaseLoading = false;
+              this.cdr.detectChanges();
+            }
+          },
+          error: (error) => {
+            this.error = '匿名登入失敗，請稍後再試';
+            this.firebaseLoading = false;
+            this.cdr.detectChanges();
+          }
+        });
+        break;
+
+      case 'email':
+        // 郵箱登入通過模態框處理
+        this.firebaseLoading = false;
+        this.cdr.detectChanges();
+        // TODO: 實現郵箱登入模態框
+        break;
     }
   }
 
