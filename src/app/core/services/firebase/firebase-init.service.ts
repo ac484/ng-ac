@@ -16,9 +16,9 @@ export class FirebaseInitService {
             console.log('🔥 開始初始化 Firebase App Check...');
 
             // 等待 App Check 獲取第一個令牌
-            const token = await getToken(this.appCheck);
+            const tokenResult = await getToken(this.appCheck);
 
-            if (token) {
+            if (tokenResult && tokenResult.token) {
                 console.log('🔥 App Check 初始化成功，令牌已獲取');
             } else {
                 console.warn('🔥 App Check 初始化完成，但未獲取到令牌');
@@ -46,8 +46,8 @@ export class FirebaseInitService {
      */
     async isAppCheckReady(): Promise<boolean> {
         try {
-            const token = await getToken(this.appCheck);
-            return !!token;
+            const tokenResult = await getToken(this.appCheck);
+            return !!(tokenResult && tokenResult.token);
         } catch (error) {
             console.error('🔥 檢查 App Check 狀態失敗:', error);
             return false;
