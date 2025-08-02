@@ -15,6 +15,7 @@ import { CELL_WIDGETS, ST_WIDGETS, SF_WIDGETS } from '@shared';
 import { zhTW as dateLang } from 'date-fns/locale';
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 import { zh_TW as zorroLang, provideNzI18n } from 'ng-zorro-antd/i18n';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 import { provideBindAuthRefresh } from './core/net';
 import { routes } from './routes/routes';
@@ -117,6 +118,9 @@ export const appConfig: ApplicationConfig = {
     
     // Forms module
     importProvidersFrom(FormsModule),
+    
+    // Google Maps module
+    importProvidersFrom(GoogleMapsModule),
     
     // Firebase providers
     ...firebaseProviders,

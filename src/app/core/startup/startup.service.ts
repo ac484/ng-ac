@@ -109,13 +109,28 @@ export class StartupService {
     // Menu data, https://ng-alain.com/theme/menu
     this.menuService.add([
       {
-        text: 'Main',
+        text: 'Dashboard',
         group: true,
         children: [
           {
-            text: 'Dashboard',
-            link: '/dashboard',
-            icon: { type: 'icon', value: 'appstore' }
+            text: '工作臺',
+            link: '/dashboard/workbench',
+            icon: { type: 'icon', value: 'dashboard' }
+          },
+          {
+            text: '監控頁',
+            link: '/dashboard/monitor',
+            icon: { type: 'icon', value: 'monitor' }
+          },
+          {
+            text: '分析頁',
+            link: '/dashboard/analysis',
+            icon: { type: 'icon', value: 'bar-chart' }
+          },
+          {
+            text: '合約管理',
+            link: '/dashboard/contracts',
+            icon: { type: 'icon', value: 'file-text' }
           }
         ]
       }
