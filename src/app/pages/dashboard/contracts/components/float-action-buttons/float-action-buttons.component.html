@@ -1,0 +1,10 @@
+<nz-float-button-group nzShape="circle" nzTrigger="hover">
+    <nz-float-button 
+        *ngFor="let button of buttons" 
+        [nzType]="button.type || 'default'"
+        nzTheme="dark"
+        [nzTooltip]="button.tooltip"
+        (click)="onButtonClick(button.key)">
+        <span nz-icon [nzType]="button.icon" nzTheme="outline"></span>
+    </nz-float-button>
+</nz-float-button-group>
