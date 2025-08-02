@@ -192,14 +192,14 @@
                                     <span>進度: {{ contract.progress }}%</span>
                                 </nz-list-item-action>
                                 }
-                                @if (contract.status === 'active' && contract.progress !== undefined && contract.progress < 100) {
-                                <nz-list-item-action>
+                                @if (contract.status === 'active' && contract.progress !== undefined &&
+                                contract.progress < 100) { <nz-list-item-action>
                                     <button nz-button nzType="link" nzSize="small"
                                         (click)="updateContractProgress(contract.id!, contract.progress! + 10)">
                                         +10%
                                     </button>
-                                </nz-list-item-action>
-                                }
+                                    </nz-list-item-action>
+                                    }
                             </ul>
                         </nz-list-item>
                         }

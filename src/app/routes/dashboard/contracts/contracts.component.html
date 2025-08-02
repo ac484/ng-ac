@@ -176,8 +176,7 @@
     <!--進度模板-->
     <ng-template #progressTpl let-progress="progress" let-status="status">
         <div class="flex items-center">
-            <nz-progress [nzPercent]="progress" nzSize="small"
-                [nzStatus]="progress === 100 ? 'success' : 'active'"
+            <nz-progress [nzPercent]="progress" nzSize="small" [nzStatus]="progress === 100 ? 'success' : 'active'"
                 class="mr-8">
             </nz-progress>
             <span class="text-xs">{{ progress }}%</span>
