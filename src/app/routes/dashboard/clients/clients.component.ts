@@ -9,7 +9,9 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzTransferModule, TransferChange } from 'ng-zorro-antd/transfer';
+import { NzTransferModule, TransferChange, TransferItem } from 'ng-zorro-antd/transfer';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'app-clients',
@@ -24,7 +26,9 @@ import { NzTransferModule, TransferChange } from 'ng-zorro-antd/transfer';
     NzSelectModule,
     NzButtonModule,
     NzTableModule,
-    NzTransferModule
+    NzTransferModule,
+    NzIconModule,
+    NzTagModule
   ],
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.less']
@@ -40,17 +44,9 @@ export class ClientsComponent implements OnInit {
     { label: '停用', value: 'inactive' }
   ];
 
-  // 請款流程選項
-  paymentFlowOptions = [
-    { key: PaymentFlowStatus.DRAFT, title: '草稿', disabled: false },
-    { key: PaymentFlowStatus.SUBMITTED, title: '已提交', disabled: false },
-    { key: PaymentFlowStatus.REVIEWING, title: '審核中', disabled: false },
-    { key: PaymentFlowStatus.APPROVED, title: '已核准', disabled: false },
-    { key: PaymentFlowStatus.REJECTED, title: '已拒絕', disabled: false },
-    { key: PaymentFlowStatus.PROCESSING, title: '處理中', disabled: false },
-    { key: PaymentFlowStatus.COMPLETED, title: '已完成', disabled: false },
-    { key: PaymentFlowStatus.CANCELLED, title: '已取消', disabled: false }
-  ];
+  // 請款流程選項 - 使用TransferItem格式
+  paymentFlowOptions: TransferItem[] = [];
+  $asTransferItems = (data: unknown): TransferItem[] => data as TransferItem[];
 
   // 當前選中的請款流程
   selectedPaymentFlows: PaymentFlowStatus[] = [];
@@ -73,6 +69,32 @@ export class ClientsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadClients();
+    this.initPaymentFlowOptions();
+  }
+
+  // 初始化請款流程選項
+  initPaymentFlowOptions(): void {
+    const flowOptions = [
+      { key: PaymentFlowStatus.DRAFT, title: '草稿', description: '初始草稿狀態', order: 1 },
+      { key: PaymentFlowStatus.SUBMITTED, title: '已提交', description: '已提交審核', order: 2 },
+      { key: PaymentFlowStatus.REVIEWING, title: '審核中', description: '正在審核中', order: 3 },
+      { key: PaymentFlowStatus.APPROVED, title: '已核准', description: '審核已通過', order: 4 },
+      { key: PaymentFlowStatus.REJECTED, title: '已拒絕', description: '審核被拒絕', order: 5 },
+      { key: PaymentFlowStatus.PROCESSING, title: '處理中', description: '正在處理中', order: 6 },
+      { key: PaymentFlowStatus.COMPLETED, title: '已完成', description: '流程已完成', order: 7 },
+      { key: PaymentFlowStatus.CANCELLED, title: '已取消', description: '流程已取消', order: 8 }
+    ];
+
+    // 按順序排序並轉換為TransferItem格式
+    this.paymentFlowOptions = flowOptions
+      .sort((a, b) => a.order - b.order)
+      .map(option => ({
+        key: option.key,
+        title: option.title,
+        description: option.description,
+        disabled: false,
+        checked: false
+      }));
   }
 
   loadClients(): void {
@@ -155,22 +177,18 @@ export class ClientsComponent implements OnInit {
     return client.paymentFlow || [];
   }
 
+  // 新增請款流程選項
+  addPaymentFlowOption(): void {
+    console.log('新增請款流程選項');
+    // TODO: 實現彈窗表單來新增請款流程選項
+  }
+
   // 獲取可選的請款流程（未選中的項目）
   getAvailablePaymentFlows(client: Client): PaymentFlowStatus[] {
     const selectedFlows = this.getClientPaymentFlows(client);
     return this.paymentFlowOptions
-      .map(option => option.key)
+      .map(option => option['key'])
       .filter(key => !selectedFlows.includes(key));
-  }
-
-  // 獲取客戶的請款流程選項
-  getClientPaymentFlowOptions(client: Client): Array<{ key: PaymentFlowStatus; title: string; disabled: boolean }> {
-    const currentFlows = this.getClientPaymentFlows(client);
-    // 左邊顯示已選項目，右邊顯示可選項目
-    return this.paymentFlowOptions.map(option => ({
-      ...option,
-      disabled: !currentFlows.includes(option.key) // 已選的項目在左邊，未選的在右邊
-    }));
   }
 
   onCancel(): void {
