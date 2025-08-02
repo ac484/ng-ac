@@ -61,32 +61,72 @@ const routerFeatures: RouterFeatures[] = [
 ];
 if (environment.useHash) routerFeatures.push(withHashLocation());
 
-const providers: Array<Provider | EnvironmentProviders> = [
-  provideHttpClient(withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, defaultInterceptor])),
-  provideAnimations(),
-  provideRouter(routes, ...routerFeatures),
-  provideAlain({ config: alainConfig, defaultLang, i18nClass: I18NService, icons: [...ICONS_AUTO, ...ICONS] }),
-  provideNzConfig(ngZorroConfig),
-  provideAuth(),
-  provideCellWidgets(...CELL_WIDGETS),
-  provideSTWidgets(...ST_WIDGETS),
-  provideSFConfig({
-    widgets: [...SF_WIDGETS]
+
+
+// Firebase providers
+const firebaseProviders: Array<Provider | EnvironmentProviders> = [
+  provideFirebaseApp(() => initializeApp({ 
+    projectId: "ng-acc", 
+    appId: "1:289956121604:web:4dd9d608a2db962aeaf951", 
+    storageBucket: "ng-acc.firebasestorage.app", 
+    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", 
+    authDomain: "ng-acc.firebaseapp.com", 
+    messagingSenderId: "289956121604", 
+    measurementId: "G-6YM5S9LCNV" 
+  })),
+  provideAuth_alias(() => getAuth()),
+  provideAnalytics(() => getAnalytics()),
+  ScreenTrackingService,
+  UserTrackingService,
+  provideAppCheck(() => {
+    // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
+    const provider = new ReCaptchaEnterpriseProvider('6Lfet5crAAAAAFDXayzMocp-GhB88FewdQ8Z9E69');
+    return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
   }),
-  provideStartup(),
-  ...(environment.providers || [])
+  provideFirestore(() => getFirestore()),
+  provideFunctions(() => getFunctions()),
+  provideMessaging(() => getMessaging()),
+  providePerformance(() => getPerformance()),
+  provideStorage(() => getStorage()),
+  provideRemoteConfig(() => getRemoteConfig()),
+  provideVertexAI(() => getVertexAI())
 ];
 
-// If you use `@delon/auth` to refresh the token, additional registration `provideBindAuthRefresh` is required
-if (environment.api?.refreshTokenEnabled && environment.api.refreshTokenType === 'auth-refresh') {
-  providers.push(provideBindAuthRefresh());
-}
-
 export const appConfig: ApplicationConfig = {
-  providers: providers,
-  providers: [provideNzIcons(icons), provideNzI18n(zh_TW), importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient(), provideFirebaseApp(() => initializeApp({ projectId: "ng-acc", appId: "1:289956121604:web:4dd9d608a2db962aeaf951", storageBucket: "ng-acc.firebasestorage.app", apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", authDomain: "ng-acc.firebaseapp.com", messagingSenderId: "289956121604", measurementId: "G-6YM5S9LCNV" })), provideAuth_alias(() => getAuth()), provideAnalytics(() => getAnalytics()), ScreenTrackingService, UserTrackingService, provideAppCheck(() => {
-  // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
-  const provider = new ReCaptchaEnterpriseProvider('6Lfet5crAAAAAFDXayzMocp-GhB88FewdQ8Z9E69');
-  return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
-}), provideFirestore(() => getFirestore()), provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig()), provideVertexAI(() => getVertexAI())]
+  providers: [
+    // Core Angular providers
+    provideHttpClient(withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, defaultInterceptor])),
+    provideAnimations(),
+    provideAnimationsAsync(),
+    provideRouter(routes, ...routerFeatures),
+    
+    // ng-zorro-antd providers
+    provideNzIcons(icons),
+    provideNzI18n(zorroLang),
+    provideNzConfig(ngZorroConfig),
+    
+    // ng-alain providers
+    provideAlain({ config: alainConfig, defaultLang, i18nClass: I18NService, icons: [...ICONS_AUTO, ...ICONS] }),
+    provideAuth(),
+    provideCellWidgets(...CELL_WIDGETS),
+    provideSTWidgets(...ST_WIDGETS),
+    provideSFConfig({
+      widgets: [...SF_WIDGETS]
+    }),
+    provideStartup(),
+    
+    // Forms module
+    importProvidersFrom(FormsModule),
+    
+    // Firebase providers
+    ...firebaseProviders,
+    
+    // Environment specific providers
+    ...(environment.providers || []),
+    
+    // Auth refresh provider (conditional)
+    ...(environment.api?.refreshTokenEnabled && environment.api.refreshTokenType === 'auth-refresh' 
+      ? [provideBindAuthRefresh()] 
+      : [])
+  ]
 };
