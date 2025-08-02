@@ -129,7 +129,7 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({
         scrollPositionRestoration: 'top'
       }),
-      withHashLocation(), // 使用哈希路由
+      ...(environment.useHash ? [withHashLocation()] : []), // 根據環境配置決定是否使用哈希路由
       withComponentInputBinding() // 开启路由参数绑定到组件的输入属性,ng16新增特性
     ),
     importProvidersFrom(NzDrawerModule, NzModalModule),
@@ -138,18 +138,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(), // 开启延迟加载动画，ng17新增特性，如果想要项目启动时就加载动画，可以使用provideAnimations()
     provideHttpClient(withInterceptorsFromDi()),
 
-    // Firebase 配置
-    provideFirebaseApp(() =>
-      initializeApp({
-        projectId: environment.firebase.projectId,
-        appId: environment.firebase.appId,
-        storageBucket: environment.firebase.storageBucket,
-        apiKey: environment.firebase.apiKey,
-        authDomain: environment.firebase.authDomain,
-        messagingSenderId: environment.firebase.messagingSenderId,
-        measurementId: environment.firebase.measurementId
-      })
-    ),
+    // Firebase 配置 - 使用完整的 Firebase 配置對象
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
 
     // Firebase 核心服务
     provideAuth(() => getAuth()), // 认证服务
@@ -157,7 +147,7 @@ export const appConfig: ApplicationConfig = {
     ScreenTrackingService, // 屏幕追踪服务
     UserTrackingService, // 用户追踪服务
 
-    // Firebase App Check 強制模式 - 提供最高安全性
+    // Firebase App Check 強制模式 - 開發和生產環境都啟用
     provideAppCheck(() => {
       const provider = new ReCaptchaEnterpriseProvider(environment.recaptcha.siteKey);
       return initializeAppCheck(undefined, {
