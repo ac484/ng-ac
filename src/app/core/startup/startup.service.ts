@@ -137,6 +137,16 @@ export class StartupService {
             link: '/dashboard/workbench',
             icon: { type: 'icon', value: 'dashboard' }
           },
+          {
+            text: 'Client',
+            link: '/dashboard/client',
+            icon: { type: 'icon', value: 'dashboard' }
+          },
+          {
+            text: 'Firestore 範例',
+            link: '/dashboard/firestore-demo',
+            icon: { type: 'icon', value: 'dashboard' }
+          }
         ]
       }
     ]);
