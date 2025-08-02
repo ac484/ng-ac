@@ -226,17 +226,26 @@
                 </div>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label nzRequired>客戶名稱</nz-form-label>
-                        <nz-form-control nzErrorTip="請輸入客戶名稱">
-                            <input nz-input formControlName="clientName" placeholder="請輸入客戶名稱" />
+                        <nz-form-label nzRequired>客戶</nz-form-label>
+                        <nz-form-control nzErrorTip="請選擇客戶">
+                            <nz-select formControlName="clientId" nzPlaceHolder="請選擇客戶">
+                                @for (client of clientList; track client.id) {
+                                <nz-option [nzValue]="client.id" [nzLabel]="client.clientName"></nz-option>
+                                }
+                            </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
                         <nz-form-label nzRequired>專案經理</nz-form-label>
-                        <nz-form-control nzErrorTip="請輸入專案經理">
-                            <input nz-input formControlName="projectManager" placeholder="請輸入專案經理" />
+                        <nz-form-control nzErrorTip="請選擇專案經理">
+                            <nz-select formControlName="contactId" nzPlaceHolder="請選擇專案經理" 
+                                (ngModelChange)="onContactChange($event)">
+                                @for (contact of contactList; track contact.id) {
+                                <nz-option [nzValue]="contact.id" [nzLabel]="contact.name"></nz-option>
+                                }
+                            </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                 </div>

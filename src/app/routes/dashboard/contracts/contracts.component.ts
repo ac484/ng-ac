@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { CommonModule } from '@angular/common';
 
 import { ContractService, Contract } from '../../../core/services/firestore/contract.service';
+import { ClientService, Client, ContactInfo } from '../../../core/services/firestore/client.service';
 import { AntTableConfig, SortFile, AntTableComponent } from '../../../shared/components/ant-table/ant-table.component';
 import { CardTableWrapComponent } from '../../../shared/components/card-table-wrap/card-table-wrap.component';
 import { PageHeaderType, PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
@@ -99,6 +100,10 @@ export class ContractsComponent implements OnInit {
   contractList: Contract[] = [];
   checkedCashArray: Contract[] = [];
   
+  // 客戶和聯絡人數據
+  clientList: Client[] = [];
+  contactList: ContactInfo[] = [];
+  
   // 統計數據
   contractStats = {
     total: 0,
@@ -134,10 +139,12 @@ export class ContractsComponent implements OnInit {
   private message = inject(NzMessageService);
   private modal = inject(NzModalService);
   private contractService = inject(ContractService);
+  private clientService = inject(ClientService);
 
   ngOnInit(): void {
     this.initForms();
     this.initTable();
+    this.loadClients();
     this.loadContracts();
     this.loadStats();
   }
@@ -156,13 +163,79 @@ export class ContractsComponent implements OnInit {
     // 合約表單
     this.contractForm = this.fb.group({
       contractCode: ['', [Validators.required]],
+      clientId: ['', [Validators.required]],
       clientName: ['', [Validators.required]],
+      contactId: ['', [Validators.required]],
       projectManager: ['', [Validators.required]],
       contractName: ['', [Validators.required]],
       totalAmount: [null, [Validators.required, Validators.min(0)]],
       progress: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       status: ['active', [Validators.required]],
       description: ['']
+    });
+
+    // 監聽客戶選擇變化
+    this.contractForm.get('clientId')?.valueChanges.subscribe(clientId => {
+      this.onClientChange(clientId);
+    });
+  }
+
+  // 客戶選擇變化處理
+  onClientChange(clientId: string): void {
+    if (clientId) {
+      const selectedClient = this.clientList.find(client => client.id === clientId);
+      if (selectedClient) {
+        // 更新客戶名稱
+        this.contractForm.patchValue({
+          clientName: selectedClient.clientName
+        });
+        
+        // 更新聯絡人列表
+        this.contactList = selectedClient.contacts || [];
+        
+        // 清空聯絡人選擇
+        this.contractForm.patchValue({
+          contactId: '',
+          projectManager: ''
+        });
+      }
+    } else {
+      this.contactList = [];
+      this.contractForm.patchValue({
+        clientName: '',
+        contactId: '',
+        projectManager: ''
+      });
+    }
+  }
+
+  // 聯絡人選擇變化處理
+  onContactChange(contactId: string): void {
+    if (contactId) {
+      const selectedContact = this.contactList.find(contact => contact.id === contactId);
+      if (selectedContact) {
+        this.contractForm.patchValue({
+          projectManager: selectedContact.name
+        });
+      }
+    } else {
+      this.contractForm.patchValue({
+        projectManager: ''
+      });
+    }
+  }
+
+  // 載入客戶列表
+  loadClients(): void {
+    this.clientService.findAll().subscribe({
+      next: (clients: Client[]) => {
+        this.clientList = clients;
+        this.cdr.markForCheck();
+      },
+      error: (error: any) => {
+        console.error('載入客戶列表失敗:', error);
+        this.message.error('載入客戶列表失敗');
+      }
     });
   }
 
@@ -359,16 +432,23 @@ export class ContractsComponent implements OnInit {
   addContract(): void {
     this.modalTitle = '新增合約';
     this.editingContract = null;
+    
+    // 重置聯絡人列表
+    this.contactList = [];
+    
     this.contractForm.reset({
-      version: 'V1.0',
+      contractCode: this.contractService.generateContractCode(),
+      clientId: '',
+      clientName: '',
+      contactId: '',
+      projectManager: '',
+      contractName: '',
+      totalAmount: null,
       progress: 0,
       status: 'active',
-      priority: 'medium'
+      description: ''
     });
-    // 自動生成合約編號
-    this.contractForm.patchValue({
-      contractCode: this.contractService.generateContractCode()
-    });
+    
     this.isModalVisible = true;
   }
 
@@ -376,7 +456,45 @@ export class ContractsComponent implements OnInit {
   editContract(contract: Contract): void {
     this.modalTitle = '編輯合約';
     this.editingContract = contract;
-    this.contractForm.patchValue(contract);
+    
+    // 找到對應的客戶
+    const client = this.clientList.find(c => c.clientName === contract.clientName);
+    if (client) {
+      // 更新聯絡人列表
+      this.contactList = client.contacts || [];
+      
+      // 找到對應的聯絡人
+      const contact = this.contactList.find(c => c.name === contract.projectManager);
+      
+      this.contractForm.patchValue({
+        contractCode: contract.contractCode,
+        clientId: client.id,
+        clientName: contract.clientName,
+        contactId: contact?.id || '',
+        projectManager: contract.projectManager,
+        contractName: contract.contractName,
+        totalAmount: contract.totalAmount,
+        progress: contract.progress,
+        status: contract.status,
+        description: contract.description
+      });
+    } else {
+      // 如果找不到對應的客戶，只設置基本信息
+      this.contactList = [];
+      this.contractForm.patchValue({
+        contractCode: contract.contractCode,
+        clientId: '',
+        clientName: contract.clientName,
+        contactId: '',
+        projectManager: contract.projectManager,
+        contractName: contract.contractName,
+        totalAmount: contract.totalAmount,
+        progress: contract.progress,
+        status: contract.status,
+        description: contract.description
+      });
+    }
+    
     this.isModalVisible = true;
   }
 
@@ -387,7 +505,19 @@ export class ContractsComponent implements OnInit {
       return;
     }
 
-    const contractData = this.contractForm.value;
+    const formData = this.contractForm.value;
+    
+    // 準備保存的數據，移除不需要的字段
+    const contractData = {
+      contractCode: formData.contractCode,
+      clientName: formData.clientName,
+      projectManager: formData.projectManager,
+      contractName: formData.contractName,
+      totalAmount: formData.totalAmount,
+      progress: formData.progress,
+      status: formData.status,
+      description: formData.description
+    };
     
     if (this.editingContract) {
       // 更新
