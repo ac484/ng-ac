@@ -51,13 +51,18 @@
 
                 <div class="m-b-8 text-right p-0" nz-col [nzLg]="8" [nzMd]="12" [nzSm]="24" [nzXl]="8" [nzXs]="24"
                     [nzXXl]="8">
-                    <button nz-button [nzType]="'primary'" (click)="getDataList()">
+                    <button nz-button [nzType]="'primary'" appDebounceClick [debounceTime]="1000"
+                        (debounceClick)="getDataList()">
                         <i nz-icon nzType="search"></i>
                         搜索
                     </button>
                     <button class="m-l-15" nz-button (click)="resetForm()">
                         <i nz-icon nzTheme="outline" nzType="close-circle"></i>
                         重置
+                    </button>
+                    <button class="m-l-15" nz-button appToggleFullscreen #fullscreen="appToggleFullscreen">
+                        <i nz-icon [nzType]="fullscreen.isFullscreenFlag ? 'fullscreen' : 'fullscreen-exit'"></i>
+                        {{ fullscreen.isFullscreenFlag ? '全螢幕' : '退出全螢幕' }}
                     </button>
                     <a class="collapse operate-text" (click)="toggleCollapse()">
                         @if (isCollapse) {
@@ -77,8 +82,9 @@
         <app-tree-table [cashArray]="checkedCashArray" [tableConfig]="tableConfig" [tableData]="dataList"
             (changePageNum)="getDataList($event)" (changePageSize)="changePageSize($event)"
             (selectedChange)="selectedChecked($event)" (sortFn)="changeSort($event)"></app-tree-table>
-        <ng-template #operationTpl let-children="children" let-id="id" let-parent="parent">
+        <ng-template #operationTpl let-children="children" let-id="id" let-parent="parent" let-name="name">
             <span class="operate-text" (click)="check(id, children, parent)">查看</span>
+            <app-copy-text [text]="'ID: ' + id + ', 姓名: ' + name" tooltipTitle="複製資訊">複製</app-copy-text>
             <span class="operate-text" (click)="del(id)">刪除</span>
             <span class="operate-text" (click)="edit(id)">編輯</span>
         </ng-template>

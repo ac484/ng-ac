@@ -7,7 +7,11 @@ import { CardTableWrapComponent } from '../../../shared/components/card-table-wr
 import { PageHeaderType, PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
 import { TreeTableComponent } from '../../../shared/components/tree-table/tree-table.component';
 import { WaterMarkComponent } from '../../../shared/components/water-mark/water-mark.component';
+import { CopyTextComponent } from '../../../shared/components/copy-text/copy-text.component';
+import { DebounceClickDirective } from '../../../shared/directives/debounce-click.directive';
+import { ToggleFullscreenDirective } from '../../../shared/directives/toggle-fullscreen.directive';
 import { fnFlattenTreeDataByDataList } from '../../../utils/treeTableTools';
+import { fnFormatFileSize, fnGetUUID } from '../../../utils/tools';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -35,6 +39,9 @@ interface SearchParam {
     PageHeaderComponent,
     NzCardModule,
     WaterMarkComponent,
+    CopyTextComponent,
+    DebounceClickDirective,
+    ToggleFullscreenDirective,
     FormsModule,
     NzFormModule,
     NzGridModule,
