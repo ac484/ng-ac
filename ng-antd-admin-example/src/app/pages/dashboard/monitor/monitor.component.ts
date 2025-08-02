@@ -2,7 +2,8 @@ import { DecimalPipe, PercentPipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, NgZone } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import AMapLoader from '@amap/amap-jsapi-loader';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { Loader } from '@googlemaps/js-api-loader';
 import { Gauge, Liquid, RingProgress, TinyArea, WordCloud } from '@antv/g2plot';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -17,7 +18,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
   styleUrls: ['./monitor.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NzCardModule, NzBreadCrumbModule, NzGridModule, NzStatisticModule, NzTypographyModule, DecimalPipe, PercentPipe]
+  imports: [NzCardModule, NzBreadCrumbModule, NzGridModule, NzStatisticModule, NzTypographyModule, GoogleMapsModule, DecimalPipe, PercentPipe]
 })
 export class MonitorComponent implements AfterViewInit {
   deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
