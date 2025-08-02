@@ -2,6 +2,50 @@
     <h2>合約管理</h2>
 
     <div class="contracts-content">
-        <!-- 合約內容將在這裡開發 -->
+        <nz-table #basicTable [nzData]="dataSet" [nzBordered]="true" [nzSize]="'middle'">
+            <thead>
+                <tr>
+                    <th nzWidth="60px">序號</th>
+                    <th nzWidth="200px">合約名稱</th>
+                    <th nzWidth="300px">標籤</th>
+                    <th nzWidth="120px">狀態</th>
+                    <th nzWidth="120px">建立日期</th>
+                    <th nzWidth="150px">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of basicTable.data; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>
+                        <nz-tag *ngFor="let tag of data.tags" [nzColor]="'blue'" class="contract-tag">
+                            {{ tag }}
+                        </nz-tag>
+                    </td>
+                    <td>
+                        <nz-tag [nzColor]="getStatusColor(data.status)">
+                            {{ getStatusText(data.status) }}
+                        </nz-tag>
+                    </td>
+                    <td>{{ data.createDate }}</td>
+                    <td>
+                        <a nz-button nzType="link" nzSize="small">
+                            <span nz-icon nzType="eye" nzTheme="outline"></span>
+                            查看
+                        </a>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <a nz-button nzType="link" nzSize="small">
+                            <span nz-icon nzType="edit" nzTheme="outline"></span>
+                            編輯
+                        </a>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <a nz-button nzType="link" nzSize="small" nzDanger>
+                            <span nz-icon nzType="delete" nzTheme="outline"></span>
+                            刪除
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
     </div>
 </div>
