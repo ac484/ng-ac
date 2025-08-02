@@ -1,16 +1,36 @@
-:host ::ng-deep .add-form { margin-bottom: 16px; }
-:host ::ng-deep .form-action { display: flex; align-items: center; }
-:host ::ng-deep nz-table { width: 100%; }
-:host ::ng-deep .payment-flow-cell { max-width: 400px; }
-:host ::ng-deep .payment-flow-cell nz-transfer { width: 100%; }
-:host ::ng-deep .payment-flow-cell nz-transfer .ant-transfer-list { width: 180px !important; height: 200px !important; }
-:host ::ng-deep .payment-flow-cell nz-transfer .ant-transfer-operation { margin: 0 8px; }
-:host ::ng-deep .payment-flow-cell nz-transfer .ant-transfer-list-header { padding: 8px 12px; font-size: 12px; }
-:host ::ng-deep .payment-flow-cell nz-transfer .ant-transfer-list-content { height: 160px; }
-:host ::ng-deep .payment-flow-cell nz-transfer .ant-transfer-list-content-item { padding: 4px 8px; font-size: 12px; }
-
-// 自定義表格樣式
-:host ::ng-deep .payment-flow-cell nz-transfer .ant-table { font-size: 12px; }
-:host ::ng-deep .payment-flow-cell nz-transfer .ant-table-thead > tr > th { padding: 4px 8px; font-size: 11px; }
-:host ::ng-deep .payment-flow-cell nz-transfer .ant-table-tbody > tr > td { padding: 4px 8px; font-size: 11px; }
-:host ::ng-deep .payment-flow-cell nz-transfer .ant-table-tbody > tr:hover > td { background-color: #f5f5f5; }
+:host ::ng-deep {
+  .add-form { margin-bottom: 16px; }
+  .form-action { display: flex; align-items: center; }
+  nz-table { width: 100%; }
+  
+  .payment-flow-cell {
+    max-width: 400px;
+    
+    nz-transfer {
+      width: 100%;
+      
+      .ant-transfer-list {
+        width: 180px !important;
+        height: 200px !important;
+        
+        &-header {
+          padding: 8px 12px;
+          font-size: 12px;
+        }
+        
+        &-content {
+          height: 160px;
+          
+          &-item {
+            padding: 4px 8px;
+            font-size: 12px;
+          }
+        }
+      }
+      
+      .ant-transfer-operation {
+        margin: 0 8px;
+      }
+    }
+  }
+}

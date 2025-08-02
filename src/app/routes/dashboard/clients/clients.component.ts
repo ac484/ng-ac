@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientService, Client, PaymentFlowStatus } from '../../../core/services/firestore/client.service';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
@@ -39,13 +38,22 @@ export class ClientsComponent implements OnInit {
   loading = false;
   editing = false;
   editingClientId: string | null = null;
+  
   statusOptions = [
     { label: '啟用', value: 'active' },
     { label: '停用', value: 'inactive' }
   ];
 
-  // 請款流程選項 - 使用TransferItem格式
-  paymentFlowOptions: TransferItem[] = [];
+  paymentFlowOptions: TransferItem[] = [
+    { key: PaymentFlowStatus.DRAFT, title: '草稿 - 初始草稿狀態', direction: 'right' },
+    { key: PaymentFlowStatus.SUBMITTED, title: '已提交 - 已提交審核', direction: 'right' },
+    { key: PaymentFlowStatus.REVIEWING, title: '審核中 - 正在審核中', direction: 'right' },
+    { key: PaymentFlowStatus.APPROVED, title: '已核准 - 審核已通過', direction: 'right' },
+    { key: PaymentFlowStatus.REJECTED, title: '已拒絕 - 審核被拒絕', direction: 'right' },
+    { key: PaymentFlowStatus.PROCESSING, title: '處理中 - 正在處理中', direction: 'right' },
+    { key: PaymentFlowStatus.COMPLETED, title: '已完成 - 流程已完成', direction: 'right' },
+    { key: PaymentFlowStatus.CANCELLED, title: '已取消 - 流程已取消', direction: 'right' }
+  ];
 
   constructor(private fb: FormBuilder, private clientService: ClientService) {
     this.addForm = this.fb.group({
@@ -65,34 +73,6 @@ export class ClientsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadClients();
-    this.initPaymentFlowOptions();
-  }
-
-  // 初始化請款流程選項
-  initPaymentFlowOptions(): void {
-    const flowOptions = [
-      { key: PaymentFlowStatus.DRAFT, title: '草稿', description: '初始草稿狀態', order: 1 },
-      { key: PaymentFlowStatus.SUBMITTED, title: '已提交', description: '已提交審核', order: 2 },
-      { key: PaymentFlowStatus.REVIEWING, title: '審核中', description: '正在審核中', order: 3 },
-      { key: PaymentFlowStatus.APPROVED, title: '已核准', description: '審核已通過', order: 4 },
-      { key: PaymentFlowStatus.REJECTED, title: '已拒絕', description: '審核被拒絕', order: 5 },
-      { key: PaymentFlowStatus.PROCESSING, title: '處理中', description: '正在處理中', order: 6 },
-      { key: PaymentFlowStatus.COMPLETED, title: '已完成', description: '流程已完成', order: 7 },
-      { key: PaymentFlowStatus.CANCELLED, title: '已取消', description: '流程已取消', order: 8 }
-    ];
-
-    // 按順序排序並轉換為TransferItem格式，將描述合併到title中
-    // 設置direction為'right'，讓所有項目預設在右側（可選）
-    this.paymentFlowOptions = flowOptions
-      .sort((a, b) => a.order - b.order)
-      .map(option => ({
-        key: option.key,
-        title: `${option.title} - ${option.description}`,
-        description: option.description,
-        disabled: false,
-        checked: false,
-        direction: 'right' // 預設在右側（可選）
-      }));
   }
 
   loadClients(): void {
@@ -111,9 +91,8 @@ export class ClientsComponent implements OnInit {
       });
       return;
     }
-    const formValue = this.addForm.getRawValue();
     
-    // 移除paymentFlow，讓它保持undefined，這樣transfer組件會正確處理
+    const formValue = this.addForm.getRawValue();
     delete formValue.paymentFlow;
     
     if (this.editing && this.editingClientId) {
@@ -153,50 +132,19 @@ export class ClientsComponent implements OnInit {
 
   updateStatus(id: string, status: 'active' | 'inactive'): void {
     this.clientService.update(id, { status }).subscribe(() => {
-      // 更新本地數據
       const client = this.clients.find(c => c.id === id);
-      if (client) {
-        client.status = status;
-      }
+      if (client) client.status = status;
     });
   }
 
-  // 處理請款流程變更
   onPaymentFlowChange(clientId: string, change: TransferChange): void {
-    // 從TransferChange中提取已選中的項目
     const flows = change.list.map(item => item['key'] as PaymentFlowStatus);
-    
-    // 立即更新本地數據，防止重新渲染問題
     const client = this.clients.find(c => c.id === clientId);
-    if (client) {
-      client.paymentFlow = flows;
-    }
+    if (client) client.paymentFlow = flows;
     
-    // 異步更新Firestore，不等待響應
     this.clientService.update(clientId, { paymentFlow: flows }).subscribe({
-      error: (error) => {
-        console.error('更新請款流程失敗:', error);
-        // 如果更新失敗，恢復本地數據
-        if (client) {
-          this.loadClients();
-        }
-      }
+      error: () => this.loadClients()
     });
-  }
-
-  // 獲取客戶的請款流程（已選中的項目）
-  getClientPaymentFlows(client: Client): PaymentFlowStatus[] {
-    // 動態更新paymentFlowOptions的direction
-    this.paymentFlowOptions.forEach(option => {
-      const key = option['key'] as PaymentFlowStatus;
-      if (client.paymentFlow && client.paymentFlow.includes(key)) {
-        option.direction = 'left'; // 已選項目在左側
-      } else {
-        option.direction = 'right'; // 未選項目在右側
-      }
-    });
-    
-    return client.paymentFlow || [];
   }
 
   onCancel(): void {

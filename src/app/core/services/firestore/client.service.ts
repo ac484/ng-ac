@@ -98,11 +98,17 @@ export class ClientService {
 
   /** 更新客戶 */
   update(id: string, data: Partial<Client>): Observable<void> {
+    if (!id) {
+      throw new Error('Client ID is required');
+    }
     return this.baseService.modify<Client>(this.collectionName, id, data);
   }
 
   /** 刪除客戶 */
   delete(id: string): Observable<void> {
+    if (!id) {
+      throw new Error('Client ID is required');
+    }
     return this.baseService.remove(this.collectionName, id);
   }
 
