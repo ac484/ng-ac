@@ -16,6 +16,7 @@ export enum PaymentFlowStatus {
 }
 
 export interface ContactInfo {
+  id?: string;              // 聯絡人唯一ID
   name: string;              // 聯絡人姓名
   phone: string;             // 電話號碼
   email: string;             // 電子郵件
