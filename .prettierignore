@@ -1,9 +1,18 @@
+# add files you wish to ignore here
 **/*.md
 **/*.svg
 **/test.ts
+
+.stylelintrc
+.prettierrc
+
+src/assets/*
+src/index.html
+node_modules/
+.vscode/
 coverage/
-publish/
 dist/
-schematics/
 package.json
-**/template/*
+tslint.json
+
+_cli-tpl/**/*

@@ -1,89 +1,14 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>NgAntAdmin</title>
-    <base href="/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link type="image/x-icon" href="favicon.ico" rel="icon" />
-    <style type="text/css">
-      .global-loader {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        width: 100%;
-        height: 100%;
-        opacity: 1;
-        will-change: transform;
-        transition: opacity 0.5s ease-in-out;
-      }
-
-      .global-loader-fade-in {
-        will-change: transform;
-        opacity: 0;
-      }
-
-      .global-loader-hidden {
-        display: none;
-      }
-
-      .global-loader h1 {
-        font-family: 'Helvetica Neue', Helvetica, sans-serif;
-        font-weight: normal;
-        font-size: 18px;
-        letter-spacing: 0.04rem;
-        white-space: pre;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-image: repeating-linear-gradient(to right, #f44336, #9c27b0, #3f51b5, #03a9f4, #009688, #8bc34a, #ffeb3b, #ff9800);
-        background-size: 750% auto;
-        background-position: 0 100%;
-        animation: gradient 20s infinite;
-        animation-fill-mode: forwards;
-        animation-timing-function: linear;
-      }
-
-      .night-bg {
-        background-color: #141414;
-      }
-
-      @keyframes gradient {
-        0% {
-          background-position: 0 0;
-        }
-
-        100% {
-          background-position: -750% 0;
-        }
-      }
-    </style>
-    <!--
-    参考https://www.cdnplanet.com/blog/faster-google-webfonts-preconnect/
-    没用到谷歌字体可以删除
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-  -->
-    <!--
-    谷歌字体
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  -->
-    <!--谷歌materialIcon ，如果你没用material icons可以删除-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-  </head>
-  <body>
-    <app-root></app-root>
-    <div id="globalLoader" class="global-loader">
-      <h1>loading...</h1>
-    </div>
-  </body>
-  <script>
-    const isNight = window.localStorage.getItem('IsNightKey');
-    if (isNight === 'true') {
-      document.getElementById('globalLoader').className += ' night-bg';
-    }
-  </script>
+<head>
+  <meta charset="utf-8">
+  <title>NgAc</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style type="text/css">.preloader{position:fixed;top:0;left:0;width:100%;height:100%;overflow:hidden;background:#49a9ee;z-index:9999;transition:opacity .65s}.preloader-hidden-add{opacity:1;display:block}.preloader-hidden-add-active{opacity:0}.preloader-hidden{display:none}.cs-loader{position:absolute;top:0;left:0;height:100%;width:100%}.cs-loader-inner{transform:translateY(-50%);top:50%;position:absolute;width:100%;color:#fff;text-align:center}.cs-loader-inner label{font-size:20px;opacity:0;display:inline-block}@keyframes lol{0%{opacity:0;transform:translateX(-300px)}33%{opacity:1;transform:translateX(0)}66%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(300px)}}.cs-loader-inner label:nth-child(6){animation:lol 3s infinite ease-in-out}.cs-loader-inner label:nth-child(5){animation:lol 3s .1s infinite ease-in-out}.cs-loader-inner label:nth-child(4){animation:lol 3s .2s infinite ease-in-out}.cs-loader-inner label:nth-child(3){animation:lol 3s .3s infinite ease-in-out}.cs-loader-inner label:nth-child(2){animation:lol 3s .4s infinite ease-in-out}.cs-loader-inner label:nth-child(1){animation:lol 3s .5s infinite ease-in-out}</style></head>
+<body>
+  <app-root></app-root>
+  <div class="preloader"><div class="cs-loader"><div class="cs-loader-inner"><label>	●</label><label>	●</label><label>	●</label><label>	●</label><label>	●</label><label>	●</label></div></div></div>
+</body>
 </html>

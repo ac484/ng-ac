@@ -3,33 +3,41 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ng-ant-admin": {
+    "ng-ac": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "less",
-          "skipTests": true
+          "skipTests": false,
+          "flat": false,
+          "inlineStyle": true,
+          "inlineTemplate": false,
+          "style": "less"
         },
-        "@schematics/angular:class": {
-          "skipTests": true
+        "ng-alain:module": {
+          "routing": true
+        },
+        "ng-alain:list": {
+          "skipTests": false
+        },
+        "ng-alain:edit": {
+          "skipTests": false,
+          "modal": true
+        },
+        "ng-alain:view": {
+          "skipTests": false,
+          "modal": true
+        },
+        "ng-alain:curd": {
+          "skipTests": false
+        },
+        "@schematics/angular:module": {
+          "routing": true
         },
         "@schematics/angular:directive": {
-          "skipTests": true
-        },
-        "@schematics/angular:guard": {
-          "skipTests": true
-        },
-        "@schematics/angular:interceptor": {
-          "skipTests": true
-        },
-        "@schematics/angular:pipe": {
-          "skipTests": true
-        },
-        "@schematics/angular:resolver": {
-          "skipTests": true
+          "skipTests": false
         },
         "@schematics/angular:service": {
-          "skipTests": true
+          "skipTests": false
         }
       },
       "root": "",
@@ -37,10 +45,8 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/ng-ant-admin",
-            "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
@@ -48,7 +54,10 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "less",
             "assets": [
-              "src/favicon.ico",
+              {
+                "glob": "**/*",
+                "input": "public"
+              },
               "src/assets",
               {
                 "glob": "**/*",
@@ -57,52 +66,20 @@
               }
             ],
             "styles": [
-              "node_modules/driver.js/dist/driver.css",
-              {
-                "input": "src/styles/default.less",
-                "bundleName": "default",
-                "inject": false
-              },
-              {
-                "input": "src/styles/dark.less",
-                "bundleName": "dark",
-                "inject": false
-              }
+              "src/styles.less"
+            ],
+            "allowedCommonJsDependencies": [
+              "ajv",
+              "ajv-formats",
+              "extend",
+              "file-saver",
+              "mockjs"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/styles/themes"
+                "node_modules/"
               ]
-            },
-            "scripts": [
-              "node_modules/driver.js/dist/driver.js.iife.js"
-            ],
-            "allowedCommonJsDependencies": [
-              "crypto-js",
-              "qs",
-              "size-sensor",
-              "pdfast",
-              "d3-regression",
-              "fmin",
-              "eventemitter3",
-              "inversify-inject-decorators",
-              "@babel/runtime/regenerator",
-              "inversify",
-              "@amap/amap-jsapi-loader",
-              "mapbox-gl",
-              "l7regl",
-              "@mapbox/geojson-rewind",
-              "pbf",
-              "supercluster/dist/supercluster",
-              "earcut",
-              "mousetrap",
-              "jquery",
-              "polygon-clipping",
-              "qrcode",
-              "driver.js",
-              "file-saver",
-              "lodash"
-            ]
+            }
           },
           "configurations": {
             "production": {
@@ -110,21 +87,21 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "6mb"
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "10kb",
-                  "maximumError": "20kb"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
               ],
+              "outputHashing": "all",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
-              ],
-              "outputHashing": "all"
+              ]
             },
             "development": {
               "optimization": false,
@@ -135,29 +112,25 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "proxyConfig": "proxy.conf.json",
-            "buildTarget": "ng-ant-admin:build"
-          },
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ng-ant-admin:build:production"
+              "buildTarget": "ng-ac:build:production"
             },
             "development": {
-              "buildTarget": "ng-ant-admin:build:development"
+              "buildTarget": "ng-ac:build:development"
             }
           },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "defaultConfiguration": "development",
           "options": {
-            "buildTarget": "ng-ant-admin:build"
+            "proxyConfig": "proxy.conf.js"
           }
         },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n"
+        },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
             "polyfills": [
               "zone.js",
@@ -166,13 +139,14 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "less",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
             ],
             "styles": [
               "src/styles.less"
-            ],
-            "scripts": []
+            ]
           }
         },
         "lint": {
@@ -190,7 +164,8 @@
   "cli": {
     "analytics": false,
     "schematicCollections": [
-      "@angular-eslint/schematics"
+      "@schematics/angular",
+      "ng-alain"
     ]
   }
 }

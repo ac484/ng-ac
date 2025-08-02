@@ -1,67 +1,49 @@
-import { AsyncPipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { filter } from 'rxjs/operators';
-
-import { PreloaderService } from '@core/services/common/preloader.service';
-import { LockScreenComponent } from '@shared/components/lock-screen/lock-screen.component';
-import { LockScreenStoreService } from '@store/common-store/lock-screen-store.service';
-import { SpinService } from '@store/common-store/spin.service';
-import { NzBackTopModule } from 'ng-zorro-antd/back-top';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-
-import { fadeRouteAnimation } from './animations/fade.animation';
+import { Component, OnInit, inject } from '@angular/core';
+import { NavigationEnd, NavigationError, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router';
+import { TitleService, VERSION as VERSION_ALAIN, stepPreloader } from '@delon/theme';
+import { environment } from '@env/environment';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd/version';
 
 @Component({
-    selector: 'app-root',
-    template: `
-    @if ((lockedState$ | async)!.locked) {
-      <app-lock-screen></app-lock-screen>
-    }
-    <nz-back-top></nz-back-top>
-    <div class="full-height" [@fadeRouteAnimation]="prepareRoute(outlet)">
-      <router-outlet #outlet="outlet"></router-outlet>
-    </div>
-    @if (loading$ | async) {
-      <div style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:1001;background:rgba(24,144,255,0.1);">
-        <div style="position:absolute;top: 50%;left:50%;margin:-16px 0 0 -16px;">
-          <nz-spin nzSize="large"></nz-spin>
-        </div>
-      </div>
-    }
-  `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [fadeRouteAnimation],
-    imports: [LockScreenComponent, NzBackTopModule, RouterOutlet, NzSpinModule, AsyncPipe]
-})
-export class AppComponent implements OnInit, AfterViewInit {
-  private preloader = inject(PreloaderService);
-  private lockScreenStoreService = inject(LockScreenStoreService);
-  private spinService = inject(SpinService);
-  private router = inject(Router);
-
-  loading$ = this.spinService.getCurrentGlobalSpinStore();
-  lockedState$ = this.lockScreenStoreService.getLockScreenStore();
-  destroyRef = inject(DestroyRef);
-
-  prepareRoute(outlet: RouterOutlet): string {
-    return outlet?.activatedRouteData?.['key'];
+  selector: 'app-root',
+  template: `<router-outlet />`,
+  imports: [RouterOutlet],
+  host: {
+    '[attr.ng-alain-version]': 'ngAlainVersion',
+    '[attr.ng-zorro-version]': 'ngZorroVersion'
   }
+})
+export class AppComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly titleSrv = inject(TitleService);
+  private readonly modalSrv = inject(NzModalService);
+  ngAlainVersion = VERSION_ALAIN.full;
+  ngZorroVersion = VERSION_ZORRO.full;
+
+  private donePreloader = stepPreloader();
 
   ngOnInit(): void {
-    this.router.events
-      .pipe(
-        filter((event: NzSafeAny) => event instanceof NavigationEnd),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe(() => {
-        this.spinService.setCurrentGlobalSpinStore(false);
-      });
-  }
-
-  ngAfterViewInit(): void {
-    this.preloader.removePreLoader();
+    let configLoad = false;
+    this.router.events.subscribe(ev => {
+      if (ev instanceof RouteConfigLoadStart) {
+        configLoad = true;
+      }
+      if (configLoad && ev instanceof NavigationError) {
+        this.modalSrv.confirm({
+          nzTitle: `提醒`,
+          nzContent: environment.production ? `应用可能已发布新版本，请点击刷新才能生效。` : `无法加载路由：${ev.url}`,
+          nzCancelDisabled: false,
+          nzOkText: '刷新',
+          nzCancelText: '忽略',
+          nzOnOk: () => location.reload()
+        });
+      }
+      if (ev instanceof NavigationEnd) {
+        this.donePreloader();
+        this.titleSrv.setTitle();
+        this.modalSrv.closeAll();
+      }
+    });
   }
 }
