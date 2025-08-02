@@ -1,5 +1,5 @@
 // 生產環境配置 - 使用你的實際生產域名
-export const ip = 'your-production-domain.com';
+export const ip = 'ng-ac--ng-acc.asia-east1.hosted.app';
 export const port = '443';
 export const localUrl = `https://${ip}/api`;
 
