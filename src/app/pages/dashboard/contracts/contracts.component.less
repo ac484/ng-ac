@@ -1,28 +1,38 @@
 .contracts-container {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .contracts-content {
+    background: #fff;
+    border-radius: 8px;
     padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-    h2 {
-        margin-bottom: 20px;
-        color: #333;
+    ::ng-deep {
+      .ant-table-thead > tr > th {
+        background-color: #fafafa;
         font-weight: 600;
+      }
+
+      .contract-tag {
+        margin-right: 4px;
+        margin-bottom: 4px;
+      }
+
+      .ant-table-tbody > tr:hover > td {
+        background-color: #f5f5f5;
+      }
     }
+  }
 
-    .contracts-content {
-        background: #fff;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-        ::ng-deep {
-            .ant-table-thead > tr > th {
-                background-color: #fafafa;
-                font-weight: 600;
-            }
-
-            .contract-tag {
-                margin-right: 4px;
-                margin-bottom: 4px;
-            }
-        }
-    }
+  // 確保浮動按鈕顯示在最上層
+  app-float-action-buttons {
+    position: relative;
+    z-index: 1000;
+  }
 }

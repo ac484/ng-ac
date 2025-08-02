@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -18,10 +19,19 @@ interface ContractItem {
     selector: 'app-contracts',
     templateUrl: './contracts.component.html',
     styleUrls: ['./contracts.component.less'],
-    imports: [NzTableModule, NzTagModule, NzButtonModule, NzIconModule, NzDividerModule, FloatActionButtonsComponent],
+    imports: [
+        CommonModule,
+        NzTableModule,
+        NzTagModule,
+        NzButtonModule,
+        NzIconModule,
+        NzDividerModule,
+        FloatActionButtonsComponent
+    ],
     standalone: true
 })
-export class ContractsComponent implements OnInit {
+export class ContractsComponent {
+    // 最小化數據
     dataSet: ContractItem[] = [
         { key: '1', name: '服務合約 A', tags: ['重要', '長期'], status: 'active', createDate: '2024-01-15' },
         { key: '2', name: '維護合約 B', tags: ['維護', '年度'], status: 'active', createDate: '2024-02-20' },
@@ -30,32 +40,36 @@ export class ContractsComponent implements OnInit {
         { key: '5', name: '培訓合約 E', tags: ['培訓', '內部'], status: 'active', createDate: '2024-01-30' }
     ];
 
+    // 最小化按鈕配置
     floatButtons: FloatActionButton[] = [
-        { key: 'add', tooltip: '添加新合約', icon: 'plus', type: 'primary' },
-        { key: 'export', tooltip: '導出數據', icon: 'download' },
-        { key: 'refresh', tooltip: '刷新數據', icon: 'reload' }
+        { id: 'add', type: 'add', icon: 'plus', tooltip: '添加新合約' },
+        { id: 'export', type: 'export', icon: 'download', tooltip: '導出數據' },
+        { id: 'refresh', type: 'refresh', icon: 'reload', tooltip: '刷新數據' }
     ];
 
-    constructor() { }
+    // 最小化狀態映射
+    private readonly statusMap = {
+        active: { color: 'green', text: '生效中' },
+        pending: { color: 'orange', text: '待審核' },
+        expired: { color: 'red', text: '已過期' }
+    };
 
-    ngOnInit(): void { }
-
-    getStatusColor(status: string): string {
-        const colors: Record<string, string> = { active: 'green', pending: 'orange', expired: 'red' };
-        return colors[status] || 'default';
-    }
-
-    getStatusText(status: string): string {
-        const texts: Record<string, string> = { active: '生效中', pending: '待審核', expired: '已過期' };
-        return texts[status] || '未知';
-    }
-
-    onFloatButtonClick(key: string): void {
-        const actions: Record<string, () => void> = {
+    // 最小化事件處理
+    onFloatButtonClick(actionType: string): void {
+        const actions = {
             add: () => console.log('添加新合約'),
             export: () => console.log('導出數據'),
             refresh: () => console.log('刷新數據')
         };
-        actions[key]?.();
+        actions[actionType as keyof typeof actions]?.();
+    }
+
+    // 最小化狀態處理
+    getStatusColor(status: string): string {
+        return this.statusMap[status as keyof typeof this.statusMap]?.color || 'default';
+    }
+
+    getStatusText(status: string): string {
+        return this.statusMap[status as keyof typeof this.statusMap]?.text || '未知';
     }
 }

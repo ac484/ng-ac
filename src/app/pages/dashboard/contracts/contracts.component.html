@@ -49,6 +49,7 @@
         </nz-table>
     </div>
 
-    <app-float-action-buttons [buttons]="floatButtons" (buttonClick)="onFloatButtonClick($event)">
+    <app-float-action-buttons [buttons]="floatButtons" [groupTooltip]="'合約操作選單'"
+        (onButtonClick)="onFloatButtonClick($event)">
     </app-float-action-buttons>
 </div>
