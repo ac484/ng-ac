@@ -6,7 +6,6 @@ this.accidentTypeOptions = [...MapPipe.transformMapToArray(MapSet.accidentType)]
 
 import { DatePipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
-
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 export const enum DateFormat {

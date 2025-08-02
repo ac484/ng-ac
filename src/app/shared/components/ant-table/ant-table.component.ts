@@ -1,6 +1,17 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
-
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  TemplateRef
+} from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzResizeEvent, NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzTableQueryParams, NzTableSize, NzTableModule } from 'ng-zorro-antd/table';
@@ -106,8 +117,8 @@ export class AntTableComponent implements OnInit, OnChanges {
   @Output() readonly changePageSize = new EventEmitter<number>();
   @Output() readonly selectedChange: EventEmitter<NzSafeAny[]> = new EventEmitter<NzSafeAny[]>();
   @Output() readonly sortFn: EventEmitter<SortFile> = new EventEmitter<SortFile>();
-  indeterminate: boolean = false;
-  allChecked: boolean = false;
+  indeterminate = false;
+  allChecked = false;
   private cdr = inject(ChangeDetectorRef);
 
   setScrollConfig(value: AntTableConfig): void {

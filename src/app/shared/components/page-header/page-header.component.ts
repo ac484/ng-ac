@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';

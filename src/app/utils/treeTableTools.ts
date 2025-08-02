@@ -27,7 +27,7 @@ function convertTreeToList(root: TreeNodeInterface): TreeNodeInterface[] {
   return array;
 }
 
-function visitNode(node: TreeNodeInterface, hashMap: { [key: string]: boolean }, array: TreeNodeInterface[]): void {
+function visitNode(node: TreeNodeInterface, hashMap: Record<string, boolean>, array: TreeNodeInterface[]): void {
   if (!hashMap[node.id]) {
     hashMap[node.id] = true;
     array.push(node);
@@ -35,8 +35,8 @@ function visitNode(node: TreeNodeInterface, hashMap: { [key: string]: boolean },
 }
 
 // 获取map形式的treeData,入参为dataList
-const fnTreeDataToMap = function tableToTreeData(dataList: any[]): { [key: string]: TreeNodeInterface[] } {
-  const mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
+const fnTreeDataToMap = function tableToTreeData(dataList: any[]): Record<string, TreeNodeInterface[]> {
+  const mapOfExpandedData: Record<string, TreeNodeInterface[]> = {};
   dataList.forEach(item => {
     mapOfExpandedData[item.id] = convertTreeToList(item);
   });
@@ -82,7 +82,7 @@ const fnFlatDataHasParentToTree = function translateDataToTree(data: any[], fath
 };
 
 // 将树状结构数据添加层级以及是否是根节点的标记，根节点isLeaf为true，层级由level表示
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+
 const fnAddTreeDataGradeAndLeaf = function AddTreeDataGradeAndLeaf(array: any[], levelName = 'level', childrenName = 'children') {
   const recursive = (array: any[], level = 0): any => {
     level++;
@@ -102,14 +102,14 @@ const fnAddTreeDataGradeAndLeaf = function AddTreeDataGradeAndLeaf(array: any[],
 };
 
 // 摊平的tree数据
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+
 const fnFlattenTreeDataByDataList = function flattenTreeData(dataList: any[]) {
-  const mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = fnTreeDataToMap(dataList);
+  const mapOfExpandedData: Record<string, TreeNodeInterface[]> = fnTreeDataToMap(dataList);
   return fnGetFlattenTreeDataByMap(mapOfExpandedData);
 };
 
 // 获取摊平的tree数据,入参为map形式的treeData
-const fnGetFlattenTreeDataByMap = function getFlattenTreeData(mapOfExpandedData: { [key: string]: TreeNodeInterface[] }): TreeNodeInterface[] {
+const fnGetFlattenTreeDataByMap = function getFlattenTreeData(mapOfExpandedData: Record<string, TreeNodeInterface[]>): TreeNodeInterface[] {
   const targetArray: TreeNodeInterface[] = [];
   Object.values(mapOfExpandedData).forEach(item => {
     item.forEach(item_1 => {
