@@ -1,0 +1,99 @@
+<button nz-button nzType="primary" (click)="openAddModal()">新增客戶</button>
+
+<nz-table [nzData]="clients" [nzLoading]="loading" nzBordered class="clients-table">
+  <thead>
+    <tr>
+      <th>編號</th>
+      <th>名稱</th>
+      <th>聯絡人</th>
+      <th>電話</th>
+      <th>電郵</th>
+      <th>狀態</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let c of clients">
+      <td>{{ c.clientCode }}</td>
+      <td>{{ c.clientName }}</td>
+      <td>{{ c.contactPerson }}</td>
+      <td>{{ c.phoneNumber }}</td>
+      <td>{{ c.email }}</td>
+      <td>{{ c.status }}</td>
+      <td>
+        <button nz-button nzType="link" (click)="openEditModal(c)">編輯</button>
+        <button nz-button nzType="link" nzDanger (click)="deleteClient(c)">刪除</button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  [nzTitle]="isEdit ? '編輯客戶' : '新增客戶'"
+  (nzOnOk)="saveClient()"
+  (nzOnCancel)="isModalVisible = false"
+  [nzWidth]="600"
+>
+  <form nz-form [formGroup]="clientForm">
+    <div class="form-row">
+      <nz-form-item>
+        <nz-form-label nzFor="clientCode" nzRequired>客戶編號</nz-form-label>
+        <nz-form-control>
+          <input nz-input id="clientCode" formControlName="clientCode" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="clientName" nzRequired>客戶名稱</nz-form-label>
+        <nz-form-control>
+          <input nz-input id="clientName" formControlName="clientName" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="contactPerson" nzRequired>聯絡人</nz-form-label>
+        <nz-form-control>
+          <input nz-input id="contactPerson" formControlName="contactPerson" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="phoneNumber">電話</nz-form-label>
+        <nz-form-control>
+          <input nz-input id="phoneNumber" formControlName="phoneNumber" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="email">電郵</nz-form-label>
+        <nz-form-control>
+          <input nz-input id="email" formControlName="email" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="status" nzRequired>狀態</nz-form-label>
+        <nz-form-control>
+          <nz-select id="status" formControlName="status">
+            <nz-option nzValue="active" nzLabel="啟用"></nz-option>
+            <nz-option nzValue="inactive" nzLabel="停用"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item nzFlex="100%">
+        <nz-form-label nzFor="paymentFlow">請款流程</nz-form-label>
+        <nz-form-control>
+          <nz-transfer
+            [nzDataSource]="paymentFlowStatusList"
+            [nzSelectedKeys]="selectedFlowKeys"
+            (nzChange)="onFlowChange($event)"
+            [nzTitles]="['可選流程','已選流程']"
+            [nzListStyle]="{ 'width.px': 250, 'height.px': 200 }"
+          ></nz-transfer>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+</nz-modal>
