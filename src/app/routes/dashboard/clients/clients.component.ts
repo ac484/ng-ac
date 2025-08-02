@@ -89,21 +89,20 @@ interface ClientWithExpand extends Client {
                 </nz-select>
               </td>
               <td class="payment-flow-cell">
-                <nz-transfer [nzDataSource]="paymentFlowOptions" [nzTitles]="['已選', '可選']" [nzOperations]="['←', '→']"
+                <nz-transfer [nzDataSource]="getPaymentFlowData(client)" [nzTitles]="['已選', '可選']" [nzOperations]="['←', '→']"
                   [nzShowSearch]="false" [nzShowSelectAll]="true" (nzChange)="onPaymentFlowChange(client.id!, $event)"
                   [nzListStyle]="{ 'width': '180px', 'height': '200px' }">
                 </nz-transfer>
               </td>
               <td>
                 <a nz-button nzType="link" (click)="onEdit(client)">編輯</a>
-                <a nz-button nzType="link" nzDanger (click)="onDelete(client.id!)">刪除</a>
+                <a nz-button nzType="link" nzDanger nz-popconfirm nzPopconfirmTitle="確定要刪除此客戶嗎?" (nzOnConfirm)="onDelete(client.id!)">刪除</a>
               </td>
             </tr>
             <tr [nzExpand]="client.expand">
               <td colspan="6">
                 <div style="padding: 16px; background-color: #fafafa;">
-                  <button nz-button (click)="addContact(client)" nzType="primary" nzSize="small" style="margin-bottom: 8px;">新增聯絡人</button>
-                  <nz-table #innerTable [nzData]="client.contacts || []" nzSize="small" [nzShowPagination]="false">
+                  <nz-table #innerTable [nzData]="getContactsList(client)" nzSize="small" [nzShowPagination]="false">
                     <thead>
                       <tr>
                         <th>聯絡人姓名</th>
@@ -113,19 +112,27 @@ interface ClientWithExpand extends Client {
                       </tr>
                     </thead>
                     <tbody>
-                      @for (contact of innerTable.data; track contact.id) {
-                        <tr>
+                      @for (contact of innerTable.data; track $index) {
+                        <tr [style.background-color]="!contact.id ? '#f0f9ff' : ''">
                           <td>
-                            <input nz-input [(ngModel)]="contact.name" (blur)="saveContact(client)" />
+                            <input nz-input [(ngModel)]="contact.name" 
+                              (blur)="onContactSave(client, contact, $index)" 
+                              [placeholder]="!contact.id ? '新增聯絡人姓名' : ''" />
                           </td>
                           <td>
-                            <input nz-input [(ngModel)]="contact.phone" (blur)="saveContact(client)" />
+                            <input nz-input [(ngModel)]="contact.phone" 
+                              (blur)="onContactSave(client, contact, $index)"
+                              [placeholder]="!contact.id ? '電話號碼' : ''" />
                           </td>
                           <td>
-                            <input nz-input [(ngModel)]="contact.email" (blur)="saveContact(client)" />
+                            <input nz-input [(ngModel)]="contact.email" 
+                              (blur)="onContactSave(client, contact, $index)"
+                              [placeholder]="!contact.id ? '電子郵件' : ''" />
                           </td>
                           <td>
-                            <a nz-popconfirm nzPopconfirmTitle="確定要刪除此聯絡人嗎?" (nzOnConfirm)="deleteContact(client, contact)">刪除</a>
+                            @if (contact.id) {
+                              <a nz-popconfirm nzPopconfirmTitle="確定要刪除此聯絡人嗎?" (nzOnConfirm)="deleteContact(client, contact)">刪除</a>
+                            }
                           </td>
                         </tr>
                       }
@@ -147,7 +154,7 @@ export class ClientsComponent implements OnInit {
   loading = false;
   editing = false;
   editingClientId: string | null = null;
-  
+ 
   statusOptions = [
     { label: '啟用', value: 'active' },
     { label: '停用', value: 'inactive' }
@@ -191,6 +198,46 @@ export class ClientsComponent implements OnInit {
     });
   }
 
+  // 取得聯絡人列表，最後添加一個空行用於新增
+  getContactsList(client: Client): ContactInfo[] {
+    const contacts = client.contacts || [];
+    return [...contacts, { id: '', name: '', phone: '', email: '' }];
+  }
+
+  // 聯絡人保存邏輯
+  onContactSave(client: Client, contact: ContactInfo, index: number): void {
+    if (!contact.id && (contact.name || contact.phone || contact.email)) {
+      // 新增聯絡人
+      contact.id = this.generateContactId();
+      if (!client.contacts) client.contacts = [];
+      client.contacts.push({ ...contact });
+      this.saveContact(client);
+    } else if (contact.id) {
+      // 更新現有聯絡人
+      this.saveContact(client);
+    }
+  }
+
+  deleteContact(client: Client, contact: ContactInfo): void {
+    if (client.contacts && contact.id) {
+      client.contacts = client.contacts.filter(c => c.id !== contact.id);
+      this.saveContact(client);
+    }
+  }
+
+  saveContact(client: Client): void {
+    this.clientService.update(client.id!, { contacts: client.contacts }).subscribe({
+      error: () => this.loadClients()
+    });
+  }
+
+  getPaymentFlowData(client: Client): TransferItem[] {
+    return this.paymentFlowOptions.map(option => ({
+      ...option,
+      direction: client.paymentFlow?.includes(option['key'] as PaymentFlowStatus) ? 'left' : 'right'
+    }));
+  }
+
   onSubmit(): void {
     if (this.addForm.invalid) {
       Object.values(this.addForm.controls).forEach(control => {
@@ -199,10 +246,9 @@ export class ClientsComponent implements OnInit {
       });
       return;
     }
-    
+   
     const formValue = this.addForm.getRawValue();
-    delete formValue.paymentFlow;
-    
+   
     if (this.editing && this.editingClientId) {
       this.clientService.update(this.editingClientId, formValue).subscribe(() => {
         this.resetForm();
@@ -244,34 +290,8 @@ export class ClientsComponent implements OnInit {
     const flows = change.list.map(item => item['key'] as PaymentFlowStatus);
     const client = this.clientsWithExpand.find(c => c.id === clientId);
     if (client) client.paymentFlow = flows;
-    
+   
     this.clientService.update(clientId, { paymentFlow: flows }).subscribe({
-      error: () => this.loadClients()
-    });
-  }
-
-  addContact(client: Client): void {
-    if (!client.contacts) {
-      client.contacts = [];
-    }
-    client.contacts.push({
-      id: this.generateContactId(),
-      name: '新聯絡人',
-      phone: '',
-      email: ''
-    });
-    this.saveContact(client);
-  }
-
-  deleteContact(client: Client, contact: ContactInfo): void {
-    if (client.contacts && contact.id) {
-      client.contacts = client.contacts.filter(c => c.id !== contact.id);
-      this.saveContact(client);
-    }
-  }
-
-  saveContact(client: Client): void {
-    this.clientService.update(client.id!, { contacts: client.contacts }).subscribe({
       error: () => this.loadClients()
     });
   }
