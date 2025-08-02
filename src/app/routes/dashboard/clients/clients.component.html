@@ -1,6 +1,6 @@
 <button nz-button nzType="primary" (click)="openAddModal()">新增客戶</button>
 
-<nz-table [nzData]="clients" [nzLoading]="loading" nzBordered class="clients-table">
+<nz-table [nzData]="clients" [nzLoading]="loading" nzBordered class="clients-table" [nzNoResult]="noDataTpl">
   <thead>
     <tr>
       <th>編號</th>
@@ -27,14 +27,15 @@
     </tr>
   </tbody>
 </nz-table>
+<ng-template #noDataTpl>
+  <div class="empty-container">
+    <i nz-icon nzType="usergroup-add" nzTheme="outline" class="empty-icon"></i>
+    <p>暫無客戶資料</p>
+  </div>
+</ng-template>
 
-<nz-modal
-  [(nzVisible)]="isModalVisible"
-  [nzTitle]="isEdit ? '編輯客戶' : '新增客戶'"
-  (nzOnOk)="saveClient()"
-  (nzOnCancel)="isModalVisible = false"
-  [nzWidth]="600"
->
+<nz-modal [(nzVisible)]="isModalVisible" [nzTitle]="isEdit ? '編輯客戶' : '新增客戶'" [nzOkLoading]="saving"
+  (nzOnOk)="saveClient()" (nzOnCancel)="isModalVisible = false" [nzWidth]="600">
   <form nz-form [formGroup]="clientForm">
     <div class="form-row">
       <nz-form-item>
@@ -85,13 +86,8 @@
       <nz-form-item nzFlex="100%">
         <nz-form-label nzFor="paymentFlow">請款流程</nz-form-label>
         <nz-form-control>
-          <nz-transfer
-            [nzDataSource]="paymentFlowStatusList"
-            [nzSelectedKeys]="selectedFlowKeys"
-            (nzChange)="onFlowChange($event)"
-            [nzTitles]="['可選流程','已選流程']"
-            [nzListStyle]="{ 'width.px': 250, 'height.px': 200 }"
-          ></nz-transfer>
+          <nz-transfer [nzDataSource]="paymentFlowStatusList" formControlName="paymentFlow" [nzTitles]="['可選流程','已選流程']"
+            [nzListStyle]="{ 'width.px': 250, 'height.px': 200 }"></nz-transfer>
         </nz-form-control>
       </nz-form-item>
     </div>

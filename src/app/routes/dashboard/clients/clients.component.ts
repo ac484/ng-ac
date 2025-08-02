@@ -39,13 +39,13 @@ export class ClientsComponent implements OnInit {
 
   clients: Client[] = [];
   loading = false;
+  saving = false; // 保存時的加載狀態
 
   clientForm!: FormGroup;
   isModalVisible = false;
   isEdit = false;
 
   paymentFlowStatusList: TransferItem[] = [];
-  selectedFlowKeys: string[] = [];
 
   ngOnInit(): void {
     this.initForm();
@@ -95,24 +95,37 @@ export class ClientsComponent implements OnInit {
 
   openAddModal(): void {
     this.isEdit = false;
-    this.clientForm.reset({ status: 'active', paymentFlow: [] });
-    this.selectedFlowKeys = [];
+    // Generate and pre-fill default client data
+    const defaultCode = this.clientService.generateClientCode();
+    this.clientForm.reset({
+      id: null,
+      clientCode: defaultCode,
+      clientName: '',
+      contactPerson: '',
+      phoneNumber: '',
+      email: '',
+      address: '',
+      industry: '',
+      companySize: '',
+      status: 'active',
+      notes: '',
+      paymentFlow: []
+    });
+    this.saving = false;
     this.isModalVisible = true;
   }
 
   openEditModal(client: Client): void {
     this.isEdit = true;
-    this.selectedFlowKeys = client.paymentFlow || [];
-    this.clientForm.patchValue({ ...client, paymentFlow: this.selectedFlowKeys });
+    this.clientForm.patchValue({ ...client });
     this.isModalVisible = true;
+    this.saving = false;
   }
 
-  onFlowChange(keys: string[]): void {
-    this.selectedFlowKeys = keys;
-    this.clientForm.patchValue({ paymentFlow: this.selectedFlowKeys });
-  }
+  // onFlowChange 已移除，改用 formControlName 綁定
 
   saveClient(): void {
+    this.saving = true;
     const data = this.clientForm.value;
     const obs = this.isEdit
       ? this.clientService.update(data.id, data)
@@ -122,9 +135,11 @@ export class ClientsComponent implements OnInit {
         this.message.success('保存成功');
         this.isModalVisible = false;
         this.loadClients();
+        this.saving = false;
       },
       () => {
         this.message.error('保存失敗');
+        this.saving = false;
       }
     );
   }
