@@ -349,36 +349,6 @@ export class LoginInOutService {
             children: []
           }
         ]
-      },
-      {
-        id: 4,
-        fatherId: 0,
-        menuName: '功能特性',
-        menuType: 'C',
-        path: '/default/feat',
-        icon: 'rocket',
-        code: 'TabsDetail',
-        children: []
-      },
-      {
-        id: 5,
-        fatherId: 0,
-        menuName: '組件展示',
-        menuType: 'C',
-        path: '/default/comp',
-        icon: 'appstore',
-        code: 'TabsDetail',
-        children: []
-      },
-      {
-        id: 6,
-        fatherId: 0,
-        menuName: '關於',
-        menuType: 'C',
-        path: '/default/about',
-        icon: 'info-circle',
-        code: 'TabsDetail',
-        children: []
       }
     ];
   }
