@@ -12,6 +12,8 @@ import { NzTransferModule, TransferChange, TransferItem } from 'ng-zorro-antd/tr
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { AntTableComponent, AntTableConfig, TableHeader } from '../../../shared/components/ant-table/ant-table.component';
+import { CardTableWrapComponent } from '../../../shared/components/card-table-wrap/card-table-wrap.component';
 
 interface ClientWithExpand extends Client {
   expand: boolean;
@@ -33,7 +35,9 @@ interface ClientWithExpand extends Client {
     NzTransferModule,
     NzIconModule,
     NzTagModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    AntTableComponent,
+    CardTableWrapComponent
   ],
   template: `
     <form nz-form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="add-form">
@@ -61,86 +65,93 @@ interface ClientWithExpand extends Client {
       </nz-row>
     </form>
 
-    <nz-table #clientTable [nzData]="clientsWithExpand" [nzLoading]="loading" nzBordered>
-      <thead>
-        <tr>
-          <th></th>
-          <th>編號</th>
-          <th>名稱</th>
-          <th>狀態</th>
-          <th>請款流程</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (client of clientTable.data; track client.id) {
+    <app-card-table-wrap tableTitle="客戶管理">
+      <nz-table #clientTable [nzData]="clientsWithExpand" [nzLoading]="loading" nzBordered>
+        <thead>
           <tr>
-            <td [(nzExpand)]="client.expand"></td>
-            <td>{{ client.clientCode }}</td>
-            <td>{{ client.clientName }}</td>
-            <td>
-              <nz-select [ngModel]="client.status" (ngModelChange)="updateStatus(client.id!, $event)" style="width: 100px;">
-                @for (o of statusOptions; track o.value) {
-                  <nz-option [nzLabel]="o.label" [nzValue]="o.value"></nz-option>
-                }
-              </nz-select>
-            </td>
-            <td class="payment-flow-cell">
-              <nz-transfer [nzDataSource]="paymentFlowOptions" [nzTitles]="['已選', '可選']" [nzOperations]="['←', '→']"
-                [nzShowSearch]="false" [nzShowSelectAll]="true" (nzChange)="onPaymentFlowChange(client.id!, $event)"
-                [nzListStyle]="{ 'width': '180px', 'height': '200px' }">
-              </nz-transfer>
-            </td>
-            <td>
-              <a nz-button nzType="link" (click)="onEdit(client)">編輯</a>
-              <a nz-button nzType="link" nzDanger (click)="onDelete(client.id!)">刪除</a>
-            </td>
+            <th></th>
+            <th>編號</th>
+            <th>名稱</th>
+            <th>狀態</th>
+            <th>請款流程</th>
+            <th>操作</th>
           </tr>
-          <tr [nzExpand]="client.expand">
-            <td colspan="6">
-              <button nz-button (click)="addContact(client)" nzType="primary" style="margin-bottom: 8px;">新增聯絡人</button>
-              <nz-table #innerTable [nzData]="client.contacts || []" nzSize="middle" [nzShowPagination]="false">
-                <thead>
-                  <tr>
-                    <th>聯絡人姓名</th>
-                    <th>電話號碼</th>
-                    <th>電子郵件</th>
-                    <th>操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (contact of innerTable.data; track contact.name) {
-                    <tr class="editable-row">
-                      <td>
-                        <div class="editable-cell" [hidden]="editContactId === contact.name" (click)="startEditContact(contact.name)">
-                          {{ contact.name }}
-                        </div>
-                        <input [hidden]="editContactId !== contact.name" type="text" nz-input [(ngModel)]="contact.name" (blur)="stopEditContact()" />
-                      </td>
-                      <td>
-                        <div class="editable-cell" [hidden]="editContactPhone === contact.phone" (click)="startEditContactPhone(contact.phone)">
-                          {{ contact.phone }}
-                        </div>
-                        <input [hidden]="editContactPhone !== contact.phone" type="text" nz-input [(ngModel)]="contact.phone" (blur)="stopEditContactPhone()" />
-                      </td>
-                      <td>
-                        <div class="editable-cell" [hidden]="editContactEmail === contact.email" (click)="startEditContactEmail(contact.email)">
-                          {{ contact.email }}
-                        </div>
-                        <input [hidden]="editContactEmail !== contact.email" type="text" nz-input [(ngModel)]="contact.email" (blur)="stopEditContactEmail()" />
-                      </td>
-                      <td>
-                        <a nz-popconfirm nzPopconfirmTitle="確定要刪除此聯絡人嗎?" (nzOnConfirm)="deleteContact(client, contact)">刪除</a>
-                      </td>
-                    </tr>
+        </thead>
+        <tbody>
+          @for (client of clientTable.data; track client.id) {
+            <tr>
+              <td [(nzExpand)]="client.expand"></td>
+              <td>{{ client.clientCode }}</td>
+              <td>{{ client.clientName }}</td>
+              <td>
+                <nz-select [ngModel]="client.status" (ngModelChange)="updateStatus(client.id!, $event)" style="width: 100px;">
+                  @for (o of statusOptions; track o.value) {
+                    <nz-option [nzLabel]="o.label" [nzValue]="o.value"></nz-option>
                   }
-                </tbody>
-              </nz-table>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </nz-table>
+                </nz-select>
+              </td>
+              <td class="payment-flow-cell">
+                <nz-transfer [nzDataSource]="paymentFlowOptions" [nzTitles]="['已選', '可選']" [nzOperations]="['←', '→']"
+                  [nzShowSearch]="false" [nzShowSelectAll]="true" (nzChange)="onPaymentFlowChange(client.id!, $event)"
+                  [nzListStyle]="{ 'width': '180px', 'height': '200px' }">
+                </nz-transfer>
+              </td>
+              <td>
+                <a nz-button nzType="link" (click)="onEdit(client)">編輯</a>
+                <a nz-button nzType="link" nzDanger (click)="onDelete(client.id!)">刪除</a>
+              </td>
+            </tr>
+            <tr [nzExpand]="client.expand">
+              <td colspan="6">
+                <div style="padding: 16px; background-color: #fafafa; border-radius: 6px;">
+                  <div style="margin-bottom: 16px;">
+                    <h4 style="margin: 0 0 8px 0;">{{ client.clientName }} - 聯絡人管理</h4>
+                    <button nz-button (click)="addContact(client)" nzType="primary" nzSize="small">新增聯絡人</button>
+                  </div>
+                  <nz-table #innerTable [nzData]="client.contacts || []" nzSize="small" [nzShowPagination]="false">
+                    <thead>
+                      <tr>
+                        <th>聯絡人姓名</th>
+                        <th>電話號碼</th>
+                        <th>電子郵件</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (contact of innerTable.data; track contact.name) {
+                        <tr class="editable-row">
+                          <td>
+                            <div class="editable-cell" [hidden]="editContactId === contact.name" (click)="startEditContact(contact.name)">
+                              {{ contact.name }}
+                            </div>
+                            <input [hidden]="editContactId !== contact.name" type="text" nz-input [(ngModel)]="contact.name" (blur)="stopEditContact()" />
+                          </td>
+                          <td>
+                            <div class="editable-cell" [hidden]="editContactPhone === contact.phone" (click)="startEditContactPhone(contact.phone)">
+                              {{ contact.phone }}
+                            </div>
+                            <input [hidden]="editContactPhone !== contact.phone" type="text" nz-input [(ngModel)]="contact.phone" (blur)="stopEditContactPhone()" />
+                          </td>
+                          <td>
+                            <div class="editable-cell" [hidden]="editContactEmail === contact.email" (click)="startEditContactEmail(contact.email)">
+                              {{ contact.email }}
+                            </div>
+                            <input [hidden]="editContactEmail !== contact.email" type="text" nz-input [(ngModel)]="contact.email" (blur)="stopEditContactEmail()" />
+                          </td>
+                          <td>
+                            <a nz-popconfirm nzPopconfirmTitle="確定要刪除此聯絡人嗎?" (nzOnConfirm)="deleteContact(client, contact)">刪除</a>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </nz-table>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    </app-card-table-wrap>
   `,
   styles: [
     `
@@ -321,6 +332,14 @@ export class ClientsComponent implements OnInit {
     this.clientService.update(client.id!, { contacts: client.contacts }).subscribe({
       error: () => this.loadClients()
     });
+  }
+
+  onPageChange(params: any): void {
+    // This method is no longer needed as tableConfig is removed
+  }
+
+  onPageSizeChange(pageSize: number): void {
+    // This method is no longer needed as tableConfig is removed
   }
 
   onCancel(): void {
