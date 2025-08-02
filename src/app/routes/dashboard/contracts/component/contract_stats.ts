@@ -81,10 +81,9 @@ export interface ContractStats {
         <nz-card>
           <nz-statistic 
             nzTitle="總金額" 
-            [nzValue]="stats.totalAmount" 
+            [nzValue]="amountFormatter(stats.totalAmount)" 
             nzPrefix="💰"
-            [nzValueStyle]="{ color: '#fa8c16' }"
-            [nzFormatter]="amountFormatter">
+            [nzValueStyle]="{ color: '#fa8c16' }">
           </nz-statistic>
         </nz-card>
       </div>

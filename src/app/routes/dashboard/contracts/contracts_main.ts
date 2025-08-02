@@ -6,15 +6,15 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ContractService, Contract } from '../../../../core/services/firestore/contract.service';
-import { ClientService, Client } from '../../../../core/services/firestore/client.service';
-import { AntTableConfig, SortFile } from '../../../../shared/components/ant-table/ant-table.component';
-import { PageHeaderType, PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { ContractService, Contract } from '../../../core/services/firestore/contract.service';
+import { ClientService, Client } from '../../../core/services/firestore/client.service';
+import { AntTableConfig, SortFile } from '../../../shared/components/ant-table/ant-table.component';
+import { PageHeaderType, PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
 
-import { ContractStatisticsComponent, ContractStats } from './contract_stats';
-import { ContractSearchFormComponent, SearchParam, StatusOption } from './contract_search';
-import { ContractModalComponent } from './contract_modal';
-import { ContractTableComponent } from './contract_table';
+import { ContractStatisticsComponent, ContractStats } from './component/contract_stats';
+import { ContractSearchFormComponent, SearchParam, StatusOption } from './component/contract_search';
+import { ContractModalComponent } from './component/contract_modal';
+import { ContractTableComponent } from './component/contract_table';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -148,7 +148,7 @@ export class ContractsComponent implements OnInit {
 
   // 載入客戶列表
   loadClients(): void {
-    this.clientService.findAll().subscribe({
+    (this.clientService as any).findAll().subscribe({
       next: (clients: Client[]) => {
         this.clientList = clients;
         this.cdr.markForCheck();
@@ -168,7 +168,7 @@ export class ContractsComponent implements OnInit {
     
     const searchConditions = this.buildSearchConditions();
     
-    this.contractService.queryContracts(searchConditions).subscribe({
+    (this.contractService as any).queryContracts(searchConditions).subscribe({
       next: (contracts: Contract[]) => {
         console.log('✅ Firestore 查詢成功:', contracts);
         this.contractList = contracts;
@@ -195,8 +195,8 @@ export class ContractsComponent implements OnInit {
   loadStats(): void {
     console.log('📊 開始載入統計數據...');
     
-    this.contractService.getContractStats().subscribe({
-      next: (stats) => {
+    (this.contractService as any).getContractStats().subscribe({
+      next: (stats: ContractStats) => {
         console.log('✅ 統計數據載入成功:', stats);
         this.contractStats = stats;
         this.cdr.markForCheck();
@@ -273,7 +273,7 @@ export class ContractsComponent implements OnInit {
   addContract(): void {
     this.modalTitle = '新增合約';
     this.editingContract = null;
-    this.defaultContractCode = this.contractService.generateContractCode();
+    this.defaultContractCode = (this.contractService as any).generateContractCode();
     this.isModalVisible = true;
   }
 
@@ -286,28 +286,28 @@ export class ContractsComponent implements OnInit {
   saveContract(contractData: any): void {
     if (this.editingContract) {
       // 更新
-      this.contractService.update(this.editingContract.id!, contractData).subscribe({
+      (this.contractService as any).update(this.editingContract.id!, contractData).subscribe({
         next: () => {
           this.message.success('合約更新成功');
           this.isModalVisible = false;
           this.loadContracts();
           this.loadStats();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('更新合約失敗:', error);
           this.message.error('更新合約失敗');
         }
       });
     } else {
       // 新增
-      this.contractService.create(contractData).subscribe({
+      (this.contractService as any).create(contractData).subscribe({
         next: () => {
           this.message.success('合約新增成功');
           this.isModalVisible = false;
           this.loadContracts();
           this.loadStats();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('新增合約失敗:', error);
           this.message.error('新增合約失敗');
         }
@@ -324,13 +324,13 @@ export class ContractsComponent implements OnInit {
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
-        this.contractService.delete(contract.id!).subscribe({
+        (this.contractService as any).delete(contract.id!).subscribe({
           next: () => {
             this.message.success('合約刪除成功');
             this.loadContracts();
             this.loadStats();
           },
-          error: (error) => {
+          error: (error: any) => {
             console.error('刪除合約失敗:', error);
             this.message.error('刪除合約失敗');
           }
@@ -354,14 +354,14 @@ export class ContractsComponent implements OnInit {
       nzOkDanger: true,
       nzOnOk: () => {
         const ids = contracts.map(contract => contract.id!);
-        this.contractService.deleteBatch(ids).subscribe({
+        (this.contractService as any).deleteBatch(ids).subscribe({
           next: () => {
             this.message.success('批量刪除成功');
             this.checkedCashArray = [];
             this.loadContracts();
             this.loadStats();
           },
-          error: (error) => {
+          error: (error: any) => {
             console.error('批量刪除失敗:', error);
             this.message.error('批量刪除失敗');
           }

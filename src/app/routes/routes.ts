@@ -6,7 +6,7 @@ import { authSimpleCanActivate, authSimpleCanActivateChild } from '@delon/auth';
 import { WorkbenchComponent } from './dashboard/workbench/workbench.component';
 import { MonitorComponent } from './dashboard/monitor/monitor.component';
 import { AnalysisComponent } from './dashboard/analysis/analysis.component';
-import { ContractsComponent } from './dashboard/contracts/contracts.component';
+import { ContractsComponent } from './dashboard/contracts/contracts_main';
 import { TreeListComponent } from './dashboard/tree-list/tree-list.component';
 import { FirestoreDemoComponent } from './dashboard/firestore-demo/firestore-demo.component';
 import { ClientsComponent } from './dashboard/clients/clients.component';
