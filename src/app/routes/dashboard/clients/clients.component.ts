@@ -11,6 +11,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTransferModule, TransferChange, TransferItem } from 'ng-zorro-antd/transfer';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 interface ClientWithExpand extends Client {
   expand: boolean;
@@ -31,7 +32,8 @@ interface ClientWithExpand extends Client {
     NzTableModule,
     NzTransferModule,
     NzIconModule,
-    NzTagModule
+    NzTagModule,
+    NzPopconfirmModule
   ],
   template: `
     <form nz-form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="add-form">
@@ -95,34 +97,66 @@ interface ClientWithExpand extends Client {
             </td>
           </tr>
           <tr [nzExpand]="client.expand">
-            <nz-table #innerTable [nzData]="client.contacts || []" nzSize="middle" [nzShowPagination]="false">
-              <thead>
-                <tr>
-                  <th>聯絡人姓名</th>
-                  <th>電話號碼</th>
-                  <th>電子郵件</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (contact of innerTable.data; track contact.name) {
+            <td colspan="6">
+              <button nz-button (click)="addContact(client)" nzType="primary" style="margin-bottom: 8px;">新增聯絡人</button>
+              <nz-table #innerTable [nzData]="client.contacts || []" nzSize="middle" [nzShowPagination]="false">
+                <thead>
                   <tr>
-                    <td>{{ contact.name }}</td>
-                    <td>{{ contact.phone }}</td>
-                    <td>{{ contact.email }}</td>
-                    <td>
-                      <a nz-button nzType="link" (click)="editContact(client, contact)">編輯</a>
-                      <a nz-button nzType="link" nzDanger (click)="deleteContact(client, contact)">刪除</a>
-                    </td>
+                    <th>聯絡人姓名</th>
+                    <th>電話號碼</th>
+                    <th>電子郵件</th>
+                    <th>操作</th>
                   </tr>
-                }
-              </tbody>
-            </nz-table>
+                </thead>
+                <tbody>
+                  @for (contact of innerTable.data; track contact.name) {
+                    <tr class="editable-row">
+                      <td>
+                        <div class="editable-cell" [hidden]="editContactId === contact.name" (click)="startEditContact(contact.name)">
+                          {{ contact.name }}
+                        </div>
+                        <input [hidden]="editContactId !== contact.name" type="text" nz-input [(ngModel)]="contact.name" (blur)="stopEditContact()" />
+                      </td>
+                      <td>
+                        <div class="editable-cell" [hidden]="editContactPhone === contact.phone" (click)="startEditContactPhone(contact.phone)">
+                          {{ contact.phone }}
+                        </div>
+                        <input [hidden]="editContactPhone !== contact.phone" type="text" nz-input [(ngModel)]="contact.phone" (blur)="stopEditContactPhone()" />
+                      </td>
+                      <td>
+                        <div class="editable-cell" [hidden]="editContactEmail === contact.email" (click)="startEditContactEmail(contact.email)">
+                          {{ contact.email }}
+                        </div>
+                        <input [hidden]="editContactEmail !== contact.email" type="text" nz-input [(ngModel)]="contact.email" (blur)="stopEditContactEmail()" />
+                      </td>
+                      <td>
+                        <a nz-popconfirm nzPopconfirmTitle="確定要刪除此聯絡人嗎?" (nzOnConfirm)="deleteContact(client, contact)">刪除</a>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </nz-table>
+            </td>
           </tr>
         }
       </tbody>
     </nz-table>
-  `
+  `,
+  styles: [
+    `
+      .editable-cell {
+        position: relative;
+        padding: 5px 12px;
+        cursor: pointer;
+      }
+
+      .editable-row:hover .editable-cell {
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        padding: 4px 11px;
+      }
+    `
+  ]
 })
 export class ClientsComponent implements OnInit {
   clients: Client[] = [];
@@ -131,6 +165,11 @@ export class ClientsComponent implements OnInit {
   loading = false;
   editing = false;
   editingClientId: string | null = null;
+  
+  // 聯絡人編輯狀態
+  editContactId: string | null = null;
+  editContactPhone: string | null = null;
+  editContactEmail: string | null = null;
   
   statusOptions = [
     { label: '啟用', value: 'active' },
@@ -234,14 +273,54 @@ export class ClientsComponent implements OnInit {
     });
   }
 
-  editContact(client: Client, contact: ContactInfo): void {
-    // TODO: 實現聯絡人編輯功能
-    console.log('編輯聯絡人:', contact);
+  // 聯絡人編輯方法
+  startEditContact(name: string): void {
+    this.editContactId = name;
+  }
+
+  stopEditContact(): void {
+    this.editContactId = null;
+  }
+
+  startEditContactPhone(phone: string): void {
+    this.editContactPhone = phone;
+  }
+
+  stopEditContactPhone(): void {
+    this.editContactPhone = null;
+  }
+
+  startEditContactEmail(email: string): void {
+    this.editContactEmail = email;
+  }
+
+  stopEditContactEmail(): void {
+    this.editContactEmail = null;
+  }
+
+  addContact(client: Client): void {
+    if (!client.contacts) {
+      client.contacts = [];
+    }
+    client.contacts.push({
+      name: '新聯絡人',
+      phone: '',
+      email: ''
+    });
+    this.updateClientContacts(client);
   }
 
   deleteContact(client: Client, contact: ContactInfo): void {
-    // TODO: 實現聯絡人刪除功能
-    console.log('刪除聯絡人:', contact);
+    if (client.contacts) {
+      client.contacts = client.contacts.filter(c => c.name !== contact.name);
+      this.updateClientContacts(client);
+    }
+  }
+
+  private updateClientContacts(client: Client): void {
+    this.clientService.update(client.id!, { contacts: client.contacts }).subscribe({
+      error: () => this.loadClients()
+    });
   }
 
   onCancel(): void {
