@@ -44,37 +44,37 @@ import { NzProgressModule } from 'ng-zorro-antd/progress';
       </ng-template>
 
       <!-- 合約編號模板 -->
-      <ng-template #contractCodeTpl let-contractCode="contractCode" let-id="id">
+      <ng-template #contractCodeTpl let-contract="$implicit">
         <div class="flex items-center">
-          <span class="mr-8">{{ contractCode }}</span>
-          <app-copy-text [text]="contractCode" tooltipTitle="複製合約編號">
+          <span class="mr-8">{{ contract?.contractCode || 'N/A' }}</span>
+          <app-copy-text [text]="contract?.contractCode || ''" tooltipTitle="複製合約編號">
             <i nz-icon nzType="copy"></i>
           </app-copy-text>
         </div>
       </ng-template>
 
       <!-- 金額模板 -->
-      <ng-template #amountTpl let-totalAmount="totalAmount">
-        <span class="font-medium text-green-600">{{ formatAmount(totalAmount) }}</span>
+      <ng-template #amountTpl let-contract="$implicit">
+        <span class="font-medium text-green-600">{{ formatAmount(contract?.totalAmount || 0) }}</span>
       </ng-template>
 
       <!-- 進度模板 -->
-      <ng-template #progressTpl let-progress="progress" let-status="status">
+      <ng-template #progressTpl let-contract="$implicit">
         <div class="flex items-center">
           <nz-progress 
-            [nzPercent]="progress" 
+            [nzPercent]="contract?.progress || 0" 
             nzSize="small" 
-            [nzStatus]="progress === 100 ? 'success' : 'active'"
+            [nzStatus]="(contract?.progress || 0) === 100 ? 'success' : 'active'"
             class="mr-8">
           </nz-progress>
-          <span class="text-xs">{{ progress }}%</span>
+          <span class="text-xs">{{ contract?.progress || 0 }}%</span>
         </div>
       </ng-template>
 
       <!-- 狀態模板 -->
-      <ng-template #statusTpl let-status="status">
-        <nz-tag [nzColor]="getStatusColor(status)">
-          {{ getStatusText(status) }}
+      <ng-template #statusTpl let-contract="$implicit">
+        <nz-tag [nzColor]="getStatusColor(contract?.status || 'draft')">
+          {{ getStatusText(contract?.status || 'draft') }}
         </nz-tag>
       </ng-template>
 
@@ -90,7 +90,7 @@ import { NzProgressModule } from 'ng-zorro-antd/progress';
             刪除
           </button>
           <app-copy-text 
-            [text]="'合約編號: ' + contract.contractCode + ', 客戶: ' + contract.clientName"
+            [text]="'合約編號: ' + (contract?.contractCode || 'N/A') + ', 客戶: ' + (contract?.clientName || 'N/A')"
             tooltipTitle="複製合約資訊">
             複製
           </app-copy-text>
@@ -118,7 +118,14 @@ export class ContractTableComponent implements AfterViewInit {
   @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<any>;
   @ViewChild('contractCodeTpl', { static: true }) contractCodeTpl!: TemplateRef<any>;
 
-  @Input() contractList: Contract[] = [];
+  @Input() set contractList(value: Contract[]) {
+    console.log('📋 ContractTableComponent received contractList:', value);
+    this._contractList = value;
+  }
+  get contractList(): Contract[] {
+    return this._contractList;
+  }
+  private _contractList: Contract[] = [];
   @Input() selectedContracts: Contract[] = [];
   @Input() tableConfig!: AntTableConfig;
 
@@ -133,11 +140,13 @@ export class ContractTableComponent implements AfterViewInit {
   @Output() sort = new EventEmitter<SortFile>();
 
   ngAfterViewInit(): void {
+    console.log('🔧 ContractTableComponent ngAfterViewInit called');
     // 初始化表格配置模板
     this.initTableConfig();
   }
 
   private initTableConfig(): void {
+    console.log('⚙️ initTableConfig called, tableConfig:', this.tableConfig);
     if (this.tableConfig) {
       this.tableConfig.headers = [
         {

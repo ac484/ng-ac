@@ -176,6 +176,13 @@ export class ContractsComponent implements OnInit {
     ).subscribe({
       next: (contracts: Contract[]) => {
         console.log('✅ Firestore 查詢成功:', contracts);
+        console.log('📊 合約數據詳情:', contracts.map(c => ({
+          id: c.id,
+          contractCode: c.contractCode,
+          clientName: c.clientName,
+          status: c.status,
+          totalAmount: c.totalAmount
+        })));
         this.contractList = contracts;
         this.tableConfig.total = contracts.length;
         this.tableConfig.loading = false;
