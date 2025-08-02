@@ -70,19 +70,10 @@
 </form>
 <div class="other">
   {{ 'app.login.sign-in-with' | i18n }}
-  <!-- Firebase 認證組件 -->
-  <app-google-auth></app-google-auth>
-  <app-email-login></app-email-login>
-  <app-anonymous-login></app-anonymous-login>
-
-  <!-- 保留原有的第三方登入（可選） -->
-  <!-- 
   <i nz-tooltip nzTooltipTitle="in fact Auth0 via window" (click)="open('auth0', 'window')" nz-icon
     nzType="alipay-circle" class="icon"></i>
   <i nz-tooltip nzTooltipTitle="in fact Github via redirect" (click)="open('github')" nz-icon nzType="taobao-circle"
     class="icon"></i>
   <i (click)="open('weibo', 'window')" nz-icon nzType="weibo-circle" class="icon"></i>
-  -->
-
   <a class="register" routerLink="/passport/register">{{ 'app.login.signup' | i18n }}</a>
 </div>

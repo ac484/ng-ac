@@ -17,11 +17,6 @@ import { NzTabChangeEvent, NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { finalize } from 'rxjs';
 
-// Firebase 認證組件
-import { AnonymousLoginComponent } from '../anonymous-login/anonymous-login.component';
-import { EmailLoginComponent } from '../email-login/email-login.component';
-import { GoogleAuthComponent } from '../google-auth/google-auth.component';
-
 @Component({
   selector: 'passport-login',
   templateUrl: './login.component.html',
@@ -39,11 +34,7 @@ import { GoogleAuthComponent } from '../google-auth/google-auth.component';
     NzInputModule,
     NzButtonModule,
     NzToolTipModule,
-    NzIconModule,
-    // Firebase 認證組件
-    AnonymousLoginComponent,
-    EmailLoginComponent,
-    GoogleAuthComponent
+    NzIconModule
   ]
 })
 export class UserLoginComponent implements OnDestroy {

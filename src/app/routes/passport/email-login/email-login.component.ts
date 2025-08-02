@@ -10,7 +10,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { EmailLoginFormComponent } from './email-login-form.component';
 import { EmailRegisterFormComponent } from './email-register-form.component';
@@ -24,21 +23,12 @@ import { EmailResetFormComponent } from './email-reset-form.component';
     NzIconModule,
     NzModalModule,
     NzTabsModule,
-    NzToolTipModule,
     EmailLoginFormComponent,
     EmailRegisterFormComponent,
     EmailResetFormComponent
   ],
   template: `
-    <i 
-      nz-tooltip 
-      nzTooltipTitle="郵箱登入" 
-      nz-icon 
-      nzType="mail" 
-      nzTheme="outline" 
-      class="icon" 
-      (click)="showModal()"
-    ></i>
+    <i nz-icon nzType="mail" nzTheme="outline" class="icon" (click)="showModal()"></i>
 
     <nz-modal [(nzVisible)]="isVisible" nzTitle="郵箱登入" [nzFooter]="null" (nzOnCancel)="handleCancel()">
       <ng-container *nzModalContent>

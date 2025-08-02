@@ -29,10 +29,20 @@ import { FirebaseAuthService } from '../../../core/services/firebase-auth.servic
   `,
   styles: [
     `
+      .icon {
+        font-size: 24px;
+        color: #666;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .icon:hover {
+        color: #1890ff;
+      }
+
       .icon.loading {
-        opacity: 0.5;
+        color: #d9d9d9;
         cursor: not-allowed;
-        pointer-events: none;
       }
     `
   ]
