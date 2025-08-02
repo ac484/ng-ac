@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ClientService, Client } from '../../../core/services/firestore/client.service';
+import { ClientService, Client, PaymentFlowStatus } from '../../../core/services/firestore/client.service';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTransferModule, TransferChange } from 'ng-zorro-antd/transfer';
 
 @Component({
   selector: 'app-clients',
@@ -16,12 +17,14 @@ import { NzTableModule } from 'ng-zorro-antd/table';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     NzFormModule,
     NzGridModule,
     NzInputModule,
     NzSelectModule,
     NzButtonModule,
-    NzTableModule
+    NzTableModule,
+    NzTransferModule
   ],
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.less']
@@ -33,9 +36,24 @@ export class ClientsComponent implements OnInit {
   editing = false;
   editingClientId: string | null = null;
   statusOptions = [
-    { label: 'Active', value: 'active' },
-    { label: 'Inactive', value: 'inactive' }
+    { label: '啟用', value: 'active' },
+    { label: '停用', value: 'inactive' }
   ];
+
+  // 請款流程選項
+  paymentFlowOptions = [
+    { key: PaymentFlowStatus.DRAFT, title: '草稿' },
+    { key: PaymentFlowStatus.SUBMITTED, title: '已提交' },
+    { key: PaymentFlowStatus.REVIEWING, title: '審核中' },
+    { key: PaymentFlowStatus.APPROVED, title: '已核准' },
+    { key: PaymentFlowStatus.REJECTED, title: '已拒絕' },
+    { key: PaymentFlowStatus.PROCESSING, title: '處理中' },
+    { key: PaymentFlowStatus.COMPLETED, title: '已完成' },
+    { key: PaymentFlowStatus.CANCELLED, title: '已取消' }
+  ];
+
+  // 當前選中的請款流程
+  selectedPaymentFlows: PaymentFlowStatus[] = [];
 
   constructor(private fb: FormBuilder, private clientService: ClientService) {
     this.addForm = this.fb.group({
@@ -47,7 +65,7 @@ export class ClientsComponent implements OnInit {
       address: [''],
       industry: [''],
       companySize: [''],
-      status: ['active', Validators.required],
+      status: ['active'],
       notes: [''],
       lastContactDate: [null]
     });
@@ -107,6 +125,40 @@ export class ClientsComponent implements OnInit {
 
   onDelete(id: string): void {
     this.clientService.delete(id).subscribe(() => this.loadClients());
+  }
+
+  updateStatus(id: string, status: 'active' | 'inactive'): void {
+    this.clientService.update(id, { status }).subscribe(() => {
+      // 更新本地數據
+      const client = this.clients.find(c => c.id === id);
+      if (client) {
+        client.status = status;
+      }
+    });
+  }
+
+  // 處理請款流程變更
+  onPaymentFlowChange(clientId: string, change: TransferChange): void {
+    // 從TransferChange中提取已選中的項目
+    const flows = change.list.map(item => item['key'] as PaymentFlowStatus);
+    this.clientService.update(clientId, { paymentFlow: flows }).subscribe(() => {
+      // 更新本地數據
+      const client = this.clients.find(c => c.id === clientId);
+      if (client) {
+        client.paymentFlow = flows;
+      }
+    });
+  }
+
+  // 獲取客戶的請款流程
+  getClientPaymentFlows(client: Client): PaymentFlowStatus[] {
+    return client.paymentFlow || [];
+  }
+
+  // 獲取可選的請款流程選項
+  getAvailablePaymentFlows(client: Client): Array<{ key: PaymentFlowStatus; title: string }> {
+    const currentFlows = this.getClientPaymentFlows(client);
+    return this.paymentFlowOptions.filter(option => !currentFlows.includes(option.key));
   }
 
   onCancel(): void {

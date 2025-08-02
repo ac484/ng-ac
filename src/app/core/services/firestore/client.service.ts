@@ -55,9 +55,8 @@ export class ClientService {
 
   /** 生成客戶編號 */
   generateClientCode(): string {
-    const ts = Date.now().toString();
-    const rand = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-    return `CLI${ts.slice(-6)}${rand}`;
+    const rand = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+    return `C${rand}`;
   }
 
   /** 檢查客戶編號是否存在 */

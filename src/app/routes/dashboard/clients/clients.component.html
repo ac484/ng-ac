@@ -2,7 +2,7 @@
   <nz-row nzGutter="16">
     <nz-col nzSpan="6">
       <nz-form-item>
-        <nz-form-label nzFor="clientCode">Client Code</nz-form-label>
+        <nz-form-label nzFor="clientCode">客戶編號</nz-form-label>
         <nz-form-control>
           <input nz-input formControlName="clientCode" id="clientCode" readonly />
         </nz-form-control>
@@ -10,15 +10,15 @@
     </nz-col>
     <nz-col nzSpan="6">
       <nz-form-item nzRequired>
-        <nz-form-label nzFor="clientName">Client Name</nz-form-label>
-        <nz-form-control nzErrorTip="Please input client name">
+        <nz-form-label nzFor="clientName">客戶名稱</nz-form-label>
+        <nz-form-control nzErrorTip="請輸入客戶名稱">
           <input nz-input formControlName="clientName" id="clientName" />
         </nz-form-control>
       </nz-form-item>
     </nz-col>
     <nz-col nzSpan="6">
       <nz-form-item>
-        <nz-form-label nzFor="contactPerson">Contact Person</nz-form-label>
+        <nz-form-label nzFor="contactPerson">聯絡人</nz-form-label>
         <nz-form-control>
           <input nz-input formControlName="contactPerson" id="contactPerson" />
         </nz-form-control>
@@ -26,7 +26,7 @@
     </nz-col>
     <nz-col nzSpan="6">
       <nz-form-item>
-        <nz-form-label nzFor="phoneNumber">Phone Number</nz-form-label>
+        <nz-form-label nzFor="phoneNumber">電話號碼</nz-form-label>
         <nz-form-control>
           <input nz-input formControlName="phoneNumber" id="phoneNumber" />
         </nz-form-control>
@@ -34,25 +34,15 @@
     </nz-col>
     <nz-col nzSpan="6">
       <nz-form-item>
-        <nz-form-label nzFor="email">Email</nz-form-label>
-        <nz-form-control nzErrorTip="Invalid email">
+        <nz-form-label nzFor="email">電子郵件</nz-form-label>
+        <nz-form-control nzErrorTip="電子郵件格式不正確">
           <input nz-input formControlName="email" id="email" />
         </nz-form-control>
       </nz-form-item>
     </nz-col>
-    <nz-col nzSpan="6">
-      <nz-form-item>
-        <nz-form-label nzFor="status">Status</nz-form-label>
-        <nz-form-control>
-          <nz-select formControlName="status" id="status">
-            <nz-option *ngFor="let o of statusOptions" [nzLabel]="o.label" [nzValue]="o.value"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-    </nz-col>
     <nz-col nzSpan="6" class="form-action">
-      <button nz-button nzType="primary" [disabled]="addForm.invalid">{{ editing ? 'Update' : 'Add' }} Client</button>
-      <button nz-button (click)="onCancel()" *ngIf="editing" style="margin-left:8px;">Cancel</button>
+      <button nz-button nzType="primary" [disabled]="addForm.invalid">{{ editing ? '更新客戶' : '新增客戶' }}</button>
+      <button nz-button (click)="onCancel()" *ngIf="editing" style="margin-left:8px;">取消</button>
     </nz-col>
   </nz-row>
 </form>
@@ -60,13 +50,14 @@
 <nz-table #clientTable [nzData]="clients" [nzLoading]="loading" nzBordered>
   <thead>
     <tr>
-      <th>Code</th>
-      <th>Name</th>
-      <th>Contact</th>
-      <th>Phone</th>
-      <th>Email</th>
-      <th>Status</th>
-      <th>Actions</th>
+      <th>編號</th>
+      <th>名稱</th>
+      <th>聯絡人</th>
+      <th>電話</th>
+      <th>電子郵件</th>
+      <th>狀態</th>
+      <th>請款流程</th>
+      <th>操作</th>
     </tr>
   </thead>
   <tbody>
@@ -76,10 +67,20 @@
       <td>{{ client.contactPerson }}</td>
       <td>{{ client.phoneNumber }}</td>
       <td>{{ client.email }}</td>
-      <td>{{ client.status }}</td>
       <td>
-        <a nz-button nzType="link" (click)="onEdit(client)">Edit</a>
-        <a nz-button nzType="link" nzDanger (click)="onDelete(client.id!)">Delete</a>
+        <nz-select [ngModel]="client.status" (ngModelChange)="updateStatus(client.id!, $event)" style="width: 100px;">
+          <nz-option *ngFor="let o of statusOptions" [nzLabel]="o.label" [nzValue]="o.value"></nz-option>
+        </nz-select>
+      </td>
+      <td class="payment-flow-cell">
+        <nz-transfer [nzDataSource]="paymentFlowOptions" [nzTitles]="['可選', '已選']" [nzOperations]="['→', '←']"
+          [nzListStyle]="{ 'width': '120px', 'height': '120px' }" [nzShowSearch]="false" [nzShowSelectAll]="false"
+          [nzSelectedKeys]="getClientPaymentFlows(client)" (nzChange)="onPaymentFlowChange(client.id!, $event)">
+        </nz-transfer>
+      </td>
+      <td>
+        <a nz-button nzType="link" (click)="onEdit(client)">編輯</a>
+        <a nz-button nzType="link" nzDanger (click)="onDelete(client.id!)">刪除</a>
       </td>
     </tr>
   </tbody>
