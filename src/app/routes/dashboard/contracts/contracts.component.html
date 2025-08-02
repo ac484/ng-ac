@@ -3,31 +3,45 @@
 
 <!--統計卡片-->
 <div nz-row [nzGutter]="16" class="mb-16">
-    <div nz-col [nzSpan]="6">
+    <div nz-col [nzSpan]="4">
         <nz-card>
             <nz-statistic nzTitle="總合約數" [nzValue]="contractStats.total" nzPrefix="📋"
                 [nzValueStyle]="{ color: '#1890ff' }">
             </nz-statistic>
         </nz-card>
     </div>
-    <div nz-col [nzSpan]="6">
+    <div nz-col [nzSpan]="4">
+        <nz-card>
+            <nz-statistic nzTitle="草稿" [nzValue]="contractStats.draft" nzPrefix="📝"
+                [nzValueStyle]="{ color: '#8c8c8c' }">
+            </nz-statistic>
+        </nz-card>
+    </div>
+    <div nz-col [nzSpan]="4">
+        <nz-card>
+            <nz-statistic nzTitle="籌備中" [nzValue]="contractStats.preparing" nzPrefix="⚙️"
+                [nzValueStyle]="{ color: '#faad14' }">
+            </nz-statistic>
+        </nz-card>
+    </div>
+    <div nz-col [nzSpan]="4">
         <nz-card>
             <nz-statistic nzTitle="進行中" [nzValue]="contractStats.active" nzPrefix="🔄"
                 [nzValueStyle]="{ color: '#52c41a' }">
             </nz-statistic>
         </nz-card>
     </div>
-    <div nz-col [nzSpan]="6">
+    <div nz-col [nzSpan]="4">
         <nz-card>
-            <nz-statistic nzTitle="總金額" [nzValue]="contractStats.totalAmount" nzPrefix="💰"
-                [nzValueStyle]="{ color: '#faad14' }">
+            <nz-statistic nzTitle="已完成" [nzValue]="contractStats.completed" nzPrefix="✅"
+                [nzValueStyle]="{ color: '#722ed1' }">
             </nz-statistic>
         </nz-card>
     </div>
-    <div nz-col [nzSpan]="6">
+    <div nz-col [nzSpan]="4">
         <nz-card>
-            <nz-statistic nzTitle="平均進度" [nzValue]="contractStats.averageProgress" nzSuffix="%" nzPrefix="📊"
-                [nzValueStyle]="{ color: '#722ed1' }">
+            <nz-statistic nzTitle="總金額" [nzValue]="contractStats.totalAmount" nzPrefix="💰"
+                [nzValueStyle]="{ color: '#fa8c16' }">
             </nz-statistic>
         </nz-card>
     </div>
@@ -155,15 +169,15 @@
     </ng-template>
 
     <!--金額模板-->
-    <ng-template #amountTpl let-amount="amount">
-        <span class="font-medium text-green-600">{{ formatAmount(amount) }}</span>
+    <ng-template #amountTpl let-totalAmount="totalAmount">
+        <span class="font-medium text-green-600">{{ formatAmount(totalAmount) }}</span>
     </ng-template>
 
     <!--進度模板-->
     <ng-template #progressTpl let-progress="progress" let-status="status">
         <div class="flex items-center">
             <nz-progress [nzPercent]="progress" nzSize="small"
-                [nzStatus]="status === 'cancelled' ? 'exception' : (progress === 100 ? 'success' : 'active')"
+                [nzStatus]="progress === 100 ? 'success' : 'active'"
                 class="mr-8">
             </nz-progress>
             <span class="text-xs">{{ progress }}%</span>
@@ -221,17 +235,9 @@
                 </div>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label nzRequired>客戶代表</nz-form-label>
-                        <nz-form-control nzErrorTip="請輸入客戶代表">
-                            <input nz-input formControlName="clientRepresentative" placeholder="請輸入客戶代表" />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label nzRequired>我方業務代表</nz-form-label>
-                        <nz-form-control nzErrorTip="請輸入我方業務代表">
-                            <input nz-input formControlName="contactPerson" placeholder="請輸入我方業務代表" />
+                        <nz-form-label nzRequired>專案經理</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入專案經理">
+                            <input nz-input formControlName="projectManager" placeholder="請輸入專案經理" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -247,17 +253,9 @@
                     <nz-form-item>
                         <nz-form-label nzRequired>總金額</nz-form-label>
                         <nz-form-control nzErrorTip="請輸入總金額">
-                            <nz-input-number formControlName="amount" [nzMin]="0" [nzFormatter]="formatNumber"
+                            <nz-input-number formControlName="totalAmount" [nzMin]="0" [nzFormatter]="formatNumber"
                                 [nzParser]="parseNumber" nzPlaceHolder="請輸入總金額" style="width: 100%">
                             </nz-input-number>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="8">
-                    <nz-form-item>
-                        <nz-form-label nzRequired>版本</nz-form-label>
-                        <nz-form-control nzErrorTip="請輸入版本">
-                            <input nz-input formControlName="version" placeholder="如: V1.0" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -280,38 +278,6 @@
                                 <nz-option [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
                                 }
                             </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="8">
-                    <nz-form-item>
-                        <nz-form-label>開始日期</nz-form-label>
-                        <nz-form-control>
-                            <nz-date-picker formControlName="startDate" style="width: 100%"></nz-date-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="8">
-                    <nz-form-item>
-                        <nz-form-label>結束日期</nz-form-label>
-                        <nz-form-control>
-                            <nz-date-picker formControlName="endDate" style="width: 100%"></nz-date-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label>專案經理</nz-form-label>
-                        <nz-form-control>
-                            <input nz-input formControlName="projectManager" placeholder="請輸入專案經理" />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label>業務負責人</nz-form-label>
-                        <nz-form-control>
-                            <input nz-input formControlName="salesPerson" placeholder="請輸入業務負責人" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>

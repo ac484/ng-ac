@@ -101,12 +101,9 @@ export class FirestoreDemoComponent implements OnInit {
     this.contractForm = this.fb.group({
       contractCode: ['', [Validators.required]],
       clientName: ['', [Validators.required]],
-      clientRepresentative: ['', [Validators.required]],
-      contactPerson: ['', [Validators.required]],
+      projectManager: ['', [Validators.required]], // 改為 projectManager
       contractName: ['', [Validators.required]],
-      amount: [null, [Validators.required, Validators.min(0)]],
-      version: ['V1.0', [Validators.required]],
-      progress: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      totalAmount: [null, [Validators.required, Validators.min(0)]], // 改為 totalAmount
       status: ['active', [Validators.required]],
       description: ['']
     });
@@ -120,13 +117,13 @@ export class FirestoreDemoComponent implements OnInit {
   // 用戶操作
   loadUsers(): void {
     this.loading.users = true;
-    this.userService.getActiveUsers({ limit: 10 }).subscribe({
-      next: (users) => {
+    this.userService.getActiveUsers([], [], 10).subscribe({
+      next: (users: User[]) => {
         this.users = users;
         this.loading.users = false;
         this.cdr.markForCheck();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('載入用戶失敗:', error);
         this.message.error('載入用戶失敗');
         this.loading.users = false;
@@ -144,13 +141,13 @@ export class FirestoreDemoComponent implements OnInit {
         roles: ['user']
       };
 
-      this.userService.createWithId(userData.uid, userData).subscribe({
+      this.userService.replace(userData.uid, userData).subscribe({
         next: () => {
           this.message.success('用戶創建成功');
           this.userForm.reset();
           this.loadUsers();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('創建用戶失敗:', error);
           this.message.error('創建用戶失敗');
         }
@@ -161,13 +158,13 @@ export class FirestoreDemoComponent implements OnInit {
   // 合約操作
   loadContracts(): void {
     this.loading.contracts = true;
-    this.contractService.getAll({ limit: 10 }).subscribe({
-      next: (contracts) => {
+    this.contractService.findAll([], [], 10).subscribe({
+      next: (contracts: Contract[]) => {
         this.contracts = contracts;
         this.loading.contracts = false;
         this.cdr.markForCheck();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('載入合約失敗:', error);
         this.message.error('載入合約失敗');
         this.loading.contracts = false;
@@ -187,13 +184,11 @@ export class FirestoreDemoComponent implements OnInit {
         next: () => {
           this.message.success('合約創建成功');
           this.contractForm.reset({
-            version: 'V1.0',
-            progress: 0,
             status: 'active'
           });
           this.loadContracts();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('創建合約失敗:', error);
           this.message.error('創建合約失敗');
         }
@@ -202,12 +197,15 @@ export class FirestoreDemoComponent implements OnInit {
   }
 
   updateContractProgress(contractId: string, progress: number): void {
-    this.contractService.updateProgress(contractId, progress).subscribe({
+    this.contractService.update(contractId, {
+      progress,
+      status: progress >= 100 ? 'completed' : 'active'
+    }).subscribe({
       next: () => {
         this.message.success('合約進度更新成功');
         this.loadContracts();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('更新合約進度失敗:', error);
         this.message.error('更新合約進度失敗');
       }
@@ -217,18 +215,20 @@ export class FirestoreDemoComponent implements OnInit {
   // 工具方法
   getStatusColor(status: string): string {
     const colors: { [key: string]: string } = {
+      'draft': 'default',
+      'preparing': 'processing',
       'active': 'processing',
-      'completed': 'success',
-      'cancelled': 'error'
+      'completed': 'success'
     };
     return colors[status] || 'default';
   }
 
   getStatusText(status: string): string {
     const statusMap: { [key: string]: string } = {
+      'draft': '草稿',
+      'preparing': '籌備中',
       'active': '進行中',
-      'completed': '已完成',
-      'cancelled': '已取消'
+      'completed': '已完成'
     };
     return statusMap[status] || status;
   }

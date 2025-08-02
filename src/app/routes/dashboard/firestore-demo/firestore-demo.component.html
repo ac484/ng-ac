@@ -113,17 +113,9 @@
                         </div>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label nzRequired>客戶代表</nz-form-label>
+                                <nz-form-label nzRequired>專案經理</nz-form-label>
                                 <nz-form-control>
-                                    <input nz-input formControlName="clientRepresentative" placeholder="請輸入客戶代表" />
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="12">
-                            <nz-form-item>
-                                <nz-form-label nzRequired>客戶窗口</nz-form-label>
-                                <nz-form-control>
-                                    <input nz-input formControlName="contactPerson" placeholder="請輸入客戶窗口" />
+                                    <input nz-input formControlName="projectManager" placeholder="請輸入專案經理" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -135,32 +127,25 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="8">
+                        <div nz-col [nzSpan]="12">
                             <nz-form-item>
                                 <nz-form-label nzRequired>總金額</nz-form-label>
                                 <nz-form-control>
-                                    <nz-input-number formControlName="amount" [nzMin]="0" nzPlaceHolder="請輸入總金額"
+                                    <nz-input-number formControlName="totalAmount" [nzMin]="0" nzPlaceHolder="請輸入總金額"
                                         style="width: 100%">
                                     </nz-input-number>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="8">
-                            <nz-form-item>
-                                <nz-form-label nzRequired>版本</nz-form-label>
-                                <nz-form-control>
-                                    <input nz-input formControlName="version" placeholder="如: V1.0" />
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="8">
+                        <div nz-col [nzSpan]="12">
                             <nz-form-item>
                                 <nz-form-label nzRequired>狀態</nz-form-label>
                                 <nz-form-control>
                                     <nz-select formControlName="status">
+                                        <nz-option nzValue="draft" nzLabel="草稿"></nz-option>
+                                        <nz-option nzValue="preparing" nzLabel="籌備中"></nz-option>
                                         <nz-option nzValue="active" nzLabel="進行中"></nz-option>
                                         <nz-option nzValue="completed" nzLabel="已完成"></nz-option>
-                                        <nz-option nzValue="cancelled" nzLabel="已取消"></nz-option>
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
@@ -191,7 +176,7 @@
                         @for (contract of contracts; track contract.id) {
                         <nz-list-item>
                             <nz-list-item-meta [nzTitle]="contract.contractName"
-                                [nzDescription]="'客戶: ' + contract.clientName + ' | 代表: ' + contract.clientRepresentative">
+                                [nzDescription]="'客戶: ' + contract.clientName + ' | 經理: ' + contract.projectManager">
                             </nz-list-item-meta>
                             <ul nz-list-item-actions>
                                 <nz-list-item-action>
@@ -200,18 +185,21 @@
                                     </nz-tag>
                                 </nz-list-item-action>
                                 <nz-list-item-action>
-                                    <span>{{ formatAmount(contract.amount) }}</span>
+                                    <span>{{ formatAmount(contract.totalAmount) }}</span>
                                 </nz-list-item-action>
+                                @if (contract.progress !== undefined) {
                                 <nz-list-item-action>
                                     <span>進度: {{ contract.progress }}%</span>
                                 </nz-list-item-action>
-                                @if (contract.status === 'active' && contract.progress < 100) { <nz-list-item-action>
+                                }
+                                @if (contract.status === 'active' && contract.progress !== undefined && contract.progress < 100) {
+                                <nz-list-item-action>
                                     <button nz-button nzType="link" nzSize="small"
-                                        (click)="updateContractProgress(contract.id!, contract.progress + 10)">
+                                        (click)="updateContractProgress(contract.id!, contract.progress! + 10)">
                                         +10%
                                     </button>
-                                    </nz-list-item-action>
-                                    }
+                                </nz-list-item-action>
+                                }
                             </ul>
                         </nz-list-item>
                         }

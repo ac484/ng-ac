@@ -123,9 +123,10 @@ export class ContractsComponent implements OnInit {
 
   // 狀態選項
   statusOptions = [
+    { label: '草稿', value: 'draft', color: 'default' },
+    { label: '籌備中', value: 'preparing', color: 'processing' },
     { label: '進行中', value: 'active', color: 'processing' },
-    { label: '已完成', value: 'completed', color: 'success' },
-    { label: '已取消', value: 'cancelled', color: 'error' }
+    { label: '已完成', value: 'completed', color: 'success' }
   ];
 
   private fb = inject(FormBuilder);
@@ -140,8 +141,6 @@ export class ContractsComponent implements OnInit {
     this.loadContracts();
     this.loadStats();
   }
-
-
 
   private initForms(): void {
     // 搜索表單
@@ -158,22 +157,12 @@ export class ContractsComponent implements OnInit {
     this.contractForm = this.fb.group({
       contractCode: ['', [Validators.required]],
       clientName: ['', [Validators.required]],
-      clientRepresentative: ['', [Validators.required]],
-      contactPerson: ['', [Validators.required]],
+      projectManager: ['', [Validators.required]],
       contractName: ['', [Validators.required]],
-      amount: [null, [Validators.required, Validators.min(0)]],
-      version: ['V1.0', [Validators.required]],
+      totalAmount: [null, [Validators.required, Validators.min(0)]],
       progress: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       status: ['active', [Validators.required]],
-      startDate: [null],
-      endDate: [null],
-      signDate: [null],
-      description: [''],
-      projectManager: [''],
-      salesPerson: [''],
-      paymentTerms: [''],
-      category: [''],
-      priority: ['medium']
+      description: ['']
     });
   }
 
@@ -339,11 +328,11 @@ export class ContractsComponent implements OnInit {
     }
     
     if (this.searchParam.minAmount) {
-      where.push({ field: 'amount', operator: '>=', value: this.searchParam.minAmount });
+      where.push({ field: 'totalAmount', operator: '>=', value: this.searchParam.minAmount });
     }
     
     if (this.searchParam.maxAmount) {
-      where.push({ field: 'amount', operator: '<=', value: this.searchParam.maxAmount });
+      where.push({ field: 'totalAmount', operator: '<=', value: this.searchParam.maxAmount });
     }
 
     if (where.length > 0) {
@@ -572,18 +561,20 @@ export class ContractsComponent implements OnInit {
   // 工具方法
   getStatusColor(status: string): string {
     const statusMap: { [key: string]: string } = {
+      'draft': 'default',
+      'preparing': 'processing',
       'active': 'processing',
-      'completed': 'success',
-      'cancelled': 'error'
+      'completed': 'success'
     };
     return statusMap[status] || 'default';
   }
 
   getStatusText(status: string): string {
     const statusMap: { [key: string]: string } = {
+      'draft': '草稿',
+      'preparing': '籌備中',
       'active': '進行中',
-      'completed': '已完成',
-      'cancelled': '已取消'
+      'completed': '已完成'
     };
     return statusMap[status] || status;
   }

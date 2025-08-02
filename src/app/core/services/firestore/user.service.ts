@@ -4,10 +4,10 @@
  * 管理用戶資料的 CRUD 操作
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BaseFirestoreService, BaseEntity, QueryOptions } from './base-firestore.service';
+import { BaseFirestoreService, BaseEntity, WhereCondition, OrderCondition } from './base-firestore.service';
 
 export interface User extends BaseEntity {
   uid: string; // Firebase Auth UID
@@ -33,18 +33,18 @@ export interface User extends BaseEntity {
 @Injectable({
   providedIn: 'root'
 })
-export class UserService extends BaseFirestoreService<User> {
-  protected collectionName = 'users';
+export class UserService {
+  private readonly baseService = inject(BaseFirestoreService);
+  private readonly collectionName = 'users';
 
   /**
    * 根據 Firebase UID 獲取用戶
    */
   getByUid(uid: string): Observable<User | null> {
-    return this.getAll({
-      where: [{ field: 'uid', operator: '==', value: uid }],
-      limit: 1
-    }).pipe(
-      map(users => users.length > 0 ? users[0] : null)
+    return this.baseService.findAll<User>(this.collectionName, [
+      { field: 'uid', operator: '==', value: uid }
+    ], [], 1).pipe(
+      map((users: User[]) => users.length > 0 ? users[0] : null)
     );
   }
 
@@ -52,11 +52,10 @@ export class UserService extends BaseFirestoreService<User> {
    * 根據郵箱獲取用戶
    */
   getByEmail(email: string): Observable<User | null> {
-    return this.getAll({
-      where: [{ field: 'email', operator: '==', value: email }],
-      limit: 1
-    }).pipe(
-      map(users => users.length > 0 ? users[0] : null)
+    return this.baseService.findAll<User>(this.collectionName, [
+      { field: 'email', operator: '==', value: email }
+    ], [], 1).pipe(
+      map((users: User[]) => users.length > 0 ? users[0] : null)
     );
   }
 
@@ -77,7 +76,7 @@ export class UserService extends BaseFirestoreService<User> {
     };
 
     // 使用 UID 作為文檔 ID
-    return this.createWithId(authUser.uid, userData).pipe(
+    return this.baseService.replace<User>(this.collectionName, authUser.uid, userData).pipe(
       map(() => authUser.uid)
     );
   }
@@ -86,82 +85,116 @@ export class UserService extends BaseFirestoreService<User> {
    * 更新用戶最後登入時間
    */
   updateLastLogin(uid: string): Observable<void> {
-    return this.update(uid, {
+    return this.baseService.modify<User>(this.collectionName, uid, {
       lastLoginAt: new Date()
-    } as any);
+    });
   }
 
   /**
    * 更新用戶角色
    */
   updateRoles(uid: string, roles: string[]): Observable<void> {
-    return this.update(uid, {
+    return this.baseService.modify<User>(this.collectionName, uid, {
       roles
-    } as any);
+    });
   }
 
   /**
    * 啟用/停用用戶
    */
   toggleUserStatus(uid: string, isActive: boolean): Observable<void> {
-    return this.update(uid, {
+    return this.baseService.modify<User>(this.collectionName, uid, {
       isActive
-    } as any);
+    });
   }
 
   /**
    * 獲取活躍用戶列表
    */
-  getActiveUsers(options?: QueryOptions): Observable<User[]> {
-    const queryOptions: QueryOptions = {
-      ...options,
-      where: [
-        ...(options?.where || []),
-        { field: 'isActive', operator: '==', value: true }
-      ]
-    };
+  getActiveUsers(where: WhereCondition[] = [], order: OrderCondition[] = [], limit?: number): Observable<User[]> {
+    const conditions: WhereCondition[] = [
+      ...where,
+      { field: 'isActive', operator: '==', value: true }
+    ];
 
-    return this.getAll(queryOptions);
+    return this.baseService.findAll<User>(this.collectionName, conditions, order, limit);
   }
 
   /**
    * 根據角色獲取用戶
    */
-  getUsersByRole(role: string, options?: QueryOptions): Observable<User[]> {
-    const queryOptions: QueryOptions = {
-      ...options,
-      where: [
-        ...(options?.where || []),
-        { field: 'roles', operator: 'array-contains', value: role }
-      ]
-    };
+  getUsersByRole(role: string, where: WhereCondition[] = [], order: OrderCondition[] = [], limit?: number): Observable<User[]> {
+    const conditions: WhereCondition[] = [
+      ...where,
+      { field: 'roles', operator: 'array-contains', value: role }
+    ];
 
-    return this.getAll(queryOptions);
+    return this.baseService.findAll<User>(this.collectionName, conditions, order, limit);
   }
 
   /**
    * 根據部門獲取用戶
    */
   getUsersByDepartment(department: string): Observable<User[]> {
-    return this.getAll({
-      where: [
-        { field: 'department', operator: '==', value: department },
-        { field: 'isActive', operator: '==', value: true }
-      ],
-      orderBy: [{ field: 'displayName', direction: 'asc' }]
-    });
+    return this.baseService.findAll<User>(this.collectionName, [
+      { field: 'department', operator: '==', value: department },
+      { field: 'isActive', operator: '==', value: true }
+    ], [
+      { field: 'displayName', direction: 'asc' }
+    ]);
   }
 
   /**
    * 搜尋用戶（根據顯示名稱或員工編號）
    */
   searchUsers(searchTerm: string): Observable<User[]> {
-    return this.getAll({
-      where: [
-        { field: 'displayName', operator: '>=', value: searchTerm },
-        { field: 'displayName', operator: '<=', value: searchTerm + '\uf8ff' }
-      ],
-      orderBy: [{ field: 'displayName', direction: 'asc' }]
-    });
+    return this.baseService.findAll<User>(this.collectionName, [
+      { field: 'displayName', operator: '>=', value: searchTerm },
+      { field: 'displayName', operator: '<=', value: searchTerm + '\uf8ff' }
+    ], [
+      { field: 'displayName', direction: 'asc' }
+    ]);
+  }
+
+  /**
+   * 獲取所有用戶
+   */
+  findAll(where: WhereCondition[] = [], order: OrderCondition[] = [], limit?: number): Observable<User[]> {
+    return this.baseService.findAll<User>(this.collectionName, where, order, limit);
+  }
+
+  /**
+   * 根據 ID 獲取用戶
+   */
+  findById(id: string): Observable<User | null> {
+    return this.baseService.findById<User>(this.collectionName, id);
+  }
+
+  /**
+   * 創建用戶
+   */
+  create(data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Observable<string> {
+    return this.baseService.create<User>(this.collectionName, data);
+  }
+
+  /**
+   * 替換用戶資料
+   */
+  replace(id: string, data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Observable<void> {
+    return this.baseService.replace<User>(this.collectionName, id, data);
+  }
+
+  /**
+   * 修改用戶資料
+   */
+  modify(id: string, data: Partial<User>): Observable<void> {
+    return this.baseService.modify<User>(this.collectionName, id, data);
+  }
+
+  /**
+   * 刪除用戶
+   */
+  remove(id: string): Observable<void> {
+    return this.baseService.remove(this.collectionName, id);
   }
 }
