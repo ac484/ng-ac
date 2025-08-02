@@ -1,105 +1,123 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ClientService, Client } from '../../../core/services/firestore/client.service';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzTransferModule, TransferItem } from 'ng-zorro-antd/transfer';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzMessageService } from 'ng-zorro-antd/message';
-
-import { ClientService, Client, PaymentFlowStatus } from '../../../core/services/firestore/client.service';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzTableModule } from 'ng-zorro-antd/table';
 
 @Component({
   selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
-    NzTableModule,
-    NzButtonModule,
-    NzModalModule,
     NzFormModule,
+    NzGridModule,
     NzInputModule,
     NzSelectModule,
-    NzTransferModule
-  ]
+    NzButtonModule,
+    NzTableModule
+  ],
+  templateUrl: './clients.component.html',
+  styleUrls: ['./clients.component.less']
 })
 export class ClientsComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private clientService = inject(ClientService);
-  private modal = inject(NzModalService);
-  private message = inject(NzMessageService);
-
   clients: Client[] = [];
+  addForm: FormGroup;
   loading = false;
-  saving = false; // 保存時的加載狀態
+  editing = false;
+  editingClientId: string | null = null;
+  statusOptions = [
+    { label: 'Active', value: 'active' },
+    { label: 'Inactive', value: 'inactive' }
+  ];
 
-  clientForm!: FormGroup;
-  isModalVisible = false;
-  isEdit = false;
-
-  paymentFlowStatusList: TransferItem[] = [];
-
-  ngOnInit(): void {
-    this.initForm();
-    this.initPaymentFlow();
-    this.loadClients();
-  }
-
-  private initForm(): void {
-    this.clientForm = this.fb.group({
-      id: [null],
-      clientCode: ['', [Validators.required]],
-      clientName: ['', [Validators.required]],
-      contactPerson: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required]],
+  constructor(private fb: FormBuilder, private clientService: ClientService) {
+    this.addForm = this.fb.group({
+      clientCode: [{ value: this.clientService.generateClientCode(), disabled: true }],
+      clientName: ['', Validators.required],
+      contactPerson: [''],
+      phoneNumber: [''],
       email: ['', [Validators.email]],
       address: [''],
       industry: [''],
       companySize: [''],
-      status: ['active', [Validators.required]],
+      status: ['active', Validators.required],
       notes: [''],
-      paymentFlow: [[]]
+      lastContactDate: [null]
     });
   }
 
-  private initPaymentFlow(): void {
-    this.paymentFlowStatusList = Object.values(PaymentFlowStatus).map(status => ({
-      key: status,
-      title: status,
-      description: '',
-      disabled: false
-    }));
+  ngOnInit(): void {
+    this.loadClients();
   }
 
   loadClients(): void {
     this.loading = true;
-    this.clientService.findAll().subscribe({
-      next: (arr: Client[]) => {
-        this.clients = arr;
-        this.loading = false;
-      },
-      error: () => {
-        this.message.error('載入客戶失敗');
-        this.loading = false;
-      }
+    this.clientService.findAll().subscribe((data: Client[]) => {
+      this.clients = data;
+      this.loading = false;
     });
   }
 
-  openAddModal(): void {
-    this.isEdit = false;
-    // Generate and pre-fill default client data
-    const defaultCode = this.clientService.generateClientCode();
-    this.clientForm.reset({
-      id: null,
-      clientCode: defaultCode,
+  onSubmit(): void {
+    if (this.addForm.invalid) {
+      Object.values(this.addForm.controls).forEach(control => {
+        control.markAsDirty();
+        control.updateValueAndValidity();
+      });
+      return;
+    }
+    const formValue = this.addForm.getRawValue();
+    if (this.editing && this.editingClientId) {
+      this.clientService.update(this.editingClientId, formValue).subscribe(() => {
+        this.resetForm();
+        this.loadClients();
+      });
+    } else {
+      this.clientService.create(formValue).subscribe(() => {
+        this.resetForm();
+        this.loadClients();
+      });
+    }
+  }
+
+  onEdit(client: Client): void {
+    this.editing = true;
+    this.editingClientId = client.id || null;
+    this.addForm.patchValue({
+      clientCode: client.clientCode,
+      clientName: client.clientName,
+      contactPerson: client.contactPerson,
+      phoneNumber: client.phoneNumber,
+      email: client.email,
+      address: client.address,
+      industry: client.industry,
+      companySize: client.companySize,
+      status: client.status,
+      notes: client.notes,
+      lastContactDate: client.lastContactDate || null
+    });
+  }
+
+  onDelete(id: string): void {
+    this.clientService.delete(id).subscribe(() => this.loadClients());
+  }
+
+  onCancel(): void {
+    this.resetForm();
+  }
+
+  private resetForm(): void {
+    this.editing = false;
+    this.editingClientId = null;
+    this.addForm.reset({
+      clientCode: this.clientService.generateClientCode(),
       clientName: '',
       contactPerson: '',
       phoneNumber: '',
@@ -109,50 +127,7 @@ export class ClientsComponent implements OnInit {
       companySize: '',
       status: 'active',
       notes: '',
-      paymentFlow: []
+      lastContactDate: null
     });
-    this.saving = false;
-    this.isModalVisible = true;
-  }
-
-  openEditModal(client: Client): void {
-    this.isEdit = true;
-    this.clientForm.patchValue({ ...client });
-    this.isModalVisible = true;
-    this.saving = false;
-  }
-
-  // onFlowChange 已移除，改用 formControlName 綁定
-
-  saveClient(): void {
-    this.saving = true;
-    const data = this.clientForm.value;
-    const obs = this.isEdit
-      ? this.clientService.update(data.id, data)
-      : this.clientService.create(data);
-    (obs as any).subscribe(
-      () => {
-        this.message.success('保存成功');
-        this.isModalVisible = false;
-        this.loadClients();
-        this.saving = false;
-      },
-      () => {
-        this.message.error('保存失敗');
-        this.saving = false;
-      }
-    );
-  }
-
-  deleteClient(client: Client): void {
-    (this.clientService.delete(client.id!) as any).subscribe(
-      () => {
-        this.message.success('刪除成功');
-        this.loadClients();
-      },
-      () => {
-        this.message.error('刪除失敗');
-      }
-    );
   }
 }
