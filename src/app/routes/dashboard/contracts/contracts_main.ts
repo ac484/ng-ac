@@ -6,13 +6,15 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ContractService, Contract } from '../../../core/services/firestore/contract.service';
+import { ContractService } from '../../../core/services/firestore/contract.service';
 import { ClientService, Client } from '../../../core/services/firestore/client.service';
 import { AntTableConfig, SortFile } from '../../../shared/components/ant-table/ant-table.component';
 import { PageHeaderType, PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
+import { Contract, ContractStats, SearchParam, StatusOption, AmountValue } from '../../../core/types/contract.types';
+import { AmountConverter, StatusConverter } from '../../../core/utils/type-converter';
 
-import { ContractStatisticsComponent, ContractStats } from './component/contract_stats';
-import { ContractSearchFormComponent, SearchParam, StatusOption } from './component/contract_search';
+import { ContractStatisticsComponent } from './component/contract_stats';
+import { ContractSearchFormComponent } from './component/contract_search';
 import { ContractModalComponent } from './component/contract_modal';
 import { ContractTableComponent } from './component/contract_table';
 

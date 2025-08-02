@@ -10,41 +10,19 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, combineLatest, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { BaseFirestoreService, BaseEntity, WhereCondition, OrderCondition } from './base-firestore.service';
-import { Timestamp, serverTimestamp } from '@angular/fire/firestore';
+import { Timestamp, serverTimestamp, FieldValue } from '@angular/fire/firestore';
+import { Contract, ContractStatus, AmountValue, ContractStats, ContractError, ContractErrorType } from '../../types/contract.types';
+import { StatusConverter } from '../../utils/type-converter';
 
 // ===== 核心介面定義 =====
 
 export interface ContractVersion {
   versionNumber: number;
   type: 'initial' | 'addition' | 'reduction' | 'modification';
-  amount: number;
+  amount: AmountValue;
   description: string;
   createdAt: Timestamp;
   approvedBy?: string;
-}
-
-export interface Contract extends BaseEntity {
-  // 基本資訊
-  contractCode: string;        // 合約編號
-  clientName: string;          // 客戶名稱
-  contractName: string;        // 合約名稱
-  
-  // 狀態和負責人
-  status: 'draft' | 'preparing' | 'active' | 'completed';
-  projectManager: string;      // 專案經理或業務負責人
-  
-  // 版本控制
-  versions: ContractVersion[];
-  totalAmount: number;         // 總金額（所有版本累計）
-  lastModified?: Timestamp | any; // Firestore 寫入時為 FieldValue，讀取時為 Timestamp
-  progress?: number;           // 0-100 summary 進度
-  
-  // 擴展欄位（保留彈性）
-  description?: string;        // 合約描述
-  attachments?: string[];      // 附件列表
-  tags?: string[];            // 標籤
-  category?: string;          // 分類
-  priority?: 'low' | 'medium' | 'high'; // 優先級
 }
 
 // ===== 查詢介面 =====
@@ -53,7 +31,7 @@ export interface ContractQuery {
   // 基本查詢
   contractCode?: string;
   clientName?: string;
-  status?: Contract['status'];
+  status?: ContractStatus;
   projectManager?: string;
   
   // 版本查詢
@@ -61,7 +39,7 @@ export interface ContractQuery {
   dateRange?: { start: Date; end: Date };
   
   // 金額查詢
-  amountRange?: { min: number; max: number };
+  amountRange?: { min: AmountValue; max: AmountValue };
   
   // 排序
   sortBy?: 'createdAt' | 'lastModified' | 'totalAmount' | 'contractCode';
@@ -72,43 +50,9 @@ export interface ContractQuery {
   lastDoc?: any;
 }
 
-// ===== 錯誤處理 =====
 
-export enum ContractErrorType {
-  // Firestore 錯誤
-  PERMISSION_DENIED = 'permission-denied',
-  UNAVAILABLE = 'unavailable',
-  UNAUTHENTICATED = 'unauthenticated',
-  
-  // 業務邏輯錯誤
-  CONTRACT_NOT_FOUND = 'contract-not-found',
-  VERSION_CONFLICT = 'version-conflict',
-  INVALID_STATUS_TRANSITION = 'invalid-status-transition',
-  AMOUNT_VALIDATION_FAILED = 'amount-validation-failed',
-  
-  // 操作錯誤
-  DUPLICATE_CONTRACT_CODE = 'duplicate-contract-code',
-  INVALID_VERSION_TYPE = 'invalid-version-type',
-  APPROVAL_REQUIRED = 'approval-required'
-}
 
-export interface ContractError {
-  type: ContractErrorType;
-  message: string;
-  suggestion?: string;
-  guidance?: string;
-}
 
-// ===== 統計介面 =====
-
-export interface ContractStats {
-  total: number;
-  draft: number;
-  preparing: number;
-  active: number;
-  completed: number;
-  totalAmount: number;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -155,7 +99,12 @@ export class ContractService {
 
   /** 更新合約 */
   update(id: string, data: Partial<Contract>): Observable<void> {
-    return this.baseService.modify<Contract>(this.collectionName, id, data);
+    // 處理 lastModified 字段的型別問題
+    const updateData = { ...data };
+    if (updateData.lastModified === undefined) {
+      updateData.lastModified = serverTimestamp() as any;
+    }
+    return this.baseService.modify<Contract>(this.collectionName, id, updateData);
   }
 
   /** 刪除合約 */
@@ -284,7 +233,7 @@ export class ContractService {
       contractId,
       (contract: Contract) => contract.status !== 'completed',
       {
-        lastModified: serverTimestamp()
+        lastModified: serverTimestamp() as any
       }
     ).pipe(
       map(() => {
@@ -305,7 +254,7 @@ export class ContractService {
         return Boolean(version && !version.approvedBy);
       },
       {
-        lastModified: serverTimestamp()
+        lastModified: serverTimestamp() as any
       }
     );
   }
@@ -327,14 +276,14 @@ export class ContractService {
   }
 
   /** 更新狀態 */
-  updateStatus(contractId: string, newStatus: Contract['status']): Observable<void> {
+  updateStatus(contractId: string, newStatus: ContractStatus): Observable<void> {
     return this.baseService.atomicUpdateWithCondition(
       this.collectionName,
       contractId,
       (contract: Contract) => this.canTransitionTo(contract.status, newStatus),
       { 
         status: newStatus, 
-        lastModified: serverTimestamp() 
+        lastModified: serverTimestamp() as any
       }
     );
   }

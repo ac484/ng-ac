@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 import { WaterMarkComponent } from '../../../../shared/components/water-mark/water-mark.component';
 import { DebounceClickDirective } from '../../../../shared/directives/debounce-click.directive';
 import { ToggleFullscreenDirective } from '../../../../shared/directives/toggle-fullscreen.directive';
+import { SearchParam, StatusOption, AmountValue } from '../../../../core/types/contract.types';
+import { AmountConverter } from '../../../../core/utils/type-converter';
 
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -20,20 +22,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
-export interface SearchParam {
-  contractCode?: string;
-  clientName?: string;
-  contractName?: string;
-  status?: string;
-  minAmount?: number;
-  maxAmount?: number;
-}
 
-export interface StatusOption {
-  label: string;
-  value: string;
-  color: string;
-}
 
 @Component({
   selector: 'app-contract-search-form',
@@ -217,13 +206,13 @@ export class ContractSearchFormComponent implements OnInit {
     this.collapseChange.emit(this.isCollapse);
   }
 
-  // 數字格式化方法
-  formatNumber = (value: number): string => {
-    if (!value) return '';
-    return `NT$ ${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  // 數字格式化方法 - 使用統一的型別轉換工具
+  formatNumber = (value: AmountValue): string => {
+    return AmountConverter.format(value).formatted;
   };
 
   parseNumber = (value: string): number => {
-    return parseFloat(value.replace(/NT\$\s?|(,*)/g, '')) || 0;
+    const result = AmountConverter.parse(value);
+    return result.success && result.data !== null && result.data !== undefined ? result.data : 0;
   };
 }

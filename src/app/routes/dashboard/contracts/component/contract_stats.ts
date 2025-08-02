@@ -8,15 +8,10 @@ import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { ContractStats, AmountValue } from '../../../../core/types/contract.types';
+import { AmountConverter } from '../../../../core/utils/type-converter';
 
-export interface ContractStats {
-  total: number;
-  draft: number;
-  preparing: number;
-  active: number;
-  completed: number;
-  totalAmount: number;
-}
+
 
 @Component({
   selector: 'app-contract-statistics',
@@ -108,11 +103,7 @@ export class ContractStatisticsComponent {
     totalAmount: 0
   };
 
-  amountFormatter = (value: number): string => {
-    return new Intl.NumberFormat('zh-TW', {
-      style: 'currency',
-      currency: 'TWD',
-      minimumFractionDigits: 0
-    }).format(value);
+  amountFormatter = (value: AmountValue): string => {
+    return AmountConverter.format(value).formatted;
   };
 }

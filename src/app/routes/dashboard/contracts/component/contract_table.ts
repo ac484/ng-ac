@@ -6,8 +6,9 @@
 import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { Contract } from '../../../../core/services/firestore/contract.service';
+import { Contract, ContractStatus, AmountValue } from '../../../../core/types/contract.types';
 import { AntTableConfig, SortFile, AntTableComponent } from '../../../../shared/components/ant-table/ant-table.component';
+import { AmountConverter, StatusConverter, ProgressConverter } from '../../../../core/utils/type-converter';
 import { CardTableWrapComponent } from '../../../../shared/components/card-table-wrap/card-table-wrap.component';
 import { CopyTextComponent } from '../../../../shared/components/copy-text/copy-text.component';
 
@@ -250,32 +251,16 @@ export class ContractTableComponent implements AfterViewInit {
     this.sort.emit(sortInfo);
   }
 
-  // 工具方法
-  getStatusColor(status: string): string {
-    const statusMap: { [key: string]: string } = {
-      'draft': 'default',
-      'preparing': 'processing',
-      'active': 'processing',
-      'completed': 'success'
-    };
-    return statusMap[status] || 'default';
+  // 工具方法 - 使用統一的型別轉換工具
+  getStatusColor(status: ContractStatus): string {
+    return StatusConverter.getColor(status);
   }
 
-  getStatusText(status: string): string {
-    const statusMap: { [key: string]: string } = {
-      'draft': '草稿',
-      'preparing': '籌備中',
-      'active': '進行中',
-      'completed': '已完成'
-    };
-    return statusMap[status] || status;
+  getStatusText(status: ContractStatus): string {
+    return StatusConverter.getLabel(status);
   }
 
-  formatAmount(amount: number): string {
-    return new Intl.NumberFormat('zh-TW', {
-      style: 'currency',
-      currency: 'TWD',
-      minimumFractionDigits: 0
-    }).format(amount);
+  formatAmount(amount: AmountValue): string {
+    return AmountConverter.format(amount).formatted;
   }
 }

@@ -7,8 +7,9 @@ import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChange
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { Contract } from '../../../../core/services/firestore/contract.service';
+import { Contract, ContractStatus, StatusOption, AmountValue } from '../../../../core/types/contract.types';
 import { Client, ContactInfo } from '../../../../core/services/firestore/client.service';
+import { AmountConverter, StatusConverter, ProgressConverter } from '../../../../core/utils/type-converter';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -18,11 +19,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 
-export interface StatusOption {
-  label: string;
-  value: string;
-  color: string;
-}
+
 
 @Component({
   selector: 'app-contract-modal',
@@ -355,14 +352,13 @@ export class ContractModalComponent implements OnInit, OnChanges {
     this.cancel.emit();
   }
 
-  // 數字格式化方法
-  formatNumber = (value: number): string => {
-    if (value === null || value === undefined) return '';
-    return `NT$ ${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  // 數字格式化方法 - 使用統一的型別轉換工具
+  formatNumber = (value: AmountValue): string => {
+    return AmountConverter.format(value).formatted;
   };
 
   parseNumber = (value: string): number => {
-    if (!value) return 0;
-    return parseFloat(value.replace(/NT\$\s?|(,*)/g, '')) || 0;
+    const result = AmountConverter.parse(value);
+    return result.success && result.data !== null && result.data !== undefined ? result.data : 0;
   };
 }

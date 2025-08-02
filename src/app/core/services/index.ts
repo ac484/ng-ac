@@ -8,3 +8,6 @@ export * from './tab.service';
 
 // Firestore 服務
 export * from './firestore';
+
+// 型別導出
+export type { Contract } from '../types/contract.types';
