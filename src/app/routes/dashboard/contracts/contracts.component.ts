@@ -16,7 +16,6 @@ import { WaterMarkComponent } from '../../../shared/components/water-mark/water-
 import { CopyTextComponent } from '../../../shared/components/copy-text/copy-text.component';
 import { DebounceClickDirective } from '../../../shared/directives/debounce-click.directive';
 import { ToggleFullscreenDirective } from '../../../shared/directives/toggle-fullscreen.directive';
-import { MapPipe } from '../../../shared/pipes/map.pipe';
 
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -32,7 +31,7 @@ import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzTableQueryParams } from 'ng-zorro-antd/table';
+
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 
@@ -142,6 +141,8 @@ export class ContractsComponent implements OnInit {
     this.loadStats();
   }
 
+
+
   private initForms(): void {
     // 搜索表單
     this.searchForm = this.fb.group({
@@ -227,7 +228,7 @@ export class ContractsComponent implements OnInit {
           width: 120
         },
         {
-          title: '客戶窗口',
+          title: '我方業務',
           field: 'contactPerson',
           width: 120
         },
@@ -258,50 +259,71 @@ export class ContractsComponent implements OnInit {
     };
   }
 
-  // 載入合約列表
-  loadContracts(e?: NzTableQueryParams): void {
+  // 載入合約列表（Firestore）
+  loadContracts(): void {
+    console.log('🔥 開始從 Firestore 載入合約...');
     this.tableConfig.loading = true;
+    this.cdr.markForCheck();
     
     // 構建查詢條件
     const searchConditions = this.buildSearchConditions();
     
     this.contractService.getAll(searchConditions).subscribe({
       next: (contracts) => {
+        console.log('✅ Firestore 查詢成功:', contracts);
         this.contractList = contracts;
         this.tableConfig.total = contracts.length;
         this.tableConfig.loading = false;
         this.cdr.markForCheck();
+        
+        if (contracts.length === 0) {
+          this.message.info('目前沒有合約資料，可以開始新增合約');
+        }
       },
       error: (error) => {
-        console.error('載入合約失敗:', error);
-        this.message.error('載入合約失敗');
+        console.error('❌ Firestore 查詢失敗:', error);
+        this.handleFirestoreError(error);
+        this.contractList = [];
+        this.tableConfig.total = 0;
         this.tableConfig.loading = false;
         this.cdr.markForCheck();
       }
     });
   }
 
-  // 載入統計數據
+  // 載入統計數據（Firestore）
   loadStats(): void {
+    console.log('📊 開始載入統計數據...');
+    
     this.contractService.getContractStats().subscribe({
       next: (stats) => {
+        console.log('✅ 統計數據載入成功:', stats);
         this.contractStats = stats;
         this.cdr.markForCheck();
       },
       error: (error) => {
-        console.error('載入統計數據失敗:', error);
+        console.error('❌ 統計數據載入失敗:', error);
+        this.handleFirestoreError(error);
+        // 設置預設值
+        this.contractStats = {
+          total: 0,
+          active: 0,
+          completed: 0,
+          cancelled: 0,
+          totalAmount: 0,
+          averageProgress: 0
+        };
+        this.cdr.markForCheck();
       }
     });
   }
 
   // 構建搜索條件
   private buildSearchConditions(): any {
-    const conditions: any = {
-      orderBy: [{ field: 'createdAt', direction: 'desc' }]
-    };
-
+    const conditions: any = {};
     const where: any[] = [];
     
+    // 只有在有搜索條件時才添加 where 子句
     if (this.searchParam.contractCode) {
       where.push({ field: 'contractCode', operator: '>=', value: this.searchParam.contractCode });
       where.push({ field: 'contractCode', operator: '<=', value: this.searchParam.contractCode + '\uf8ff' });
@@ -328,6 +350,10 @@ export class ContractsComponent implements OnInit {
       conditions.where = where;
     }
 
+    // 簡化排序，避免索引問題
+    conditions.limit = 50; // 限制查詢數量，提高性能
+
+    console.log('🔍 構建的查詢條件:', conditions);
     return conditions;
   }
 
@@ -487,7 +513,8 @@ export class ContractsComponent implements OnInit {
   }
 
   // 表格事件處理
-  onTableChange(e: NzTableQueryParams): void {
+  onTableChange(event?: any): void {
+    console.log('表格變更事件:', event);
     this.loadContracts();
   }
 
@@ -510,6 +537,34 @@ export class ContractsComponent implements OnInit {
     this.loadContracts();
     this.loadStats();
   }
+
+  // Firestore 錯誤處理
+  private handleFirestoreError(error: any): void {
+    console.error('Firestore 錯誤詳情:', error);
+    
+    if (error.code) {
+      switch (error.code) {
+        case 'permission-denied':
+          this.message.error('權限不足，請檢查 Firestore 安全規則');
+          break;
+        case 'unavailable':
+          this.message.error('Firestore 服務暫時無法使用，請稍後再試');
+          break;
+        case 'unauthenticated':
+          this.message.error('未驗證用戶，請重新登入');
+          break;
+        case 'failed-precondition':
+          this.message.error('Firestore 索引可能需要建立，請檢查控制台');
+          break;
+        default:
+          this.message.error(`Firestore 錯誤: ${error.message || '未知錯誤'}`);
+      }
+    } else {
+      this.message.error('網路連接問題，請檢查網路狀態');
+    }
+  }
+
+
 
   // 工具方法
   getStatusColor(status: string): string {

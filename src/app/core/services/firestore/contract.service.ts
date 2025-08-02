@@ -1,20 +1,21 @@
 /**
  * 合約管理服務
  * 
- * 管理合約資料的 CRUD 操作
+ * 組合原子化的 Firestore 操作來實現合約業務邏輯
+ * 遵循極簡主義原則：組合而非繼承
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BaseFirestoreService, BaseEntity } from './base-firestore.service';
+import { BaseFirestoreService, BaseEntity, WhereCondition, OrderCondition } from './base-firestore.service';
 
 export interface Contract extends BaseEntity {
   // 基本資訊
   contractCode: string;        // 合約編號 20250802-001
   clientName: string;          // 客戶名稱
   clientRepresentative: string; // 客戶代表
-  contactPerson: string;       // 客戶窗口
+  contactPerson: string;       // 我方業務代表
   contractName: string;        // 合約名稱
   
   // 金額和版本
@@ -52,17 +53,42 @@ export interface Contract extends BaseEntity {
 @Injectable({
   providedIn: 'root'
 })
-export class ContractService extends BaseFirestoreService<Contract> {
-  protected collectionName = 'contracts';
+export class ContractService {
+  private readonly collectionName = 'contracts';
+  private readonly baseService = inject(BaseFirestoreService);
 
-  /**
-   * 根據合約編號獲取合約
-   */
+  // 基礎 CRUD 操作 - 組合原子操作
+  create(data: Omit<Contract, 'id' | 'createdAt' | 'updatedAt'>): Observable<string> {
+    return this.baseService.addDocument<Contract>(this.collectionName, data);
+  }
+
+  getById(id: string): Observable<Contract | null> {
+    return this.baseService.getDocumentById<Contract>(this.collectionName, id);
+  }
+
+  getAll(whereConditions: WhereCondition[] = [], orderConditions: OrderCondition[] = [], limitCount?: number): Observable<Contract[]> {
+    return this.baseService.queryDocuments<Contract>(this.collectionName, whereConditions, orderConditions, limitCount);
+  }
+
+  update(id: string, data: Partial<Contract>): Observable<void> {
+    return this.baseService.updateDocument<Contract>(this.collectionName, id, data);
+  }
+
+  delete(id: string): Observable<void> {
+    return this.baseService.deleteDocument(this.collectionName, id);
+  }
+
+  deleteBatch(ids: string[]): Observable<void[]> {
+    return this.baseService.deleteDocuments(this.collectionName, ids);
+  }
+
+  // 業務邏輯方法 - 組合基礎操作
   getByContractCode(contractCode: string): Observable<Contract | null> {
-    return this.getAll({
-      where: [{ field: 'contractCode', operator: '==', value: contractCode }],
-      limit: 1
-    }).pipe(
+    const whereConditions: WhereCondition[] = [
+      { field: 'contractCode', operator: '==', value: contractCode }
+    ];
+    
+    return this.getAll(whereConditions, [], 1).pipe(
       map(contracts => contracts.length > 0 ? contracts[0] : null)
     );
   }

@@ -137,6 +137,7 @@
             <i nz-icon nzType="plus"></i>
             新增合約
         </button>
+
         <button nz-button nzType="default" nzDanger (click)="batchDelete()">
             <i nz-icon nzType="delete"></i>
             批量刪除
@@ -228,9 +229,9 @@
                 </div>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label nzRequired>客戶窗口</nz-form-label>
-                        <nz-form-control nzErrorTip="請輸入客戶窗口">
-                            <input nz-input formControlName="contactPerson" placeholder="請輸入客戶窗口" />
+                        <nz-form-label nzRequired>我方業務代表</nz-form-label>
+                        <nz-form-control nzErrorTip="請輸入我方業務代表">
+                            <input nz-input formControlName="contactPerson" placeholder="請輸入我方業務代表" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
