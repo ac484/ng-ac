@@ -1,0 +1,115 @@
+<nz-card [nzTitle]="'Principal 管理'" [nzExtra]="addButtonTemplate">
+    <ng-template #addButtonTemplate>
+        <button nz-button nzType="primary" (click)="addPrincipal()">
+            <span nz-icon nzType="plus"></span>新增 Principal
+        </button>
+    </ng-template>
+
+    <nz-table #principalTable [nzData]="principalList" [nzLoading]="loading" [nzPageSize]="10" [nzShowPagination]="true"
+        [nzScroll]="{ x: '1200px' }">
+
+        <thead>
+            <tr>
+                <th nzWidth="80px" nzAlign="center">序號</th>
+                <th nzWidth="200px">Principal 名稱</th>
+                <th nzWidth="150px">聯絡人數量</th>
+                <th nzWidth="120px">狀態</th>
+                <th nzWidth="200px">操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <ng-container *ngFor="let principal of principalTable.data; let i = index">
+                <!-- 主表格行 -->
+                <tr [nzExpand]="isExpanded(principal)">
+                    <td nzAlign="center">{{ i + 1 }}</td>
+                    <td>
+                        <a (click)="expandPrincipal(principal)" class="principal-name">
+                            {{ principal.name.getValue() }}
+                        </a>
+                    </td>
+                    <td>{{ principal.contactCount }}</td>
+                    <td>
+                        <nz-tag [nzColor]="principal.status === 'active' ? 'green' : 'red'">
+                            {{ principal.status === 'active' ? '啟用' : '停用' }}
+                        </nz-tag>
+                    </td>
+                    <td>
+                        <nz-space>
+                            <button nz-button nzType="link" (click)="editPrincipal(principal)">
+                                <span nz-icon nzType="edit"></span>編輯
+                            </button>
+                            <button nz-button nzType="link" nzDanger (click)="deletePrincipal(principal)">
+                                <span nz-icon nzType="delete"></span>刪除
+                            </button>
+                        </nz-space>
+                    </td>
+                </tr>
+
+                <!-- 展開的子表格行 -->
+                <tr *ngIf="isExpanded(principal)">
+                    <td colspan="5">
+                        <div class="nested-table-container">
+                            <nz-table #contactTable [nzData]="principal.contacts" [nzSize]="'small'"
+                                [nzShowPagination]="false" [nzScroll]="{ x: '600px' }" [nzBordered]="true">
+
+                                <thead>
+                                    <tr>
+                                        <th nzWidth="200px">聯絡人姓名</th>
+                                        <th nzWidth="250px">電子郵件</th>
+                                        <th nzWidth="150px">電話號碼</th>
+                                        <th nzWidth="120px">操作</th>
+                                    </tr>
+                                </thead>
+
+        <tbody>
+            <tr *ngFor="let contact of contactTable.data">
+                <td>{{ contact.name.getValue() }}</td>
+                <td>{{ contact.email.getValue() }}</td>
+                <td>{{ contact.phone.getValue() }}</td>
+                <td>
+                    <nz-space>
+                        <button nz-button nzType="link" nzSize="small" (click)="editContact(contact)">
+                            <span nz-icon nzType="edit"></span>
+                        </button>
+                        <button nz-button nzType="link" nzSize="small" nzDanger (click)="deleteContact(contact)">
+                            <span nz-icon nzType="delete"></span>
+                        </button>
+                    </nz-space>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+    <!-- 新增聯絡人按鈕 -->
+    <div style="margin-top: 8px;">
+        <button nz-button nzType="dashed" nzSize="small" (click)="addContact()">
+            <span nz-icon nzType="plus"></span>新增聯絡人
+        </button>
+    </div>
+    </div>
+    </td>
+    </tr>
+    </ng-container>
+    </tbody>
+    </nz-table>
+</nz-card>
+
+<style>
+    .nested-table-container {
+        padding: 16px;
+        background-color: #fafafa;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    .principal-name {
+        color: #1890ff;
+        cursor: pointer;
+    }
+
+    .principal-name:hover {
+        color: #40a9ff;
+        text-decoration: underline;
+    }
+</style>

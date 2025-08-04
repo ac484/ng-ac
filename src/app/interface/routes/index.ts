@@ -1,0 +1,1 @@
+export { dddRoutes } from './ddd-routes'; 

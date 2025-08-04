@@ -1,0 +1,70 @@
+<nz-card [nzTitle]="'請款流程編輯'" [nzExtra]="saveButtonTemplate">
+    <ng-template #saveButtonTemplate>
+        <button nz-button nzType="primary" (click)="saveWorkflow()" [nzLoading]="loading">
+            <span nz-icon nzType="save"></span>保存
+        </button>
+    </ng-template>
+
+    <div class="workflow-editor">
+        <div *ngIf="!principal" class="no-selection">
+            <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="'請選擇一個 Principal 來編輯請款流程'">
+            </nz-empty>
+        </div>
+
+        <div *ngIf="principal && loading" class="loading">
+            <nz-spin nzSize="large"></nz-spin>
+        </div>
+
+        <div *ngIf="principal && !loading" class="workflow-content">
+            <h4>Principal: {{ principal.name.getValue() }}</h4>
+
+            <!-- 流程步驟列表 -->
+            <nz-list [nzDataSource]="workflowSteps" [nzRenderItem]="workflowItemTemplate">
+                <ng-template #workflowItemTemplate let-step let-i="index">
+                    <nz-list-item>
+                        <nz-list-item-meta>
+                            <nz-list-item-meta-title>
+                                <nz-input-group>
+                                    <input nz-input [(ngModel)]="step.name" placeholder="步驟名稱" />
+                                </nz-input-group>
+                            </nz-list-item-meta-title>
+                            <nz-list-item-meta-description>
+                                <nz-select [(ngModel)]="step.type" style="width: 120px;">
+                                    <nz-option nzValue="approval" nzLabel="審批"></nz-option>
+                                    <nz-option nzValue="notification" nzLabel="通知"></nz-option>
+                                    <nz-option nzValue="document" nzLabel="文件"></nz-option>
+                                </nz-select>
+                            </nz-list-item-meta-description>
+                        </nz-list-item-meta>
+                        <ul nz-list-item-actions>
+                            <li>
+                                <button nz-button nzType="link" nzSize="small" (click)="moveStepUp(i)"
+                                    [disabled]="i === 0">
+                                    <span nz-icon nzType="up"></span>
+                                </button>
+                            </li>
+                            <li>
+                                <button nz-button nzType="link" nzSize="small" (click)="moveStepDown(i)"
+                                    [disabled]="i === workflowSteps.length - 1">
+                                    <span nz-icon nzType="down"></span>
+                                </button>
+                            </li>
+                            <li>
+                                <button nz-button nzType="link" nzSize="small" nzDanger (click)="removeStep(i)">
+                                    <span nz-icon nzType="delete"></span>
+                                </button>
+                            </li>
+                        </ul>
+                    </nz-list-item>
+                </ng-template>
+            </nz-list>
+
+            <!-- 新增步驟按鈕 -->
+            <div style="margin-top: 16px;">
+                <button nz-button nzType="dashed" (click)="addWorkflowStep()">
+                    <span nz-icon nzType="plus"></span>新增流程步驟
+                </button>
+            </div>
+        </div>
+    </div>
+</nz-card>

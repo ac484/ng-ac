@@ -1,0 +1,98 @@
+.dashboard-container {
+    padding: 24px;
+}
+
+.ddd-overview-card {
+    margin-bottom: 24px;
+}
+
+.ddd-overview h2 {
+    color: var(--primary-color, #1890ff);
+    margin-bottom: 8px;
+}
+
+.ddd-overview p {
+    color: var(--text-color-secondary, #666);
+    margin-bottom: 24px;
+}
+
+.architecture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.architecture-item {
+    padding: 20px;
+    border: 1px solid var(--border-color-base, #f0f0f0);
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.architecture-item:hover {
+    border-color: var(--primary-color, #1890ff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.architecture-item h3 {
+    color: var(--text-color, #333);
+    margin-bottom: 12px;
+}
+
+.architecture-item p {
+    color: var(--text-color-secondary, #666);
+    margin-bottom: 16px;
+}
+
+.quick-access {
+    margin-top: 24px;
+}
+
+.quick-access-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+}
+
+.quick-item {
+    border: 1px solid var(--border-color-base, #f0f0f0);
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.3s ease;
+}
+
+.quick-item:hover {
+    border-color: var(--primary-color, #1890ff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.quick-item h4 {
+    color: var(--text-color, #333);
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* Dark theme specific adjustments */
+[data-theme="dark"] .architecture-item {
+    border-color: var(--border-color-base, #303030);
+}
+
+[data-theme="dark"] .quick-item {
+    border-color: var(--border-color-base, #303030);
+}
+
+[data-theme="dark"] .ddd-overview h2 {
+    color: var(--primary-color, #177ddc);
+}
+
+[data-theme="dark"] .architecture-item h3,
+[data-theme="dark"] .quick-item h4 {
+    color: var(--text-color, #ffffff);
+}
+
+[data-theme="dark"] .ddd-overview p,
+[data-theme="dark"] .architecture-item p {
+    color: var(--text-color-secondary, #a6a6a6);
+} 

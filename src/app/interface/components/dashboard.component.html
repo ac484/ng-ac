@@ -1,0 +1,71 @@
+<page-header />
+
+<div class="dashboard-container">
+    <!-- DDD Architecture Overview -->
+    <nz-card class="ddd-overview-card">
+        <div class="ddd-overview">
+            <h2>🏗️ DDD 架構系統</h2>
+            <p>Domain-Driven Design 架構已完全實現並投入使用</p>
+
+            <div class="architecture-grid">
+                <div class="architecture-item">
+                    <h3>📊 帳戶管理</h3>
+                    <p>完整的帳戶 CRUD 操作，包含統計信息</p>
+                    <button nz-button nzType="primary" routerLink="/accounts">
+                        <span nz-icon nzType="bank"></span>
+                        管理帳戶
+                    </button>
+                </div>
+
+                <div class="architecture-item">
+                    <h3>💳 交易管理</h3>
+                    <p>交易記錄管理，包含狀態追蹤</p>
+                    <button nz-button nzType="primary" routerLink="/transactions">
+                        <span nz-icon nzType="transaction"></span>
+                        管理交易
+                    </button>
+                </div>
+
+                <div class="architecture-item">
+                    <h3>👥 用戶管理</h3>
+                    <p>用戶資料管理，包含認證授權</p>
+                    <button nz-button nzType="primary" routerLink="/users">
+                        <span nz-icon nzType="user"></span>
+                        管理用戶
+                    </button>
+                </div>
+
+                <div class="architecture-item">
+                    <h3>📋 合約管理</h3>
+                    <p>合約資料管理，包含狀態追蹤</p>
+                    <button nz-button nzType="primary" routerLink="/contracts">
+                        <span nz-icon nzType="file-text"></span>
+                        管理合約
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nz-card>
+
+    <!-- Quick Access Components -->
+    <div class="quick-access">
+        <nz-card title="快速訪問" class="quick-access-card">
+            <div class="quick-access-grid">
+                <div class="quick-item">
+                    <h4>帳戶列表</h4>
+                    <app-account-list></app-account-list>
+                </div>
+
+                <div class="quick-item">
+                    <h4>交易列表</h4>
+                    <app-transaction-list></app-transaction-list>
+                </div>
+
+                <div class="quick-item">
+                    <h4>用戶列表</h4>
+                    <app-user-list></app-user-list>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+</div>

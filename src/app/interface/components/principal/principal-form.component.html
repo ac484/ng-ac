@@ -1,0 +1,27 @@
+<form nz-form [formGroup]="principalFormGroup" nz-row [nzGutter]="24">
+    <nz-form-item nz-col [nzSpan]="24">
+        <nz-form-label [nzSpan]="6" nzFor="name" [nzRequired]="true">Principal 名稱</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="請輸入 Principal 名稱">
+            <input nz-input formControlName="name" placeholder="請輸入 Principal 名稱" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-col [nzSpan]="24">
+        <nz-form-label [nzSpan]="6" nzFor="status" [nzRequired]="true">狀態</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+            <nz-select formControlName="status">
+                <nz-option nzValue="active" nzLabel="啟用"></nz-option>
+                <nz-option nzValue="inactive" nzLabel="停用"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-col [nzSpan]="24">
+        <nz-form-label [nzSpan]="6" nzFor="description">描述</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+            <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                placeholder="請輸入描述">
+      </textarea>
+        </nz-form-control>
+    </nz-form-item>
+</form>

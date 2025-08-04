@@ -1,0 +1,56 @@
+import { Component, OnInit } from '@angular/core';
+import { Principal } from '../../../domain/entities/principal.entity';
+import { CommonModule } from '@angular/common';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzSplitterModule } from 'ng-zorro-antd/splitter';
+import { PrincipalListComponent } from './principal-list.component';
+import { PrincipalWorkflowComponent } from './principal-workflow.component';
+
+export interface WorkflowStep {
+  id: string;
+  name: string;
+  type: 'approval' | 'notification' | 'document';
+  order: number;
+  config: any;
+}
+
+@Component({
+  selector: 'app-principal-page',
+  templateUrl: './principal-page.component.html',
+  standalone: true,
+  imports: [
+    CommonModule,
+    NzCardModule,
+    NzButtonModule,
+    NzIconModule,
+    NzSpaceModule,
+    NzModalModule,
+    NzSplitterModule,
+    PrincipalListComponent,
+    PrincipalWorkflowComponent
+  ]
+})
+export class PrincipalPageComponent implements OnInit {
+  selectedPrincipal: Principal | null = null;
+  splitterSizes: number[] = [60, 40];
+
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  onPrincipalSelected(principal: Principal): void {
+    this.selectedPrincipal = principal;
+  }
+
+  onWorkflowSaved(steps: WorkflowStep[]): void {
+    console.log('Workflow saved:', steps);
+  }
+
+  onSplitterResize(sizes: number[]): void {
+    this.splitterSizes = sizes;
+  }
+} 
