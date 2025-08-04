@@ -52,18 +52,17 @@
                 <!-- 展開的子表格行 -->
                 <tr *ngIf="isExpanded(principal)">
                     <td colspan="5">
-                        <div class="nested-table-container">
-                            <nz-table #contactTable [nzData]="principal.contacts" [nzSize]="'small'"
-                                [nzShowPagination]="false" [nzScroll]="{ x: '600px' }" [nzBordered]="true">
+                        <nz-table #contactTable [nzData]="principal.contacts" [nzSize]="'small'"
+                            [nzShowPagination]="false" [nzScroll]="{ x: '600px' }" [nzBordered]="true">
 
-                                <thead>
-                                    <tr>
-                                        <th nzWidth="200px">聯絡人姓名</th>
-                                        <th nzWidth="250px">電子郵件</th>
-                                        <th nzWidth="150px">電話號碼</th>
-                                        <th nzWidth="120px">操作</th>
-                                    </tr>
-                                </thead>
+                            <thead>
+                                <tr>
+                                    <th nzWidth="200px">聯絡人姓名</th>
+                                    <th nzWidth="250px">電子郵件</th>
+                                    <th nzWidth="150px">電話號碼</th>
+                                    <th nzWidth="120px">操作</th>
+                                </tr>
+                            </thead>
 
         <tbody>
             <tr *ngFor="let contact of contactTable.data">
@@ -90,7 +89,6 @@
             <span nz-icon nzType="plus"></span>新增聯絡人
         </button>
     </div>
-    </div>
     </td>
     </tr>
     </ng-container>
@@ -99,13 +97,6 @@
 </nz-card>
 
 <style>
-    .nested-table-container {
-        padding: 16px;
-        background-color: #fafafa;
-        border-radius: 6px;
-        margin: 8px 0;
-    }
-
     .principal-name {
         color: #1890ff;
         cursor: pointer;
