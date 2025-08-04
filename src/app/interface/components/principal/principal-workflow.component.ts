@@ -316,7 +316,8 @@ export const WORKFLOW_ACTIONS = [
     NzCheckboxModule,
     NzRadioModule,
     FormsModule
-  ]
+  ],
+  providers: [PrincipalApplicationService]
 })
 export class PrincipalWorkflowComponent implements OnInit {
   @Input() principal: Principal | null = null;
