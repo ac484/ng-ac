@@ -79,26 +79,33 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: (principals) => {
         this.principalList = principals;
+        console.log('載入的 Principal 數據:', principals);
+        principals.forEach(principal => {
+          console.log(`Principal: ${principal.name.getValue()}, 聯絡人數量: ${principal.contactCount}`);
+        });
         this.loading = false;
       },
       error: (error) => {
+        console.error('載入 Principal 列表失敗:', error);
         this.message.error('載入 Principal 列表失敗');
         this.loading = false;
       }
     });
   }
 
-  expandPrincipal(principal: Principal): void {
+  expandPrincipal(principal: Principal, expanded?: boolean): void {
     const principalId = principal.id.getValue();
     
-    // Toggle expansion state
-    if (this.expandedPrincipalId === principalId) {
-      this.expandedPrincipalId = null;
-      this.selectedPrincipal = null;
-    } else {
+    // 如果傳入了 expanded 參數，使用該值；否則切換當前狀態
+    const newExpandedState = expanded !== undefined ? expanded : !this.isExpanded(principal);
+    
+    if (newExpandedState) {
       this.expandedPrincipalId = principalId;
       this.selectedPrincipal = principal;
       this.principalSelected.emit(principal);
+    } else {
+      this.expandedPrincipalId = null;
+      this.selectedPrincipal = null;
     }
   }
 
