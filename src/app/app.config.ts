@@ -46,6 +46,8 @@ import { I18NService } from './infrastructure/services/i18n.service';
 // DDD Tab Infrastructure
 import { TabReuseStrategyService } from './infrastructure/services/tab-reuse-strategy.service';
 
+registerLocaleData(zh);
+
 const defaultLang: AlainProvideLang = {
   abbr: 'zh-Hant',
   ng: ngLang,
