@@ -2,6 +2,7 @@ import { BaseEntity } from './base-entity';
 import { PrincipalName } from '../value-objects/principal/principal-name.value-object';
 import { PrincipalId } from '../value-objects/principal/principal-id.value-object';
 import { Contact } from './contact.entity';
+import { WorkflowStep } from '../../interface/components/principal/principal-workflow.component';
 
 export interface PrincipalProps {
   id: PrincipalId;
@@ -9,6 +10,7 @@ export interface PrincipalProps {
   status: 'active' | 'inactive';
   description?: string;
   contacts: Contact[];
+  workflowSteps: WorkflowStep[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -52,6 +54,14 @@ export class Principal extends BaseEntity<PrincipalProps> {
     return this.props.contacts.length;
   }
 
+  get workflowSteps(): WorkflowStep[] {
+    return [...this.props.workflowSteps];
+  }
+
+  get workflowStepCount(): number {
+    return this.props.workflowSteps.length;
+  }
+
   get createdAt(): Date {
     return this.props.createdAt;
   }
@@ -93,11 +103,38 @@ export class Principal extends BaseEntity<PrincipalProps> {
     }
   }
 
+  updateWorkflowSteps(workflowSteps: WorkflowStep[]): void {
+    this.props.workflowSteps = [...workflowSteps];
+    this.props.updatedAt = new Date();
+  }
+
+  addWorkflowStep(workflowStep: WorkflowStep): void {
+    this.props.workflowSteps.push(workflowStep);
+    this.props.updatedAt = new Date();
+  }
+
+  removeWorkflowStep(stepId: string): void {
+    this.props.workflowSteps = this.props.workflowSteps.filter(s => s.id !== stepId);
+    this.props.updatedAt = new Date();
+  }
+
+  updateWorkflowStep(workflowStep: WorkflowStep): void {
+    const index = this.props.workflowSteps.findIndex(s => s.id === workflowStep.id);
+    if (index !== -1) {
+      this.props.workflowSteps[index] = workflowStep;
+      this.props.updatedAt = new Date();
+    }
+  }
+
   isActive(): boolean {
     return this.props.status === 'active';
   }
 
   hasContacts(): boolean {
     return this.props.contacts.length > 0;
+  }
+
+  hasWorkflowSteps(): boolean {
+    return this.props.workflowSteps.length > 0;
   }
 } 

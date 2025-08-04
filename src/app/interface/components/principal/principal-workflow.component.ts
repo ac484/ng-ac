@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Principal } from '../../../domain/entities/principal.entity';
+import { PrincipalApplicationService } from '../../../application/services/principal-application.service';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -328,7 +329,10 @@ export class PrincipalWorkflowComponent implements OnInit {
   loading = false;
   activeTab = 0;
 
-  constructor(private message: NzMessageService) {}
+  constructor(
+    private message: NzMessageService,
+    private principalApplicationService: PrincipalApplicationService
+  ) {}
 
   ngOnInit(): void {
     if (this.principal) {
@@ -346,162 +350,13 @@ export class PrincipalWorkflowComponent implements OnInit {
     if (!this.principal) return;
 
     this.loading = true;
-    // 模擬載入工作流程數據
+    // 從 Principal 實體中讀取請款流程數據
     setTimeout(() => {
-      this.workflowSteps = [
-        {
-          id: '1',
-          name: '請款申請',
-          type: 'application',
-          order: 0,
-          config: {
-            required: true,
-            autoApprove: false,
-            timeout: 24
-          },
-          description: '提交請款申請',
-          isActive: true,
-          stateTransitions: [
-            {
-              id: '1-1',
-              fromState: 'draft',
-              toState: 'submitted',
-              action: 'submit',
-              description: '提交申請',
-              isActive: true
-            },
-            {
-              id: '1-2',
-              fromState: 'submitted',
-              toState: 'withdrawn',
-              action: 'withdraw',
-              description: '撤回申請',
-              isActive: true
-            }
-          ]
-        },
-        {
-          id: '2',
-          name: '部門審核',
-          type: 'review',
-          order: 1,
-          config: {
-            required: true,
-            approvers: ['部門主管'],
-            minApprovers: 1,
-            approvalLevel: 1
-          },
-          description: '部門主管初步審核',
-          isActive: true,
-          stateTransitions: [
-            {
-              id: '2-1',
-              fromState: 'submitted',
-              toState: 'under_review',
-              action: 'submit',
-              description: '開始審核',
-              isActive: true
-            },
-            {
-              id: '2-2',
-              fromState: 'under_review',
-              toState: 'approved',
-              action: 'approve',
-              description: '通過審核',
-              isActive: true
-            },
-            {
-              id: '2-3',
-              fromState: 'under_review',
-              toState: 'rejected',
-              action: 'reject',
-              description: '拒絕申請',
-              isActive: true
-            },
-            {
-              id: '2-4',
-              fromState: 'under_review',
-              toState: 'submitted',
-              action: 'return',
-              description: '退回修改',
-              isActive: true
-            }
-          ]
-        },
-        {
-          id: '3',
-          name: '財務檢查',
-          type: 'finance_check',
-          order: 2,
-          config: {
-            required: true,
-            amountLimit: 100000,
-            currency: 'TWD',
-            budgetCode: 'FIN001'
-          },
-          description: '財務合規性檢查',
-          isActive: true,
-          stateTransitions: [
-            {
-              id: '3-1',
-              fromState: 'approved',
-              toState: 'finance_check',
-              action: 'submit',
-              description: '開始財務檢查',
-              isActive: true
-            },
-            {
-              id: '3-2',
-              fromState: 'finance_check',
-              toState: 'payment_processing',
-              action: 'approve',
-              description: '財務檢查通過',
-              isActive: true
-            },
-            {
-              id: '3-3',
-              fromState: 'finance_check',
-              toState: 'rejected',
-              action: 'reject',
-              description: '財務檢查不通過',
-              isActive: true
-            }
-          ]
-        },
-        {
-          id: '4',
-          name: '付款處理',
-          type: 'payment_process',
-          order: 3,
-          config: {
-            required: true,
-            paymentMethod: '銀行轉帳',
-            paymentTerms: 'T+3'
-          },
-          description: '執行付款流程',
-          isActive: true,
-          stateTransitions: [
-            {
-              id: '4-1',
-              fromState: 'payment_processing',
-              toState: 'completed',
-              action: 'complete',
-              description: '付款完成',
-              isActive: true
-            },
-            {
-              id: '4-2',
-              fromState: 'payment_processing',
-              toState: 'cancelled',
-              action: 'cancel',
-              description: '付款失敗',
-              isActive: true
-            }
-          ]
-        }
-      ];
+      if (this.principal) {
+        this.workflowSteps = this.principal.workflowSteps || [];
+      }
       this.loading = false;
-    }, 500);
+    }, 100);
   }
 
   addWorkflowStep(): void {
@@ -757,12 +612,26 @@ export class PrincipalWorkflowComponent implements OnInit {
     if (!this.principal) return;
 
     this.loading = true;
-    // 模擬保存工作流程
-    setTimeout(() => {
-      this.message.success('請款流程保存成功');
-      this.workflowSaved.emit(this.workflowSteps);
-      this.loading = false;
-    }, 1000);
+    
+    this.principalApplicationService.updateWorkflow({
+      principalId: this.principal.id.getValue(),
+      workflowSteps: this.workflowSteps
+    }).subscribe({
+      next: (success) => {
+        if (success) {
+          this.message.success('請款流程保存成功');
+          this.workflowSaved.emit(this.workflowSteps);
+        } else {
+          this.message.error('請款流程保存失敗');
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('保存請款流程時發生錯誤:', error);
+        this.message.error('請款流程保存失敗');
+        this.loading = false;
+      }
+    });
   }
 
   private generateId(): string {

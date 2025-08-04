@@ -54,6 +54,10 @@ export const MOCK_REPOSITORY_PROVIDERS: Provider[] = [
     useClass: MockTransactionRepository
   },
   {
+    provide: AUTH_REPOSITORY,
+    useClass: FirebaseAuthRepository
+  },
+  {
     provide: PRINCIPAL_REPOSITORY,
     useClass: MockPrincipalRepository
   }

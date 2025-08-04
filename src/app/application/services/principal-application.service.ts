@@ -8,6 +8,7 @@ import { PrincipalName } from '../../domain/value-objects/principal/principal-na
 import { ContactPerson } from '../../domain/value-objects/principal/contact-person.value-object';
 import { ContactEmail } from '../../domain/value-objects/principal/contact-email.value-object';
 import { ContactPhone } from '../../domain/value-objects/principal/contact-phone.value-object';
+import { WorkflowStep } from '../../interface/components/principal/principal-workflow.component';
 
 export interface CreatePrincipalRequest {
   name: string;
@@ -35,6 +36,11 @@ export interface UpdateContactRequest {
   name?: string;
   email?: string;
   phone?: string;
+}
+
+export interface UpdateWorkflowRequest {
+  principalId: string;
+  workflowSteps: WorkflowStep[];
 }
 
 @Injectable({
@@ -69,7 +75,8 @@ export class PrincipalApplicationService {
       name: PrincipalName.fromString(request.name),
       status: request.status,
       description: request.description,
-      contacts: []
+      contacts: [],
+      workflowSteps: []
     });
 
     await this.principalRepository.save(principal);
@@ -180,6 +187,21 @@ export class PrincipalApplicationService {
     }
 
     principal.removeContact(contactId);
+    await this.principalRepository.save(principal);
+    return true;
+  }
+
+  updateWorkflow(request: UpdateWorkflowRequest): Observable<boolean> {
+    return from(this.updateWorkflowAsync(request));
+  }
+
+  private async updateWorkflowAsync(request: UpdateWorkflowRequest): Promise<boolean> {
+    const principal = await this.principalRepository.findById(request.principalId);
+    if (!principal) {
+      return false;
+    }
+
+    principal.updateWorkflowSteps(request.workflowSteps);
     await this.principalRepository.save(principal);
     return true;
   }

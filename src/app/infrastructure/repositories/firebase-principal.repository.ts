@@ -8,6 +8,7 @@ import { Contact } from '../../domain/entities/contact.entity';
 import { ContactPerson } from '../../domain/value-objects/principal/contact-person.value-object';
 import { ContactEmail } from '../../domain/value-objects/principal/contact-email.value-object';
 import { ContactPhone } from '../../domain/value-objects/principal/contact-phone.value-object';
+import { WorkflowStep } from '../../interface/components/principal/principal-workflow.component';
 
 /**
  * Firebase implementation of PrincipalRepository
@@ -163,11 +164,25 @@ export class FirebasePrincipalRepository implements PrincipalRepository {
       });
     });
 
+    const workflowSteps = (data['workflowSteps'] || []).map((stepData: any) => {
+      return {
+        id: stepData.id,
+        name: stepData.name,
+        type: stepData.type,
+        order: stepData.order,
+        config: stepData.config || {},
+        description: stepData.description,
+        isActive: stepData.isActive !== undefined ? stepData.isActive : true,
+        stateTransitions: stepData.stateTransitions || []
+      } as WorkflowStep;
+    });
+
     return Principal.create({
       name: PrincipalName.fromString(data['name']),
       status: data['status'],
       description: data['description'],
-      contacts: contacts
+      contacts: contacts,
+      workflowSteps: workflowSteps
     });
   }
 
@@ -181,11 +196,23 @@ export class FirebasePrincipalRepository implements PrincipalRepository {
       phone: contact.phone.getValue()
     }));
 
+    const workflowSteps = principal.workflowSteps.map(step => ({
+      id: step.id,
+      name: step.name,
+      type: step.type,
+      order: step.order,
+      config: step.config,
+      description: step.description,
+      isActive: step.isActive,
+      stateTransitions: step.stateTransitions
+    }));
+
     return {
       name: principal.name.getValue(),
       status: principal.status,
       description: principal.description,
       contacts: contacts,
+      workflowSteps: workflowSteps,
       createdAt: principal.createdAt,
       updatedAt: principal.updatedAt
     };
