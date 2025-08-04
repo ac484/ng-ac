@@ -1,56 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, query, where, orderBy, DocumentData } from '@angular/fire/firestore';
+import { Firestore, DocumentData, Query, where, query as firestoreQuery } from '@angular/fire/firestore';
 import { User } from '../../domain/entities/user.entity';
 import { UserRepository } from '../../domain/repositories/user.repository';
-import { Email } from '../../domain/value-objects/authentication/email.value-object';
-import { DisplayName } from '../../domain/value-objects/authentication/display-name.value-object';
-import { PhotoUrl } from '../../domain/value-objects/authentication/photo-url.value-object';
-import { UserId } from '../../domain/value-objects/authentication/user-id.value-object';
-import { UserStatus, UserStatusType } from '../../domain/value-objects/status/user-status.value-object';
-import { IsAnonymous } from '../../domain/value-objects/status/is-anonymous.value-object';
-import { IsEmailVerified } from '../../domain/value-objects/status/is-email-verified.value-object';
-import { AuthProvider, AuthProviderType } from '../../domain/value-objects/authentication/auth-provider.value-object';
-import { AuthMethod, AuthMethodType } from '../../domain/value-objects/authentication/auth-method.value-object';
-import { SessionId } from '../../domain/value-objects/authentication/session-id.value-object';
-import { RoleSet } from '../../domain/value-objects/authorization/role-set.value-object';
-import { PermissionSet } from '../../domain/value-objects/authorization/permission-set.value-object';
-import { DeviceInfo } from '../../domain/value-objects/device/device-info.value-object';
-import { GeoLocation } from '../../domain/value-objects/device/geo-location.value-object';
-import { LoginSource } from '../../domain/value-objects/device/login-source.value-object';
-import { LoginContext } from '../../domain/value-objects/device/login-context.value-object';
-import { JWTToken } from '../../domain/value-objects/token/jwt-token.value-object';
-import { TokenExpiresAt } from '../../domain/value-objects/token/token-expires-at.value-object';
+import { BaseFirebaseRepository } from './base-firebase.repository';
+import { SearchCriteria } from '../../domain/interfaces/search-criteria.interface';
 
 /**
- * Firebase implementation of UserRepository
- * Uses @angular/fire for all Firebase operations
+ * Firebase implementation of UserRepository using BaseFirebaseRepository
+ * Simplified implementation with standardized error handling and logging
  */
 @Injectable({
   providedIn: 'root'
 })
-export class FirebaseUserRepository implements UserRepository {
+export class FirebaseUserRepository extends BaseFirebaseRepository<User> implements UserRepository {
 
-  private readonly collectionName = 'users';
-
-  constructor(private firestore: Firestore) {}
-
-  /**
-   * Find user by ID
-   */
-  async findById(id: string): Promise<User | null> {
-    try {
-      const userDoc = doc(this.firestore, this.collectionName, id);
-      const userSnapshot = await getDoc(userDoc);
-      
-      if (userSnapshot.exists()) {
-        return this.mapFromFirestore(userSnapshot.data(), userSnapshot.id);
-      }
-      
-      return null;
-    } catch (error) {
-      console.error('Error finding user by ID:', error);
-      throw new Error('Failed to find user by ID');
-    }
+  constructor(firestore: Firestore) {
+    super(firestore, 'users');
   }
 
   /**
@@ -58,66 +23,20 @@ export class FirebaseUserRepository implements UserRepository {
    */
   async findByEmail(email: string): Promise<User | null> {
     try {
-      const usersRef = collection(this.firestore, this.collectionName);
-      const q = query(usersRef, where('email', '==', email.toLowerCase()));
-      const querySnapshot = await getDocs(q);
-      
-      if (!querySnapshot.empty) {
-        const doc = querySnapshot.docs[0];
-        return this.mapFromFirestore(doc.data(), doc.id);
-      }
-      
-      return null;
-    } catch (error) {
-      console.error('Error finding user by email:', error);
-      throw new Error('Failed to find user by email');
-    }
-  }
+      this.logOperation('findByEmail', { email });
 
-  /**
-   * Find all users with optional status filtering
-   */
-  async findAll(status?: string): Promise<User[]> {
-    try {
-      const usersRef = collection(this.firestore, this.collectionName);
-      let q = query(usersRef, orderBy('createdAt', 'desc'));
-      
-      if (status) {
-        q = query(usersRef, where('status', '==', status), orderBy('createdAt', 'desc'));
-      }
-      
-      const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
-    } catch (error) {
-      console.error('Error finding all users:', error);
-      throw new Error('Failed to find all users');
-    }
-  }
+      const criteria: SearchCriteria = {
+        filters: { email: email.toLowerCase() }
+      };
 
-  /**
-   * Save user (create or update)
-   */
-  async save(user: User): Promise<void> {
-    try {
-      const userDoc = doc(this.firestore, this.collectionName, user.id);
-      const userData = this.mapToFirestore(user);
-      await setDoc(userDoc, userData, { merge: true });
-    } catch (error) {
-      console.error('Error saving user:', error);
-      throw new Error('Failed to save user');
-    }
-  }
+      const users = await this.findAll(criteria);
+      const user = users.length > 0 ? users[0] : null;
 
-  /**
-   * Delete user by ID
-   */
-  async delete(id: string): Promise<void> {
-    try {
-      const userDoc = doc(this.firestore, this.collectionName, id);
-      await deleteDoc(userDoc);
+      this.logOperation('findByEmail', { email, found: !!user });
+      return user;
     } catch (error) {
-      console.error('Error deleting user:', error);
-      throw new Error('Failed to delete user');
+      this.logError('findByEmail', error, { email });
+      throw error;
     }
   }
 
@@ -126,104 +45,127 @@ export class FirebaseUserRepository implements UserRepository {
    */
   async existsByEmail(email: string): Promise<boolean> {
     try {
+      this.logOperation('existsByEmail', { email });
+
       const user = await this.findByEmail(email);
-      return user !== null;
+      const exists = user !== null;
+
+      this.logOperation('existsByEmail', { email, exists });
+      return exists;
     } catch (error) {
-      console.error('Error checking user existence:', error);
-      throw new Error('Failed to check user existence');
+      this.logError('existsByEmail', error, { email });
+      throw error;
     }
   }
 
   /**
-   * Count total users
+   * Find all users with optional search criteria
+   * Implements UserRepository interface
    */
-  async count(): Promise<number> {
+  override async findAll(criteria?: SearchCriteria): Promise<User[]> {
     try {
-      const usersRef = collection(this.firestore, this.collectionName);
-      const querySnapshot = await getDocs(usersRef);
-      return querySnapshot.size;
+      this.logOperation('findAll', { criteria });
+
+      const searchCriteria: SearchCriteria = criteria || {
+        sortBy: 'createdAt',
+        sortOrder: 'desc'
+      };
+
+      const users = await super.findAll(searchCriteria);
+
+      this.logOperation('findAll', { criteria: searchCriteria, count: users.length });
+      return users;
     } catch (error) {
-      console.error('Error counting users:', error);
-      throw new Error('Failed to count users');
+      this.logError('findAll', error, { criteria });
+      throw error;
     }
   }
+
+  // save, delete, and count methods are inherited from BaseFirebaseRepository
 
   /**
    * Find users by status
    */
   async findByStatus(status: string): Promise<User[]> {
     try {
-      const usersRef = collection(this.firestore, this.collectionName);
-      const q = query(usersRef, where('status', '==', status), orderBy('createdAt', 'desc'));
-      const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
+      this.logOperation('findByStatus', { status });
+
+      const criteria: SearchCriteria = {
+        status,
+        sortBy: 'createdAt',
+        sortOrder: 'desc'
+      };
+
+      const users = await this.findAll(criteria);
+
+      this.logOperation('findByStatus', { status, count: users.length });
+      return users;
     } catch (error) {
-      console.error('Error finding users by status:', error);
-      throw new Error('Failed to find users by status');
+      this.logError('findByStatus', error, { status });
+      throw error;
     }
   }
 
   /**
-   * Map Firestore document to User entity
+   * Override search criteria application for user-specific needs
    */
-  private mapFromFirestore(data: DocumentData, id: string): User {
-    // 創建值物件
-    const email = new Email(data['email']);
-    const displayName = new DisplayName(data['displayName']);
-    const photoUrl = new PhotoUrl(data['photoURL']);
-    const userId = new UserId(id);
-    const status = new UserStatus(data['status'] as UserStatusType);
-    const isAnonymous = new IsAnonymous(data['isAnonymous'] || false);
-    const isEmailVerified = new IsEmailVerified(data['isEmailVerified'] || false);
-    const authProvider = new AuthProvider(data['authProvider'] as AuthProviderType);
-    const authMethod = new AuthMethod(data['authMethod'] as AuthMethodType);
-    const sessionId = new SessionId(data['sessionId'] || `session_${Date.now()}`);
-    const roles = new RoleSet();
-    const permissions = new PermissionSet();
-    const deviceInfo = DeviceInfo.fromBrowser();
-    const geoLocation = new GeoLocation('Unknown', 'Unknown', 0, 0);
-    const loginSource = LoginSource.WEB();
-    const loginContext = new LoginContext('127.0.0.1', deviceInfo, geoLocation, loginSource);
+  protected override applySearchCriteria(q: Query<DocumentData>, criteria: SearchCriteria): Query<DocumentData> {
+    // Start with base criteria
+    let query = super.applySearchCriteria(q, criteria);
 
-    return new User(
-      userId,
-      email,
-      displayName,
-      photoUrl,
-      status,
-      isAnonymous,
-      isEmailVerified,
-      authProvider,
-      authMethod,
-      sessionId,
-      roles,
-      permissions,
-      deviceInfo,
-      geoLocation,
-      loginContext,
-      data['createdAt']?.toDate() || new Date(),
-      data['updatedAt']?.toDate() || new Date(),
-      data['phoneNumber']
-    );
+    // Add user-specific search logic
+    if (criteria.keyword) {
+      // For keyword search, we might want to search in multiple fields
+      // Note: Firestore doesn't support OR queries easily, so this is a simplified example
+      // In a real implementation, you might need to use composite queries or full-text search
+      query = firestoreQuery(q, where('displayName', '>=', criteria.keyword));
+    }
+
+    return query;
   }
 
   /**
-   * Map User entity to Firestore document
+   * Convert Firestore document to User entity
    */
-  private mapToFirestore(user: User): DocumentData {
+  protected fromFirestore(data: DocumentData, id: string): User {
+    const userData = {
+      id,
+      email: data['email'] || '',
+      displayName: data['displayName'] || '',
+      photoURL: data['photoURL'],
+      isEmailVerified: data['isEmailVerified'] || false,
+      isAnonymous: data['isAnonymous'] || false,
+      authProvider: data['authProvider'] || 'email',
+      status: data['status'] || 'active',
+      lastLoginAt: data['lastLoginAt']?.toDate(),
+      phoneNumber: data['phoneNumber'],
+      roles: data['roles'] || [],
+      permissions: data['permissions'] || [],
+      createdAt: data['createdAt']?.toDate() || new Date(),
+      updatedAt: data['updatedAt']?.toDate() || new Date()
+    };
+
+    return new User(userData);
+  }
+
+  /**
+   * Convert User entity to Firestore document
+   */
+  protected toFirestore(entity: User): DocumentData {
     return {
-      email: user.email.getValue(),
-      displayName: user.displayName.getValue(),
-      photoURL: user.photoUrl.getValue(),
-      status: user.status.getValue(),
-      isAnonymous: user.isAnonymous.getValue(),
-      isEmailVerified: user.isEmailVerified.getValue(),
-      authProvider: user.authProvider.getValue(),
-      authMethod: user.authMethod.getValue(),
-      sessionId: user.sessionId.getValue(),
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      phoneNumber: user.phoneNumber
+      email: entity.email,
+      displayName: entity.displayName,
+      photoURL: entity.photoURL,
+      status: entity.status,
+      isAnonymous: entity.isAnonymous,
+      isEmailVerified: entity.isEmailVerified,
+      authProvider: entity.authProvider,
+      roles: entity.roles,
+      permissions: entity.permissions,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+      phoneNumber: entity.phoneNumber,
+      lastLoginAt: entity.lastLoginAt
     };
   }
 } 

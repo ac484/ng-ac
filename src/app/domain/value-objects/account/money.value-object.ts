@@ -22,9 +22,7 @@ export class Money {
     if (typeof amount !== 'number' || isNaN(amount)) {
       throw new Error('Amount must be a valid number');
     }
-    if (amount < 0) {
-      throw new Error('Amount cannot be negative');
-    }
+    // Allow negative amounts for credit accounts and overdrafts
   }
 
   /**
@@ -81,16 +79,14 @@ export class Money {
    * Subtract another money value
    * @param other Money value to subtract
    * @returns New Money instance
-   * @throws Error if currencies don't match or result is negative
+   * @throws Error if currencies don't match
    */
   subtract(other: Money): Money {
     if (this.currency !== other.currency) {
       throw new Error('Cannot subtract money with different currencies');
     }
     const result = this.amount - other.amount;
-    if (result < 0) {
-      throw new Error('Subtraction would result in negative amount');
-    }
+    // Allow negative results for credit accounts and overdrafts
     return new Money(result, this.currency);
   }
 

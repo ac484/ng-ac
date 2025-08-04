@@ -1,6 +1,6 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { default as ngLang } from '@angular/common/locales/zh-Hant';
-import { ApplicationConfig, EnvironmentProviders, Provider, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, EnvironmentProviders, Provider, importProvidersFrom, ErrorHandler } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withComponentInputBinding, withViewTransitions, withInMemoryScrolling, withHashLocation, RouterFeatures, RouteReuseStrategy } from '@angular/router';
 import { provideCellWidgets } from '@delon/abc/cell';
@@ -16,6 +16,7 @@ import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 import { zh_TW as zorroLang, provideNzI18n } from 'ng-zorro-antd/i18n';
 
 import { dddAuthInterceptor } from './infrastructure/interceptors/ddd-auth.interceptor';
+import { httpErrorInterceptor } from './infrastructure/interceptors/http-error.interceptor';
 import { dddRoutes } from './interface/routes/ddd-routes';
 import { ICONS } from '../style-icons';
 import { ICONS_AUTO } from '../style-icons-auto';
@@ -36,8 +37,7 @@ import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
-import { getRepositoryProviders } from './infrastructure/di/repository.providers';
-import { CONTRACT_PROVIDERS } from './infrastructure/di/contract.providers';
+import { provideRepositories } from './infrastructure/providers/repository.providers';
 
 // Import migrated services from infrastructure layer
 import { provideStartup } from './infrastructure/services/startup.service';
@@ -45,6 +45,9 @@ import { I18NService } from './infrastructure/services/i18n.service';
 
 // DDD Tab Infrastructure
 import { TabReuseStrategyService } from './infrastructure/services/tab-reuse-strategy.service';
+
+// Global Error Handler
+import { GlobalErrorHandler } from './shared/errors/global-error-handler';
 
 registerLocaleData(zh);
 
@@ -71,14 +74,14 @@ if (environment.useHash) routerFeatures.push(withHashLocation());
 
 // Firebase providers
 const firebaseProviders: Array<Provider | EnvironmentProviders> = [
-  provideFirebaseApp(() => initializeApp({ 
-    projectId: "ng-acc", 
-    appId: "1:289956121604:web:4dd9d608a2db962aeaf951", 
-    storageBucket: "ng-acc.firebasestorage.app", 
-    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", 
-    authDomain: "ng-acc.firebaseapp.com", 
-    messagingSenderId: "289956121604", 
-    measurementId: "G-6YM5S9LCNV" 
+  provideFirebaseApp(() => initializeApp({
+    projectId: "ng-acc",
+    appId: "1:289956121604:web:4dd9d608a2db962aeaf951",
+    storageBucket: "ng-acc.firebasestorage.app",
+    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ",
+    authDomain: "ng-acc.firebaseapp.com",
+    messagingSenderId: "289956121604",
+    measurementId: "G-6YM5S9LCNV"
   })),
   provideAuth_alias(() => getAuth()),
   provideAnalytics(() => getAnalytics()),
@@ -101,16 +104,16 @@ const firebaseProviders: Array<Provider | EnvironmentProviders> = [
 export const appConfig: ApplicationConfig = {
   providers: [
     // Core Angular providers
-    provideHttpClient(withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, dddAuthInterceptor])),
+    provideHttpClient(withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, dddAuthInterceptor, httpErrorInterceptor])),
     provideAnimations(),
     provideAnimationsAsync(),
     provideRouter(dddRoutes, ...routerFeatures),
-    
+
     // ng-zorro-antd providers
     provideNzIcons(icons),
     provideNzI18n(zorroLang),
     provideNzConfig(ngZorroConfig),
-    
+
     // ng-alain providers
     provideAlain({ config: alainConfig, defaultLang, i18nClass: I18NService, icons: [...ICONS_AUTO, ...ICONS] }),
     provideAuth(),
@@ -120,25 +123,25 @@ export const appConfig: ApplicationConfig = {
       widgets: [...SF_WIDGETS]
     }),
     provideStartup(),
-    
+
     // Forms module
     importProvidersFrom(FormsModule),
-    
+
     // Firebase providers
     ...firebaseProviders,
-    
-    // DDD Repository providers
-    ...getRepositoryProviders(),
-    
-    // Contract providers
-    ...CONTRACT_PROVIDERS,
-    
+
+    // DDD Repository providers (unified)
+    ...provideRepositories(),
+
     // DDD Tab Infrastructure - Route Reuse Strategy
     { provide: RouteReuseStrategy, useClass: TabReuseStrategyService },
-    
+
+    // Global Error Handler
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+
     // Environment specific providers
     ...(environment.providers || []),
-    
+
     // Auth refresh provider (conditional) - Removed as part of DDD migration
     // ...(environment.api?.refreshTokenEnabled && environment.api.refreshTokenType === 'auth-refresh' 
     //   ? [provideBindAuthRefresh()] 

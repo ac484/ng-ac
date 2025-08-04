@@ -22,7 +22,7 @@ export class UnifiedAuthService {
     private tokenService: TokenService,
     private message: NzMessageService,
     private router: Router
-  ) {}
+  ) { }
 
   /**
    * 匿名登入（帶緩存）
@@ -31,7 +31,7 @@ export class UnifiedAuthService {
     try {
       const cacheKey = 'anonymous';
       let user = this.userCache.get(cacheKey);
-      
+
       if (!user) {
         user = User.createAnonymous();
         this.userCache.set(cacheKey, user);
@@ -65,18 +65,14 @@ export class UnifiedAuthService {
     try {
       const cacheKey = `email_${emailStr}`;
       let user = this.userCache.get(cacheKey);
-      
+
       if (!user) {
-        user = User.create(
-          'user_' + Date.now(),
-          emailStr,
-          emailStr.split('@')[0],
-          undefined,
-          false,
-          true,
-          'email',
-          'password'
-        );
+        user = User.create({
+          email: emailStr,
+          displayName: emailStr.split('@')[0],
+          authProvider: 'email'
+        });
+        user.verifyEmail(); // Mark as verified
         this.userCache.set(cacheKey, user);
       }
 
@@ -145,7 +141,7 @@ export class UnifiedAuthService {
 
     const cacheKey = `token_${token.token}`;
     const cached = this.tokenValidationCache.get(cacheKey);
-    
+
     // 緩存5分鐘
     if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) {
       return cached.isValid;
@@ -154,12 +150,12 @@ export class UnifiedAuthService {
     try {
       const auth = Authentication.fromTokenModel(token);
       const isValid = auth.isSessionValid();
-      
+
       this.tokenValidationCache.set(cacheKey, {
         isValid,
         timestamp: Date.now()
       });
-      
+
       return isValid;
     } catch {
       return false;
@@ -175,7 +171,7 @@ export class UnifiedAuthService {
 
     const cacheKey = `user_${token.id}`;
     const cached = this.userCache.get(cacheKey);
-    
+
     if (cached) {
       return cached.getSummary();
     }
@@ -199,7 +195,7 @@ export class UnifiedAuthService {
 
     const cacheKey = `auth_${token.token}`;
     const cached = this.tokenValidationCache.get(cacheKey);
-    
+
     if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) {
       return cached.isValid;
     }
@@ -209,7 +205,7 @@ export class UnifiedAuthService {
       isValid,
       timestamp: Date.now()
     });
-    
+
     return isValid;
   }
 
@@ -217,15 +213,15 @@ export class UnifiedAuthService {
   private createOrGetCachedAuth(user: User, providerId: string): Authentication {
     const cacheKey = `auth_${user.id}_${providerId}`;
     let auth = this.authCache.get(cacheKey);
-    
+
     if (!auth) {
       auth = Authentication.fromFirebaseUser({
         uid: user.id,
-        email: user.email.getValue(),
-        displayName: user.displayName.getValue(),
-        photoURL: user.photoUrl.getValue(),
-        emailVerified: user.isEmailVerified.isVerified(),
-        isAnonymous: user.isAnonymous.isAnonymous(),
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        emailVerified: user.isEmailVerified,
+        isAnonymous: user.isAnonymous,
         providerId,
         metadata: {
           creationTime: user.createdAt.toISOString(),
@@ -234,7 +230,7 @@ export class UnifiedAuthService {
       });
       this.authCache.set(cacheKey, auth);
     }
-    
+
     return auth;
   }
 

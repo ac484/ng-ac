@@ -3,6 +3,7 @@ import { ACCOUNT_REPOSITORY } from '../../domain/repositories/repository-tokens'
 import { Account } from '../../domain/entities/account.entity';
 import { AccountRepository } from '../../domain/repositories/account.repository';
 import { AccountDomainService } from '../../domain/services/account-domain.service';
+import { ConversionUtilitiesService } from '../../domain/services/conversion-utilities.service';
 import { AccountType } from '../../domain/value-objects/account/account-type.value-object';
 import { AccountStatus } from '../../domain/value-objects/account/account-status.value-object';
 import {
@@ -23,27 +24,29 @@ import {
 } from '../dto/account.dto';
 
 /**
- * Account application service
- * Orchestrates account-related operations and handles application logic
+ * Optimized Account Application Service - Coordination Logic Only
+ * Focuses on orchestrating domain operations, repository interactions, and DTO mapping
+ * Eliminates duplicate validation logic (handled by Domain Service)
+ * Uses centralized conversion utilities
  */
 @Injectable({ providedIn: 'root' })
 export class AccountApplicationService {
   constructor(
     @Inject(ACCOUNT_REPOSITORY) private accountRepository: AccountRepository,
-    private accountDomainService: AccountDomainService
-  ) {}
+    private accountDomainService: AccountDomainService,
+    private conversionUtilities: ConversionUtilitiesService
+  ) { }
 
   /**
-   * Create a new account
-   * @param createAccountDto Account creation data
-   * @returns Created account DTO
+   * Coordinate account creation
+   * Removed duplicate validation - handled by Domain Service
    */
   async createAccount(createAccountDto: CreateAccountDto): Promise<AccountDto> {
     try {
-      // 將字符串轉換為值物件
-      const accountType = this.convertStringToAccountType(createAccountDto.accountType);
-      const accountStatus = AccountStatus.ACTIVE(); // 默認狀態
-      
+      // Use centralized conversion utilities
+      const accountType = this.conversionUtilities.stringToAccountType(createAccountDto.accountType);
+
+      // Delegate to domain service (handles all validation and creation logic)
       const account = this.accountDomainService.createAccount(
         createAccountDto.accountNumber,
         createAccountDto.accountName,
@@ -54,10 +57,13 @@ export class AccountApplicationService {
         createAccountDto.description
       );
 
+      // Persist entity
       await this.accountRepository.save(account);
+
+      // Return DTO
       return this.mapToDto(account);
     } catch (error) {
-      throw new Error(`Failed to create account: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw this.handleError('create account', error);
     }
   }
 
@@ -140,8 +146,8 @@ export class AccountApplicationService {
         throw new Error('Account not found');
       }
 
-      const newStatus = this.convertStringToAccountStatus(updateStatusDto.status);
-      await this.accountDomainService.updateAccountStatus(account, newStatus);
+      const newStatus = this.conversionUtilities.stringToAccountStatus(updateStatusDto.status);
+      this.accountDomainService.updateAccountStatus(account, newStatus);
       await this.accountRepository.save(account);
 
       return this.mapToDto(account);
@@ -213,7 +219,7 @@ export class AccountApplicationService {
       }
 
       this.accountDomainService.processTransfer(sourceAccount, targetAccount, transferDto.amount);
-      
+
       await this.accountRepository.save(sourceAccount);
       await this.accountRepository.save(targetAccount);
 
@@ -256,21 +262,26 @@ export class AccountApplicationService {
       const offset = (page - 1) * pageSize;
 
       // Get all accounts and filter
-      const status = searchDto?.status ? this.convertStringToAccountStatus(searchDto.status) : undefined;
-      const accountType = searchDto?.accountType ? this.convertStringToAccountType(searchDto.accountType) : undefined;
+      const status = searchDto?.status ? this.conversionUtilities.stringToAccountStatus(searchDto.status) : undefined;
+      const accountType = searchDto?.accountType ? this.conversionUtilities.stringToAccountType(searchDto.accountType) : undefined;
       let accounts = await this.accountRepository.findAll(status, accountType);
-      
+
       // Apply additional filters
       accounts = this.filterAccounts(accounts, searchDto);
 
       const total = accounts.length;
       const paginatedAccounts = accounts.slice(offset, offset + pageSize);
 
+      const accountDtos = paginatedAccounts.map(account => this.mapToDto(account));
+
       return {
-        accounts: paginatedAccounts.map(account => this.mapToDto(account)),
+        items: accountDtos,
+        accounts: accountDtos, // Alias for backward compatibility
         total,
         page,
-        pageSize
+        pageSize,
+        hasNext: (page * pageSize) < total,
+        hasPrevious: page > 1
       };
     } catch (error) {
       throw new Error(`Failed to get accounts: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -284,13 +295,13 @@ export class AccountApplicationService {
   async getAccountStats(): Promise<AccountStatsDto> {
     try {
       const allAccounts = await this.accountRepository.findAll();
-      
+
       const total = allAccounts.length;
       const active = allAccounts.filter(acc => acc.status.getValue() === 'ACTIVE').length;
       const inactive = allAccounts.filter(acc => acc.status.getValue() === 'INACTIVE').length;
       const suspended = allAccounts.filter(acc => acc.status.getValue() === 'SUSPENDED').length;
       const closed = allAccounts.filter(acc => acc.status.getValue() === 'CLOSED').length;
-      
+
       const totalBalance = allAccounts.reduce((sum, acc) => sum + acc.balance.getAmount(), 0);
       const averageBalance = total > 0 ? totalBalance / total : 0;
 
@@ -391,41 +402,18 @@ export class AccountApplicationService {
       currency: account.currency.getValue(),
       status: account.status.getValue(),
       userId: account.userId.getValue(),
-      createdAt: account.createdAt,
-      updatedAt: account.updatedAt,
+      createdAt: account.createdAt.toISOString(),
+      updatedAt: account.updatedAt.toISOString(),
       description: account.description,
-      lastTransactionDate: account.lastTransactionDate
+      lastTransactionDate: account.lastTransactionDate?.toISOString()
     };
   }
 
-  // 添加轉換方法
-  private convertStringToAccountType(typeString: string): AccountType {
-    switch (typeString.toUpperCase()) {
-      case 'CHECKING':
-        return AccountType.CHECKING();
-      case 'SAVINGS':
-        return AccountType.SAVINGS();
-      case 'CREDIT':
-        return AccountType.CREDIT();
-      case 'INVESTMENT':
-        return AccountType.INVESTMENT();
-      default:
-        throw new Error(`Invalid account type: ${typeString}`);
-    }
-  }
-
-  private convertStringToAccountStatus(statusString: string): AccountStatus {
-    switch (statusString.toUpperCase()) {
-      case 'ACTIVE':
-        return AccountStatus.ACTIVE();
-      case 'INACTIVE':
-        return AccountStatus.INACTIVE();
-      case 'SUSPENDED':
-        return AccountStatus.SUSPENDED();
-      case 'CLOSED':
-        return AccountStatus.CLOSED();
-      default:
-        throw new Error(`Invalid account status: ${statusString}`);
-    }
+  /**
+   * Centralized error handling
+   */
+  private handleError(operation: string, error: any): Error {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return new Error(`Failed to ${operation}: ${message}`);
   }
 } 

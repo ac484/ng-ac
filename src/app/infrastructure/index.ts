@@ -23,5 +23,9 @@ export * from './interceptors/ddd-auth.interceptor';
 export * from './interceptors/refresh-token';
 export * from './interceptors/helper';
 
-// Dependency Injection
-export * from './di/repository.providers'; 
+// New Unified Repository Module and Providers
+export * from './modules/repository.module';
+export * from './providers/repository.providers';
+
+// Legacy Dependency Injection (deprecated)
+export { FIREBASE_REPOSITORY_PROVIDERS, MOCK_REPOSITORY_PROVIDERS } from './di/repository.providers'; 

@@ -1,30 +1,20 @@
 import { Injectable } from '@angular/core';
-import { User, UserStatus } from '../../domain/entities/user.entity';
+import { User } from '../../domain/entities/user.entity';
 import { UserRepository } from '../../domain/repositories/user.repository';
+import { BaseMockRepository } from './base-mock.repository';
+import { SearchCriteria } from '../../domain/interfaces/search-criteria.interface';
 
 /**
- * Mock implementation of UserRepository for testing and development
- * Uses in-memory storage instead of Firebase
+ * Mock implementation of UserRepository using BaseMockRepository
+ * Uses in-memory storage instead of Firebase with standardized operations
  */
 @Injectable({
   providedIn: 'root'
 })
-export class MockUserRepository implements UserRepository {
-
-  private users = new Map<string, User>();
+export class MockUserRepository extends BaseMockRepository<User> implements UserRepository {
 
   constructor() {
-    // Initialize with some mock data
-    this.initializeMockData();
-  }
-
-  /**
-   * Find user by ID
-   */
-  async findById(id: string): Promise<User | null> {
-    // Simulate network delay
-    await this.delay(100);
-    return this.users.get(id) || null;
+    super();
   }
 
   /**
@@ -32,42 +22,17 @@ export class MockUserRepository implements UserRepository {
    */
   async findByEmail(email: string): Promise<User | null> {
     await this.delay(100);
-    for (const user of this.users.values()) {
+    this.logOperation('findByEmail', { email });
+
+    for (const user of this.entities.values()) {
       if (user.email.toLowerCase() === email.toLowerCase()) {
+        this.logOperation('findByEmail', { email, found: true });
         return user;
       }
     }
+
+    this.logOperation('findByEmail', { email, found: false });
     return null;
-  }
-
-  /**
-   * Find all users with optional status filtering
-   */
-  async findAll(status?: string): Promise<User[]> {
-    await this.delay(200);
-    let users = Array.from(this.users.values());
-    
-    if (status) {
-      users = users.filter(user => user.status.getValue() === status);
-    }
-    
-    return users.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  }
-
-  /**
-   * Save user (create or update)
-   */
-  async save(user: User): Promise<void> {
-    await this.delay(150);
-    this.users.set(user.id, user);
-  }
-
-  /**
-   * Delete user by ID
-   */
-  async delete(id: string): Promise<void> {
-    await this.delay(100);
-    this.users.delete(id);
   }
 
   /**
@@ -75,113 +40,109 @@ export class MockUserRepository implements UserRepository {
    */
   async existsByEmail(email: string): Promise<boolean> {
     await this.delay(50);
-    for (const user of this.users.values()) {
+    this.logOperation('existsByEmail', { email });
+
+    for (const user of this.entities.values()) {
       if (user.email.toLowerCase() === email.toLowerCase()) {
+        this.logOperation('existsByEmail', { email, exists: true });
         return true;
       }
     }
+
+    this.logOperation('existsByEmail', { email, exists: false });
     return false;
   }
 
   /**
-   * Count total users
+   * Find all users with optional search criteria
+   * Implements UserRepository interface
    */
-  async count(): Promise<number> {
-    await this.delay(50);
-    return this.users.size;
+  override async findAll(criteria?: SearchCriteria): Promise<User[]> {
+    await this.delay(200);
+    this.logOperation('findAll', { criteria });
+
+    const searchCriteria: SearchCriteria = criteria || {
+      sortBy: 'createdAt',
+      sortOrder: 'desc'
+    };
+
+    const users = await super.findAll(searchCriteria);
+    this.logOperation('findAll', { criteria: searchCriteria, count: users.length });
+
+    return users;
   }
+
+  // save, delete, and count methods are inherited from BaseMockRepository
 
   /**
    * Find users by status
    */
   async findByStatus(status: string): Promise<User[]> {
     await this.delay(100);
-    const users = Array.from(this.users.values());
-    return users
-      .filter(user => user.status.getValue() === status)
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    this.logOperation('findByStatus', { status });
+
+    const criteria: SearchCriteria = {
+      status,
+      sortBy: 'createdAt',
+      sortOrder: 'desc'
+    };
+
+    const users = await this.findAll(criteria);
+    this.logOperation('findByStatus', { status, count: users.length });
+
+    return users;
+  }
+
+  /**
+   * Override keyword search for user-specific logic
+   */
+  protected override applyKeywordSearch(entities: User[], keyword: string): User[] {
+    const lowerKeyword = keyword.toLowerCase();
+    return entities.filter(user =>
+      user.displayName.toLowerCase().includes(lowerKeyword) ||
+      user.email.toLowerCase().includes(lowerKeyword)
+    );
   }
 
   /**
    * Initialize mock data for testing
    */
-  private initializeMockData(): void {
+  protected initializeMockData(): void {
     const mockUsers = [
-      User.create(
-        'user_1',
-        'john.doe@example.com',
-        'John Doe',
-        'https://example.com/avatar1.jpg',
-        false,
-        false,
-        'email',
-        'password'
-      ),
-      User.create(
-        'user_2',
-        'jane.smith@example.com',
-        'Jane Smith',
-        'https://example.com/avatar2.jpg',
-        false,
-        false,
-        'email',
-        'password'
-      ),
-      User.create(
-        'user_3',
-        'bob.wilson@example.com',
-        'Bob Wilson',
-        undefined,
-        false,
-        false,
-        'email',
-        'password'
-      ),
-      User.create(
-        'user_4',
-        'alice.brown@example.com',
-        'Alice Brown',
-        'https://example.com/avatar4.jpg',
-        false,
-        false,
-        'email',
-        'password'
-      ),
-      User.create(
-        'user_5',
-        'charlie.davis@example.com',
-        'Charlie Davis',
-        undefined,
-        false,
-        false,
-        'email',
-        'password'
-      )
+      User.create({
+        email: 'john.doe@example.com',
+        displayName: 'John Doe',
+        photoURL: 'https://example.com/avatar1.jpg'
+      }),
+      User.create({
+        email: 'jane.smith@example.com',
+        displayName: 'Jane Smith',
+        photoURL: 'https://example.com/avatar2.jpg'
+      }),
+      User.create({
+        email: 'bob.wilson@example.com',
+        displayName: 'Bob Wilson'
+      }),
+      User.create({
+        email: 'alice.brown@example.com',
+        displayName: 'Alice Brown',
+        photoURL: 'https://example.com/avatar4.jpg'
+      }),
+      User.create({
+        email: 'charlie.davis@example.com',
+        displayName: 'Charlie Davis'
+      })
     ];
 
     mockUsers.forEach(user => {
-      this.users.set(user.id, user);
+      this.entities.set(user.id, user);
     });
-  }
-
-  /**
-   * Simulate network delay
-   */
-  private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  /**
-   * Clear all mock data (for testing)
-   */
-  clearMockData(): void {
-    this.users.clear();
   }
 
   /**
    * Add mock user (for testing)
    */
   addMockUser(user: User): void {
-    this.users.set(user.id, user);
+    this.addMockEntity(user);
   }
 } 

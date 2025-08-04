@@ -5,21 +5,21 @@ import { AccountNumber } from '../value-objects/account/account-number.value-obj
 import { AccountName } from '../value-objects/account/account-name.value-object';
 import { Currency } from '../value-objects/account/currency.value-object';
 import { UserId } from '../value-objects/authentication/user-id.value-object';
+import { SharedUtilitiesService } from './shared-utilities.service';
 
 /**
- * Account domain service
- * Contains business logic and validation rules for account operations
+ * Optimized Account Domain Service - Pure Business Logic Only
+ * Focuses on business rules, validations, and account operations
+ * Eliminates duplicate logic with Application Service and uses SharedUtilitiesService
  */
 @Injectable({ providedIn: 'root' })
 export class AccountDomainService {
 
+  constructor(private sharedUtilities: SharedUtilitiesService) { }
+
   /**
-   * Validate account creation parameters
-   * @param accountNumber Account number
-   * @param accountName Account name
-   * @param accountType Account type
-   * @param userId User ID
-   * @throws Error if validation fails
+   * Business rule: Validate account creation parameters
+   * Consolidated validation logic using SharedUtilitiesService
    */
   validateAccountCreation(
     accountNumber: string,
@@ -27,146 +27,75 @@ export class AccountDomainService {
     accountType: AccountType,
     userId: string
   ): void {
-    if (!accountNumber || accountNumber.trim().length === 0) {
-      throw new Error('Account number is required');
-    }
-    if (!accountName || accountName.trim().length === 0) {
-      throw new Error('Account name is required');
-    }
-    if (!accountType) {
-      throw new Error('Account type is required');
-    }
-    if (!userId || userId.trim().length === 0) {
-      throw new Error('User ID is required');
-    }
-    if (accountNumber.length < 8) {
-      throw new Error('Account number must be at least 8 characters');
-    }
-    if (accountName.length < 2) {
-      throw new Error('Account name must be at least 2 characters');
-    }
+    // Use shared utilities for common validations
+    this.sharedUtilities.validateRequired(accountNumber, 'Account number');
+    this.sharedUtilities.validateRequired(accountName, 'Account name');
+    this.sharedUtilities.validateRequired(accountType, 'Account type');
+    this.sharedUtilities.validateRequired(userId, 'User ID');
+
+    // Account-specific validations
+    this.validateAccountNumber(accountNumber);
+    this.validateAccountName(accountName);
   }
 
   /**
-   * Generate a unique account ID
-   * @returns Generated account ID
-   */
-  generateAccountId(): string {
-    return `acc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
-
-  /**
-   * Generate a unique account number
-   * @returns Generated account number
-   */
-  generateAccountNumber(): string {
-    const timestamp = Date.now().toString();
-    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    return `${timestamp.slice(-6)}${random}`;
-  }
-
-  /**
-   * Validate account number format
-   * @param accountNumber Account number to validate
-   * @throws Error if account number is invalid
+   * Business rule: Validate account number format
    */
   validateAccountNumber(accountNumber: string): void {
-    if (!accountNumber || accountNumber.trim().length === 0) {
-      throw new Error('Account number is required');
-    }
-    if (accountNumber.length < 8) {
-      throw new Error('Account number must be at least 8 characters');
-    }
+    this.sharedUtilities.validateRequired(accountNumber, 'Account number');
+    this.sharedUtilities.validateStringLength(accountNumber, 8, 20, 'Account number');
+
     if (!/^\d+$/.test(accountNumber)) {
       throw new Error('Account number must contain only digits');
     }
   }
 
   /**
-   * Validate account name
-   * @param accountName Account name to validate
-   * @throws Error if account name is invalid
+   * Business rule: Validate account name
    */
   validateAccountName(accountName: string): void {
-    if (!accountName || accountName.trim().length === 0) {
-      throw new Error('Account name is required');
-    }
-    if (accountName.length < 2) {
-      throw new Error('Account name must be at least 2 characters');
-    }
-    if (accountName.length > 50) {
-      throw new Error('Account name cannot exceed 50 characters');
-    }
+    this.sharedUtilities.validateStringLength(accountName.trim(), 2, 50, 'Account name');
   }
 
   /**
-   * Validate account type
-   * @param accountType Account type to validate
-   * @throws Error if account type is invalid
-   */
-  validateAccountType(accountType: AccountType): void {
-    if (!accountType) {
-      throw new Error('Account type is required');
-    }
-    if (!Object.values(AccountType).includes(accountType)) {
-      throw new Error('Invalid account type');
-    }
-  }
-
-  /**
-   * Validate initial balance
-   * @param balance Initial balance
-   * @throws Error if balance is invalid
+   * Business rule: Validate initial balance
    */
   validateInitialBalance(balance: number): void {
-    if (typeof balance !== 'number' || isNaN(balance)) {
-      throw new Error('Balance must be a valid number');
-    }
-    if (balance < 0) {
-      throw new Error('Initial balance cannot be negative');
-    }
+    this.sharedUtilities.validateNonNegativeNumber(balance, 'Initial balance');
   }
 
   /**
-   * Check if account can be activated
-   * @param account Account to check
-   * @returns True if account can be activated
+   * Business rule: Check if account can be activated
    */
   canActivateAccount(account: Account): boolean {
-    return account.status.getValue() === 'ACTIVE';
+    const status = account.status.getValue();
+    return status === 'INACTIVE' || status === 'SUSPENDED';
   }
 
   /**
-   * Check if account can be deactivated
-   * @param account Account to check
-   * @returns True if account can be deactivated
+   * Business rule: Check if account can be deactivated
    */
   canDeactivateAccount(account: Account): boolean {
     return account.status.getValue() === 'ACTIVE';
   }
 
   /**
-   * Check if account can be suspended
-   * @param account Account to check
-   * @returns True if account can be suspended
+   * Business rule: Check if account can be suspended
    */
   canSuspendAccount(account: Account): boolean {
     return account.status.getValue() === 'ACTIVE';
   }
 
   /**
-   * Check if account can be closed
-   * @param account Account to check
-   * @returns True if account can be closed
+   * Business rule: Check if account can be closed
    */
   canCloseAccount(account: Account): boolean {
     return account.status.getValue() !== 'CLOSED' && account.balance.getAmount() === 0;
   }
 
   /**
-   * Validate status transition
-   * @param currentStatus Current account status
-   * @param newStatus New account status
+   * Business rule: Validate account status transition
+   * Uses SharedUtilitiesService for consistent validation
    */
   validateStatusTransition(currentStatus: AccountStatus, newStatus: AccountStatus): void {
     const validTransitions: Record<string, string[]> = {
@@ -176,24 +105,16 @@ export class AccountDomainService {
       'CLOSED': []
     };
 
-    const currentStatusValue = currentStatus.getValue();
-    const newStatusValue = newStatus.getValue();
-
-    if (!validTransitions[currentStatusValue].includes(newStatusValue)) {
-      throw new Error(`Invalid status transition from ${currentStatusValue} to ${newStatusValue}`);
-    }
+    this.sharedUtilities.validateStatusTransition(
+      currentStatus.getValue(),
+      newStatus.getValue(),
+      validTransitions
+    );
   }
 
   /**
-   * Create a new account
-   * @param accountNumber Account number
-   * @param accountName Account name
-   * @param accountType Account type
-   * @param userId User ID
-   * @param initialBalance Initial balance
-   * @param currency Currency code
-   * @param description Account description
-   * @returns Created account
+   * Business operation: Create a new account with full validation
+   * Consolidated creation logic using SharedUtilitiesService
    */
   createAccount(
     accountNumber: string,
@@ -204,12 +125,16 @@ export class AccountDomainService {
     currency: string = 'USD',
     description?: string
   ): Account {
+    // Validate all creation parameters
     this.validateAccountCreation(accountNumber, accountName, accountType, userId);
     this.validateInitialBalance(initialBalance);
 
-    const accountId = this.generateAccountId();
+    // Generate unique ID using shared utilities
+    const accountId = this.sharedUtilities.generateId('account');
+
+    // Create value objects
     const accountNumberVO = new AccountNumber(accountNumber);
-    const accountNameVO = new AccountName(accountName);
+    const accountNameVO = new AccountName(accountName.trim());
     const balanceVO = new Money(initialBalance);
     const currencyVO = new Currency(currency);
     const statusVO = AccountStatus.ACTIVE();
@@ -226,25 +151,20 @@ export class AccountDomainService {
       userIdVO,
       new Date(),
       new Date(),
-      description
+      description?.trim()
     );
   }
 
   /**
-   * Update account information
-   * @param account Account to update
-   * @param accountName New account name
-   * @param description New description
+   * Business operation: Update account information with validation
    */
   updateAccountInfo(account: Account, accountName: string, description?: string): void {
     this.validateAccountName(accountName);
-    account.updateInfo(accountName, description);
+    account.updateInfo(accountName.trim(), description?.trim());
   }
 
   /**
-   * Update account status
-   * @param account Account to update
-   * @param newStatus New status
+   * Business operation: Update account status with validation
    */
   updateAccountStatus(account: Account, newStatus: AccountStatus): void {
     this.validateStatusTransition(account.status, newStatus);
@@ -252,64 +172,81 @@ export class AccountDomainService {
   }
 
   /**
-   * Process account deposit
-   * @param account Account to deposit to
-   * @param amount Amount to deposit
+   * Business operation: Process account deposit with validation
    */
   processDeposit(account: Account, amount: number): void {
-    if (amount <= 0) {
-      throw new Error('Deposit amount must be positive');
+    this.sharedUtilities.validatePositiveNumber(amount, 'Deposit amount');
+
+    // Business rule: Check account status
+    if (account.status.getValue() !== 'ACTIVE') {
+      throw new Error('Cannot deposit to inactive account');
     }
+
     const moneyAmount = new Money(amount);
     account.deposit(moneyAmount);
   }
 
   /**
-   * Process account withdrawal
-   * @param account Account to withdraw from
-   * @param amount Amount to withdraw
+   * Business operation: Process account withdrawal with validation
    */
   processWithdrawal(account: Account, amount: number): void {
-    if (amount <= 0) {
-      throw new Error('Withdrawal amount must be positive');
+    this.sharedUtilities.validatePositiveNumber(amount, 'Withdrawal amount');
+
+    // Business rule: Check account status
+    if (account.status.getValue() !== 'ACTIVE') {
+      throw new Error('Cannot withdraw from inactive account');
     }
+
+    // Business rule: Check sufficient balance
+    if (account.balance.getAmount() < amount) {
+      throw new Error('Insufficient balance for withdrawal');
+    }
+
     const moneyAmount = new Money(amount);
     account.withdraw(moneyAmount);
   }
 
   /**
-   * Process account transfer
-   * @param sourceAccount Source account
-   * @param targetAccount Target account
-   * @param amount Amount to transfer
+   * Business operation: Process account transfer with validation
    */
   processTransfer(sourceAccount: Account, targetAccount: Account, amount: number): void {
-    if (amount <= 0) {
-      throw new Error('Transfer amount must be positive');
-    }
+    this.sharedUtilities.validatePositiveNumber(amount, 'Transfer amount');
+
+    // Business rules validation
     if (sourceAccount.id === targetAccount.id) {
       throw new Error('Cannot transfer to the same account');
     }
+
     if (sourceAccount.currency.getValue() !== targetAccount.currency.getValue()) {
       throw new Error('Cannot transfer between accounts with different currencies');
     }
+
+    if (sourceAccount.status.getValue() !== 'ACTIVE') {
+      throw new Error('Cannot transfer from inactive source account');
+    }
+
+    if (targetAccount.status.getValue() !== 'ACTIVE') {
+      throw new Error('Cannot transfer to inactive target account');
+    }
+
+    if (sourceAccount.balance.getAmount() < amount) {
+      throw new Error('Insufficient balance for transfer');
+    }
+
     const moneyAmount = new Money(amount);
     sourceAccount.transfer(targetAccount, moneyAmount);
   }
 
   /**
-   * Calculate account balance in money format
-   * @param account Account to calculate balance for
-   * @returns Money object representing balance
+   * Business rule: Calculate account balance in money format
    */
   calculateBalance(account: Account): Money {
     return account.balance;
   }
 
   /**
-   * Get account summary information
-   * @param account Account to get summary for
-   * @returns Account summary
+   * Business operation: Get account summary information
+   * Provides standardized account summary for reporting
    */
   getAccountSummary(account: Account): {
     id: string;
@@ -331,5 +268,31 @@ export class AccountDomainService {
       currency: account.currency.getValue(),
       lastTransactionDate: account.lastTransactionDate
     };
+  }
+
+  /**
+   * Business rule: Validate account for transaction operations
+   */
+  validateAccountForTransaction(account: Account, operationType: 'deposit' | 'withdrawal' | 'transfer'): void {
+    if (account.status.getValue() !== 'ACTIVE') {
+      throw new Error(`Cannot perform ${operationType} on inactive account`);
+    }
+
+    // Additional business rules based on operation type
+    switch (operationType) {
+      case 'withdrawal':
+      case 'transfer':
+        if (account.balance.getAmount() <= 0) {
+          throw new Error(`Account has insufficient balance for ${operationType}`);
+        }
+        break;
+    }
+  }
+
+  /**
+   * Business rule: Check if account can be deleted
+   */
+  canDeleteAccount(account: Account): boolean {
+    return account.status.getValue() === 'CLOSED' && account.balance.getAmount() === 0;
   }
 } 

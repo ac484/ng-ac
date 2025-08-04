@@ -3,47 +3,41 @@ import { TRANSACTION_REPOSITORY } from '../../domain/repositories/repository-tok
 import { Transaction, TransactionStatus, TransactionType } from '../../domain/entities/transaction.entity';
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
 import { TransactionDomainService } from '../../domain/services/transaction-domain.service';
-import { 
-  CreateTransactionDto, 
-  UpdateTransactionDto, 
-  UpdateTransactionStatusDto, 
-  TransactionDto, 
-  TransactionListDto, 
-  TransactionSearchDto, 
+import { ConversionUtilitiesService } from '../../domain/services/conversion-utilities.service';
+import {
+  CreateTransactionDto,
+  UpdateTransactionDto,
+  UpdateTransactionStatusDto,
+  TransactionDto,
+  TransactionListDto,
+  TransactionSearchDto,
   TransactionStatsDto,
   ProcessTransactionDto,
   TransactionValidationDto
 } from '../dto/transaction.dto';
 
+/**
+ * Optimized Transaction Application Service - Coordination Logic Only
+ * Focuses on orchestrating domain operations, repository interactions, and DTO mapping
+ * Eliminates duplicate validation logic (handled by Domain Service)
+ * Uses centralized conversion utilities
+ */
 @Injectable({ providedIn: 'root' })
 export class TransactionApplicationService {
   constructor(
     @Inject(TRANSACTION_REPOSITORY) private transactionRepository: TransactionRepository,
-    private transactionDomainService: TransactionDomainService
-  ) {}
+    private transactionDomainService: TransactionDomainService,
+    private conversionUtilities: ConversionUtilitiesService
+  ) { }
 
-  // Create a new transaction
+  /**
+   * Coordinate transaction creation
+   * Removed duplicate validation - handled by Domain Service
+   */
   async createTransaction(createDto: CreateTransactionDto): Promise<TransactionDto> {
     try {
-      // Validate the transaction creation
-      const validation = this.transactionDomainService.validateTransactionCreation(
-        createDto.accountId,
-        createDto.userId,
-        createDto.amount,
-        createDto.transactionType,
-        createDto.description
-      );
-
-      if (!validation.isValid) {
-        throw new Error(`Transaction creation failed: ${validation.errors.join(', ')}`);
-      }
-
-      // Generate unique ID
-      const id = this.generateId();
-
-      // Create transaction using domain service
+      // Delegate to domain service (handles all validation and creation logic)
       const transaction = this.transactionDomainService.createTransaction(
-        id,
         createDto.accountId,
         createDto.userId,
         createDto.amount,
@@ -54,7 +48,7 @@ export class TransactionApplicationService {
         createDto.category
       );
 
-      // Save to repository
+      // Persist entity
       await this.transactionRepository.save(transaction);
 
       // Return DTO
@@ -112,13 +106,17 @@ export class TransactionApplicationService {
       const startIndex = (page - 1) * pageSize;
       const endIndex = startIndex + pageSize;
       const paginatedTransactions = allTransactions.slice(startIndex, endIndex);
+      const transactionDtos = paginatedTransactions.map(transaction => this.mapToDto(transaction));
 
       return {
-        transactions: paginatedTransactions.map(transaction => this.mapToDto(transaction)),
+        items: transactionDtos,
+        transactions: transactionDtos, // Alias for backward compatibility
         total,
         page,
         pageSize,
-        totalPages: Math.ceil(total / pageSize)
+        totalPages: Math.ceil(total / pageSize),
+        hasNext: page < Math.ceil(total / pageSize),
+        hasPrevious: page > 1
       };
     } catch (error) {
       throw new Error(`Failed to get all transactions: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -148,25 +146,27 @@ export class TransactionApplicationService {
       }
 
       if (searchDto.startDate && searchDto.endDate) {
-        transactions = transactions.filter(t => 
-          t.createdAt >= searchDto.startDate! && t.createdAt <= searchDto.endDate!
+        const startDate = new Date(searchDto.startDate);
+        const endDate = new Date(searchDto.endDate);
+        transactions = transactions.filter(t =>
+          t.createdAt >= startDate && t.createdAt <= endDate
         );
       }
 
       if (searchDto.minAmount !== undefined && searchDto.maxAmount !== undefined) {
-        transactions = transactions.filter(t => 
+        transactions = transactions.filter(t =>
           t.amount >= searchDto.minAmount! && t.amount <= searchDto.maxAmount!
         );
       }
 
       if (searchDto.referenceNumber) {
-        transactions = transactions.filter(t => 
+        transactions = transactions.filter(t =>
           t.referenceNumber?.includes(searchDto.referenceNumber!)
         );
       }
 
       if (searchDto.category) {
-        transactions = transactions.filter(t => 
+        transactions = transactions.filter(t =>
           t.category?.includes(searchDto.category!)
         );
       }
@@ -176,7 +176,7 @@ export class TransactionApplicationService {
         transactions.sort((a, b) => {
           const aValue = (a as any)[searchDto.sortBy!];
           const bValue = (b as any)[searchDto.sortBy!];
-          
+
           if (aValue < bValue) return searchDto.sortOrder === 'desc' ? 1 : -1;
           if (aValue > bValue) return searchDto.sortOrder === 'desc' ? -1 : 1;
           return 0;
@@ -190,13 +190,17 @@ export class TransactionApplicationService {
       const startIndex = (page - 1) * pageSize;
       const endIndex = startIndex + pageSize;
       const paginatedTransactions = transactions.slice(startIndex, endIndex);
+      const transactionDtos = paginatedTransactions.map(transaction => this.mapToDto(transaction));
 
       return {
-        transactions: paginatedTransactions.map(transaction => this.mapToDto(transaction)),
+        items: transactionDtos,
+        transactions: transactionDtos, // Alias for backward compatibility
         total,
         page,
         pageSize,
-        totalPages: Math.ceil(total / pageSize)
+        totalPages: Math.ceil(total / pageSize),
+        hasNext: page < Math.ceil(total / pageSize),
+        hasPrevious: page > 1
       };
     } catch (error) {
       throw new Error(`Failed to search transactions: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -224,10 +228,8 @@ export class TransactionApplicationService {
       }
 
       if (updateDto.referenceNumber) {
-        const validation = this.transactionDomainService.validateReferenceNumber(updateDto.referenceNumber);
-        if (!validation.isValid) {
-          throw new Error(`Reference number validation failed: ${validation.errors.join(', ')}`);
-        }
+        // Delegate validation to domain service
+        this.transactionDomainService.validateReferenceNumber(updateDto.referenceNumber);
         transaction.referenceNumber = updateDto.referenceNumber;
       }
 
@@ -242,7 +244,10 @@ export class TransactionApplicationService {
     }
   }
 
-  // Update transaction status
+  /**
+   * Coordinate transaction status update
+   * Removed duplicate validation - handled by Domain Service
+   */
   async updateTransactionStatus(id: string, statusDto: UpdateTransactionStatusDto): Promise<TransactionDto> {
     try {
       const transaction = await this.transactionRepository.findById(id);
@@ -250,17 +255,14 @@ export class TransactionApplicationService {
         throw new Error('Transaction not found');
       }
 
-      // Validate status transition
-      const validation = this.transactionDomainService.validateStatusTransition(
-        transaction.status,
-        statusDto.status
-      );
+      // Use centralized conversion and delegate validation to domain service
+      const newStatus = this.conversionUtilities.stringToTransactionStatus(statusDto.status);
+      this.transactionDomainService.validateStatusTransition(transaction.status, newStatus);
 
-      if (!validation.isValid) {
-        throw new Error(`Status transition validation failed: ${validation.errors.join(', ')}`);
-      }
+      // Update status
+      transaction.updateStatus(newStatus, statusDto.reason);
 
-      transaction.updateStatus(statusDto.status, statusDto.reason);
+      // Persist changes
       await this.transactionRepository.save(transaction);
       return this.mapToDto(transaction);
     } catch (error) {
@@ -324,6 +326,7 @@ export class TransactionApplicationService {
       const stats = await this.transactionRepository.getStatistics();
       return {
         ...stats,
+        total: stats.totalCount, // Map totalCount to total for compatibility
         processingCount: stats.byStatus[TransactionStatus.PROCESSING] || 0,
         failedCount: stats.byStatus[TransactionStatus.FAILED] || 0,
         cancelledCount: stats.byStatus[TransactionStatus.CANCELLED] || 0
@@ -339,6 +342,7 @@ export class TransactionApplicationService {
       const stats = await this.transactionRepository.getAccountStatistics(accountId);
       return {
         ...stats,
+        total: stats.totalCount, // Map totalCount to total for compatibility
         processingCount: stats.byStatus[TransactionStatus.PROCESSING] || 0,
         failedCount: stats.byStatus[TransactionStatus.FAILED] || 0,
         cancelledCount: stats.byStatus[TransactionStatus.CANCELLED] || 0
@@ -354,6 +358,7 @@ export class TransactionApplicationService {
       const stats = await this.transactionRepository.getUserStatistics(userId);
       return {
         ...stats,
+        total: stats.totalCount, // Map totalCount to total for compatibility
         processingCount: stats.byStatus[TransactionStatus.PROCESSING] || 0,
         failedCount: stats.byStatus[TransactionStatus.FAILED] || 0,
         cancelledCount: stats.byStatus[TransactionStatus.CANCELLED] || 0
@@ -363,33 +368,44 @@ export class TransactionApplicationService {
     }
   }
 
-  // Validate transaction creation
+  /**
+   * Coordinate transaction validation with business warnings
+   * Domain Service handles core validation, Application Service adds business warnings
+   */
   validateTransactionCreation(createDto: CreateTransactionDto): TransactionValidationDto {
-    const validation = this.transactionDomainService.validateTransactionCreation(
-      createDto.accountId,
-      createDto.userId,
-      createDto.amount,
-      createDto.transactionType,
-      createDto.description
-    );
+    try {
+      // Delegate core validation to domain service
+      this.transactionDomainService.validateTransactionCreation(
+        createDto.accountId,
+        createDto.userId,
+        createDto.amount,
+        createDto.transactionType,
+        createDto.description
+      );
 
-    const warnings: string[] = [];
+      // Add application-level warnings
+      const warnings: string[] = [];
 
-    // Add warnings for high amounts
-    if (createDto.amount > 10000) {
-      warnings.push('High transaction amount detected');
+      if (createDto.amount > 10000) {
+        warnings.push('High transaction amount detected');
+      }
+
+      if (createDto.transactionType === TransactionType.WITHDRAWAL && createDto.amount > 5000) {
+        warnings.push('Large withdrawal amount detected');
+      }
+
+      return {
+        isValid: true,
+        errors: [],
+        warnings
+      };
+    } catch (error) {
+      return {
+        isValid: false,
+        errors: [error instanceof Error ? error.message : 'Validation failed'],
+        warnings: []
+      };
     }
-
-    // Add warnings for specific transaction types
-    if (createDto.transactionType === TransactionType.WITHDRAWAL && createDto.amount > 5000) {
-      warnings.push('Large withdrawal amount detected');
-    }
-
-    return {
-      isValid: validation.isValid,
-      errors: validation.errors,
-      warnings
-    };
   }
 
   // Calculate transaction fees
@@ -401,10 +417,7 @@ export class TransactionApplicationService {
     return this.transactionDomainService.calculateFees(transactionType, amount, currency);
   }
 
-  // Private helper methods
-  private generateId(): string {
-    return `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+  // Removed generateId() - now handled by SharedUtilitiesService in Domain Service
 
   private mapToDto(transaction: Transaction): TransactionDto {
     return {
@@ -418,14 +431,22 @@ export class TransactionApplicationService {
       type: transaction.transactionType, // Alias for compatibility
       status: transaction.status,
       description: transaction.description,
-      createdAt: transaction.createdAt,
-      updatedAt: transaction.updatedAt,
-      date: transaction.createdAt, // Alias for compatibility
+      createdAt: transaction.createdAt.toISOString(),
+      updatedAt: transaction.updatedAt.toISOString(),
+      date: transaction.createdAt.toISOString(), // Alias for compatibility
       referenceNumber: transaction.referenceNumber,
       category: transaction.category,
       fees: transaction.fees,
       notes: transaction.notes,
       totalAmount: transaction.getTotalAmount()
     };
+  }
+
+  /**
+   * Centralized error handling
+   */
+  private handleError(operation: string, error: any): Error {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return new Error(`Failed to ${operation}: ${message}`);
   }
 } 

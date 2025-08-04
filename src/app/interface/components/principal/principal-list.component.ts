@@ -21,8 +21,6 @@ import { NzSplitterModule } from 'ng-zorro-antd/splitter';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { PrincipalFormComponent } from './principal-form.component';
-import { PrincipalContactComponent } from './principal-contact.component';
 
 @Component({
   selector: 'app-principal-list',
@@ -43,9 +41,7 @@ import { PrincipalContactComponent } from './principal-contact.component';
     NzSplitterModule,
     NzListModule,
     NzEmptyModule,
-    NzSpinModule,
-    PrincipalFormComponent,
-    PrincipalContactComponent
+    NzSpinModule
   ]
 })
 export class PrincipalListComponent implements OnInit, OnDestroy {
@@ -61,7 +57,7 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
     private principalService: PrincipalApplicationService,
     private modal: NzModalService,
     private message: NzMessageService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadPrincipals();
@@ -95,10 +91,10 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
 
   expandPrincipal(principal: Principal, expanded?: boolean): void {
     const principalId = principal.id.getValue();
-    
+
     // 如果傳入了 expanded 參數，使用該值；否則切換當前狀態
     const newExpandedState = expanded !== undefined ? expanded : !this.isExpanded(principal);
-    
+
     if (newExpandedState) {
       this.expandedPrincipalId = principalId;
       this.selectedPrincipal = principal;
@@ -110,6 +106,9 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
   }
 
   addPrincipal(): void {
+    // TODO: Implement with new dynamic form component
+    this.message.info('新增功能將在重構完成後實作');
+    /*
     const modalRef = this.modal.create({
       nzTitle: '新增 Principal',
       nzContent: PrincipalFormComponent,
@@ -129,9 +128,13 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
         this.message.success('Principal 新增成功');
       }
     });
+    */
   }
 
   editPrincipal(principal: Principal): void {
+    // TODO: Implement with new dynamic form component
+    this.message.info('編輯功能將在重構完成後實作');
+    /*
     const modalRef = this.modal.create({
       nzTitle: '編輯 Principal',
       nzContent: PrincipalFormComponent,
@@ -151,6 +154,7 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
         this.message.success('Principal 更新成功');
       }
     });
+    */
   }
 
   deletePrincipal(principal: Principal): void {
@@ -181,6 +185,9 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // TODO: Implement with new dynamic form component
+    this.message.info('新增聯絡人功能將在重構完成後實作');
+    /*
     const modalRef = this.modal.create({
       nzTitle: '新增聯絡人',
       nzContent: PrincipalContactComponent,
@@ -200,9 +207,13 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
         this.message.success('聯絡人新增成功');
       }
     });
+    */
   }
 
   editContact(contact: Contact): void {
+    // TODO: Implement with new dynamic form component
+    this.message.info('編輯聯絡人功能將在重構完成後實作');
+    /*
     const modalRef = this.modal.create({
       nzTitle: '編輯聯絡人',
       nzContent: PrincipalContactComponent,
@@ -222,6 +233,7 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
         this.message.success('聯絡人更新成功');
       }
     });
+    */
   }
 
   deleteContact(contact: Contact): void {
@@ -237,7 +249,7 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
       nzCancelText: '取消',
       nzOnOk: () => {
         this.principalService.deleteContact(
-          this.selectedPrincipal!.id.getValue(), 
+          this.selectedPrincipal!.id.getValue(),
           contact.id
         ).pipe(
           takeUntil(this.destroy$)

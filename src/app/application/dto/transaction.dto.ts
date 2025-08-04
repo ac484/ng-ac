@@ -1,7 +1,17 @@
 import { TransactionStatus, TransactionType } from '../../domain/entities/transaction.entity';
+import {
+  BaseCreateDto,
+  BaseUpdateDto,
+  BaseResponseDto,
+  ListResponseDto,
+  SearchCriteriaDto,
+  BaseStatsDto,
+  ExportDataDto
+} from './base.dto';
 
 // Create Transaction DTO
-export interface CreateTransactionDto {
+// 擴展標準化的 BaseCreateDto
+export interface CreateTransactionDto extends BaseCreateDto {
   accountId: string;
   userId: string;
   amount: number;
@@ -14,7 +24,8 @@ export interface CreateTransactionDto {
 }
 
 // Update Transaction DTO
-export interface UpdateTransactionDto {
+// 擴展標準化的 BaseUpdateDto
+export interface UpdateTransactionDto extends BaseUpdateDto {
   id?: string; // Alias for compatibility
   description?: string;
   category?: string;
@@ -29,8 +40,8 @@ export interface UpdateTransactionStatusDto {
 }
 
 // Transaction DTO
-export interface TransactionDto {
-  id: string;
+// 擴展標準化的 BaseResponseDto
+export interface TransactionDto extends BaseResponseDto {
   transactionNumber: string;
   accountId: string;
   userId: string;
@@ -40,9 +51,7 @@ export interface TransactionDto {
   type: TransactionType; // Alias for compatibility
   status: TransactionStatus;
   description: string;
-  createdAt: Date;
-  updatedAt: Date;
-  date: Date; // Alias for createdAt
+  date: string; // Alias for createdAt (ISO 字串格式)
   referenceNumber?: string;
   category?: string;
   fees?: number;
@@ -51,35 +60,32 @@ export interface TransactionDto {
 }
 
 // Transaction List DTO
-export interface TransactionListDto {
-  transactions: TransactionDto[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
+// 使用標準化的 ListResponseDto 格式
+export interface TransactionListDto extends ListResponseDto<TransactionDto> {
+  // 繼承標準列表回應格式
+  // 向後相容性：保留舊的屬性名稱
+  transactions: TransactionDto[]; // Alias for items
+  totalPages: number; // 向後相容性
+  totalAmount?: number; // 交易特定的額外欄位
+  averageAmount?: number;
 }
 
 // Transaction Search DTO
-export interface TransactionSearchDto {
+// 擴展標準化的 SearchCriteriaDto
+export interface TransactionSearchDto extends SearchCriteriaDto {
   accountId?: string;
   userId?: string;
-  status?: TransactionStatus;
   transactionType?: TransactionType;
-  startDate?: Date;
-  endDate?: Date;
   minAmount?: number;
   maxAmount?: number;
   referenceNumber?: string;
   category?: string;
-  page?: number;
-  pageSize?: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
 }
 
 // Transaction Statistics DTO
-export interface TransactionStatsDto {
-  totalCount: number;
+// 擴展標準化的 BaseStatsDto
+export interface TransactionStatsDto extends BaseStatsDto {
+  totalCount: number; // Alias for compatibility with total
   totalAmount: number;
   byStatus: Record<TransactionStatus, number>;
   byType: Record<TransactionType, number>;
@@ -112,11 +118,10 @@ export interface TransactionDetailsDto extends TransactionDto {
 }
 
 // Transaction Export DTO
-export interface TransactionExportDto {
-  transactions: TransactionDto[];
-  exportDate: Date;
-  filters: TransactionSearchDto;
-  statistics: TransactionStatsDto;
+// 使用標準化的 ExportDataDto 格式
+export interface TransactionExportDto extends ExportDataDto<TransactionDto> {
+  // 繼承標準匯出格式
+  statistics?: TransactionStatsDto; // 交易特定的統計資料
 }
 
 // Transaction Processing DTO

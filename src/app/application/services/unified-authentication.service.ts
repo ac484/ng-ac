@@ -19,7 +19,7 @@ export class UnifiedAuthenticationService {
     private message: NzMessageService,
     private router: Router,
     private errorHandler: ErrorHandlerService
-  ) {}
+  ) { }
 
   /**
    * 匿名登入
@@ -116,9 +116,9 @@ export class UnifiedAuthenticationService {
 
   // 私有方法：統一的登入邏輯
   private async performLogin(
-    type: 'anonymous' | 'email', 
-    displayName: string, 
-    isAnonymous: boolean, 
+    type: 'anonymous' | 'email',
+    displayName: string,
+    isAnonymous: boolean,
     email?: string
   ): Promise<AuthenticationResult> {
     try {
@@ -149,16 +149,13 @@ export class UnifiedAuthenticationService {
     if (type === 'anonymous') {
       return User.createAnonymous();
     } else {
-      return User.create(
-        'user_' + Date.now(),
-        email || '',
-        displayName,
-        undefined,
-        false,
-        true,
-        'email',
-        'password'
-      );
+      const user = User.create({
+        email: email || '',
+        displayName: displayName,
+        authProvider: 'email'
+      });
+      user.verifyEmail(); // Mark as verified
+      return user;
     }
   }
 
@@ -166,11 +163,11 @@ export class UnifiedAuthenticationService {
   private createAuth(user: User, type: string): Authentication {
     return Authentication.fromFirebaseUser({
       uid: user.id,
-      email: user.email.getValue(),
-      displayName: user.displayName.getValue(),
-      photoURL: user.photoUrl.getValue(),
-      emailVerified: user.isEmailVerified.isVerified(),
-      isAnonymous: user.isAnonymous.isAnonymous(),
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.isEmailVerified,
+      isAnonymous: user.isAnonymous,
       providerId: type === 'anonymous' ? 'anonymous' : 'password',
       metadata: {
         creationTime: user.createdAt.toISOString(),

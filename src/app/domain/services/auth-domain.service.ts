@@ -18,16 +18,10 @@ export class AuthDomainService {
   validateEmailAuthData(authData: EmailAuthData): AuthResult {
     try {
       // 創建臨時用戶實體進行驗證
-      const tempUser = User.create(
-        'temp_id',
-        authData.email,
-        authData.displayName || 'Temp User',
-        undefined,
-        false,
-        false,
-        'email',
-        'password'
-      );
+      const tempUser = User.create({
+        email: authData.email,
+        displayName: authData.displayName || 'Temp User'
+      });
 
       // 通過實體進行驗證
       const validation = tempUser.validate();

@@ -1,12 +1,21 @@
 import { UserStatus } from '../../domain/entities/user.entity';
+import {
+  BaseCreateDto,
+  BaseUpdateDto,
+  BaseResponseDto,
+  ListResponseDto,
+  SearchCriteriaDto,
+  BaseStatsDto
+} from './base.dto';
 
 // Re-export domain types for convenience
-export { UserStatus };
+export type { UserStatus };
 
 /**
  * DTO for creating a new user
+ * Extends BaseCreateDto for consistency with base application service
  */
-export interface CreateUserDto {
+export interface CreateUserDto extends BaseCreateDto {
   email: string;
   displayName: string;
   photoURL?: string;
@@ -15,8 +24,9 @@ export interface CreateUserDto {
 
 /**
  * DTO for updating user profile
+ * Extends BaseUpdateDto for consistency with base application service
  */
-export interface UpdateUserDto {
+export interface UpdateUserDto extends BaseUpdateDto {
   displayName?: string;
   photoURL?: string;
   phoneNumber?: string;
@@ -31,14 +41,12 @@ export interface UpdateUserStatusDto {
 
 /**
  * DTO for user response data
+ * Extends BaseResponseDto for consistency with base application service
  */
-export interface UserDto {
-  id: string;
+export interface UserDto extends BaseResponseDto {
   email: string;
   displayName: string;
   status: string;
-  createdAt: Date;
-  updatedAt: Date;
   photoURL?: string;
   phoneNumber?: string;
   isAnonymous?: boolean;
@@ -48,33 +56,39 @@ export interface UserDto {
 
 /**
  * DTO for user list response
+ * 使用標準化的 ListResponseDto 格式
  */
-export interface UserListDto {
-  users: UserDto[];
-  total: number;
-  page: number;
-  pageSize: number;
+export interface UserListDto extends ListResponseDto<UserDto> {
+  // 繼承標準列表回應格式
+  // 向後相容性：保留舊的屬性名稱
+  users: UserDto[]; // Alias for items
 }
 
 /**
  * DTO for user search/filter criteria
+ * 擴展標準化的 SearchCriteriaDto
  */
-export interface UserSearchDto {
-  status?: string;
+export interface UserSearchDto extends SearchCriteriaDto {
   email?: string;
   displayName?: string;
-  page?: number;
-  pageSize?: number;
+  authProvider?: string;
+  isEmailVerified?: boolean;
+  isAnonymous?: boolean;
 }
 
 /**
  * DTO for user statistics
+ * 擴展標準化的 BaseStatsDto
  */
-export interface UserStatsDto {
-  total: number;
-  totalUsers: number; // Alias for compatibility
+export interface UserStatsDto extends BaseStatsDto {
+  totalUsers: number; // Alias for compatibility with total
   active: number;
   inactive: number;
   pending: number;
   suspended: number;
+  emailVerified: number;
+  anonymous: number;
+  byAuthProvider: {
+    [provider: string]: number;
+  };
 } 

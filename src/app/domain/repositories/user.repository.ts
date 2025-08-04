@@ -1,4 +1,5 @@
 import { User } from '../entities/user.entity';
+import { SearchCriteria } from '../interfaces/search-criteria.interface';
 
 /**
  * User repository interface defining standard CRUD operations
@@ -18,7 +19,7 @@ export interface UserRepository {
   /**
    * Find all users with optional filtering
    */
-  findAll(status?: string): Promise<User[]>;
+  findAll(criteria?: SearchCriteria): Promise<User[]>;
 
   /**
    * Save user (create or update)

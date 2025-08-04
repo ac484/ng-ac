@@ -2,19 +2,19 @@ import { inject, Injectable } from '@angular/core';
 import { Contract } from '../../domain/entities/contract.entity';
 import { ContractRepository, ContractSearchCriteria } from '../../domain/repositories/contract.repository';
 import { ContractDomainService } from '../../domain/services/contract-domain.service';
-import { 
-  CreateContractDto, 
-  UpdateContractDto, 
-  ContractDto, 
-  ContractListDto, 
-  ContractSearchDto, 
-  ContractStatsDto 
+import {
+  CreateContractDto,
+  UpdateContractDto,
+  ContractDto,
+  ContractListDto,
+  ContractSearchDto,
+  ContractStatsDto
 } from '../dto/contract.dto';
-import { 
-  ClientName, 
-  ClientRepresentative, 
-  ContactPerson, 
-  ContractName, 
+import {
+  ClientName,
+  ClientRepresentative,
+  ContactPerson,
+  ContractName,
   ContractStatus,
   ContactPhone,
   Notes
@@ -35,9 +35,9 @@ export class ContractApplicationService {
       if (!dto.contractNumber) {
         const today = new Date();
         const dateStr = today.getFullYear().toString() +
-                        String(today.getMonth() + 1).padStart(2, '0') +
-                        String(today.getDate()).padStart(2, '0');
-        
+          String(today.getMonth() + 1).padStart(2, '0') +
+          String(today.getDate()).padStart(2, '0');
+
         const timestamp = Date.now();
         const sequence = timestamp % 10000;
         dto.contractNumber = `${dateStr}${String(sequence).padStart(4, '0')}`;
@@ -122,14 +122,14 @@ export class ContractApplicationService {
         status: criteria?.status,
         clientName: criteria?.clientName,
         contractName: criteria?.contractName,
-        startDate: criteria?.startDate,
-        endDate: criteria?.endDate,
+        startDate: criteria?.startDate ? new Date(criteria.startDate) : undefined,
+        endDate: criteria?.endDate ? new Date(criteria.endDate) : undefined,
         page: criteria?.page || 1,
         pageSize: criteria?.pageSize || 10
       };
 
       const contracts = await this.contractRepository.findAll(searchCriteria);
-      
+
       // Get total count based on search criteria
       let total: number;
       if (searchCriteria.status) {
@@ -141,11 +141,18 @@ export class ContractApplicationService {
 
       console.log(`Found ${contracts.length} contracts, total: ${total}`);
 
+      const contractDtos = contracts.map((contract: Contract) => this.toDto(contract));
+      const page = searchCriteria.page || 1;
+      const pageSize = searchCriteria.pageSize || 10;
+
       return {
-        contracts: contracts.map((contract: Contract) => this.toDto(contract)),
+        items: contractDtos,
+        contracts: contractDtos, // Alias for backward compatibility
         total,
-        page: searchCriteria.page || 1,
-        pageSize: searchCriteria.pageSize || 10
+        page,
+        pageSize,
+        hasNext: (page * pageSize) < total,
+        hasPrevious: page > 1
       };
     } catch (error) {
       console.error('Error in getContracts:', error);
@@ -183,7 +190,15 @@ export class ContractApplicationService {
         draft,
         preparing,
         inProgress,
-        completed
+        completed,
+        totalAmount: 0, // TODO: Calculate from contracts
+        averageAmount: 0, // TODO: Calculate from contracts
+        byStatus: {
+          draft,
+          preparing,
+          inProgress,
+          completed
+        }
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -203,8 +218,8 @@ export class ContractApplicationService {
       status: contract.status.getValue(),
       contactPhone: contract.contactPhone?.getValue(),
       notes: contract.notes?.getValue(),
-      createdAt: contract.createdAt,
-      updatedAt: contract.updatedAt
+      createdAt: contract.createdAt.toISOString(),
+      updatedAt: contract.updatedAt.toISOString()
     };
   }
 } 

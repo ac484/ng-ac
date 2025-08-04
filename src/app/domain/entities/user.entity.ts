@@ -1,367 +1,410 @@
-import { AggregateRoot } from './aggregate-root';
-import { UserCreatedEvent, UserUpdatedEvent, UserStatusChangedEvent, UserDeactivatedEvent, UserActivatedEvent } from '../events/user-events';
+import { OptimizedAggregateRoot, BaseEntityData, createEntityData } from './optimized-base-entity';
 
-// 導入值物件
-import { Email } from '../value-objects/authentication/email.value-object';
-import { DisplayName } from '../value-objects/authentication/display-name.value-object';
-import { PhotoUrl } from '../value-objects/authentication/photo-url.value-object';
-import { UserId } from '../value-objects/authentication/user-id.value-object';
-import { UserStatus } from '../value-objects/status/user-status.value-object';
-import { IsAnonymous } from '../value-objects/status/is-anonymous.value-object';
-import { IsEmailVerified } from '../value-objects/status/is-email-verified.value-object';
-import { AuthProvider } from '../value-objects/authentication/auth-provider.value-object';
-import { AuthMethod } from '../value-objects/authentication/auth-method.value-object';
-import { SessionId } from '../value-objects/authentication/session-id.value-object';
-import { RoleSet } from '../value-objects/authorization/role-set.value-object';
-import { PermissionSet } from '../value-objects/authorization/permission-set.value-object';
-import { DeviceInfo } from '../value-objects/device/device-info.value-object';
-import { GeoLocation } from '../value-objects/device/geo-location.value-object';
-import { LoginContext } from '../value-objects/device/login-context.value-object';
-
-// 重新導出值物件以解決 TS2459 錯誤
-export { UserStatus } from '../value-objects/status/user-status.value-object';
+// 重新導出用戶狀態類型以保持向後相容性
+export type UserStatus = 'active' | 'inactive' | 'suspended';
 
 /**
- * User entity representing a user in the system
- * Integrates with @delon/auth and Firebase authentication
- * Now extends AggregateRoot for DDD architecture with rich value objects
+ * 用戶實體資料介面
+ * 定義用戶的所有屬性，使用簡單的原始類型
  */
-export class User extends AggregateRoot<string> {
-  constructor(
-    id: UserId,
-    email: Email,
-    displayName: DisplayName,
-    photoUrl: PhotoUrl,
-    status: UserStatus,
-    isAnonymous: IsAnonymous,
-    isEmailVerified: IsEmailVerified,
-    authProvider: AuthProvider,
-    authMethod: AuthMethod,
-    sessionId: SessionId,
-    roles: RoleSet,
-    permissions: PermissionSet,
-    deviceInfo: DeviceInfo,
-    geoLocation: GeoLocation,
-    loginContext: LoginContext,
-    createdAt: Date = new Date(),
-    updatedAt: Date = new Date(),
-    phoneNumber?: string
-  ) {
-    super(id.getValue());
-    
-    // 私有屬性使用值物件
-    this._id = id;
-    this._email = email;
-    this._displayName = displayName;
-    this._photoUrl = photoUrl;
-    this._status = status;
-    this._isAnonymous = isAnonymous;
-    this._isEmailVerified = isEmailVerified;
-    this._authProvider = authProvider;
-    this._authMethod = authMethod;
-    this._sessionId = sessionId;
-    this._roles = roles;
-    this._permissions = permissions;
-    this._deviceInfo = deviceInfo;
-    this._geoLocation = geoLocation;
-    this._loginContext = loginContext;
-    this._createdAt = createdAt;
-    this._updatedAt = updatedAt;
-    this._phoneNumber = phoneNumber;
+export interface UserData extends BaseEntityData {
+  email: string;
+  displayName: string;
+  photoURL?: string;
+  isEmailVerified: boolean;
+  isAnonymous: boolean;
+  authProvider: string;
+  status: UserStatus;
+  lastLoginAt?: Date;
+  phoneNumber?: string;
+  roles: string[];
+  permissions: string[];
+}
+
+/**
+ * 用戶創建 DTO
+ */
+export interface CreateUserData {
+  email: string;
+  displayName: string;
+  photoURL?: string;
+  isAnonymous?: boolean;
+  authProvider?: string;
+  phoneNumber?: string;
+}
+
+/**
+ * 優化的用戶實體
+ * 使用直接屬性存取，只為真正需要業務邏輯的操作創建方法
+ * 移除不必要的值物件（如 DisplayName），簡化架構複雜度
+ */
+export class User extends OptimizedAggregateRoot implements UserData {
+  // 直接屬性存取，無需 getter/setter
+  email: string;
+  displayName: string;
+  photoURL?: string;
+  isEmailVerified: boolean;
+  isAnonymous: boolean;
+  authProvider: string;
+  status: UserStatus;
+  lastLoginAt?: Date;
+  phoneNumber?: string;
+  roles: string[];
+  permissions: string[];
+
+  constructor(data: UserData) {
+    super(data);
+
+    // 直接賦值，簡化建構過程
+    this.email = data.email;
+    this.displayName = data.displayName;
+    this.photoURL = data.photoURL;
+    this.isEmailVerified = data.isEmailVerified;
+    this.isAnonymous = data.isAnonymous;
+    this.authProvider = data.authProvider;
+    this.status = data.status;
+    this.lastLoginAt = data.lastLoginAt;
+    this.phoneNumber = data.phoneNumber;
+    this.roles = [...(data.roles || [])];
+    this.permissions = [...(data.permissions || [])];
   }
 
-  // 私有屬性
-  private _id: UserId;
-  private _email: Email;
-  private _displayName: DisplayName;
-  private _photoUrl: PhotoUrl;
-  private _status: UserStatus;
-  private _isAnonymous: IsAnonymous;
-  private _isEmailVerified: IsEmailVerified;
-  private _authProvider: AuthProvider;
-  private _authMethod: AuthMethod;
-  private _sessionId: SessionId;
-  private _roles: RoleSet;
-  private _permissions: PermissionSet;
-  private _deviceInfo: DeviceInfo;
-  private _geoLocation: GeoLocation;
-  private _loginContext: LoginContext;
-  private _createdAt: Date;
-  private _updatedAt: Date;
-  private _phoneNumber?: string;
-
-  // Getter 方法
-  get id(): string { return this._id.getValue(); }
-  get email(): Email { return this._email; }
-  get displayName(): DisplayName { return this._displayName; }
-  get photoUrl(): PhotoUrl { return this._photoUrl; }
-  get status(): UserStatus { return this._status; }
-  get isAnonymous(): IsAnonymous { return this._isAnonymous; }
-  get isEmailVerified(): IsEmailVerified { return this._isEmailVerified; }
-  get authProvider(): AuthProvider { return this._authProvider; }
-  get authMethod(): AuthMethod { return this._authMethod; }
-  get sessionId(): SessionId { return this._sessionId; }
-  get roles(): RoleSet { return this._roles; }
-  get permissions(): PermissionSet { return this._permissions; }
-  get deviceInfo(): DeviceInfo { return this._deviceInfo; }
-  get geoLocation(): GeoLocation { return this._geoLocation; }
-  get loginContext(): LoginContext { return this._loginContext; }
-  get createdAt(): Date { return this._createdAt; }
-  get updatedAt(): Date { return this._updatedAt; }
-  get phoneNumber(): string | undefined { return this._phoneNumber; }
-
   /**
-   * Create a new user with rich value objects
+   * 靜態工廠方法：創建新用戶
    */
-  static create(
-    id: string,
-    email: string,
-    displayName: string,
-    photoUrl?: string,
-    isAnonymous: boolean = false,
-    isEmailVerified: boolean = false,
-    authProvider: string = 'email',
-    authMethod: string = 'password'
-  ): User {
-    const userId = new UserId(id);
-    const emailVO = new Email(email);
-    const displayNameVO = new DisplayName(displayName);
-    const photoUrlVO = new PhotoUrl(photoUrl || null);
-    const statusVO = UserStatus.ACTIVE();
-    const isAnonymousVO = new IsAnonymous(isAnonymous);
-    const isEmailVerifiedVO = new IsEmailVerified(isEmailVerified);
-    const authProviderVO = new AuthProvider(authProvider as any);
-    const authMethodVO = new AuthMethod(authMethod as any);
-    const sessionIdVO = SessionId.generate();
-    const rolesVO = new RoleSet();
-    const permissionsVO = new PermissionSet();
-    const deviceInfoVO = DeviceInfo.fromBrowser();
-    const geoLocationVO = new GeoLocation('Unknown', 'Unknown', 0, 0);
-    const loginContextVO = new LoginContext('127.0.0.1', deviceInfoVO, geoLocationVO, 'Web' as any);
+  static create(data: CreateUserData): User {
+    const userData: UserData = {
+      ...createEntityData(),
+      email: data.email,
+      displayName: data.displayName,
+      photoURL: data.photoURL,
+      isEmailVerified: false,
+      isAnonymous: data.isAnonymous || false,
+      authProvider: data.authProvider || 'email',
+      status: 'active',
+      phoneNumber: data.phoneNumber,
+      roles: [],
+      permissions: []
+    };
 
-    const user = new User(
-      userId,
-      emailVO,
-      displayNameVO,
-      photoUrlVO,
-      statusVO,
-      isAnonymousVO,
-      isEmailVerifiedVO,
-      authProviderVO,
-      authMethodVO,
-      sessionIdVO,
-      rolesVO,
-      permissionsVO,
-      deviceInfoVO,
-      geoLocationVO,
-      loginContextVO
-    );
+    const user = new User(userData);
 
-    user.addDomainEvent(new UserCreatedEvent(id, email, displayName));
+    // 添加領域事件
+    user.addDomainEvent({
+      type: 'UserCreated',
+      userId: user.id,
+      email: user.email,
+      displayName: user.displayName,
+      timestamp: new Date()
+    });
+
     return user;
   }
 
   /**
-   * Create anonymous user
+   * 靜態工廠方法：創建匿名用戶
    */
   static createAnonymous(): User {
-    const userId = UserId.generate();
-    const emailVO = Email.createAnonymous();
-    const displayNameVO = new DisplayName('Anonymous User');
-    const photoUrlVO = new PhotoUrl(null);
-    const statusVO = UserStatus.ACTIVE();
-    const isAnonymousVO = IsAnonymous.ANONYMOUS();
-    const isEmailVerifiedVO = IsEmailVerified.UNVERIFIED();
-    const authProviderVO = new AuthProvider('anonymous' as any);
-    const authMethodVO = new AuthMethod('anonymous' as any);
-    const sessionIdVO = SessionId.generate();
-    const rolesVO = new RoleSet();
-    const permissionsVO = new PermissionSet();
-    const deviceInfoVO = DeviceInfo.fromBrowser();
-    const geoLocationVO = new GeoLocation('Unknown', 'Unknown', 0, 0);
-    const loginContextVO = new LoginContext('127.0.0.1', deviceInfoVO, geoLocationVO, 'Web' as any);
-
-    const user = new User(
-      userId,
-      emailVO,
-      displayNameVO,
-      photoUrlVO,
-      statusVO,
-      isAnonymousVO,
-      isEmailVerifiedVO,
-      authProviderVO,
-      authMethodVO,
-      sessionIdVO,
-      rolesVO,
-      permissionsVO,
-      deviceInfoVO,
-      geoLocationVO,
-      loginContextVO
-    );
-
-    user.addDomainEvent(new UserCreatedEvent(userId.getValue(), emailVO.getValue(), displayNameVO.getValue()));
-    return user;
+    return User.create({
+      email: `anonymous-${Date.now()}@temp.local`,
+      displayName: 'Anonymous User',
+      isAnonymous: true,
+      authProvider: 'anonymous'
+    });
   }
 
   /**
-   * Update user profile information
+   * 業務方法：更新電子郵件（包含驗證邏輯）
+   * 保留必要的業務方法，如 updateEmail 驗證
    */
-  updateProfile(displayName: string, photoUrl?: string): void {
-    const oldDisplayName = this._displayName.getValue();
-    this._displayName = new DisplayName(displayName);
-    
-    if (photoUrl !== undefined) {
-      this._photoUrl = new PhotoUrl(photoUrl);
+  updateEmail(newEmail: string): void {
+    if (!this.isValidEmail(newEmail)) {
+      throw new Error('無效的電子郵件格式');
     }
-    
-    this._updatedAt = new Date();
-    
-    this.addDomainEvent(new UserUpdatedEvent(this._id.getValue(), displayName, photoUrl));
+
+    if (this.isAnonymous) {
+      throw new Error('匿名用戶無法更新電子郵件');
+    }
+
+    const oldEmail = this.email;
+    this.email = newEmail;
+    this.isEmailVerified = false; // 新郵件需要重新驗證
+    this.touch();
+
+    this.addDomainEvent({
+      type: 'UserEmailUpdated',
+      userId: this.id,
+      oldEmail,
+      newEmail,
+      timestamp: new Date()
+    });
   }
 
   /**
-   * Update user status
+   * 業務方法：更新個人資料
    */
-  updateStatus(status: UserStatus): void {
-    const oldStatus = this._status;
-    this._status = status;
-    this._updatedAt = new Date();
-    
-    this.addDomainEvent(new UserStatusChangedEvent(this._id.getValue(), oldStatus.getValue(), status.getValue()));
+  updateProfile(displayName: string, photoURL?: string): void {
+    if (!displayName || displayName.trim() === '') {
+      throw new Error('顯示名稱不能為空');
+    }
+
+    this.displayName = displayName.trim();
+    if (photoURL !== undefined) {
+      this.photoURL = photoURL;
+    }
+    this.touch();
+
+    this.addDomainEvent({
+      type: 'UserProfileUpdated',
+      userId: this.id,
+      displayName: this.displayName,
+      photoURL: this.photoURL,
+      timestamp: new Date()
+    });
   }
 
   /**
-   * Activate user account
+   * 業務方法：更新狀態
+   */
+  updateStatus(newStatus: UserStatus): void {
+    if (this.status === newStatus) {
+      return; // 狀態未改變
+    }
+
+    const oldStatus = this.status;
+    this.status = newStatus;
+    this.touch();
+
+    this.addDomainEvent({
+      type: 'UserStatusChanged',
+      userId: this.id,
+      oldStatus,
+      newStatus,
+      timestamp: new Date()
+    });
+  }
+
+  /**
+   * 業務方法：激活用戶帳戶
    */
   activate(): void {
-    if (!this._status.isActive()) {
-      this.updateStatus(UserStatus.ACTIVE());
-      this.addDomainEvent(new UserActivatedEvent(this._id.getValue()));
+    if (!this.isActive()) {
+      this.updateStatus('active');
+      this.addDomainEvent({
+        type: 'UserActivated',
+        userId: this.id,
+        timestamp: new Date()
+      });
     }
   }
 
   /**
-   * Deactivate user account
+   * 業務方法：停用用戶帳戶
    */
   deactivate(): void {
-    if (this._status.isActive()) {
-      this.updateStatus(UserStatus.INACTIVE());
-      this.addDomainEvent(new UserDeactivatedEvent(this._id.getValue()));
+    if (this.isActive()) {
+      this.updateStatus('inactive');
+      this.addDomainEvent({
+        type: 'UserDeactivated',
+        userId: this.id,
+        timestamp: new Date()
+      });
     }
   }
 
   /**
-   * Suspend user account
+   * 業務方法：暫停用戶帳戶
    */
   suspend(): void {
-    if (!this._status.isSuspended()) {
-      this.updateStatus(UserStatus.SUSPENDED());
-      this.addDomainEvent(new UserDeactivatedEvent(this._id.getValue(), 'Account suspended'));
+    if (this.status !== 'suspended') {
+      this.updateStatus('suspended');
+      this.addDomainEvent({
+        type: 'UserDeactivated',
+        userId: this.id,
+        reason: 'Account suspended',
+        timestamp: new Date()
+      });
     }
   }
 
   /**
-   * Update authentication information
+   * 業務方法：驗證電子郵件
    */
-  updateAuthInfo(
-    authProvider: AuthProvider,
-    authMethod: AuthMethod,
-    isEmailVerified: IsEmailVerified
-  ): void {
-    this._authProvider = authProvider;
-    this._authMethod = authMethod;
-    this._isEmailVerified = isEmailVerified;
-    this._updatedAt = new Date();
+  verifyEmail(): void {
+    if (this.isAnonymous) {
+      throw new Error('匿名用戶無法驗證電子郵件');
+    }
+
+    if (this.isEmailVerified) {
+      return; // 已經驗證過了
+    }
+
+    this.isEmailVerified = true;
+    this.touch();
+
+    this.addDomainEvent({
+      type: 'UserEmailVerified',
+      userId: this.id,
+      email: this.email,
+      timestamp: new Date()
+    });
   }
 
   /**
-   * Update device and location information
+   * 業務方法：記錄登入
    */
-  updateDeviceInfo(deviceInfo: DeviceInfo, geoLocation: GeoLocation): void {
-    this._deviceInfo = deviceInfo;
-    this._geoLocation = geoLocation;
-    this._updatedAt = new Date();
+  recordLogin(): void {
+    this.lastLoginAt = new Date();
+    this.touch();
+
+    this.addDomainEvent({
+      type: 'UserLoggedIn',
+      userId: this.id,
+      timestamp: this.lastLoginAt
+    });
   }
 
   /**
-   * Add role to user
+   * 業務方法：添加角色
    */
-  addRole(role: any): void {
-    this._roles.addRole(role);
-    this._updatedAt = new Date();
+  addRole(role: string): void {
+    if (!role || role.trim() === '') {
+      throw new Error('角色名稱不能為空');
+    }
+
+    const roleName = role.trim();
+    if (!this.roles.includes(roleName)) {
+      this.roles.push(roleName);
+      this.touch();
+
+      this.addDomainEvent({
+        type: 'UserRoleAdded',
+        userId: this.id,
+        role: roleName,
+        timestamp: new Date()
+      });
+    }
   }
 
   /**
-   * Remove role from user
+   * 業務方法：移除角色
    */
-  removeRole(role: any): void {
-    this._roles.removeRole(role);
-    this._updatedAt = new Date();
+  removeRole(role: string): void {
+    const index = this.roles.indexOf(role);
+    if (index > -1) {
+      this.roles.splice(index, 1);
+      this.touch();
+
+      this.addDomainEvent({
+        type: 'UserRoleRemoved',
+        userId: this.id,
+        role,
+        timestamp: new Date()
+      });
+    }
   }
 
   /**
-   * Add permission to user
+   * 業務方法：添加權限
    */
-  addPermission(permission: any): void {
-    this._permissions.addPermission(permission);
-    this._updatedAt = new Date();
+  addPermission(permission: string): void {
+    if (!permission || permission.trim() === '') {
+      throw new Error('權限名稱不能為空');
+    }
+
+    const permissionName = permission.trim();
+    if (!this.permissions.includes(permissionName)) {
+      this.permissions.push(permissionName);
+      this.touch();
+
+      this.addDomainEvent({
+        type: 'UserPermissionAdded',
+        userId: this.id,
+        permission: permissionName,
+        timestamp: new Date()
+      });
+    }
   }
 
   /**
-   * Remove permission from user
+   * 業務方法：移除權限
    */
-  removePermission(permission: any): void {
-    this._permissions.removePermission(permission);
-    this._updatedAt = new Date();
+  removePermission(permission: string): void {
+    const index = this.permissions.indexOf(permission);
+    if (index > -1) {
+      this.permissions.splice(index, 1);
+      this.touch();
+
+      this.addDomainEvent({
+        type: 'UserPermissionRemoved',
+        userId: this.id,
+        permission,
+        timestamp: new Date()
+      });
+    }
   }
 
   /**
-   * Check if user is active
+   * 查詢方法：檢查是否為活躍用戶
    */
   isActive(): boolean {
-    return this._status.isActive();
+    return this.status === 'active';
   }
 
   /**
-   * Check if user can perform actions
+   * 查詢方法：檢查是否可以執行操作
    */
   canPerformActions(): boolean {
-    return this._status.isActive();
+    return this.isActive() && !this.isAnonymous;
   }
 
   /**
-   * Check if user has role
+   * 查詢方法：檢查是否有特定角色
    */
-  hasRole(roleName: string): boolean {
-    return this._roles.hasRoleByName(roleName);
+  hasRole(role: string): boolean {
+    return this.roles.includes(role);
   }
 
   /**
-   * Check if user has permission
+   * 查詢方法：檢查是否有特定權限
    */
-  hasPermission(permissionName: string): boolean {
-    return this._permissions.hasPermissionByName(permissionName);
+  hasPermission(permission: string): boolean {
+    return this.permissions.includes(permission);
   }
 
   /**
-   * Validate user data
+   * 私有方法：驗證電子郵件格式
+   */
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  /**
+   * 實作抽象方法：驗證用戶資料
    */
   validate(): { isValid: boolean; errors: string[] } {
-    const errors: string[] = [];
+    const errors = this.validateBase();
 
-    // 驗證 Email
-    if (this._email.isAnonymousEmail() && !this._isAnonymous.isAnonymous()) {
-      errors.push('Anonymous email should be used with anonymous user');
+    // 驗證電子郵件
+    if (!this.email || !this.isValidEmail(this.email)) {
+      errors.push('無效的電子郵件格式');
     }
 
-    // 驗證 DisplayName
-    if (this._displayName.getValue().length === 0) {
-      errors.push('Display name is required');
+    // 驗證顯示名稱
+    if (!this.displayName || this.displayName.trim() === '') {
+      errors.push('顯示名稱不能為空');
     }
 
-    // 驗證狀態一致性
-    if (this._isAnonymous.isAnonymous() && this._isEmailVerified.isVerified()) {
-      errors.push('Anonymous user cannot have verified email');
+    // 驗證匿名用戶邏輯
+    if (this.isAnonymous && this.isEmailVerified) {
+      errors.push('匿名用戶不能有已驗證的電子郵件');
+    }
+
+    // 驗證狀態
+    const validStatuses: UserStatus[] = ['active', 'inactive', 'suspended'];
+    if (!validStatuses.includes(this.status)) {
+      errors.push('無效的用戶狀態');
     }
 
     return {
@@ -371,13 +414,13 @@ export class User extends AggregateRoot<string> {
   }
 
   /**
-   * Get user summary with value objects
+   * 獲取用戶摘要資訊
    */
-  getSummary(): { 
-    id: string; 
-    email: string; 
-    displayName: string; 
-    status: string; 
+  getSummary(): {
+    id: string;
+    email: string;
+    displayName: string;
+    status: string;
     isActive: boolean;
     isAnonymous: boolean;
     isEmailVerified: boolean;
@@ -386,32 +429,52 @@ export class User extends AggregateRoot<string> {
     permissions: string[];
   } {
     return {
-      id: this._id.getValue(),
-      email: this._email.getValue(),
-      displayName: this._displayName.getValue(),
-      status: this._status.getValue(),
-      isActive: this._status.isActive(),
-      isAnonymous: this._isAnonymous.isAnonymous(),
-      isEmailVerified: this._isEmailVerified.isVerified(),
-      authProvider: this._authProvider.getValue(),
-      roles: this._roles.getRoleNames(),
-      permissions: this._permissions.getPermissionNames()
+      id: this.id,
+      email: this.email,
+      displayName: this.displayName,
+      status: this.status,
+      isActive: this.isActive(),
+      isAnonymous: this.isAnonymous,
+      isEmailVerified: this.isEmailVerified,
+      authProvider: this.authProvider,
+      roles: [...this.roles],
+      permissions: [...this.permissions]
     };
   }
 
   /**
-   * Get user for @delon/auth integration
+   * 轉換為 @delon/auth 格式
    */
   toDelonAuthUser(): any {
     return {
-      id: this._id.getValue(),
-      name: this._displayName.getValue(),
-      email: this._email.getValue(),
-      avatar: this._photoUrl.getValue(),
-      isAnonymous: this._isAnonymous.isAnonymous(),
-      emailVerified: this._isEmailVerified.isVerified(),
-      roles: this._roles.getRoleNames(),
-      permissions: this._permissions.getPermissionNames()
+      id: this.id,
+      name: this.displayName,
+      email: this.email,
+      avatar: this.photoURL,
+      isAnonymous: this.isAnonymous,
+      emailVerified: this.isEmailVerified,
+      roles: [...this.roles],
+      permissions: [...this.permissions]
     };
   }
-} 
+
+  /**
+   * 重寫 toJSON 方法
+   */
+  override toJSON(): any {
+    return {
+      ...super.toJSON(),
+      email: this.email,
+      displayName: this.displayName,
+      photoURL: this.photoURL,
+      isEmailVerified: this.isEmailVerified,
+      isAnonymous: this.isAnonymous,
+      authProvider: this.authProvider,
+      status: this.status,
+      lastLoginAt: this.lastLoginAt?.toISOString(),
+      phoneNumber: this.phoneNumber,
+      roles: [...this.roles],
+      permissions: [...this.permissions]
+    };
+  }
+}

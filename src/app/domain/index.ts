@@ -2,6 +2,9 @@
 export * from './entities/base-entity';
 export * from './entities/aggregate-root';
 
+// Optimized entities
+export * from './entities/optimized-base-entity';
+
 // Domain entities
 export * from './entities/user.entity';
 export * from './entities/account.entity';
@@ -22,6 +25,8 @@ export * from './services/transaction-domain.service';
 export * from './services/auth-domain.service';
 export * from './services/authorization-domain.service';
 export * from './services/tab-domain.service';
+export * from './services/shared-utilities.service';
+export * from './services/conversion-utilities.service';
 
 // Repository interfaces
 export * from './repositories/user.repository';
