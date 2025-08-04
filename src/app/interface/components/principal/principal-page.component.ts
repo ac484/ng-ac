@@ -8,15 +8,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSplitterModule } from 'ng-zorro-antd/splitter';
 import { PrincipalListComponent } from './principal-list.component';
-import { PrincipalWorkflowComponent } from './principal-workflow.component';
-
-export interface WorkflowStep {
-  id: string;
-  name: string;
-  type: 'approval' | 'notification' | 'document';
-  order: number;
-  config: any;
-}
+import { PrincipalWorkflowComponent, WorkflowStep } from './principal-workflow.component';
 
 @Component({
   selector: 'app-principal-page',
