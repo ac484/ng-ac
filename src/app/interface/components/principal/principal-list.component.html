@@ -21,7 +21,7 @@
         <tbody>
             <ng-container *ngFor="let principal of principalTable.data; let i = index">
                 <!-- 主表格行 -->
-                <tr [nzExpand]="isExpanded(principal)">
+                <tr>
                     <td nzAlign="center">{{ i + 1 }}</td>
                     <td>
                         <a (click)="expandPrincipal(principal)" class="principal-name">
@@ -62,54 +62,54 @@
                                     </tr>
                                 </thead>
 
-        <tbody>
-            <tr *ngFor="let contact of contactTable.data">
-                <td>{{ contact.name.getValue() }}</td>
-                <td>{{ contact.email.getValue() }}</td>
-                <td>{{ contact.phone.getValue() }}</td>
-                <td>
-                    <nz-space>
-                        <button nz-button nzType="link" nzSize="small" (click)="editContact(contact)">
-                            <span nz-icon nzType="edit"></span>
-                        </button>
-                        <button nz-button nzType="link" nzSize="small" nzDanger (click)="deleteContact(contact)">
-                            <span nz-icon nzType="delete"></span>
-                        </button>
-                    </nz-space>
-                </td>
-            </tr>
-        </tbody>
-    </nz-table>
+                                <tbody>
+                                    <tr *ngFor="let contact of contactTable.data">
+                                        <td>{{ contact.name.getValue() }}</td>
+                                        <td>{{ contact.email.getValue() }}</td>
+                                        <td>{{ contact.phone.getValue() }}</td>
+                                        <td>
+                                            <nz-space>
+                                                <button nz-button nzType="link" nzSize="small" (click)="editContact(contact)">
+                                                    <span nz-icon nzType="edit"></span>
+                                                </button>
+                                                <button nz-button nzType="link" nzSize="small" nzDanger (click)="deleteContact(contact)">
+                                                    <span nz-icon nzType="delete"></span>
+                                                </button>
+                                            </nz-space>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
 
-    <!-- 新增聯絡人按鈕 -->
-    <div style="margin-top: 8px;">
-        <button nz-button nzType="dashed" nzSize="small" (click)="addContact()">
-            <span nz-icon nzType="plus"></span>新增聯絡人
-        </button>
-    </div>
-    </div>
-    </td>
-    </tr>
-    </ng-container>
-    </tbody>
+                            <!-- 新增聯絡人按鈕 -->
+                            <div style="margin-top: 8px;">
+                                <button nz-button nzType="dashed" nzSize="small" (click)="addContact()">
+                                    <span nz-icon nzType="plus"></span>新增聯絡人
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
     </nz-table>
 </nz-card>
 
 <style>
-    .nested-table-container {
-        padding: 16px;
-        background-color: #fafafa;
-        border-radius: 6px;
-        margin: 8px 0;
-    }
+.nested-table-container {
+    padding: 16px;
+    background-color: #fafafa;
+    border-radius: 6px;
+    margin: 8px 0;
+}
 
-    .principal-name {
-        color: #1890ff;
-        cursor: pointer;
-    }
+.principal-name {
+    color: #1890ff;
+    cursor: pointer;
+}
 
-    .principal-name:hover {
-        color: #40a9ff;
-        text-decoration: underline;
-    }
+.principal-name:hover {
+    color: #40a9ff;
+    text-decoration: underline;
+}
 </style>
