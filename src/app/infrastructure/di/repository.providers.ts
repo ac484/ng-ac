@@ -67,7 +67,7 @@ export const MOCK_REPOSITORY_PROVIDERS: Provider[] = [
 export function getRepositoryProviders(): Provider[] {
   // In production, use Firebase repositories
   // In development, you can choose between Firebase and Mock
-  const useMock = true; // Set to true to use mock repositories for testing
+  const useMock = false; // Set to false to use Firebase repositories
   
   return useMock ? MOCK_REPOSITORY_PROVIDERS : FIREBASE_REPOSITORY_PROVIDERS;
 } 
