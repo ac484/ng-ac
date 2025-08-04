@@ -38,4 +38,4 @@ export class GeoLocation {
     // 實際實現中應調用地理位置 API
     return Promise.resolve(new GeoLocation('Unknown', 'Unknown', 0, 0));
   }
-} 
+}

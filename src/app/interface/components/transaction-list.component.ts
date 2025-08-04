@@ -2,24 +2,23 @@
  * Transaction List Component
  * Uses ng-zorro-antd and DDD application services for transaction management
  */
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import { Subject, takeUntil, from } from 'rxjs';
 
-import { TransactionApplicationService } from '../../application/services/transaction-application.service';
 import { TransactionDto, CreateTransactionDto, UpdateTransactionDto } from '../../application/dto/transaction.dto';
+import { TransactionApplicationService } from '../../application/services/transaction-application.service';
 
 @Component({
   selector: 'app-transaction-list',
@@ -76,13 +75,13 @@ import { TransactionDto, CreateTransactionDto, UpdateTransactionDto } from '../.
             <td>{{ transaction.id }}</td>
             <td>{{ transaction.accountId }}</td>
             <td>
-                              <nz-tag [nzColor]="transaction.type === 'DEPOSIT' ? 'green' : 'red'">
-                  {{ transaction.type }}
-                </nz-tag>
+              <nz-tag [nzColor]="transaction.type === 'DEPOSIT' ? 'green' : 'red'">
+                {{ transaction.type }}
+              </nz-tag>
             </td>
             <td>{{ transaction.amount | currency }}</td>
             <td>{{ transaction.description }}</td>
-            <td>{{ transaction.date | date:'short' }}</td>
+            <td>{{ transaction.date | date: 'short' }}</td>
             <td>
               <nz-tag [nzColor]="transaction.status === 'COMPLETED' ? 'green' : 'orange'">
                 {{ transaction.status }}
@@ -152,11 +151,7 @@ import { TransactionDto, CreateTransactionDto, UpdateTransactionDto } from '../.
           <nz-form-item>
             <nz-form-label [nzSpan]="8">Date</nz-form-label>
             <nz-form-control [nzSpan]="16">
-              <nz-date-picker
-                formControlName="date"
-                nzFormat="yyyy-MM-dd"
-                placeholder="Select date"
-              ></nz-date-picker>
+              <nz-date-picker formControlName="date" nzFormat="yyyy-MM-dd" placeholder="Select date"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -177,22 +172,24 @@ import { TransactionDto, CreateTransactionDto, UpdateTransactionDto } from '../.
       </form>
     </nz-modal>
   `,
-  styles: [`
-    .transaction-list-container {
-      padding: 24px;
-    }
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    
-    .header h2 {
-      margin: 0;
-    }
-  `]
+  styles: [
+    `
+      .transaction-list-container {
+        padding: 24px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .header h2 {
+        margin: 0;
+      }
+    `
+  ]
 })
 export class TransactionListComponent implements OnInit, OnDestroy {
   transactions: TransactionDto[] = [];
@@ -200,11 +197,11 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   total = 0;
   pageSize = 10;
   pageIndex = 1;
-  
+
   isModalVisible = false;
   isEditing = false;
   currentTransaction: TransactionDto | null = null;
-  
+
   transactionForm!: FormGroup;
 
   private destroy$ = new Subject<void>();
@@ -298,7 +295,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   handleModalOk(): void {
     if (this.transactionForm.valid) {
       const formValue = this.transactionForm.value;
-      
+
       if (this.isEditing && this.currentTransaction) {
         const updateDto: UpdateTransactionDto = {
           description: formValue.description!,
@@ -306,7 +303,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
           referenceNumber: formValue.referenceNumber,
           notes: formValue.notes
         };
-        
+
         from(this.transactionService.updateTransaction(this.currentTransaction.id, updateDto))
           .pipe(takeUntil(this.destroy$))
           .subscribe({
@@ -327,7 +324,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
           transactionType: formValue.type!,
           description: formValue.description!
         };
-        
+
         from(this.transactionService.createTransaction(createDto))
           .pipe(takeUntil(this.destroy$))
           .subscribe({
@@ -361,4 +358,4 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   onPageSizeChange(pageSize: number): void {
     this.pageSize = pageSize;
   }
-} 
+}

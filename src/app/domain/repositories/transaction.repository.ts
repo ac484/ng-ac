@@ -48,4 +48,4 @@ export interface TransactionRepository {
     completedCount: number;
     pendingCount: number;
   }>;
-} 
+}

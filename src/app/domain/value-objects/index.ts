@@ -42,4 +42,4 @@ export { AccountName } from './account/account-name.value-object';
 export { AccountNumber } from './account/account-number.value-object';
 export { AccountStatus, AccountStatusType } from './account/account-status.value-object';
 export { AccountType, AccountTypeEnum } from './account/account-type.value-object';
-export { Money } from './account/money.value-object'; 
+export { Money } from './account/money.value-object';

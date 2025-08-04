@@ -31,4 +31,4 @@ export class Permission {
   static USER_WRITE(): Permission {
     return new Permission('user.write');
   }
-} 
+}

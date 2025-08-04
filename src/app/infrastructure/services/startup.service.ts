@@ -1,16 +1,17 @@
+import { HttpClient } from '@angular/common/http';
 import { APP_INITIALIZER, Injectable, Provider, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { ACLService } from '@delon/acl';
 import { DA_SERVICE_TOKEN } from '@delon/auth';
 import { ALAIN_I18N_TOKEN, MenuService, SettingsService, TitleService } from '@delon/theme';
-import { ACLService } from '@delon/acl';
-import { I18NService } from './i18n.service';
-import { Observable, zip, of, catchError, map } from 'rxjs';
 import type { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Observable, zip, of, catchError, map } from 'rxjs';
+
+import { I18NService } from './i18n.service';
 
 /**
  * Infrastructure Service: Application Startup
- * 
+ *
  * Used for application startup to get basic data like menu data, user data, etc.
  * This service belongs to the Infrastructure layer as it handles external dependencies
  * and technical concerns like HTTP requests, routing, and service initialization.
@@ -106,7 +107,7 @@ export class StartupService {
     //   this.router.navigateByUrl(this.tokenService.login_url!);
     //   return;
     // }
-    
+
     // Mock data for development
     const app: any = {
       name: `DDD Application`,
@@ -181,4 +182,4 @@ export class StartupService {
     // mock：请勿在生产环境中这么使用，viaMock 单纯只是为了模拟一些数据使脚手架一开始能正常运行
     return this.viaMockI18n();
   }
-} 
+}

@@ -1,6 +1,7 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, OnInit, OnDestroy } from '@angular/core';
-import { AuthApplicationService } from '../../application/services/auth-application.service';
 import { Subscription } from 'rxjs';
+
+import { AuthApplicationService } from '../../application/services/auth-application.service';
 
 @Directive({
   selector: '[appPermission]',
@@ -29,7 +30,7 @@ export class PermissionDirective implements OnInit, OnDestroy {
   private checkPermission() {
     this.subscription = this.authService.getUserPermissions().subscribe(permissions => {
       const hasPermission = permissions.includes(this.appPermission);
-      
+
       if (hasPermission) {
         this.viewContainer.createEmbeddedView(this.templateRef);
       } else {
@@ -37,4 +38,4 @@ export class PermissionDirective implements OnInit, OnDestroy {
       }
     });
   }
-} 
+}

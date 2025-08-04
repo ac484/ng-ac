@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
 
 /**
  * Infrastructure Service: Internationalization
- * 
+ *
  * Handles internationalization and localization for the application.
  * This service belongs to the Infrastructure layer as it manages external
  * dependencies like locale data, HTTP requests for language files, and
@@ -65,8 +65,8 @@ const LANGS: Record<string, LangConfigData> = {
   }
 };
 
-@Injectable({ 
-  providedIn: 'root' 
+@Injectable({
+  providedIn: 'root'
 })
 export class I18NService extends AlainI18nBaseService {
   private readonly http = inject(_HttpClient);
@@ -137,4 +137,4 @@ export class I18NService extends AlainI18nBaseService {
   getLangs(): Array<{ code: string; text: string; abbr: string }> {
     return this._langs;
   }
-} 
+}

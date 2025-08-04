@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -26,4 +26,4 @@ export class ErrorInterceptor implements HttpInterceptor {
       })
     );
   }
-} 
+}

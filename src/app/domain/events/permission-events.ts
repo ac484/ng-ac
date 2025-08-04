@@ -81,4 +81,4 @@ export class PermissionDeletedEvent extends DomainEvent {
     this.permissionId = permissionId;
     this.data = data;
   }
-} 
+}

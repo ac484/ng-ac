@@ -49,33 +49,33 @@ export class Currency {
   }
 
   private getCurrencySymbol(code: string): string {
-    const symbols: { [key: string]: string } = {
-      'USD': '$',
-      'EUR': '€',
-      'GBP': '£',
-      'JPY': '¥',
-      'CNY': '¥',
-      'HKD': 'HK$',
-      'SGD': 'S$',
-      'TWD': 'NT$',
-      'KRW': '₩',
-      'THB': '฿'
+    const symbols: Record<string, string> = {
+      USD: '$',
+      EUR: '€',
+      GBP: '£',
+      JPY: '¥',
+      CNY: '¥',
+      HKD: 'HK$',
+      SGD: 'S$',
+      TWD: 'NT$',
+      KRW: '₩',
+      THB: '฿'
     };
     return symbols[code] || code;
   }
 
   private getCurrencyName(code: string): string {
-    const names: { [key: string]: string } = {
-      'USD': 'US Dollar',
-      'EUR': 'Euro',
-      'GBP': 'British Pound',
-      'JPY': 'Japanese Yen',
-      'CNY': 'Chinese Yuan',
-      'HKD': 'Hong Kong Dollar',
-      'SGD': 'Singapore Dollar',
-      'TWD': 'Taiwan Dollar',
-      'KRW': 'South Korean Won',
-      'THB': 'Thai Baht'
+    const names: Record<string, string> = {
+      USD: 'US Dollar',
+      EUR: 'Euro',
+      GBP: 'British Pound',
+      JPY: 'Japanese Yen',
+      CNY: 'Chinese Yuan',
+      HKD: 'Hong Kong Dollar',
+      SGD: 'Singapore Dollar',
+      TWD: 'Taiwan Dollar',
+      KRW: 'South Korean Won',
+      THB: 'Thai Baht'
     };
     return names[code] || code;
   }
@@ -127,4 +127,4 @@ export class Currency {
   toString(): string {
     return this.code;
   }
-} 
+}

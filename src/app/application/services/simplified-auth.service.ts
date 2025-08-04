@@ -1,9 +1,9 @@
 /**
  * @deprecated 此服務已被 UnifiedAuthenticationService 取代
  * 請使用 UnifiedAuthenticationService 替代
- * 
+ *
  * 重複代碼已移除，統一使用 UnifiedAuthenticationService
- * 
+ *
  * 遷移指南：
  * - quickAnonymousLogin() → signInAnonymously() 或 quickAnonymousLogin()
  * - quickEmailLogin() → signInWithEmail() 或 quickEmailLogin()
@@ -13,6 +13,7 @@
  */
 
 import { Injectable } from '@angular/core';
+
 import { UnifiedAuthenticationService } from './unified-authentication.service';
 
 @Injectable({
@@ -41,4 +42,4 @@ export class SimplifiedAuthService {
   getCurrentUser(): any {
     return this.unifiedAuth.getCurrentUser();
   }
-} 
+}

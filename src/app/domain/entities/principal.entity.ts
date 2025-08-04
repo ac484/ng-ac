@@ -1,8 +1,8 @@
 import { BaseEntity } from './base-entity';
-import { PrincipalName } from '../value-objects/principal/principal-name.value-object';
-import { PrincipalId } from '../value-objects/principal/principal-id.value-object';
 import { Contact } from './contact.entity';
 import { WorkflowStep } from '../../interface/components/principal/principal-workflow.component';
+import { PrincipalId } from '../value-objects/principal/principal-id.value-object';
+import { PrincipalName } from '../value-objects/principal/principal-name.value-object';
 
 export interface PrincipalProps {
   id: PrincipalId;
@@ -137,4 +137,4 @@ export class Principal extends BaseEntity<PrincipalProps> {
   hasWorkflowSteps(): boolean {
     return this.props.workflowSteps.length > 0;
   }
-} 
+}

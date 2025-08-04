@@ -15,7 +15,7 @@ let refreshToken$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 /**
  * Re-attach new Token information
  *
- * > Since requests that have already been initiated will not go through `@delon/auth` again, 
+ * > Since requests that have already been initiated will not go through `@delon/auth` again,
  *   it is necessary to re-attach the new Token in combination with the business situation
  */
 function reAttachToken(injector: Injector, req: HttpRequest<any>): HttpRequest<any> {
@@ -41,7 +41,7 @@ export function tryRefreshToken(injector: Injector, ev: HttpResponseBase, req: H
     toLogin(injector);
     return throwError(() => ev);
   }
-  // 2. If `refreshToking` is `true`, it means that the refresh Token is already being requested, 
+  // 2. If `refreshToking` is `true`, it means that the refresh Token is already being requested,
   //    and all subsequent requests will enter the waiting state until the result is returned and then re-initiate the request
   if (refreshToking) {
     return refreshToken$.pipe(
@@ -95,7 +95,7 @@ function buildAuthRefresh(injector: Injector): void {
 }
 
 /**
- * Refresh Token method 2: Use the `refresh` interface of `@delon/auth`, 
+ * Refresh Token method 2: Use the `refresh` interface of `@delon/auth`,
  * which needs to be registered in `app.config.ts` with `provideBindAuthRefresh`
  */
 export function provideBindAuthRefresh(): EnvironmentProviders[] {
@@ -115,14 +115,14 @@ export function provideBindAuthRefresh(): EnvironmentProviders[] {
  */
 export function needsTokenRefresh(token: string | null): boolean {
   if (!token) return true;
-  
+
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     const exp = payload.exp * 1000; // Convert to milliseconds
     const now = Date.now();
     const buffer = 5 * 60 * 1000; // 5 minutes buffer
-    
-    return now >= (exp - buffer);
+
+    return now >= exp - buffer;
   } catch {
     return true;
   }
@@ -140,4 +140,4 @@ export function getTokenFromAuthService(injector: Injector): Observable<string |
       return of(session?.token || null);
     })
   );
-} 
+}

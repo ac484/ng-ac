@@ -25,16 +25,15 @@ export class ContractNumber {
 
   static generate(): ContractNumber {
     const today = new Date();
-    const dateStr = today.getFullYear().toString() +
-                    String(today.getMonth() + 1).padStart(2, '0') +
-                    String(today.getDate()).padStart(2, '0');
-    
+    const dateStr =
+      today.getFullYear().toString() + String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0');
+
     // For now, use timestamp-based sequence
     // In production, this should query the database for the max sequence
     const timestamp = Date.now();
     const sequence = timestamp % 10000; // Use last 4 digits of timestamp
     const contractNumber = `${dateStr}${String(sequence).padStart(4, '0')}`;
-    
+
     return new ContractNumber(contractNumber);
   }
-} 
+}

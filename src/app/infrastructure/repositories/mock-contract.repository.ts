@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
+
 import { Contract } from '../../domain/entities/contract.entity';
 import { ContractRepository, ContractSearchCriteria } from '../../domain/repositories/contract.repository';
-import { 
-  ContractNumber, 
-  ContractStatus, 
-  ClientName, 
-  ClientRepresentative, 
-  ContactPerson, 
-  ContractName 
-} from '../../domain/value-objects/contract';
 import { Money } from '../../domain/value-objects/account/money.value-object';
+import {
+  ContractNumber,
+  ContractStatus,
+  ClientName,
+  ClientRepresentative,
+  ContactPerson,
+  ContractName
+} from '../../domain/value-objects/contract';
 
 @Injectable()
 export class MockContractRepository implements ContractRepository {
@@ -33,9 +34,7 @@ export class MockContractRepository implements ContractRepository {
     const endOfDay = new Date(date);
     endOfDay.setHours(23, 59, 59, 999);
 
-    return this.contracts.filter(c => 
-      c.createdAt >= startOfDay && c.createdAt <= endOfDay
-    );
+    return this.contracts.filter(c => c.createdAt >= startOfDay && c.createdAt <= endOfDay);
   }
 
   async findAll(criteria?: ContractSearchCriteria): Promise<Contract[]> {
@@ -45,14 +44,10 @@ export class MockContractRepository implements ContractRepository {
       filtered = filtered.filter(c => c.status.getValue() === criteria.status);
     }
     if (criteria?.clientName) {
-      filtered = filtered.filter(c => 
-        c.clientName.getValue().toLowerCase().includes(criteria.clientName!.toLowerCase())
-      );
+      filtered = filtered.filter(c => c.clientName.getValue().toLowerCase().includes(criteria.clientName!.toLowerCase()));
     }
     if (criteria?.contractName) {
-      filtered = filtered.filter(c => 
-        c.contractName.getValue().toLowerCase().includes(criteria.contractName!.toLowerCase())
-      );
+      filtered = filtered.filter(c => c.contractName.getValue().toLowerCase().includes(criteria.contractName!.toLowerCase()));
     }
 
     // Simple pagination
@@ -85,7 +80,7 @@ export class MockContractRepository implements ContractRepository {
     const mockContracts = [
       this.createMockContract('1', '202412190001', '台灣電力公司', '張經理', '李小姐', '變電站設備維護合約', 1500000),
       this.createMockContract('2', '202412190002', '中華電信', '王主任', '陳先生', '通訊設備安裝合約', 2300000),
-      this.createMockContract('3', '202412190003', '台積電', '林副總', '黃小姐', '廠房電力系統建置', 5000000),
+      this.createMockContract('3', '202412190003', '台積電', '林副總', '黃小姐', '廠房電力系統建置', 5000000)
     ];
 
     this.contracts = mockContracts;
@@ -115,4 +110,4 @@ export class MockContractRepository implements ContractRepository {
       new Date('2024-12-19')
     );
   }
-} 
+}

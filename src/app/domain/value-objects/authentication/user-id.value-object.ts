@@ -18,4 +18,4 @@ export class UserId {
   static generate(): UserId {
     return new UserId(`user_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`);
   }
-} 
+}

@@ -45,4 +45,4 @@ export interface UserRepository {
    * Find users by status
    */
   findByStatus(status: string): Promise<User[]>;
-} 
+}

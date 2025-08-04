@@ -1,22 +1,22 @@
 import { Routes } from '@angular/router';
-import { startPageGuard } from '../guards/start-page.guard';
 import { authSimpleCanActivate, authSimpleCanActivateChild } from '@delon/auth';
 
+import { PRINCIPAL_ROUTES } from './principal-routes';
+import { AnonymousLoginComponent } from '../components/auth/anonymous-login.component';
+import { CallbackComponent } from '../components/auth/callback.component';
+import { EmailLoginComponent } from '../components/auth/email-login.component';
+import { GoogleAuthComponent } from '../components/auth/google-auth.component';
+import { UserLockComponent } from '../components/auth/lock.component';
+import { UserLoginComponent } from '../components/auth/login.component';
+import { UserRegisterResultComponent } from '../components/auth/register-result.component';
+import { UserRegisterComponent } from '../components/auth/register.component';
 import { DashboardComponent } from '../components/dashboard.component';
 import { LayoutBasicComponent } from '../components/layout/basic.component';
-import { CallbackComponent } from '../components/auth/callback.component';
-import { UserLoginComponent } from '../components/auth/login.component';
-import { UserRegisterComponent } from '../components/auth/register.component';
-import { UserRegisterResultComponent } from '../components/auth/register-result.component';
-import { UserLockComponent } from '../components/auth/lock.component';
-import { GoogleAuthComponent } from '../components/auth/google-auth.component';
-import { EmailLoginComponent } from '../components/auth/email-login.component';
-import { AnonymousLoginComponent } from '../components/auth/anonymous-login.component';
-import { WelcomeComponent } from '../components/welcome.component';
 import { LayoutPassportComponent } from '../components/layout/passport/passport.component';
+import { WelcomeComponent } from '../components/welcome.component';
 import { ExceptionComponent } from '../components/exception/exception.component';
 import { ExceptionTriggerComponent } from '../components/exception/trigger.component';
-import { PRINCIPAL_ROUTES } from './principal-routes';
+import { startPageGuard } from '../guards/start-page.guard';
 
 export const dddRoutes: Routes = [
   // Main application routes with authentication
@@ -30,53 +30,53 @@ export const dddRoutes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       // DDD Architecture Routes
-      { 
-        path: 'accounts', 
+      {
+        path: 'accounts',
         loadComponent: () => import('../components/account-list.component').then(m => m.AccountListComponent),
         title: '帳戶管理'
       },
-      { 
-        path: 'transactions', 
+      {
+        path: 'transactions',
         loadComponent: () => import('../components/transaction-list.component').then(m => m.TransactionListComponent),
         title: '交易管理'
       },
-      { 
-        path: 'users', 
+      {
+        path: 'users',
         loadComponent: () => import('../components/user-list.component').then(m => m.UserListComponent),
         title: '用戶管理'
       },
-      { 
-        path: 'contracts', 
+      {
+        path: 'contracts',
         children: [
-          { 
-            path: '', 
+          {
+            path: '',
             loadComponent: () => import('../components/contract/contract-list.component').then(m => m.ContractListComponent),
             title: '合約管理'
           },
-          { 
-            path: 'create', 
+          {
+            path: 'create',
             loadComponent: () => import('../components/contract/contract-form.component').then(m => m.ContractFormComponent),
             title: '新增合約'
           },
-          { 
-            path: ':id', 
+          {
+            path: ':id',
             loadComponent: () => import('../components/contract/contract-detail.component').then(m => m.ContractDetailComponent),
             title: '合約詳情'
           },
-          { 
-            path: ':id/edit', 
+          {
+            path: ':id/edit',
             loadComponent: () => import('../components/contract/contract-form.component').then(m => m.ContractFormComponent),
             title: '編輯合約'
           }
         ]
       },
-      { 
-        path: 'pro/account/center', 
+      {
+        path: 'pro/account/center',
         loadComponent: () => import('../components/account-center.component').then(m => m.AccountCenterComponent),
         title: '個人中心'
       },
-      { 
-        path: 'pro/account/settings', 
+      {
+        path: 'pro/account/settings',
         loadComponent: () => import('../components/account-settings.component').then(m => m.AccountSettingsComponent),
         title: '個人設置'
       },
@@ -137,4 +137,4 @@ export const dddRoutes: Routes = [
   { path: 'exception/trigger', component: ExceptionTriggerComponent },
   // Catch all route
   { path: '**', redirectTo: 'exception/404' }
-]; 
+];

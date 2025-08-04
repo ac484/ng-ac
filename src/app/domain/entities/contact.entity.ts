@@ -1,6 +1,6 @@
 import { BaseEntity } from './base-entity';
-import { ContactPerson } from '../value-objects/principal/contact-person.value-object';
 import { ContactEmail } from '../value-objects/principal/contact-email.value-object';
+import { ContactPerson } from '../value-objects/principal/contact-person.value-object';
 import { ContactPhone } from '../value-objects/principal/contact-phone.value-object';
 
 export interface ContactProps {
@@ -61,4 +61,4 @@ export class Contact extends BaseEntity<ContactProps> {
   private static generateId(): string {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
-} 
+}

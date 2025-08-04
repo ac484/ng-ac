@@ -49,4 +49,4 @@ export class TokenRefreshedEvent extends DomainEvent {
   ) {
     super();
   }
-} 
+}

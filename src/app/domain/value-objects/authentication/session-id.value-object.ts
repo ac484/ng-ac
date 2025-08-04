@@ -18,4 +18,4 @@ export class SessionId {
   static generate(): SessionId {
     return new SessionId(`session_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`);
   }
-} 
+}

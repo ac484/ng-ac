@@ -31,4 +31,4 @@ export class Role {
   static USER(): Role {
     return new Role('User');
   }
-} 
+}

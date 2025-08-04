@@ -10,7 +10,7 @@ export class ContactPhone {
     if (!value || value.trim().length === 0) {
       throw new Error('Contact phone cannot be empty');
     }
-    
+
     // Basic phone number validation (Taiwan format)
     const phoneRegex = /^(\+886|886)?[0-9]{8,10}$/;
     if (!phoneRegex.test(value.replace(/[\s\-\(\)]/g, ''))) {
@@ -25,4 +25,4 @@ export class ContactPhone {
   static create(value: string): ContactPhone {
     return new ContactPhone(value);
   }
-} 
+}

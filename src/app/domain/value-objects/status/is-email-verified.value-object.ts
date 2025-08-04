@@ -33,4 +33,4 @@ export class IsEmailVerified {
   static fromFirebaseUser(user: any): IsEmailVerified {
     return new IsEmailVerified(user.emailVerified || false);
   }
-} 
+}

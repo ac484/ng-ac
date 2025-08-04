@@ -56,4 +56,4 @@ export class PermissionSet {
   size(): number {
     return this.permissions.size;
   }
-} 
+}

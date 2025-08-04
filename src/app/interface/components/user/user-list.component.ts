@@ -1,26 +1,20 @@
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 
-import { UserApplicationService } from '../../../application/services/user-application.service';
 import { UserDto } from '../../../application/dto/user.dto';
+import { UserApplicationService } from '../../../application/services/user-application.service';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzTableModule,
-    NzButtonModule,
-    NzIconModule,
-    NzTagModule
-  ],
+  imports: [CommonModule, NzTableModule, NzButtonModule, NzIconModule, NzTagModule],
   template: `
     <div class="user-list-container">
       <div class="header">
@@ -39,8 +33,8 @@ import { UserDto } from '../../../application/dto/user.dto';
         [nzPageSize]="pageSize"
         [nzPageIndex]="pageIndex"
         (nzPageIndexChange)="onPageIndexChange($event)"
-        (nzPageSizeChange)="onPageSizeChange($event)">
-        
+        (nzPageSizeChange)="onPageSizeChange($event)"
+      >
         <thead>
           <tr>
             <th>ID</th>
@@ -51,7 +45,7 @@ import { UserDto } from '../../../application/dto/user.dto';
             <th>操作</th>
           </tr>
         </thead>
-        
+
         <tbody>
           <tr *ngFor="let user of basicTable.data">
             <td>{{ user.id }}</td>
@@ -62,7 +56,7 @@ import { UserDto } from '../../../application/dto/user.dto';
                 {{ getStatusText(user.status) }}
               </nz-tag>
             </td>
-            <td>{{ user.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ user.createdAt | date: 'yyyy-MM-dd HH:mm' }}</td>
             <td>
               <button nz-button nzType="link" (click)="viewUser(user)">
                 <span nz-icon nzType="eye"></span>
@@ -79,22 +73,24 @@ import { UserDto } from '../../../application/dto/user.dto';
       </nz-table>
     </div>
   `,
-  styles: [`
-    .user-list-container {
-      padding: 24px;
-    }
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    
-    .header h2 {
-      margin: 0;
-    }
-  `]
+  styles: [
+    `
+      .user-list-container {
+        padding: 24px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .header h2 {
+        margin: 0;
+      }
+    `
+  ]
 })
 export class UserListComponent implements OnInit {
   private readonly userApplicationService = inject(UserApplicationService);
@@ -171,21 +167,31 @@ export class UserListComponent implements OnInit {
 
   getStatusColor(status: string): string {
     switch (status) {
-      case 'ACTIVE': return 'green';
-      case 'INACTIVE': return 'red';
-      case 'PENDING': return 'orange';
-      case 'SUSPENDED': return 'red';
-      default: return 'default';
+      case 'ACTIVE':
+        return 'green';
+      case 'INACTIVE':
+        return 'red';
+      case 'PENDING':
+        return 'orange';
+      case 'SUSPENDED':
+        return 'red';
+      default:
+        return 'default';
     }
   }
 
   getStatusText(status: string): string {
     switch (status) {
-      case 'ACTIVE': return '啟用';
-      case 'INACTIVE': return '停用';
-      case 'PENDING': return '待審核';
-      case 'SUSPENDED': return '暫停';
-      default: return '未知';
+      case 'ACTIVE':
+        return '啟用';
+      case 'INACTIVE':
+        return '停用';
+      case 'PENDING':
+        return '待審核';
+      case 'SUSPENDED':
+        return '暫停';
+      default:
+        return '未知';
     }
   }
-} 
+}

@@ -3,11 +3,12 @@ import { ALAIN_I18N_TOKEN, I18nPipe, SettingsService } from '@delon/theme';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+
 import { I18NService } from '../../../../infrastructure/services/i18n.service';
 
 /**
  * Interface Component: Header I18n Widget
- * 
+ *
  * Widget component that provides internationalization functionality.
  * This component belongs to the Interface layer as it handles user interaction
  * and UI concerns related to language selection and internationalization.
@@ -46,7 +47,7 @@ export class HeaderI18nComponent {
   private readonly settings = inject(SettingsService);
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly doc = inject(DOCUMENT);
-  
+
   /** Whether to display language text */
   @Input({ transform: booleanAttribute }) showLangText = true;
 
@@ -74,4 +75,4 @@ export class HeaderI18nComponent {
       setTimeout(() => this.doc.location.reload());
     });
   }
-} 
+}

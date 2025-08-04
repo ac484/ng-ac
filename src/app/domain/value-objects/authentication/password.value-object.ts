@@ -32,4 +32,4 @@ export class Password {
   verifyPassword(inputPassword: string): boolean {
     return this.hashPassword(inputPassword) === this.hashedValue;
   }
-} 
+}

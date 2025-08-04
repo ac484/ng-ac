@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { I18nPipe, SettingsService, User } from '@delon/theme';
@@ -9,22 +10,21 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
 // DDD Application Services
+import { TabComponent } from './tab/tab.component';
+import { DddHeaderClearStorageComponent } from './widgets/ddd-header-clear-storage.component';
+import { DddHeaderFullScreenComponent } from './widgets/ddd-header-fullscreen.component';
+import { DddHeaderI18nComponent } from './widgets/ddd-header-i18n.component';
+import { DddHeaderSearchComponent } from './widgets/ddd-header-search.component';
+import { DddHeaderUserComponent } from './widgets/ddd-header-user.component';
 import { AuthApplicationService } from '../../application/services/auth-application.service';
 import { UserApplicationService } from '../../application/services/user-application.service';
 
 // DDD Widgets
-import { DddHeaderUserComponent } from './widgets/ddd-header-user.component';
-import { DddHeaderSearchComponent } from './widgets/ddd-header-search.component';
-import { DddHeaderClearStorageComponent } from './widgets/ddd-header-clear-storage.component';
-import { DddHeaderFullScreenComponent } from './widgets/ddd-header-fullscreen.component';
-import { DddHeaderI18nComponent } from './widgets/ddd-header-i18n.component';
 
 // DDD Tab Component
-import { TabComponent } from './tab/tab.component';
 
 @Component({
   selector: 'app-ddd-layout',
@@ -126,7 +126,7 @@ export class DddLayoutComponent implements OnInit, OnDestroy {
     logoExpanded: `./assets/logo-full.svg`,
     logoCollapsed: `./assets/logo.svg`
   };
-  
+
   searchToggleStatus = false;
   showSettingDrawer = !environment.production;
   currentUser: User | null = null;
@@ -167,7 +167,8 @@ export class DddLayoutComponent implements OnInit, OnDestroy {
 
   private subscribeToAuthChanges(): void {
     // Subscribe to authentication changes
-    this.authApplicationService.getCurrentAuthentication()
+    this.authApplicationService
+      .getCurrentAuthentication()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: async (auth: any) => {
@@ -186,4 +187,4 @@ export class DddLayoutComponent implements OnInit, OnDestroy {
   get user(): User {
     return this.currentUser || this.settings.user;
   }
-} 
+}

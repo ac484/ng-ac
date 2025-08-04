@@ -1,11 +1,11 @@
-import { Injectable, inject, DestroyRef } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router';
+import { Injectable, inject, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router';
 
 /**
  * Infrastructure Service: Tab Reuse Strategy Service
- * 
+ *
  * Implements Angular's RouteReuseStrategy to cache route components
  * for tab functionality. This service belongs to the Infrastructure
  * layer as it handles technical concerns like route caching and
@@ -19,11 +19,11 @@ export class TabReuseStrategyService implements RouteReuseStrategy {
   private readonly doc = inject(DOCUMENT);
 
   // Cache for route handlers
-  private static handlers: { [key: string]: any } = {};
-  
+  private static handlers: Record<string, any> = {};
+
   // Cache for scroll positions
-  private static scrollHandlers: { [key: string]: any } = {};
-  
+  private static scrollHandlers: Record<string, any> = {};
+
   // Flag to prevent caching when tab is being deleted
   public static waitDelete: string | null = null;
 
@@ -35,7 +35,7 @@ export class TabReuseStrategyService implements RouteReuseStrategy {
     if (route.data['shouldDetach'] === 'no') {
       return false;
     }
-    
+
     // Don't cache if tab functionality is disabled
     if (route.data['disableTab'] === true) {
       return false;
@@ -53,7 +53,7 @@ export class TabReuseStrategyService implements RouteReuseStrategy {
     }
 
     const key = this.getRouteKey(route);
-    
+
     // Don't store if this route is marked for deletion
     if (TabReuseStrategyService.waitDelete === key) {
       this.runHook('_onReuseDestroy', handle.componentRef);
@@ -65,7 +65,7 @@ export class TabReuseStrategyService implements RouteReuseStrategy {
 
     // Store scroll position
     this.storeScrollPosition(route, key);
-    
+
     // Store the route handle
     TabReuseStrategyService.handlers[key] = handle;
   }
@@ -84,12 +84,12 @@ export class TabReuseStrategyService implements RouteReuseStrategy {
   retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
     const key = this.getRouteKey(route);
     const handle = TabReuseStrategyService.handlers[key];
-    
+
     if (handle) {
       this.runHook('_onReuseInit', handle.componentRef);
       this.restoreScrollPosition(route, key);
     }
-    
+
     return handle;
   }
 
@@ -140,14 +140,14 @@ export class TabReuseStrategyService implements RouteReuseStrategy {
   private getRoutePath(route: ActivatedRouteSnapshot): string {
     const paths: string[] = [];
     let currentRoute = route;
-    
+
     while (currentRoute) {
       if (currentRoute.routeConfig?.path) {
         paths.unshift(currentRoute.routeConfig.path);
       }
       currentRoute = currentRoute.parent!;
     }
-    
+
     return paths.join('/');
   }
 
@@ -160,7 +160,7 @@ export class TabReuseStrategyService implements RouteReuseStrategy {
       .sort()
       .map(key => `${key}=${params[key]}`)
       .join('&');
-    
+
     return paramString ? `?${paramString}` : '';
   }
 
@@ -232,4 +232,4 @@ export class TabReuseStrategyService implements RouteReuseStrategy {
       componentRef.instance[method]();
     }
   }
-} 
+}

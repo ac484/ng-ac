@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { I18nPipe, User } from '@delon/theme';
@@ -5,7 +6,6 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
 // DDD Application Services
@@ -86,7 +86,8 @@ export class DddHeaderUserComponent implements OnInit, OnDestroy {
 
   private subscribeToAuthChanges(): void {
     // Subscribe to authentication changes
-    this.authApplicationService.getCurrentAuthentication()
+    this.authApplicationService
+      .getCurrentAuthentication()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: async (auth: any) => {
@@ -112,4 +113,4 @@ export class DddHeaderUserComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/passport/login');
     }
   }
-} 
+}

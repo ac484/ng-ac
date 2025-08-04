@@ -5,4 +5,4 @@ import { Component } from '@angular/core';
   standalone: true,
   template: `<div>Transaction Form Component</div>`
 })
-export class TransactionFormComponent {} 
+export class TransactionFormComponent {}

@@ -3,6 +3,7 @@
  * Defines the contract for authentication data access operations
  */
 import { Observable } from 'rxjs';
+
 import { Authentication, AuthResult, EmailAuthData, AuthProvider } from '../entities/auth.entity';
 
 export interface AuthRepository {
@@ -65,4 +66,4 @@ export interface AuthRepository {
    * Validate authentication token
    */
   validateToken(token: string): Observable<boolean>;
-} 
+}

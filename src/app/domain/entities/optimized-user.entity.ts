@@ -50,7 +50,7 @@ export class OptimizedUser extends OptimizedAggregateRoot implements UserData {
 
   constructor(data: UserData) {
     super(data);
-    
+
     // 直接賦值，簡化建構過程
     this.email = data.email;
     this.displayName = data.displayName;
@@ -84,7 +84,7 @@ export class OptimizedUser extends OptimizedAggregateRoot implements UserData {
     };
 
     const user = new OptimizedUser(userData);
-    
+
     // 添加領域事件
     user.addDomainEvent({
       type: 'UserCreated',

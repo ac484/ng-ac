@@ -37,7 +37,7 @@ export class DeviceInfo {
     const platform = navigator.platform;
     const screenSize = `${screen.width}x${screen.height}`;
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    
+
     return new DeviceInfo(userAgent, platform, screenSize, timezone);
   }
-} 
+}

@@ -1,19 +1,20 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { UserApplicationService } from '../../application/services/user-application.service';
-import { UserDto, UserSearchDto } from '../../application/dto/user.dto';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+
 import { DataTableComponent } from './shared/data-table/data-table.component';
 import { TableColumn, TableAction } from './shared/data-table/table-column.interface';
+import { UserDto, UserSearchDto } from '../../application/dto/user.dto';
+import { UserApplicationService } from '../../application/services/user-application.service';
 
 /**
  * User list component using ng-zorro-antd components
@@ -41,24 +42,14 @@ import { TableColumn, TableAction } from './shared/data-table/table-column.inter
       <div nz-row nzGutter="16" class="mb-4">
         <div nz-col nzSpan="6">
           <nz-input-group [nzSuffix]="suffixIconSearch">
-            <input 
-              nz-input 
-              placeholder="搜尋用戶名稱或郵箱" 
-              [(ngModel)]="searchDto.email"
-              (ngModelChange)="onSearch()"
-            />
+            <input nz-input placeholder="搜尋用戶名稱或郵箱" [(ngModel)]="searchDto.email" (ngModelChange)="onSearch()" />
           </nz-input-group>
           <ng-template #suffixIconSearch>
             <span nz-icon nzType="search"></span>
           </ng-template>
         </div>
         <div nz-col nzSpan="4">
-          <nz-select 
-            nzPlaceHolder="選擇狀態" 
-            [(ngModel)]="searchDto.status"
-            (ngModelChange)="onSearch()"
-            [nzAllowClear]="true"
-          >
+          <nz-select nzPlaceHolder="選擇狀態" [(ngModel)]="searchDto.status" (ngModelChange)="onSearch()" [nzAllowClear]="true">
             <nz-option nzValue="ACTIVE" nzLabel="啟用"></nz-option>
             <nz-option nzValue="INACTIVE" nzLabel="停用"></nz-option>
             <nz-option nzValue="PENDING" nzLabel="待審核"></nz-option>
@@ -95,11 +86,13 @@ import { TableColumn, TableAction } from './shared/data-table/table-column.inter
       </button>
     </ng-template>
   `,
-  styles: [`
-    .mb-4 {
-      margin-bottom: 16px;
-    }
-  `]
+  styles: [
+    `
+      .mb-4 {
+        margin-bottom: 16px;
+      }
+    `
+  ]
 })
 export class UserListComponent implements OnInit {
   users: UserDto[] = [];
@@ -131,16 +124,16 @@ export class UserListComponent implements OnInit {
       title: '狀態',
       type: 'status',
       statusColors: {
-        'ACTIVE': 'green',
-        'INACTIVE': 'red',
-        'PENDING': 'orange',
-        'SUSPENDED': 'red'
+        ACTIVE: 'green',
+        INACTIVE: 'red',
+        PENDING: 'orange',
+        SUSPENDED: 'red'
       },
       statusTexts: {
-        'ACTIVE': '啟用',
-        'INACTIVE': '停用',
-        'PENDING': '待審核',
-        'SUSPENDED': '暫停'
+        ACTIVE: '啟用',
+        INACTIVE: '停用',
+        PENDING: '待審核',
+        SUSPENDED: '暫停'
       }
     },
     {
@@ -185,7 +178,7 @@ export class UserListComponent implements OnInit {
     private userApplicationService: UserApplicationService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -236,8 +229,6 @@ export class UserListComponent implements OnInit {
     this.loadUsers();
   }
 
-
-
   addUser(): void {
     // TODO: 實作新增用戶功能，將使用獨立的用戶表單頁面
     this.message.info('新增用戶功能將導向到用戶表單頁面');
@@ -287,4 +278,4 @@ export class UserListComponent implements OnInit {
       }
     });
   }
-} 
+}

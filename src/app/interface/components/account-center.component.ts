@@ -2,29 +2,20 @@
  * Account Center Component
  * Personal center page for user account management
  */
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NzCardModule } from 'ng-zorro-antd/card';
+import { Component, OnInit } from '@angular/core';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'app-account-center',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzCardModule,
-    NzAvatarModule,
-    NzButtonModule,
-    NzIconModule,
-    NzDescriptionsModule,
-    NzTagModule,
-    NzDividerModule
-  ],
+  imports: [CommonModule, NzCardModule, NzAvatarModule, NzButtonModule, NzIconModule, NzDescriptionsModule, NzTagModule, NzDividerModule],
   template: `
     <div class="account-center-container">
       <nz-card nzTitle="個人中心" [nzExtra]="extraTemplate">
@@ -91,67 +82,68 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
       </button>
     </ng-template>
   `,
-  styles: [`
-    .account-center-container {
-      padding: 24px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .account-center-container {
+        padding: 24px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
-    .user-profile {
-      margin-bottom: 24px;
-    }
+      .user-profile {
+        margin-bottom: 24px;
+      }
 
-    .profile-header {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
+      .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
 
-    .profile-avatar {
-      border: 4px solid #f0f0f0;
-    }
+      .profile-avatar {
+        border: 4px solid #f0f0f0;
+      }
 
-    .profile-info h2 {
-      margin: 0 0 8px 0;
-      font-size: 24px;
-      font-weight: 600;
-    }
+      .profile-info h2 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+        font-weight: 600;
+      }
 
-    .profile-info p {
-      margin: 0 0 12px 0;
-      color: #666;
-      font-size: 16px;
-    }
+      .profile-info p {
+        margin: 0 0 12px 0;
+        color: #666;
+        font-size: 16px;
+      }
 
-    .quick-actions {
-      margin-top: 24px;
-    }
+      .quick-actions {
+        margin-top: 24px;
+      }
 
-    .quick-actions h3 {
-      margin-bottom: 16px;
-      font-size: 18px;
-      font-weight: 600;
-    }
+      .quick-actions h3 {
+        margin-bottom: 16px;
+        font-size: 18px;
+        font-weight: 600;
+      }
 
-    .action-buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+      .action-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
 
-    .action-buttons button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-  `]
+      .action-buttons button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    `
+  ]
 })
 export class AccountCenterComponent implements OnInit {
-  
   constructor() {}
 
   ngOnInit(): void {
     // Initialize component
   }
-} 
+}

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { User, UserStatus } from '../entities/user.entity';
+
 import { SharedUtilitiesService } from './shared-utilities.service';
+import { User, UserStatus } from '../entities/user.entity';
 
 /**
  * Optimized User Domain Service - Pure Business Logic Only
@@ -11,8 +12,7 @@ import { SharedUtilitiesService } from './shared-utilities.service';
   providedIn: 'root'
 })
 export class UserDomainService {
-
-  constructor(private sharedUtilities: SharedUtilitiesService) { }
+  constructor(private sharedUtilities: SharedUtilitiesService) {}
 
   /**
    * Business rule: Check if user can be activated
@@ -55,9 +55,9 @@ export class UserDomainService {
    */
   validateStatusTransition(currentStatus: UserStatus, newStatus: UserStatus): void {
     const validTransitions: Record<UserStatus, UserStatus[]> = {
-      'active': ['inactive', 'suspended'],
-      'inactive': ['active'],
-      'suspended': ['active', 'inactive']
+      active: ['inactive', 'suspended'],
+      inactive: ['active'],
+      suspended: ['active', 'inactive']
     };
 
     this.sharedUtilities.validateStatusTransition(currentStatus, newStatus, validTransitions);
@@ -121,4 +121,4 @@ export class UserDomainService {
 
     user.updateEmail(newEmail.toLowerCase().trim());
   }
-} 
+}

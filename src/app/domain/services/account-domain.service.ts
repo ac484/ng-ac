@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Account, AccountStatus, AccountType } from '../entities/account.entity';
-import { Money } from '../value-objects/account/money.value-object';
-import { AccountNumber } from '../value-objects/account/account-number.value-object';
-import { AccountName } from '../value-objects/account/account-name.value-object';
-import { Currency } from '../value-objects/account/currency.value-object';
-import { UserId } from '../value-objects/authentication/user-id.value-object';
+
 import { SharedUtilitiesService } from './shared-utilities.service';
+import { Account, AccountStatus, AccountType } from '../entities/account.entity';
+import { AccountName } from '../value-objects/account/account-name.value-object';
+import { AccountNumber } from '../value-objects/account/account-number.value-object';
+import { Currency } from '../value-objects/account/currency.value-object';
+import { Money } from '../value-objects/account/money.value-object';
+import { UserId } from '../value-objects/authentication/user-id.value-object';
 
 /**
  * Optimized Account Domain Service - Pure Business Logic Only
@@ -14,19 +15,13 @@ import { SharedUtilitiesService } from './shared-utilities.service';
  */
 @Injectable({ providedIn: 'root' })
 export class AccountDomainService {
-
-  constructor(private sharedUtilities: SharedUtilitiesService) { }
+  constructor(private sharedUtilities: SharedUtilitiesService) {}
 
   /**
    * Business rule: Validate account creation parameters
    * Consolidated validation logic using SharedUtilitiesService
    */
-  validateAccountCreation(
-    accountNumber: string,
-    accountName: string,
-    accountType: AccountType,
-    userId: string
-  ): void {
+  validateAccountCreation(accountNumber: string, accountName: string, accountType: AccountType, userId: string): void {
     // Use shared utilities for common validations
     this.sharedUtilities.validateRequired(accountNumber, 'Account number');
     this.sharedUtilities.validateRequired(accountName, 'Account name');
@@ -99,17 +94,13 @@ export class AccountDomainService {
    */
   validateStatusTransition(currentStatus: AccountStatus, newStatus: AccountStatus): void {
     const validTransitions: Record<string, string[]> = {
-      'ACTIVE': ['INACTIVE', 'SUSPENDED'],
-      'INACTIVE': ['ACTIVE', 'SUSPENDED'],
-      'SUSPENDED': ['ACTIVE', 'INACTIVE'],
-      'CLOSED': []
+      ACTIVE: ['INACTIVE', 'SUSPENDED'],
+      INACTIVE: ['ACTIVE', 'SUSPENDED'],
+      SUSPENDED: ['ACTIVE', 'INACTIVE'],
+      CLOSED: []
     };
 
-    this.sharedUtilities.validateStatusTransition(
-      currentStatus.getValue(),
-      newStatus.getValue(),
-      validTransitions
-    );
+    this.sharedUtilities.validateStatusTransition(currentStatus.getValue(), newStatus.getValue(), validTransitions);
   }
 
   /**
@@ -121,8 +112,8 @@ export class AccountDomainService {
     accountName: string,
     accountType: AccountType,
     userId: string,
-    initialBalance: number = 0,
-    currency: string = 'USD',
+    initialBalance = 0,
+    currency = 'USD',
     description?: string
   ): Account {
     // Validate all creation parameters
@@ -295,4 +286,4 @@ export class AccountDomainService {
   canDeleteAccount(account: Account): boolean {
     return account.status.getValue() === 'CLOSED' && account.balance.getAmount() === 0;
   }
-} 
+}

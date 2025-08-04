@@ -6,10 +6,10 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import { AuthRepository } from '../../domain/repositories/auth.repository';
-import { AuthDomainService } from '../../domain/services/auth-domain.service';
 import { Authentication, AuthResult, EmailAuthData } from '../../domain/entities/auth.entity';
+import { AuthRepository } from '../../domain/repositories/auth.repository';
 import { AUTH_REPOSITORY } from '../../domain/repositories/repository-tokens';
+import { AuthDomainService } from '../../domain/services/auth-domain.service';
 
 @Injectable({
   providedIn: 'root'
@@ -72,9 +72,7 @@ export class AuthApplicationService {
    * Send password reset email
    */
   sendPasswordResetEmail(email: string): Observable<AuthResult> {
-    return this.authRepository.sendPasswordResetEmail(email).pipe(
-      catchError(error => this.handleAuthError(error, 'Password reset email'))
-    );
+    return this.authRepository.sendPasswordResetEmail(email).pipe(catchError(error => this.handleAuthError(error, 'Password reset email')));
   }
 
   /**
@@ -195,4 +193,4 @@ export class AuthApplicationService {
     console.error(`${operation} failed:`, error);
     return from([{ success: false, message: `${operation} failed`, error }]);
   }
-} 
+}

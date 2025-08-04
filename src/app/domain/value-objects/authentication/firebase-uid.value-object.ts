@@ -21,4 +21,4 @@ export class FirebaseUid {
     }
     return new FirebaseUid(user.uid);
   }
-} 
+}

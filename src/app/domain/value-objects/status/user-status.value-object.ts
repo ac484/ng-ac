@@ -59,4 +59,4 @@ export enum UserStatusType {
   BANNED = 'Banned',
   PENDING = 'Pending',
   INACTIVE = 'Inactive'
-} 
+}

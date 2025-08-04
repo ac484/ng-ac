@@ -21,4 +21,4 @@ export class ContractName {
       throw new Error('Contract name cannot exceed 200 characters');
     }
   }
-} 
+}

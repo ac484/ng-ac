@@ -5,4 +5,4 @@ import { Component } from '@angular/core';
   standalone: true,
   template: `<div>Account Detail Component</div>`
 })
-export class AccountDetailComponent {} 
+export class AccountDetailComponent {}

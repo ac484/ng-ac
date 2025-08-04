@@ -1,29 +1,22 @@
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { ContractApplicationService } from '../../../application/services/contract-application.service';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+
 import { ContractDto } from '../../../application/dto/contract.dto';
+import { ContractApplicationService } from '../../../application/services/contract-application.service';
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzCardModule,
-    NzButtonModule,
-    NzIconModule,
-    NzTagModule,
-    NzDescriptionsModule,
-    NzDividerModule
-  ],
+  imports: [CommonModule, NzCardModule, NzButtonModule, NzIconModule, NzTagModule, NzDescriptionsModule, NzDividerModule],
   template: `
     <div class="contract-detail-container">
       <div class="header-actions">
@@ -59,7 +52,7 @@ import { ContractDto } from '../../../application/dto/contract.dto';
             {{ contract.contractName }}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="總金額">
-            {{ contract.amount | currency:'TWD':'symbol':'1.0-0' }}
+            {{ contract.amount | currency: 'TWD' : 'symbol' : '1.0-0' }}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="合約狀態">
             <nz-tag [nzColor]="getStatusColor(contract.status)">
@@ -67,10 +60,10 @@ import { ContractDto } from '../../../application/dto/contract.dto';
             </nz-tag>
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="建立時間">
-            {{ contract.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}
+            {{ contract.createdAt | date: 'yyyy-MM-dd HH:mm:ss' }}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="更新時間">
-            {{ contract.updatedAt | date:'yyyy-MM-dd HH:mm:ss' }}
+            {{ contract.updatedAt | date: 'yyyy-MM-dd HH:mm:ss' }}
           </nz-descriptions-item>
         </nz-descriptions>
 
@@ -110,96 +103,98 @@ import { ContractDto } from '../../../application/dto/contract.dto';
           <span nz-icon nzType="exclamation-circle" nzTheme="outline"></span>
           <h3>合約不存在</h3>
           <p>找不到指定的合約，可能已被刪除或編號錯誤。</p>
-          <button nz-button nzType="primary" (click)="goBack()">
-            返回列表
-          </button>
+          <button nz-button nzType="primary" (click)="goBack()"> 返回列表 </button>
         </div>
       </nz-card>
     </div>
   `,
-  styles: [`
-    .contract-detail-container {
-      padding: 24px;
-    }
-    
-    .header-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    
-    .action-buttons {
-      display: flex;
-      gap: 12px;
-    }
-    
-    .detail-card {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    
-    .contract-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    
-    .contract-header h2 {
-      margin: 0;
-      color: #1890ff;
-    }
-    
-    .notes-section {
-      margin-top: 24px;
-    }
-    
-    .notes-section h3 {
-      color: #1890ff;
-      margin-bottom: 12px;
-    }
-    
-    .notes-content {
-      background: #f5f5f5;
-      padding: 16px;
-      border-radius: 6px;
-      margin: 0;
-      line-height: 1.6;
-    }
-    
-    .loading-card, .error-card {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .loading-content, .error-content {
-      text-align: center;
-      padding: 48px 24px;
-    }
-    
-    .loading-content span {
-      font-size: 48px;
-      color: #1890ff;
-      margin-bottom: 16px;
-    }
-    
-    .error-content span {
-      font-size: 48px;
-      color: #ff4d4f;
-      margin-bottom: 16px;
-    }
-    
-    .error-content h3 {
-      color: #ff4d4f;
-      margin-bottom: 8px;
-    }
-    
-    .error-content p {
-      color: #666;
-      margin-bottom: 24px;
-    }
-  `]
+  styles: [
+    `
+      .contract-detail-container {
+        padding: 24px;
+      }
+
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 12px;
+      }
+
+      .detail-card {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .contract-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .contract-header h2 {
+        margin: 0;
+        color: #1890ff;
+      }
+
+      .notes-section {
+        margin-top: 24px;
+      }
+
+      .notes-section h3 {
+        color: #1890ff;
+        margin-bottom: 12px;
+      }
+
+      .notes-content {
+        background: #f5f5f5;
+        padding: 16px;
+        border-radius: 6px;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .loading-card,
+      .error-card {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .loading-content,
+      .error-content {
+        text-align: center;
+        padding: 48px 24px;
+      }
+
+      .loading-content span {
+        font-size: 48px;
+        color: #1890ff;
+        margin-bottom: 16px;
+      }
+
+      .error-content span {
+        font-size: 48px;
+        color: #ff4d4f;
+        margin-bottom: 16px;
+      }
+
+      .error-content h3 {
+        color: #ff4d4f;
+        margin-bottom: 8px;
+      }
+
+      .error-content p {
+        color: #666;
+        margin-bottom: 24px;
+      }
+    `
+  ]
 })
 export class ContractDetailComponent implements OnInit {
   private readonly contractApplicationService = inject(ContractApplicationService);
@@ -268,21 +263,21 @@ export class ContractDetailComponent implements OnInit {
 
   getStatusColor(status: string): string {
     const colors: Record<string, string> = {
-      'draft': 'default',
-      'preparing': 'processing',
-      'in_progress': 'warning',
-      'completed': 'success'
+      draft: 'default',
+      preparing: 'processing',
+      in_progress: 'warning',
+      completed: 'success'
     };
     return colors[status] || 'default';
   }
 
   getStatusText(status: string): string {
     const texts: Record<string, string> = {
-      'draft': '草稿',
-      'preparing': '籌備中',
-      'in_progress': '進行中',
-      'completed': '已完成'
+      draft: '草稿',
+      preparing: '籌備中',
+      in_progress: '進行中',
+      completed: '已完成'
     };
     return texts[status] || status;
   }
-} 
+}

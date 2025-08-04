@@ -1,13 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, query, where, orderBy, DocumentData } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  DocumentData
+} from '@angular/fire/firestore';
+
+import { Contact } from '../../domain/entities/contact.entity';
 import { Principal } from '../../domain/entities/principal.entity';
 import { PrincipalRepository } from '../../domain/repositories/principal.repository';
-import { PrincipalName } from '../../domain/value-objects/principal/principal-name.value-object';
-import { PrincipalId } from '../../domain/value-objects/principal/principal-id.value-object';
-import { Contact } from '../../domain/entities/contact.entity';
-import { ContactPerson } from '../../domain/value-objects/principal/contact-person.value-object';
 import { ContactEmail } from '../../domain/value-objects/principal/contact-email.value-object';
+import { ContactPerson } from '../../domain/value-objects/principal/contact-person.value-object';
 import { ContactPhone } from '../../domain/value-objects/principal/contact-phone.value-object';
+import { PrincipalId } from '../../domain/value-objects/principal/principal-id.value-object';
+import { PrincipalName } from '../../domain/value-objects/principal/principal-name.value-object';
 import { WorkflowStep } from '../../interface/components/principal/principal-workflow.component';
 
 /**
@@ -18,7 +31,6 @@ import { WorkflowStep } from '../../interface/components/principal/principal-wor
   providedIn: 'root'
 })
 export class FirebasePrincipalRepository implements PrincipalRepository {
-
   private readonly collectionName = 'principals';
 
   constructor(private firestore: Firestore) {}
@@ -30,11 +42,11 @@ export class FirebasePrincipalRepository implements PrincipalRepository {
     try {
       const principalDoc = doc(this.firestore, this.collectionName, id);
       const principalSnapshot = await getDoc(principalDoc);
-      
+
       if (principalSnapshot.exists()) {
         return this.mapFromFirestore(principalSnapshot.data(), principalSnapshot.id);
       }
-      
+
       return null;
     } catch (error) {
       console.error('Error finding principal by ID:', error);
@@ -50,12 +62,12 @@ export class FirebasePrincipalRepository implements PrincipalRepository {
       const principalsRef = collection(this.firestore, this.collectionName);
       const q = query(principalsRef, where('name', '==', name));
       const querySnapshot = await getDocs(q);
-      
+
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         return this.mapFromFirestore(doc.data(), doc.id);
       }
-      
+
       return null;
     } catch (error) {
       console.error('Error finding principal by name:', error);
@@ -70,11 +82,11 @@ export class FirebasePrincipalRepository implements PrincipalRepository {
     try {
       const principalsRef = collection(this.firestore, this.collectionName);
       let q = query(principalsRef, orderBy('createdAt', 'desc'));
-      
+
       if (status) {
         q = query(principalsRef, where('status', '==', status), orderBy('createdAt', 'desc'));
       }
-      
+
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
@@ -217,4 +229,4 @@ export class FirebasePrincipalRepository implements PrincipalRepository {
       updatedAt: principal.updatedAt
     };
   }
-} 
+}

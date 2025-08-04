@@ -1,5 +1,6 @@
-import { Contract } from '../entities/contract.entity';
 import { InjectionToken } from '@angular/core';
+
+import { Contract } from '../entities/contract.entity';
 
 /**
  * Contract repository interface
@@ -30,4 +31,4 @@ export interface ContractSearchCriteria {
 /**
  * Repository token for dependency injection
  */
-export const CONTRACT_REPOSITORY_TOKEN = new InjectionToken<ContractRepository>('ContractRepository'); 
+export const CONTRACT_REPOSITORY_TOKEN = new InjectionToken<ContractRepository>('ContractRepository');

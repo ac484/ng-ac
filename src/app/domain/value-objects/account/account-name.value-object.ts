@@ -18,12 +18,12 @@ export class AccountName {
     return this.value;
   }
 
-  getShortValue(maxLength: number = 20): string {
+  getShortValue(maxLength = 20): string {
     // 返回截短的帳戶名稱
     if (this.value.length <= maxLength) {
       return this.value;
     }
-    return this.value.substring(0, maxLength) + '...';
+    return `${this.value.substring(0, maxLength)}...`;
   }
 
   private validateAccountName(accountName: string): void {
@@ -55,4 +55,4 @@ export class AccountName {
     const timestamp = new Date().toLocaleDateString();
     return new AccountName(`Account ${timestamp}`);
   }
-} 
+}

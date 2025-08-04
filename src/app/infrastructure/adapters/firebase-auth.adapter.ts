@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { TokenService } from '@delon/auth';
+
+import { AuthProvider } from '../../domain/value-objects/authentication/auth-provider.value-object';
 import { Email } from '../../domain/value-objects/authentication/email.value-object';
 import { IsAnonymous } from '../../domain/value-objects/status/is-anonymous.value-object';
-import { AuthProvider } from '../../domain/value-objects/authentication/auth-provider.value-object';
 import { IsEmailVerified } from '../../domain/value-objects/status/is-email-verified.value-object';
 
 /**
@@ -22,7 +23,7 @@ export class FirebaseAuthAdapter {
   }
 
   private initializeAuthStateListener(): void {
-    onAuthStateChanged(this.auth, async (firebaseUser) => {
+    onAuthStateChanged(this.auth, async firebaseUser => {
       if (firebaseUser) {
         await this.handleFirebaseUserSignIn(firebaseUser);
       } else {
@@ -46,7 +47,7 @@ export class FirebaseAuthAdapter {
       id: firebaseUser.uid,
       avatar: firebaseUser.photoURL || '',
       time: +new Date(),
-      expired: Date.now() + (60 * 60 * 1000), // 1 hour
+      expired: Date.now() + 60 * 60 * 1000, // 1 hour
       firebase: {
         uid: firebaseUser.uid,
         emailVerified: isEmailVerified.getValue(),
@@ -57,7 +58,7 @@ export class FirebaseAuthAdapter {
     };
 
     await this.tokenService.set(tokenModel);
-    
+
     // 觸發 @delon/auth 事件 - 使用 TokenService 的 change 方法
     this.tokenService.change().subscribe(() => {
       // Token 變更已處理
@@ -79,4 +80,4 @@ export class FirebaseAuthAdapter {
       emailVerified: firebaseUser.emailVerified
     };
   }
-} 
+}

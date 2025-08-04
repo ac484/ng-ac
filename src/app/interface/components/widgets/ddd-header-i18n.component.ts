@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, booleanAttribute, inject, DOCUMENT } from '@angular/core';
-import { I18NService } from '../../../infrastructure/services/i18n.service';
 import { ALAIN_I18N_TOKEN, I18nPipe, SettingsService } from '@delon/theme';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+
+import { I18NService } from '../../../infrastructure/services/i18n.service';
 
 @Component({
   selector: 'ddd-header-i18n',
@@ -61,4 +62,4 @@ export class DddHeaderI18nComponent {
       setTimeout(() => this.doc.location.reload());
     });
   }
-} 
+}

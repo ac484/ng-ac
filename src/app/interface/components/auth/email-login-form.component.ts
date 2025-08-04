@@ -11,6 +11,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
+
 import { FirebaseAuthService } from '../../../infrastructure/services/firebase-auth.service';
 
 @Component({
@@ -35,9 +36,7 @@ import { FirebaseAuthService } from '../../../infrastructure/services/firebase-a
 
       <nz-form-item>
         <nz-form-control [nzOffset]="6" [nzSpan]="18">
-          <button nz-button nzType="primary" [nzLoading]="loading" [disabled]="loginForm.invalid"> 
-            登入 
-          </button>
+          <button nz-button nzType="primary" [nzLoading]="loading" [disabled]="loginForm.invalid"> 登入 </button>
         </nz-form-control>
       </nz-form-item>
     </form>
@@ -68,22 +67,24 @@ export class EmailLoginFormComponent {
     this.loading = true;
     const { email, password } = this.loginForm.value;
 
-    this.firebaseAuthService.signInWithEmail({ 
-      email: email!, 
-      password: password! 
-    }).subscribe({
-      next: async (result) => {
-        if (result.success && result.user) {
-          await this.firebaseAuthService.handleAuthSuccess(result.user);
+    this.firebaseAuthService
+      .signInWithEmail({
+        email: email!,
+        password: password!
+      })
+      .subscribe({
+        next: async result => {
+          if (result.success && result.user) {
+            await this.firebaseAuthService.handleAuthSuccess(result.user);
+          }
+        },
+        error: error => {
+          this.message.error(error.message || '登入失敗，請稍後再試');
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
         }
-      },
-      error: (error) => {
-        this.message.error(error.message || '登入失敗，請稍後再試');
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      }
-    });
+      });
   }
-} 
+}

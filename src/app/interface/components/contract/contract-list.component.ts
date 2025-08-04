@@ -1,33 +1,25 @@
-import { Component, OnInit, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, NavigationEnd } from '@angular/router';
-import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { ContractApplicationService } from '../../../application/services/contract-application.service';
-import { ContractDto, ContractSearchDto } from '../../../application/dto/contract.dto';
-import { filter, takeUntil } from 'rxjs/operators';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
+
+import { ContractDto, ContractSearchDto } from '../../../application/dto/contract.dto';
+import { ContractApplicationService } from '../../../application/services/contract-application.service';
 
 @Component({
   selector: 'app-contract-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    NzTableModule,
-    NzButtonModule,
-    NzIconModule,
-    NzTagModule,
-    NzInputModule,
-    NzSelectModule
-  ],
+  imports: [CommonModule, FormsModule, NzTableModule, NzButtonModule, NzIconModule, NzTagModule, NzInputModule, NzSelectModule],
   template: `
     <div class="contract-list-container">
       <div class="header">
@@ -40,15 +32,10 @@ import { Subject } from 'rxjs';
 
       <div class="search-bar">
         <nz-input-group>
-          <input nz-input 
-                 placeholder="搜尋客戶名稱或合約名稱" 
-                 [(ngModel)]="searchText" 
-                 (input)="onSearch()" />
+          <input nz-input placeholder="搜尋客戶名稱或合約名稱" [(ngModel)]="searchText" (input)="onSearch()" />
         </nz-input-group>
-        
-        <nz-select [(ngModel)]="statusFilter" 
-                   (ngModelChange)="onStatusFilterChange()" 
-                   placeholder="狀態篩選">
+
+        <nz-select [(ngModel)]="statusFilter" (ngModelChange)="onStatusFilterChange()" placeholder="狀態篩選">
           <nz-option nzValue="" nzLabel="全部狀態"></nz-option>
           <nz-option nzValue="draft" nzLabel="草稿"></nz-option>
           <nz-option nzValue="preparing" nzLabel="籌備中"></nz-option>
@@ -65,8 +52,8 @@ import { Subject } from 'rxjs';
         [nzPageSize]="pageSize"
         [nzPageIndex]="pageIndex"
         (nzPageIndexChange)="onPageIndexChange($event)"
-        (nzPageSizeChange)="onPageSizeChange($event)">
-        
+        (nzPageSizeChange)="onPageSizeChange($event)"
+      >
         <thead>
           <tr>
             <th>合約編號</th>
@@ -79,7 +66,7 @@ import { Subject } from 'rxjs';
             <th>操作</th>
           </tr>
         </thead>
-        
+
         <tbody>
           <tr *ngFor="let contract of basicTable.data">
             <td>{{ contract.contractNumber }}</td>
@@ -87,7 +74,7 @@ import { Subject } from 'rxjs';
             <td>{{ contract.clientRepresentative }}</td>
             <td>{{ contract.contactPerson }}</td>
             <td>{{ contract.contractName }}</td>
-            <td>{{ contract.amount | currency:'TWD':'symbol':'1.0-0' }}</td>
+            <td>{{ contract.amount | currency: 'TWD' : 'symbol' : '1.0-0' }}</td>
             <td>
               <nz-tag [nzColor]="getStatusColor(contract.status)">
                 {{ getStatusText(contract.status) }}
@@ -109,36 +96,38 @@ import { Subject } from 'rxjs';
       </nz-table>
     </div>
   `,
-  styles: [`
-    .contract-list-container {
-      padding: 24px;
-    }
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    
-    .header h2 {
-      margin: 0;
-    }
-    
-    .search-bar {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    
-    .search-bar nz-input-group {
-      flex: 1;
-    }
-    
-    .search-bar nz-select {
-      width: 200px;
-    }
-  `]
+  styles: [
+    `
+      .contract-list-container {
+        padding: 24px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .header h2 {
+        margin: 0;
+      }
+
+      .search-bar {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .search-bar nz-input-group {
+        flex: 1;
+      }
+
+      .search-bar nz-select {
+        width: 200px;
+      }
+    `
+  ]
 })
 export class ContractListComponent implements OnInit, OnDestroy {
   private readonly contractApplicationService = inject(ContractApplicationService);
@@ -192,7 +181,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
         contractName: this.searchText || undefined,
         status: this.statusFilter || undefined
       });
-      
+
       const criteria: ContractSearchDto = {
         page: this.pageIndex,
         pageSize: this.pageSize,
@@ -200,7 +189,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
         contractName: this.searchText || undefined,
         status: this.statusFilter || undefined
       };
-      
+
       const result = await this.contractApplicationService.getContracts(criteria);
       console.log('Contracts loaded:', result.contracts.length, 'total:', result.total);
       this.contracts = result.contracts;
@@ -267,21 +256,21 @@ export class ContractListComponent implements OnInit, OnDestroy {
 
   getStatusColor(status: string): string {
     const colors: Record<string, string> = {
-      'draft': 'default',
-      'preparing': 'processing',
-      'in_progress': 'warning',
-      'completed': 'success'
+      draft: 'default',
+      preparing: 'processing',
+      in_progress: 'warning',
+      completed: 'success'
     };
     return colors[status] || 'default';
   }
 
   getStatusText(status: string): string {
     const texts: Record<string, string> = {
-      'draft': '草稿',
-      'preparing': '籌備中',
-      'in_progress': '進行中',
-      'completed': '已完成'
+      draft: '草稿',
+      preparing: '籌備中',
+      in_progress: '進行中',
+      completed: '已完成'
     };
     return texts[status] || status;
   }
-} 
+}

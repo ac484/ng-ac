@@ -6,7 +6,7 @@ export class Money {
   private readonly amount: number;
   private readonly currency: string;
 
-  constructor(amount: number, currency: string = 'USD') {
+  constructor(amount: number, currency = 'USD') {
     this.validateAmount(amount);
     this.validateCurrency(currency);
     this.amount = this.roundToTwoDecimals(amount);
@@ -15,6 +15,7 @@ export class Money {
 
   /**
    * Validate amount is a valid number
+   *
    * @param amount Amount to validate
    * @throws Error if amount is invalid
    */
@@ -27,6 +28,7 @@ export class Money {
 
   /**
    * Validate currency code
+   *
    * @param currency Currency code to validate
    * @throws Error if currency is invalid
    */
@@ -41,6 +43,7 @@ export class Money {
 
   /**
    * Round amount to two decimal places
+   *
    * @param amount Amount to round
    * @returns Rounded amount
    */
@@ -64,6 +67,7 @@ export class Money {
 
   /**
    * Add another money value
+   *
    * @param other Money value to add
    * @returns New Money instance
    * @throws Error if currencies don't match
@@ -77,6 +81,7 @@ export class Money {
 
   /**
    * Subtract another money value
+   *
    * @param other Money value to subtract
    * @returns New Money instance
    * @throws Error if currencies don't match
@@ -92,6 +97,7 @@ export class Money {
 
   /**
    * Multiply by a factor
+   *
    * @param factor Factor to multiply by
    * @returns New Money instance
    */
@@ -104,6 +110,7 @@ export class Money {
 
   /**
    * Check if this money value equals another
+   *
    * @param other Money value to compare
    * @returns True if equal
    */
@@ -113,6 +120,7 @@ export class Money {
 
   /**
    * Check if this money value is greater than another
+   *
    * @param other Money value to compare
    * @returns True if greater
    * @throws Error if currencies don't match
@@ -126,6 +134,7 @@ export class Money {
 
   /**
    * Check if this money value is less than another
+   *
    * @param other Money value to compare
    * @returns True if less
    * @throws Error if currencies don't match
@@ -139,6 +148,7 @@ export class Money {
 
   /**
    * Check if this money value is zero
+   *
    * @returns True if zero
    */
   isZero(): boolean {
@@ -147,6 +157,7 @@ export class Money {
 
   /**
    * Format money as string
+   *
    * @returns Formatted string
    */
   toString(): string {
@@ -155,6 +166,7 @@ export class Money {
 
   /**
    * Format money for display
+   *
    * @returns Formatted display string
    */
   toDisplayString(): string {
@@ -169,22 +181,24 @@ export class Money {
 
   /**
    * Create Money instance from number
+   *
    * @param amount Amount in number
    * @param currency Currency code
    * @returns Money instance
    */
-  static create(amount: number, currency: string = 'USD'): Money {
+  static create(amount: number, currency = 'USD'): Money {
     return new Money(amount, currency);
   }
 
   /**
    * Create Money instance from string
+   *
    * @param amountString Amount as string
    * @param currency Currency code
    * @returns Money instance
    * @throws Error if string is invalid
    */
-  static fromString(amountString: string, currency: string = 'USD'): Money {
+  static fromString(amountString: string, currency = 'USD'): Money {
     const amount = parseFloat(amountString);
     if (isNaN(amount)) {
       throw new Error('Invalid amount string');
@@ -194,10 +208,11 @@ export class Money {
 
   /**
    * Create zero money value
+   *
    * @param currency Currency code
    * @returns Zero Money instance
    */
-  static zero(currency: string = 'USD'): Money {
+  static zero(currency = 'USD'): Money {
     return new Money(0, currency);
   }
-} 
+}

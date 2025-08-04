@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+
+import { Contact } from '../../domain/entities/contact.entity';
 import { Principal } from '../../domain/entities/principal.entity';
 import { PrincipalRepository } from '../../domain/repositories/principal.repository';
-import { PrincipalName } from '../../domain/value-objects/principal/principal-name.value-object';
-import { Contact } from '../../domain/entities/contact.entity';
-import { ContactPerson } from '../../domain/value-objects/principal/contact-person.value-object';
 import { ContactEmail } from '../../domain/value-objects/principal/contact-email.value-object';
+import { ContactPerson } from '../../domain/value-objects/principal/contact-person.value-object';
 import { ContactPhone } from '../../domain/value-objects/principal/contact-phone.value-object';
+import { PrincipalName } from '../../domain/value-objects/principal/principal-name.value-object';
 import { WorkflowStep } from '../../interface/components/principal/principal-workflow.component';
 
 /**
@@ -15,7 +16,6 @@ import { WorkflowStep } from '../../interface/components/principal/principal-wor
   providedIn: 'root'
 })
 export class MockPrincipalRepository implements PrincipalRepository {
-
   private principals: Principal[] = [];
 
   constructor() {
@@ -53,7 +53,7 @@ export class MockPrincipalRepository implements PrincipalRepository {
    */
   async save(principal: Principal): Promise<void> {
     const existingIndex = this.principals.findIndex(p => p.id.getValue() === principal.id.getValue());
-    
+
     if (existingIndex !== -1) {
       this.principals[existingIndex] = principal;
     } else {
@@ -254,7 +254,7 @@ export class MockPrincipalRepository implements PrincipalRepository {
     ];
 
     this.principals = mockPrincipals.map(data => {
-      const contacts = data.contacts.map(contactData => 
+      const contacts = data.contacts.map(contactData =>
         Contact.create({
           name: ContactPerson.fromString(contactData.name),
           email: ContactEmail.fromString(contactData.email),
@@ -282,4 +282,4 @@ export class MockPrincipalRepository implements PrincipalRepository {
       });
     });
   }
-} 
+}

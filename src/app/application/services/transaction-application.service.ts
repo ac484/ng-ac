@@ -1,9 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
-import { TRANSACTION_REPOSITORY } from '../../domain/repositories/repository-tokens';
+
 import { Transaction, TransactionStatus, TransactionType } from '../../domain/entities/transaction.entity';
+import { TRANSACTION_REPOSITORY } from '../../domain/repositories/repository-tokens';
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
-import { TransactionDomainService } from '../../domain/services/transaction-domain.service';
 import { ConversionUtilitiesService } from '../../domain/services/conversion-utilities.service';
+import { TransactionDomainService } from '../../domain/services/transaction-domain.service';
 import {
   CreateTransactionDto,
   UpdateTransactionDto,
@@ -28,7 +29,7 @@ export class TransactionApplicationService {
     @Inject(TRANSACTION_REPOSITORY) private transactionRepository: TransactionRepository,
     private transactionDomainService: TransactionDomainService,
     private conversionUtilities: ConversionUtilitiesService
-  ) { }
+  ) {}
 
   /**
    * Coordinate transaction creation
@@ -99,7 +100,7 @@ export class TransactionApplicationService {
   }
 
   // Get all transactions with pagination
-  async getAllTransactions(page: number = 1, pageSize: number = 10): Promise<TransactionListDto> {
+  async getAllTransactions(page = 1, pageSize = 10): Promise<TransactionListDto> {
     try {
       const allTransactions = await this.transactionRepository.findAll();
       const total = allTransactions.length;
@@ -148,27 +149,19 @@ export class TransactionApplicationService {
       if (searchDto.startDate && searchDto.endDate) {
         const startDate = new Date(searchDto.startDate);
         const endDate = new Date(searchDto.endDate);
-        transactions = transactions.filter(t =>
-          t.createdAt >= startDate && t.createdAt <= endDate
-        );
+        transactions = transactions.filter(t => t.createdAt >= startDate && t.createdAt <= endDate);
       }
 
       if (searchDto.minAmount !== undefined && searchDto.maxAmount !== undefined) {
-        transactions = transactions.filter(t =>
-          t.amount >= searchDto.minAmount! && t.amount <= searchDto.maxAmount!
-        );
+        transactions = transactions.filter(t => t.amount >= searchDto.minAmount! && t.amount <= searchDto.maxAmount!);
       }
 
       if (searchDto.referenceNumber) {
-        transactions = transactions.filter(t =>
-          t.referenceNumber?.includes(searchDto.referenceNumber!)
-        );
+        transactions = transactions.filter(t => t.referenceNumber?.includes(searchDto.referenceNumber!));
       }
 
       if (searchDto.category) {
-        transactions = transactions.filter(t =>
-          t.category?.includes(searchDto.category!)
-        );
+        transactions = transactions.filter(t => t.category?.includes(searchDto.category!));
       }
 
       // Apply sorting
@@ -409,11 +402,7 @@ export class TransactionApplicationService {
   }
 
   // Calculate transaction fees
-  calculateTransactionFees(
-    transactionType: TransactionType,
-    amount: number,
-    currency: string = 'USD'
-  ): number {
+  calculateTransactionFees(transactionType: TransactionType, amount: number, currency = 'USD'): number {
     return this.transactionDomainService.calculateFees(transactionType, amount, currency);
   }
 
@@ -449,4 +438,4 @@ export class TransactionApplicationService {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return new Error(`Failed to ${operation}: ${message}`);
   }
-} 
+}

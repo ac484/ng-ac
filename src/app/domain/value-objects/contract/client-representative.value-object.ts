@@ -21,4 +21,4 @@ export class ClientRepresentative {
       throw new Error('Client representative cannot exceed 50 characters');
     }
   }
-} 
+}

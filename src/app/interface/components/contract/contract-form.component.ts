@@ -1,19 +1,20 @@
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { ContractApplicationService } from '../../../application/services/contract-application.service';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+
 import { ContractDto } from '../../../application/dto/contract.dto';
+import { ContractApplicationService } from '../../../application/services/contract-application.service';
 
 @Component({
   selector: 'app-contract-form',
@@ -62,14 +63,15 @@ import { ContractDto } from '../../../application/dto/contract.dto';
                 <nz-form-item>
                   <nz-form-label [nzSpan]="6" nzRequired>總金額</nz-form-label>
                   <nz-form-control [nzSpan]="18" nzErrorTip="請輸入有效金額">
-                    <nz-input-number 
-                      formControlName="amount" 
-                      [nzMin]="0" 
+                    <nz-input-number
+                      formControlName="amount"
+                      [nzMin]="0"
                       [nzStep]="1000"
                       [nzFormatter]="formatCurrency"
                       [nzParser]="parseCurrency"
                       style="width: 100%"
-                      placeholder="請輸入金額" />
+                      placeholder="請輸入金額"
+                    />
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -136,11 +138,12 @@ import { ContractDto } from '../../../application/dto/contract.dto';
                 <nz-form-item>
                   <nz-form-label [nzSpan]="3">備註</nz-form-label>
                   <nz-form-control [nzSpan]="21">
-                    <textarea 
-                      nz-input 
-                      formControlName="notes" 
+                    <textarea
+                      nz-input
+                      formControlName="notes"
                       [nzAutosize]="{ minRows: 3, maxRows: 6 }"
-                      placeholder="請輸入備註說明"></textarea>
+                      placeholder="請輸入備註說明"
+                    ></textarea>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -161,39 +164,41 @@ import { ContractDto } from '../../../application/dto/contract.dto';
       </nz-card>
     </div>
   `,
-  styles: [`
-    .contract-form-container {
-      padding: 24px;
-    }
-    
-    .form-card {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    
-    .form-section {
-      margin-bottom: 24px;
-    }
-    
-    .form-section h3 {
-      margin-bottom: 16px;
-      color: #1890ff;
-      font-weight: 600;
-    }
-    
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid #f0f0f0;
-    }
-    
-    nz-form-item {
-      margin-bottom: 16px;
-    }
-  `]
+  styles: [
+    `
+      .contract-form-container {
+        padding: 24px;
+      }
+
+      .form-card {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .form-section {
+        margin-bottom: 24px;
+      }
+
+      .form-section h3 {
+        margin-bottom: 16px;
+        color: #1890ff;
+        font-weight: 600;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #f0f0f0;
+      }
+
+      nz-form-item {
+        margin-bottom: 16px;
+      }
+    `
+  ]
 })
 export class ContractFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
@@ -233,15 +238,14 @@ export class ContractFormComponent implements OnInit {
 
   private generateContractNumber(): void {
     const today = new Date();
-    const dateStr = today.getFullYear().toString() +
-                    String(today.getMonth() + 1).padStart(2, '0') +
-                    String(today.getDate()).padStart(2, '0');
-    
+    const dateStr =
+      today.getFullYear().toString() + String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0');
+
     // Use timestamp-based sequence for now
     const timestamp = Date.now();
     const sequence = timestamp % 10000;
     const contractNumber = `${dateStr}${String(sequence).padStart(4, '0')}`;
-    
+
     this.contractForm.patchValue({ contractNumber });
   }
 
@@ -276,7 +280,7 @@ export class ContractFormComponent implements OnInit {
     try {
       this.loading = true;
       const formValue = this.contractForm.value;
-      
+
       if (this.isEditMode && this.contractId) {
         await this.contractApplicationService.updateContract(this.contractId, formValue);
         this.message.success('合約更新成功');
@@ -284,7 +288,7 @@ export class ContractFormComponent implements OnInit {
         await this.contractApplicationService.createContract(formValue);
         this.message.success('合約建立成功');
       }
-      
+
       this.router.navigate(['/contracts']);
     } catch (error) {
       console.error('Contract creation/update error:', error);
@@ -307,9 +311,9 @@ export class ContractFormComponent implements OnInit {
 
   formatCurrency = (value: number): string => {
     return `NT$ ${value}`;
-  }
+  };
 
   parseCurrency = (value: string): number => {
     return Number(value.replace('NT$ ', ''));
-  }
-} 
+  };
+}

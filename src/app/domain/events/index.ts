@@ -17,4 +17,4 @@ export * from './auth-events';
 export * from './role-events';
 
 // Permission events
-export * from './permission-events'; 
+export * from './permission-events';

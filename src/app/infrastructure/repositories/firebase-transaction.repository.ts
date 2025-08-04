@@ -1,5 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, startAfter, DocumentData, QueryDocumentSnapshot } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  DocumentData,
+  QueryDocumentSnapshot
+} from '@angular/fire/firestore';
+
 import { Transaction, TransactionStatus, TransactionType } from '../../domain/entities/transaction.entity';
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
 
@@ -13,7 +29,7 @@ export class FirebaseTransactionRepository implements TransactionRepository {
     try {
       const docRef = doc(this.firestore, this.collectionName, id);
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
         return this.mapFromFirestore(docSnap.data(), docSnap.id);
       }
@@ -26,12 +42,9 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async findByTransactionNumber(transactionNumber: string): Promise<Transaction | null> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('transactionNumber', '==', transactionNumber)
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('transactionNumber', '==', transactionNumber));
       const querySnapshot = await getDocs(q);
-      
+
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         return this.mapFromFirestore(doc.data(), doc.id);
@@ -45,16 +58,10 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async findByAccountId(accountId: string): Promise<Transaction[]> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('accountId', '==', accountId),
-        orderBy('createdAt', 'desc')
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('accountId', '==', accountId), orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => 
-        this.mapFromFirestore(doc.data(), doc.id)
-      );
+
+      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
       console.error('Error finding transactions by account ID:', error);
       throw new Error('Failed to find transactions by account ID');
@@ -63,16 +70,10 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async findByUserId(userId: string): Promise<Transaction[]> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc')
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('userId', '==', userId), orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => 
-        this.mapFromFirestore(doc.data(), doc.id)
-      );
+
+      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
       console.error('Error finding transactions by user ID:', error);
       throw new Error('Failed to find transactions by user ID');
@@ -81,16 +82,10 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async findByStatus(status: TransactionStatus): Promise<Transaction[]> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('status', '==', status),
-        orderBy('createdAt', 'desc')
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('status', '==', status), orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => 
-        this.mapFromFirestore(doc.data(), doc.id)
-      );
+
+      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
       console.error('Error finding transactions by status:', error);
       throw new Error('Failed to find transactions by status');
@@ -99,16 +94,10 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async findByType(type: TransactionType): Promise<Transaction[]> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('transactionType', '==', type),
-        orderBy('createdAt', 'desc')
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('transactionType', '==', type), orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => 
-        this.mapFromFirestore(doc.data(), doc.id)
-      );
+
+      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
       console.error('Error finding transactions by type:', error);
       throw new Error('Failed to find transactions by type');
@@ -124,10 +113,8 @@ export class FirebaseTransactionRepository implements TransactionRepository {
         orderBy('createdAt', 'desc')
       );
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => 
-        this.mapFromFirestore(doc.data(), doc.id)
-      );
+
+      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
       console.error('Error finding transactions by date range:', error);
       throw new Error('Failed to find transactions by date range');
@@ -143,10 +130,8 @@ export class FirebaseTransactionRepository implements TransactionRepository {
         orderBy('amount', 'desc')
       );
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => 
-        this.mapFromFirestore(doc.data(), doc.id)
-      );
+
+      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
       console.error('Error finding transactions by amount range:', error);
       throw new Error('Failed to find transactions by amount range');
@@ -161,10 +146,8 @@ export class FirebaseTransactionRepository implements TransactionRepository {
         orderBy('createdAt', 'desc')
       );
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => 
-        this.mapFromFirestore(doc.data(), doc.id)
-      );
+
+      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
       console.error('Error finding transactions by reference number:', error);
       throw new Error('Failed to find transactions by reference number');
@@ -173,16 +156,10 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async findByCategory(category: string): Promise<Transaction[]> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('category', '==', category),
-        orderBy('createdAt', 'desc')
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('category', '==', category), orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => 
-        this.mapFromFirestore(doc.data(), doc.id)
-      );
+
+      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
       console.error('Error finding transactions by category:', error);
       throw new Error('Failed to find transactions by category');
@@ -191,15 +168,10 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async findAll(): Promise<Transaction[]> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        orderBy('createdAt', 'desc')
-      );
+      const q = query(collection(this.firestore, this.collectionName), orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => 
-        this.mapFromFirestore(doc.data(), doc.id)
-      );
+
+      return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
     } catch (error) {
       console.error('Error finding all transactions:', error);
       throw new Error('Failed to find all transactions');
@@ -239,10 +211,7 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async existsByTransactionNumber(transactionNumber: string): Promise<boolean> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('transactionNumber', '==', transactionNumber)
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('transactionNumber', '==', transactionNumber));
       const querySnapshot = await getDocs(q);
       return !querySnapshot.empty;
     } catch (error) {
@@ -263,10 +232,7 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async countByStatus(status: TransactionStatus): Promise<number> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('status', '==', status)
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('status', '==', status));
       const querySnapshot = await getDocs(q);
       return querySnapshot.size;
     } catch (error) {
@@ -277,10 +243,7 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async countByType(type: TransactionType): Promise<number> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('transactionType', '==', type)
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('transactionType', '==', type));
       const querySnapshot = await getDocs(q);
       return querySnapshot.size;
     } catch (error) {
@@ -291,10 +254,7 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async countByAccountId(accountId: string): Promise<number> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('accountId', '==', accountId)
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('accountId', '==', accountId));
       const querySnapshot = await getDocs(q);
       return querySnapshot.size;
     } catch (error) {
@@ -305,10 +265,7 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
   async countByUserId(userId: string): Promise<number> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('userId', '==', userId)
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('userId', '==', userId));
       const querySnapshot = await getDocs(q);
       return querySnapshot.size;
     } catch (error) {
@@ -443,7 +400,7 @@ export class FirebaseTransactionRepository implements TransactionRepository {
       stats.totalAmount += transaction.amount;
       stats.byStatus[transaction.status]++;
       stats.byType[transaction.transactionType]++;
-      
+
       if (transaction.isCompleted()) {
         stats.completedCount++;
       }
@@ -456,4 +413,4 @@ export class FirebaseTransactionRepository implements TransactionRepository {
 
     return stats;
   }
-} 
+}

@@ -56,4 +56,4 @@ export class AccountNumber {
   equals(other: AccountNumber): boolean {
     return this.value === other.value;
   }
-} 
+}

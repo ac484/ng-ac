@@ -13,7 +13,7 @@ import { tryRefreshToken } from './refresh-token';
 
 function handleData(injector: Injector, ev: HttpResponseBase, req: HttpRequest<any>, next: HttpHandlerFn): Observable<any> {
   checkStatus(injector, ev);
-  
+
   // Business processing: common operations
   switch (ev.status) {
     case 200:
@@ -53,7 +53,10 @@ function handleData(injector: Injector, ev: HttpResponseBase, req: HttpRequest<a
       break;
     default:
       if (ev instanceof HttpErrorResponse) {
-        console.warn('Unknown error, mostly caused by backend not supporting CORS or invalid configuration, please refer to https://ng-alain.com/docs/server to solve CORS problem', ev);
+        console.warn(
+          'Unknown error, mostly caused by backend not supporting CORS or invalid configuration, please refer to https://ng-alain.com/docs/server to solve CORS problem',
+          ev
+        );
       }
       break;
   }
@@ -88,5 +91,3 @@ export const dddAuthInterceptor: HttpInterceptorFn = (req, next) => {
     // catchError((err: HttpErrorResponse) => handleData(injector, err, newReq, next))
   );
 };
-
- 

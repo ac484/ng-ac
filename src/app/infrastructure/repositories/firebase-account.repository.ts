@@ -1,5 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, startAfter, DocumentData, QueryDocumentSnapshot } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  DocumentData,
+  QueryDocumentSnapshot
+} from '@angular/fire/firestore';
+
 import { Account, AccountStatus, AccountType } from '../../domain/entities/account.entity';
 import { AccountRepository } from '../../domain/repositories/account.repository';
 
@@ -96,12 +112,7 @@ export class FirebaseAccountRepository implements AccountRepository {
         q = query(accountsRef, where('accountType', '==', accountType), orderBy('createdAt', 'desc'));
       }
       if (status && accountType) {
-        q = query(
-          accountsRef,
-          where('status', '==', status),
-          where('accountType', '==', accountType),
-          orderBy('createdAt', 'desc')
-        );
+        q = query(accountsRef, where('status', '==', status), where('accountType', '==', accountType), orderBy('createdAt', 'desc'));
       }
 
       const querySnapshot = await getDocs(q);
@@ -155,12 +166,7 @@ export class FirebaseAccountRepository implements AccountRepository {
   async findByBalanceRange(minBalance: number, maxBalance: number): Promise<Account[]> {
     try {
       const accountsRef = collection(this.firestore, this.collectionName);
-      const q = query(
-        accountsRef,
-        where('balance', '>=', minBalance),
-        where('balance', '<=', maxBalance),
-        orderBy('balance', 'desc')
-      );
+      const q = query(accountsRef, where('balance', '>=', minBalance), where('balance', '<=', maxBalance), orderBy('balance', 'desc'));
       const querySnapshot = await getDocs(q);
 
       return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
@@ -186,12 +192,7 @@ export class FirebaseAccountRepository implements AccountRepository {
   async findByDateRange(startDate: Date, endDate: Date): Promise<Account[]> {
     try {
       const accountsRef = collection(this.firestore, this.collectionName);
-      const q = query(
-        accountsRef,
-        where('createdAt', '>=', startDate),
-        where('createdAt', '<=', endDate),
-        orderBy('createdAt', 'desc')
-      );
+      const q = query(accountsRef, where('createdAt', '>=', startDate), where('createdAt', '<=', endDate), orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
 
       return querySnapshot.docs.map(doc => this.mapFromFirestore(doc.data(), doc.id));
@@ -212,13 +213,13 @@ export class FirebaseAccountRepository implements AccountRepository {
   }> {
     try {
       const allAccounts = await this.findAll();
-      
+
       const total = allAccounts.length;
       const active = allAccounts.filter(acc => acc.status.getValue() === 'ACTIVE').length;
       const inactive = allAccounts.filter(acc => acc.status.getValue() === 'INACTIVE').length;
       const suspended = allAccounts.filter(acc => acc.status.getValue() === 'SUSPENDED').length;
       const closed = allAccounts.filter(acc => acc.status.getValue() === 'CLOSED').length;
-      
+
       const totalBalance = allAccounts.reduce((sum, acc) => sum + acc.balance.getAmount(), 0);
       const averageBalance = total > 0 ? totalBalance / total : 0;
 
@@ -239,6 +240,7 @@ export class FirebaseAccountRepository implements AccountRepository {
 
   /**
    * Map Firestore document to Account entity
+   *
    * @param data Firestore document data
    * @param id Document ID
    * @returns Account entity
@@ -262,6 +264,7 @@ export class FirebaseAccountRepository implements AccountRepository {
 
   /**
    * Map Account entity to Firestore document
+   *
    * @param account Account entity
    * @returns Firestore document data
    */
@@ -280,4 +283,4 @@ export class FirebaseAccountRepository implements AccountRepository {
       lastTransactionDate: account.lastTransactionDate
     };
   }
-} 
+}

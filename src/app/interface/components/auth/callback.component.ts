@@ -1,6 +1,6 @@
 /**
  * 認證回調組件
- * 
+ *
  * 完整流程的最後一步：處理所有認證成功後的統一邏輯
  * Firebase認證 → AuthApplicationService → 這裡統一處理 → 跳轉到主頁
  */
@@ -9,6 +9,7 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SocialService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
+
 import { AuthApplicationService } from '../../../application/services/auth-application.service';
 
 @Component({
@@ -40,12 +41,12 @@ export class CallbackComponent implements OnInit {
   private readonly settingsSrv = inject(SettingsService);
   private readonly router = inject(Router);
   private readonly authApplicationService = inject(AuthApplicationService);
-  
+
   @Input() type = '';
 
   ngOnInit(): void {
     console.log('CallbackComponent 初始化，type:', this.type);
-    
+
     if (this.type === 'firebase') {
       this.handleFirebaseCallback();
     } else {
@@ -60,12 +61,12 @@ export class CallbackComponent implements OnInit {
   private async handleFirebaseCallback(): Promise<void> {
     try {
       console.log('開始處理 Firebase 回調...');
-      
+
       // 使用 DDD 認證服務獲取當前認證狀態
       const auth = await this.authApplicationService.getCurrentAuthentication().toPromise();
       if (auth) {
         console.log('找到認證用戶:', auth.getUser()?.id);
-        
+
         // 使用 DDD 認證服務處理認證成功流程
         console.log('Firebase 認證處理完成');
       } else {
@@ -95,4 +96,4 @@ export class CallbackComponent implements OnInit {
     });
     this.socialService.callback(info);
   }
-} 
+}

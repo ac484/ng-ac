@@ -96,4 +96,4 @@ export enum AccountStatusType {
   INACTIVE = 'INACTIVE',
   SUSPENDED = 'SUSPENDED',
   CLOSED = 'CLOSED'
-} 
+}

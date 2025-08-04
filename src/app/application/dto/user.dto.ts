@@ -1,12 +1,5 @@
+import { BaseCreateDto, BaseUpdateDto, BaseResponseDto, ListResponseDto, SearchCriteriaDto, BaseStatsDto } from './base.dto';
 import { UserStatus } from '../../domain/entities/user.entity';
-import {
-  BaseCreateDto,
-  BaseUpdateDto,
-  BaseResponseDto,
-  ListResponseDto,
-  SearchCriteriaDto,
-  BaseStatsDto
-} from './base.dto';
 
 // Re-export domain types for convenience
 export type { UserStatus };
@@ -88,7 +81,5 @@ export interface UserStatsDto extends BaseStatsDto {
   suspended: number;
   emailVerified: number;
   anonymous: number;
-  byAuthProvider: {
-    [provider: string]: number;
-  };
-} 
+  byAuthProvider: Record<string, number>;
+}

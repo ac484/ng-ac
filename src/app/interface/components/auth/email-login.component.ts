@@ -58,4 +58,4 @@ export class EmailLoginComponent {
   handleCancel(): void {
     this.isVisible = false;
   }
-} 
+}

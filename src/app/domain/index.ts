@@ -18,7 +18,7 @@ export * from './entities/tab.entity';
 export * from './value-objects/authentication/email.value-object';
 export * from './value-objects/account/money.value-object';
 
-// Domain services  
+// Domain services
 export * from './services/user-domain.service';
 export * from './services/account-domain.service';
 export * from './services/transaction-domain.service';
@@ -38,4 +38,4 @@ export * from './repositories/permission.repository';
 export * from './repositories/repository-tokens';
 
 // Domain events
-export * from './events'; 
+export * from './events';

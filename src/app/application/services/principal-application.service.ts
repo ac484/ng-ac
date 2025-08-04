@@ -1,13 +1,14 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
-import { Principal } from '../../domain/entities/principal.entity';
+
 import { Contact } from '../../domain/entities/contact.entity';
+import { Principal } from '../../domain/entities/principal.entity';
 import { PrincipalRepository } from '../../domain/repositories/principal.repository';
 import { PRINCIPAL_REPOSITORY } from '../../domain/repositories/repository-tokens';
-import { PrincipalName } from '../../domain/value-objects/principal/principal-name.value-object';
-import { ContactPerson } from '../../domain/value-objects/principal/contact-person.value-object';
 import { ContactEmail } from '../../domain/value-objects/principal/contact-email.value-object';
+import { ContactPerson } from '../../domain/value-objects/principal/contact-person.value-object';
 import { ContactPhone } from '../../domain/value-objects/principal/contact-phone.value-object';
+import { PrincipalName } from '../../domain/value-objects/principal/principal-name.value-object';
 import { WorkflowStep } from '../../interface/components/principal/principal-workflow.component';
 
 export interface CreatePrincipalRequest {
@@ -47,10 +48,7 @@ export interface UpdateWorkflowRequest {
   providedIn: 'root'
 })
 export class PrincipalApplicationService {
-
-  constructor(
-    @Inject(PRINCIPAL_REPOSITORY) private principalRepository: PrincipalRepository
-  ) {}
+  constructor(@Inject(PRINCIPAL_REPOSITORY) private principalRepository: PrincipalRepository) {}
 
   getPrincipals(): Observable<Principal[]> {
     return from(this.principalRepository.findAll());
@@ -205,5 +203,4 @@ export class PrincipalApplicationService {
     await this.principalRepository.save(principal);
     return true;
   }
-
-} 
+}

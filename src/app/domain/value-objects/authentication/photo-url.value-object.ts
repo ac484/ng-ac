@@ -33,4 +33,4 @@ export class PhotoUrl {
   hasPhoto(): boolean {
     return this.value !== null;
   }
-} 
+}

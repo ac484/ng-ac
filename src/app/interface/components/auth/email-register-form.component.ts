@@ -11,6 +11,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
+
 import { FirebaseAuthService } from '../../../infrastructure/services/firebase-auth.service';
 
 @Component({
@@ -26,7 +27,7 @@ import { FirebaseAuthService } from '../../../infrastructure/services/firebase-a
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
-      
+
       <nz-form-item>
         <nz-form-control nzErrorTip="請輸入顯示名稱">
           <nz-input-group nzSize="large" nzPrefixIcon="user">
@@ -34,7 +35,7 @@ import { FirebaseAuthService } from '../../../infrastructure/services/firebase-a
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
-      
+
       <nz-form-item>
         <nz-form-control nzErrorTip="密碼至少6位">
           <nz-input-group nzSize="large" nzPrefixIcon="lock">
@@ -42,7 +43,7 @@ import { FirebaseAuthService } from '../../../infrastructure/services/firebase-a
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
-      
+
       <nz-form-item>
         <nz-form-control nzErrorTip="請確認密碼">
           <nz-input-group nzSize="large" nzPrefixIcon="lock">
@@ -50,11 +51,9 @@ import { FirebaseAuthService } from '../../../infrastructure/services/firebase-a
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
-      
+
       <nz-form-item>
-        <button nz-button type="submit" nzType="primary" nzSize="large" [nzLoading]="loading" nzBlock> 
-          註冊 
-        </button>
+        <button nz-button type="submit" nzType="primary" nzSize="large" [nzLoading]="loading" nzBlock> 註冊 </button>
       </nz-form-item>
     </form>
   `,
@@ -88,11 +87,11 @@ export class EmailRegisterFormComponent {
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
-    
+
     if (!password || !confirmPassword) {
       return null;
     }
-    
+
     return password.value !== confirmPassword.value ? { passwordMismatch: true } : null;
   }
 
@@ -105,27 +104,29 @@ export class EmailRegisterFormComponent {
     this.loading = true;
     const { email, password, displayName } = this.registerForm.value;
 
-    this.firebaseAuthService.createUserWithEmail({
-      email: email!,
-      password: password!,
-      displayName: displayName || undefined
-    }).subscribe({
-      next: async (result) => {
-        if (result.success && result.user) {
-          this.message.success('註冊成功！正在為您登入...');
-          this.registerSuccess.emit();
-          // 註冊成功後自動登入
-          await this.firebaseAuthService.handleAuthSuccess(result.user);
+    this.firebaseAuthService
+      .createUserWithEmail({
+        email: email!,
+        password: password!,
+        displayName: displayName || undefined
+      })
+      .subscribe({
+        next: async result => {
+          if (result.success && result.user) {
+            this.message.success('註冊成功！正在為您登入...');
+            this.registerSuccess.emit();
+            // 註冊成功後自動登入
+            await this.firebaseAuthService.handleAuthSuccess(result.user);
+          }
+        },
+        error: error => {
+          this.message.error(error.message || '註冊失敗，請稍後再試');
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
         }
-      },
-      error: (error) => {
-        this.message.error(error.message || '註冊失敗，請稍後再試');
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      }
-    });
+      });
   }
 
   private markFormGroupTouched(formGroup: AbstractControl): void {
@@ -139,4 +140,4 @@ export class EmailRegisterFormComponent {
       }
     });
   }
-} 
+}

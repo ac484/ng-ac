@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { AuthApplicationService } from '../../application/services/auth-application.service';
 import { Observable, map, catchError, of } from 'rxjs';
+
+import { AuthApplicationService } from '../../application/services/auth-application.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class RoleGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const requiredRoles = route.data['roles'] as string[];
-    
+
     if (!requiredRoles || requiredRoles.length === 0) {
       return of(true);
     }
@@ -22,11 +23,11 @@ export class RoleGuard implements CanActivate {
     return this.authService.getUserPermissions().pipe(
       map(userRoles => {
         const hasRequiredRole = requiredRoles.some(role => userRoles.includes(role));
-        
+
         if (hasRequiredRole) {
           return true;
         }
-        
+
         this.router.navigate(['/unauthorized']);
         return false;
       }),
@@ -36,4 +37,4 @@ export class RoleGuard implements CanActivate {
       })
     );
   }
-} 
+}

@@ -44,4 +44,4 @@ export class JWTToken {
   static fromDelonToken(tokenModel: any): JWTToken {
     return new JWTToken(tokenModel.token);
   }
-} 
+}

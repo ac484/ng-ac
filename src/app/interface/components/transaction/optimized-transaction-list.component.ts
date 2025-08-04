@@ -3,30 +3,25 @@
  * 使用通用組件重構交易列表和表單，整合交易狀態的視覺化呈現
  */
 
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { NzCardModule } from 'ng-zorro-antd/card';
+import { Router } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { ModalService } from '../../services/modal.service';
-import { FormModalComponent, FormModalData } from '../shared/modal-templates/form-modal.component';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
-import { DataTableComponent } from '../shared/data-table/data-table.component';
-import { TableColumn, TableAction, PaginationConfig } from '../shared/data-table/table-column.interface';
 import {
   OptimizedTransactionApplicationService,
   TransactionResponseDto,
@@ -35,6 +30,10 @@ import {
   TransactionStatsDto
 } from '../../../application/services/optimized-transaction-application.service';
 import { TransactionType, TransactionStatus } from '../../../domain/entities/optimized-transaction.entity';
+import { ModalService } from '../../services/modal.service';
+import { DataTableComponent } from '../shared/data-table/data-table.component';
+import { TableColumn, TableAction, PaginationConfig } from '../shared/data-table/table-column.interface';
+import { FormModalComponent, FormModalData } from '../shared/modal-templates/form-modal.component';
 
 @Component({
   selector: 'app-optimized-transaction-list',
@@ -63,34 +62,21 @@ import { TransactionType, TransactionStatus } from '../../../domain/entities/opt
       <nz-card class="stats-card" nzTitle="交易統計">
         <nz-row [nzGutter]="16">
           <nz-col [nzSpan]="6">
-            <nz-statistic
-              nzTitle="總交易數"
-              [nzValue]="transactionStats.totalCount"
-              [nzValueStyle]="{ color: '#3f8600' }">
+            <nz-statistic nzTitle="總交易數" [nzValue]="transactionStats.totalCount" [nzValueStyle]="{ color: '#3f8600' }"> </nz-statistic>
+          </nz-col>
+          <nz-col [nzSpan]="6">
+            <nz-statistic nzTitle="已完成" [nzValue]="transactionStats.completedCount" [nzValueStyle]="{ color: '#1890ff' }">
             </nz-statistic>
           </nz-col>
           <nz-col [nzSpan]="6">
-            <nz-statistic
-              nzTitle="已完成"
-              [nzValue]="transactionStats.completedCount"
-              [nzValueStyle]="{ color: '#1890ff' }">
-            </nz-statistic>
-          </nz-col>
-          <nz-col [nzSpan]="6">
-            <nz-statistic
-              nzTitle="總金額"
-              [nzValue]="transactionStats.totalAmount"
-              [nzValueStyle]="{ color: '#722ed1' }">
+            <nz-statistic nzTitle="總金額" [nzValue]="transactionStats.totalAmount" [nzValueStyle]="{ color: '#722ed1' }">
               <ng-template #nzFormatter let-value>
                 {{ formatCurrency(value) }}
               </ng-template>
             </nz-statistic>
           </nz-col>
           <nz-col [nzSpan]="6">
-            <nz-statistic
-              nzTitle="平均金額"
-              [nzValue]="transactionStats.averageAmount"
-              [nzValueStyle]="{ color: '#eb2f96' }">
+            <nz-statistic nzTitle="平均金額" [nzValue]="transactionStats.averageAmount" [nzValueStyle]="{ color: '#eb2f96' }">
               <ng-template #nzFormatter let-value>
                 {{ formatCurrency(value) }}
               </ng-template>
@@ -153,7 +139,7 @@ import { TransactionType, TransactionStatus } from '../../../domain/entities/opt
               <nz-form-item>
                 <nz-form-label>關鍵字</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="keyword" placeholder="搜尋交易編號、描述或參考編號">
+                  <input nz-input formControlName="keyword" placeholder="搜尋交易編號、描述或參考編號" />
                 </nz-form-control>
               </nz-form-item>
             </nz-col>
@@ -200,35 +186,38 @@ import { TransactionType, TransactionStatus } from '../../../domain/entities/opt
           (view)="viewTransaction($event)"
           (edit)="editTransaction($event)"
           (delete)="deleteTransaction($event)"
-          (customAction)="onCustomAction($event)">
+          (customAction)="onCustomAction($event)"
+        >
         </app-data-table>
       </nz-card>
 
       <!-- 移除不再需要的表單模態框，現在使用統一的模態框服務 -->
     </div>
   `,
-  styles: [`
-    .transaction-list-container {
-      padding: 24px;
-    }
+  styles: [
+    `
+      .transaction-list-container {
+        padding: 24px;
+      }
 
-    .stats-card,
-    .search-card {
-      margin-bottom: 16px;
-    }
+      .stats-card,
+      .search-card {
+        margin-bottom: 16px;
+      }
 
-    .stats-card .ant-statistic {
-      text-align: center;
-    }
+      .stats-card .ant-statistic {
+        text-align: center;
+      }
 
-    nz-card {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+      nz-card {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
 
-    .search-card .ant-form-item {
-      margin-bottom: 16px;
-    }
-  `]
+      .search-card .ant-form-item {
+        margin-bottom: 16px;
+      }
+    `
+  ]
 })
 export class OptimizedTransactionListComponent implements OnInit {
   private readonly transactionService = inject(OptimizedTransactionApplicationService);
@@ -413,8 +402,7 @@ export class OptimizedTransactionListComponent implements OnInit {
       icon: 'close-circle',
       key: 'fail',
       danger: true,
-      visible: (item: TransactionResponseDto) =>
-        item.status === TransactionStatus.PENDING || item.status === TransactionStatus.PROCESSING
+      visible: (item: TransactionResponseDto) => item.status === TransactionStatus.PENDING || item.status === TransactionStatus.PROCESSING
     },
     {
       type: 'custom',
@@ -428,12 +416,9 @@ export class OptimizedTransactionListComponent implements OnInit {
       title: '刪除交易',
       icon: 'delete',
       danger: true,
-      visible: (item: TransactionResponseDto) =>
-        item.status === TransactionStatus.PENDING || item.status === TransactionStatus.FAILED
+      visible: (item: TransactionResponseDto) => item.status === TransactionStatus.PENDING || item.status === TransactionStatus.FAILED
     }
   ];
-
-
 
   /**
    * 載入交易列表
@@ -447,7 +432,6 @@ export class OptimizedTransactionListComponent implements OnInit {
 
       this.transactions = result.items;
       this.paginationConfig.total = result.total;
-
     } catch (error) {
       this.message.error('載入交易列表失敗');
       console.error('Error loading transactions:', error);
@@ -487,8 +471,8 @@ export class OptimizedTransactionListComponent implements OnInit {
     };
   }
   /**
-    * 搜尋處理
-    */
+   * 搜尋處理
+   */
   async onSearch(): Promise<void> {
     this.paginationConfig.pageIndex = 1;
     await this.loadTransactions();
@@ -629,7 +613,7 @@ export class OptimizedTransactionListComponent implements OnInit {
       component: FormModalComponent,
       componentParams: { data: formData },
       width: 800,
-      onOk: async (data) => {
+      onOk: async data => {
         try {
           const updateDto = {
             description: data.description,
@@ -653,20 +637,17 @@ export class OptimizedTransactionListComponent implements OnInit {
    * 刪除交易
    */
   async deleteTransaction(transaction: TransactionResponseDto): Promise<void> {
-    await this.modalService.confirmDelete(
-      `交易 "${transaction.transactionNumber}"`,
-      async () => {
-        try {
-          await this.transactionService.delete(transaction.id);
-          this.message.success('交易刪除成功');
-          await this.loadTransactions();
-          await this.loadTransactionStats();
-        } catch (error) {
-          this.message.error('交易刪除失敗');
-          console.error('Error deleting transaction:', error);
-        }
+    await this.modalService.confirmDelete(`交易 "${transaction.transactionNumber}"`, async () => {
+      try {
+        await this.transactionService.delete(transaction.id);
+        this.message.success('交易刪除成功');
+        await this.loadTransactions();
+        await this.loadTransactionStats();
+      } catch (error) {
+        this.message.error('交易刪除失敗');
+        console.error('Error deleting transaction:', error);
       }
-    );
+    });
   }
 
   /**
@@ -723,8 +704,8 @@ export class OptimizedTransactionListComponent implements OnInit {
     }
   }
   /**
-    * 交易失敗
-    */
+   * 交易失敗
+   */
   private async failTransaction(transaction: TransactionResponseDto): Promise<void> {
     await this.modalService.confirmWarning({
       title: '確認標記失敗',
@@ -850,7 +831,7 @@ export class OptimizedTransactionListComponent implements OnInit {
       component: FormModalComponent,
       componentParams: { data: formData },
       width: 800,
-      onOk: async (data) => {
+      onOk: async data => {
         try {
           const createDto: CreateTransactionDto = {
             accountId: data.accountId,

@@ -20,7 +20,7 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged, tap } from 'rxjs';
 
 /**
  * Interface Component: Header Search Widget
- * 
+ *
  * Widget component that provides search functionality for the application.
  * This component belongs to the Interface layer as it handles user interaction
  * and UI concerns related to search functionality.
@@ -123,4 +123,4 @@ export class HeaderSearchComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.search$.complete();
   }
-} 
+}

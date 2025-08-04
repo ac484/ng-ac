@@ -1,27 +1,20 @@
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
-import { UserApplicationService } from '../../../application/services/user-application.service';
 import { UserDto } from '../../../application/dto/user.dto';
+import { UserApplicationService } from '../../../application/services/user-application.service';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzCardModule,
-    NzButtonModule,
-    NzIconModule,
-    NzTagModule,
-    NzDescriptionsModule
-  ],
+  imports: [CommonModule, NzCardModule, NzButtonModule, NzIconModule, NzTagModule, NzDescriptionsModule],
   template: `
     <div class="user-detail-container">
       <nz-card>
@@ -56,10 +49,10 @@ import { UserDto } from '../../../application/dto/user.dto';
               </nz-tag>
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="創建時間">
-              {{ user.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}
+              {{ user.createdAt | date: 'yyyy-MM-dd HH:mm:ss' }}
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="更新時間">
-              {{ user.updatedAt | date:'yyyy-MM-dd HH:mm:ss' }}
+              {{ user.updatedAt | date: 'yyyy-MM-dd HH:mm:ss' }}
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="頭像URL" *ngIf="user.photoURL">
               {{ user.photoURL }}
@@ -76,33 +69,35 @@ import { UserDto } from '../../../application/dto/user.dto';
       </nz-card>
     </div>
   `,
-  styles: [`
-    .user-detail-container {
-      padding: 24px;
-    }
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    
-    .header h2 {
-      margin: 0;
-    }
-    
-    .actions {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: #999;
-    }
-  `]
+  styles: [
+    `
+      .user-detail-container {
+        padding: 24px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .header h2 {
+        margin: 0;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+      }
+    `
+  ]
 })
 export class UserDetailComponent implements OnInit {
   private readonly userApplicationService = inject(UserApplicationService);
@@ -155,21 +150,31 @@ export class UserDetailComponent implements OnInit {
 
   getStatusColor(status: string): string {
     switch (status) {
-      case 'ACTIVE': return 'green';
-      case 'INACTIVE': return 'red';
-      case 'PENDING': return 'orange';
-      case 'SUSPENDED': return 'red';
-      default: return 'default';
+      case 'ACTIVE':
+        return 'green';
+      case 'INACTIVE':
+        return 'red';
+      case 'PENDING':
+        return 'orange';
+      case 'SUSPENDED':
+        return 'red';
+      default:
+        return 'default';
     }
   }
 
   getStatusText(status: string): string {
     switch (status) {
-      case 'ACTIVE': return '啟用';
-      case 'INACTIVE': return '停用';
-      case 'PENDING': return '待審核';
-      case 'SUSPENDED': return '暫停';
-      default: return '未知';
+      case 'ACTIVE':
+        return '啟用';
+      case 'INACTIVE':
+        return '停用';
+      case 'PENDING':
+        return '待審核';
+      case 'SUSPENDED':
+        return '暫停';
+      default:
+        return '未知';
     }
   }
-} 
+}

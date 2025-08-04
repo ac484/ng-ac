@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { Transaction, TransactionStatus, TransactionType } from '../../domain/entities/transaction.entity';
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
 
@@ -49,17 +50,13 @@ export class MockTransactionRepository implements TransactionRepository {
 
   async findByDateRange(startDate: Date, endDate: Date): Promise<Transaction[]> {
     return Array.from(this.transactions.values())
-      .filter(transaction => 
-        transaction.createdAt >= startDate && transaction.createdAt <= endDate
-      )
+      .filter(transaction => transaction.createdAt >= startDate && transaction.createdAt <= endDate)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   async findByAmountRange(minAmount: number, maxAmount: number): Promise<Transaction[]> {
     return Array.from(this.transactions.values())
-      .filter(transaction => 
-        transaction.amount >= minAmount && transaction.amount <= maxAmount
-      )
+      .filter(transaction => transaction.amount >= minAmount && transaction.amount <= maxAmount)
       .sort((a, b) => b.amount - a.amount);
   }
 
@@ -76,8 +73,7 @@ export class MockTransactionRepository implements TransactionRepository {
   }
 
   async findAll(): Promise<Transaction[]> {
-    return Array.from(this.transactions.values())
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    return Array.from(this.transactions.values()).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   async save(transaction: Transaction): Promise<void> {
@@ -106,23 +102,19 @@ export class MockTransactionRepository implements TransactionRepository {
   }
 
   async countByStatus(status: TransactionStatus): Promise<number> {
-    return Array.from(this.transactions.values())
-      .filter(transaction => transaction.status === status).length;
+    return Array.from(this.transactions.values()).filter(transaction => transaction.status === status).length;
   }
 
   async countByType(type: TransactionType): Promise<number> {
-    return Array.from(this.transactions.values())
-      .filter(transaction => transaction.transactionType === type).length;
+    return Array.from(this.transactions.values()).filter(transaction => transaction.transactionType === type).length;
   }
 
   async countByAccountId(accountId: string): Promise<number> {
-    return Array.from(this.transactions.values())
-      .filter(transaction => transaction.accountId === accountId).length;
+    return Array.from(this.transactions.values()).filter(transaction => transaction.accountId === accountId).length;
   }
 
   async countByUserId(userId: string): Promise<number> {
-    return Array.from(this.transactions.values())
-      .filter(transaction => transaction.userId === userId).length;
+    return Array.from(this.transactions.values()).filter(transaction => transaction.userId === userId).length;
   }
 
   async getStatistics(): Promise<{
@@ -196,7 +188,7 @@ export class MockTransactionRepository implements TransactionRepository {
       stats.totalAmount += transaction.amount;
       stats.byStatus[transaction.status]++;
       stats.byType[transaction.transactionType]++;
-      
+
       if (transaction.isCompleted()) {
         stats.completedCount++;
       }
@@ -342,4 +334,4 @@ export class MockTransactionRepository implements TransactionRepository {
       this.transactions.set(transaction.id, transaction);
     });
   }
-} 
+}

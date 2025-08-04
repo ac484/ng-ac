@@ -53,12 +53,12 @@ export interface DomainEventBus {
  * Simple in-memory domain event bus implementation
  */
 export class InMemoryDomainEventBus implements DomainEventBus {
-  private handlers: Map<string, DomainEventHandler<any>[]> = new Map();
+  private handlers = new Map<string, Array<DomainEventHandler<any>>>();
 
   publish(event: DomainEvent): void {
     const eventName = event.constructor.name;
     const handlers = this.handlers.get(eventName) || [];
-    
+
     handlers.forEach(handler => {
       try {
         handler.handle(event);
@@ -84,4 +84,4 @@ export class InMemoryDomainEventBus implements DomainEventBus {
       this.handlers.set(eventName, handlers);
     }
   }
-} 
+}

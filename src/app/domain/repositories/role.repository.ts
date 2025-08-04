@@ -1,7 +1,7 @@
 import { RoleEntity } from '../entities/role.entity';
-import { Role } from '../value-objects/authorization/role.value-object';
-import { PermissionSet } from '../value-objects/authorization/permission-set.value-object';
 import { UserId } from '../value-objects/authentication/user-id.value-object';
+import { PermissionSet } from '../value-objects/authorization/permission-set.value-object';
+import { Role } from '../value-objects/authorization/role.value-object';
 
 /**
  * 角色存儲庫接口
@@ -91,4 +91,4 @@ export interface RoleRepository {
    * 獲取用戶的所有權限
    */
   getUserPermissions(userId: UserId): Promise<string[]>;
-} 
+}

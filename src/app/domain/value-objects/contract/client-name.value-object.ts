@@ -21,4 +21,4 @@ export class ClientName {
       throw new Error('Client name cannot exceed 100 characters');
     }
   }
-} 
+}

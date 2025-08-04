@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { Account, AccountStatus, AccountType } from '../../domain/entities/account.entity';
 import { AccountRepository } from '../../domain/repositories/account.repository';
 
@@ -100,9 +101,7 @@ export class MockAccountRepository implements AccountRepository {
 
   async findByDateRange(startDate: Date, endDate: Date): Promise<Account[]> {
     await this.delay(150);
-    return Array.from(this.accounts.values()).filter(
-      account => account.createdAt >= startDate && account.createdAt <= endDate
-    );
+    return Array.from(this.accounts.values()).filter(account => account.createdAt >= startDate && account.createdAt <= endDate);
   }
 
   async getStatistics(): Promise<{
@@ -116,13 +115,13 @@ export class MockAccountRepository implements AccountRepository {
   }> {
     await this.delay(200);
     const allAccounts = Array.from(this.accounts.values());
-    
+
     const total = allAccounts.length;
     const active = allAccounts.filter(acc => acc.status.getValue() === 'ACTIVE').length;
     const inactive = allAccounts.filter(acc => acc.status.getValue() === 'INACTIVE').length;
     const suspended = allAccounts.filter(acc => acc.status.getValue() === 'SUSPENDED').length;
     const closed = allAccounts.filter(acc => acc.status.getValue() === 'CLOSED').length;
-    
+
     const totalBalance = allAccounts.reduce((sum, acc) => sum + acc.balance.getAmount(), 0);
     const averageBalance = total > 0 ? totalBalance / total : 0;
 
@@ -148,34 +147,18 @@ export class MockAccountRepository implements AccountRepository {
         'Main Checking Account',
         AccountType.CHECKING(),
         'user_1',
-        2500.00,
+        2500.0,
         'Primary checking account for daily transactions'
       ),
-      Account.create(
-        'acc_2',
-        '0987654321',
-        'Savings Account',
-        AccountType.SAVINGS(),
-        'user_1',
-        15000.00,
-        'High-yield savings account'
-      ),
-      Account.create(
-        'acc_3',
-        '1122334455',
-        'Credit Card',
-        AccountType.CREDIT(),
-        'user_1',
-        -500.00,
-        'Credit card account'
-      ),
+      Account.create('acc_2', '0987654321', 'Savings Account', AccountType.SAVINGS(), 'user_1', 15000.0, 'High-yield savings account'),
+      Account.create('acc_3', '1122334455', 'Credit Card', AccountType.CREDIT(), 'user_1', -500.0, 'Credit card account'),
       Account.create(
         'acc_4',
         '5566778899',
         'Investment Portfolio',
         AccountType.INVESTMENT(),
         'user_2',
-        50000.00,
+        50000.0,
         'Investment account for stocks and bonds'
       ),
       Account.create(
@@ -184,54 +167,22 @@ export class MockAccountRepository implements AccountRepository {
         'Secondary Checking',
         AccountType.CHECKING(),
         'user_2',
-        0.00,
+        0.0,
         'Secondary checking account (inactive)'
       ),
-      Account.create(
-        'acc_6',
-        '4433221100',
-        'Business Account',
-        AccountType.CHECKING(),
-        'user_3',
-        5000.00,
-        'Business checking account'
-      ),
-      Account.create(
-        'acc_7',
-        '6677889900',
-        'Emergency Fund',
-        AccountType.SAVINGS(),
-        'user_3',
-        10000.00,
-        'Emergency savings fund'
-      ),
+      Account.create('acc_6', '4433221100', 'Business Account', AccountType.CHECKING(), 'user_3', 5000.0, 'Business checking account'),
+      Account.create('acc_7', '6677889900', 'Emergency Fund', AccountType.SAVINGS(), 'user_3', 10000.0, 'Emergency savings fund'),
       Account.create(
         'acc_8',
         '2233445566',
         'Investment Account',
         AccountType.INVESTMENT(),
         'user_4',
-        25000.00,
+        25000.0,
         'Personal investment account'
       ),
-      Account.create(
-        'acc_9',
-        '7788990011',
-        'Credit Line',
-        AccountType.CREDIT(),
-        'user_4',
-        -2000.00,
-        'Personal line of credit'
-      ),
-      Account.create(
-        'acc_10',
-        '3344556677',
-        'Joint Account',
-        AccountType.CHECKING(),
-        'user_5',
-        7500.00,
-        'Joint checking account'
-      )
+      Account.create('acc_9', '7788990011', 'Credit Line', AccountType.CREDIT(), 'user_4', -2000.0, 'Personal line of credit'),
+      Account.create('acc_10', '3344556677', 'Joint Account', AccountType.CHECKING(), 'user_5', 7500.0, 'Joint checking account')
     ];
 
     // Add accounts to the map
@@ -242,6 +193,7 @@ export class MockAccountRepository implements AccountRepository {
 
   /**
    * Simulate network delay
+   *
    * @param ms Milliseconds to delay
    */
   private delay(ms: number): Promise<void> {
@@ -257,6 +209,7 @@ export class MockAccountRepository implements AccountRepository {
 
   /**
    * Add a mock account (for testing)
+   *
    * @param account Account to add
    */
   addMockAccount(account: Account): void {
@@ -269,4 +222,4 @@ export class MockAccountRepository implements AccountRepository {
   getAllMockAccounts(): Account[] {
     return Array.from(this.accounts.values());
   }
-} 
+}

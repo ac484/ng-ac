@@ -34,4 +34,4 @@ export enum LoginSourceType {
   MOBILE = 'Mobile',
   API = 'API',
   ADMIN_PANEL = 'AdminPanel'
-} 
+}

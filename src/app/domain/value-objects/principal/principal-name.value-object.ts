@@ -26,4 +26,4 @@ export class PrincipalName {
   static fromString(value: string): PrincipalName {
     return new PrincipalName(value);
   }
-} 
+}

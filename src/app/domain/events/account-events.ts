@@ -51,4 +51,4 @@ export class AccountClosedEvent extends DomainEvent {
   ) {
     super();
   }
-} 
+}

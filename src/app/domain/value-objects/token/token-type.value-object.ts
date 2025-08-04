@@ -25,4 +25,4 @@ export enum TokenTypeEnum {
   BEARER = 'Bearer',
   FIREBASE_ID_TOKEN = 'FirebaseIdToken',
   REFRESH_TOKEN = 'RefreshToken'
-} 
+}

@@ -28,4 +28,4 @@ export * from './modules/repository.module';
 export * from './providers/repository.providers';
 
 // Legacy Dependency Injection (deprecated)
-export { FIREBASE_REPOSITORY_PROVIDERS, MOCK_REPOSITORY_PROVIDERS } from './di/repository.providers'; 
+export { FIREBASE_REPOSITORY_PROVIDERS, MOCK_REPOSITORY_PROVIDERS } from './di/repository.providers';

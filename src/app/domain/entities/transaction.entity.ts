@@ -1,5 +1,10 @@
 import { AggregateRoot } from './aggregate-root';
-import { TransactionCreatedEvent, TransactionProcessedEvent, TransactionFailedEvent, TransactionCancelledEvent } from '../events/transaction-events';
+import {
+  TransactionCreatedEvent,
+  TransactionProcessedEvent,
+  TransactionFailedEvent,
+  TransactionCancelledEvent
+} from '../events/transaction-events';
 
 export enum TransactionType {
   DEPOSIT = 'DEPOSIT',
@@ -25,7 +30,7 @@ export class Transaction extends AggregateRoot<string> {
     public accountId: string,
     public userId: string,
     public amount: number,
-    public currency: string = 'USD',
+    public currency = 'USD',
     public transactionType: TransactionType,
     public status: TransactionStatus = TransactionStatus.PENDING,
     public description: string,
@@ -40,7 +45,9 @@ export class Transaction extends AggregateRoot<string> {
   }
 
   // Getter for id
-  get id(): string { return this.props; }
+  get id(): string {
+    return this.props;
+  }
 
   /**
    * Create a new transaction
@@ -53,7 +60,7 @@ export class Transaction extends AggregateRoot<string> {
     amount: number,
     transactionType: TransactionType,
     description: string,
-    currency: string = 'USD'
+    currency = 'USD'
   ): Transaction {
     const transaction = new Transaction(
       id,
@@ -85,7 +92,7 @@ export class Transaction extends AggregateRoot<string> {
     }
     this.status = TransactionStatus.COMPLETED;
     this.updatedAt = new Date();
-    
+
     this.addDomainEvent(new TransactionProcessedEvent(this.id, this.accountId, this.amount, this.amount));
   }
 
@@ -96,7 +103,7 @@ export class Transaction extends AggregateRoot<string> {
     this.status = TransactionStatus.FAILED;
     this.notes = reason ? `${this.notes || ''} - Failed: ${reason}`.trim() : this.notes;
     this.updatedAt = new Date();
-    
+
     this.addDomainEvent(new TransactionFailedEvent(this.id, this.accountId, this.amount, reason || 'Unknown error'));
   }
 
@@ -107,7 +114,7 @@ export class Transaction extends AggregateRoot<string> {
     this.status = TransactionStatus.CANCELLED;
     this.notes = reason ? `${this.notes || ''} - Cancelled: ${reason}`.trim() : this.notes;
     this.updatedAt = new Date();
-    
+
     this.addDomainEvent(new TransactionCancelledEvent(this.id, this.accountId, reason || 'Cancelled by user'));
   }
 
@@ -115,7 +122,7 @@ export class Transaction extends AggregateRoot<string> {
     if (this.status === TransactionStatus.COMPLETED && newStatus !== TransactionStatus.COMPLETED) {
       throw new Error('Completed transactions cannot be modified');
     }
-    
+
     this.status = newStatus;
     if (reason) {
       this.notes = `${this.notes || ''} - Status changed to ${newStatus}: ${reason}`.trim();
@@ -189,18 +196,9 @@ export class Transaction extends AggregateRoot<string> {
     userId: string,
     amount: number,
     description: string,
-    currency: string = 'USD'
+    currency = 'USD'
   ): Transaction {
-    return Transaction.create(
-      id,
-      transactionNumber,
-      accountId,
-      userId,
-      amount,
-      TransactionType.DEPOSIT,
-      description,
-      currency
-    );
+    return Transaction.create(id, transactionNumber, accountId, userId, amount, TransactionType.DEPOSIT, description, currency);
   }
 
   static createWithdrawal(
@@ -210,18 +208,9 @@ export class Transaction extends AggregateRoot<string> {
     userId: string,
     amount: number,
     description: string,
-    currency: string = 'USD'
+    currency = 'USD'
   ): Transaction {
-    return Transaction.create(
-      id,
-      transactionNumber,
-      accountId,
-      userId,
-      amount,
-      TransactionType.WITHDRAWAL,
-      description,
-      currency
-    );
+    return Transaction.create(id, transactionNumber, accountId, userId, amount, TransactionType.WITHDRAWAL, description, currency);
   }
 
   static createTransfer(
@@ -231,18 +220,9 @@ export class Transaction extends AggregateRoot<string> {
     userId: string,
     amount: number,
     description: string,
-    currency: string = 'USD'
+    currency = 'USD'
   ): Transaction {
-    return Transaction.create(
-      id,
-      transactionNumber,
-      accountId,
-      userId,
-      amount,
-      TransactionType.TRANSFER,
-      description,
-      currency
-    );
+    return Transaction.create(id, transactionNumber, accountId, userId, amount, TransactionType.TRANSFER, description, currency);
   }
 
   /**
@@ -288,13 +268,13 @@ export class Transaction extends AggregateRoot<string> {
   /**
    * Get transaction summary
    */
-  getSummary(): { 
-    id: string; 
-    transactionNumber: string; 
-    amount: number; 
-    type: TransactionType; 
-    status: TransactionStatus; 
-    description: string 
+  getSummary(): {
+    id: string;
+    transactionNumber: string;
+    amount: number;
+    type: TransactionType;
+    status: TransactionStatus;
+    description: string;
   } {
     return {
       id: this.id,
@@ -305,4 +285,4 @@ export class Transaction extends AggregateRoot<string> {
       description: this.description
     };
   }
-} 
+}

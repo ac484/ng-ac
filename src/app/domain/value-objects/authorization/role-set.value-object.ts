@@ -41,4 +41,4 @@ export class RoleSet {
   size(): number {
     return this.roles.size;
   }
-} 
+}

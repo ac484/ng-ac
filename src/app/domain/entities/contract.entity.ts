@@ -1,15 +1,15 @@
 import { AggregateRoot } from './aggregate-root';
-import { 
-  ContractNumber, 
-  ContractStatus, 
-  ClientName, 
-  ClientRepresentative, 
-  ContactPerson, 
+import { Money } from '../value-objects/account/money.value-object';
+import {
+  ContractNumber,
+  ContractStatus,
+  ClientName,
+  ClientRepresentative,
+  ContactPerson,
   ContractName,
   ContactPhone,
   Notes
 } from '../value-objects/contract';
-import { Money } from '../value-objects/account/money.value-object';
 
 /**
  * Contract entity - Aggregate root for contract management
@@ -57,18 +57,42 @@ export class Contract extends AggregateRoot<string> {
   private _updatedAt: Date;
 
   // Getters
-  get id(): string { return this.props; }
-  get contractNumber(): ContractNumber { return this._contractNumber; }
-  get clientName(): ClientName { return this._clientName; }
-  get clientRepresentative(): ClientRepresentative { return this._clientRepresentative; }
-  get contactPerson(): ContactPerson { return this._contactPerson; }
-  get contractName(): ContractName { return this._contractName; }
-  get amount(): Money { return this._amount; }
-  get status(): ContractStatus { return this._status; }
-  get contactPhone(): ContactPhone | undefined { return this._contactPhone; }
-  get notes(): Notes | undefined { return this._notes; }
-  get createdAt(): Date { return this._createdAt; }
-  get updatedAt(): Date { return this._updatedAt; }
+  get id(): string {
+    return this.props;
+  }
+  get contractNumber(): ContractNumber {
+    return this._contractNumber;
+  }
+  get clientName(): ClientName {
+    return this._clientName;
+  }
+  get clientRepresentative(): ClientRepresentative {
+    return this._clientRepresentative;
+  }
+  get contactPerson(): ContactPerson {
+    return this._contactPerson;
+  }
+  get contractName(): ContractName {
+    return this._contractName;
+  }
+  get amount(): Money {
+    return this._amount;
+  }
+  get status(): ContractStatus {
+    return this._status;
+  }
+  get contactPhone(): ContactPhone | undefined {
+    return this._contactPhone;
+  }
+  get notes(): Notes | undefined {
+    return this._notes;
+  }
+  get createdAt(): Date {
+    return this._createdAt;
+  }
+  get updatedAt(): Date {
+    return this._updatedAt;
+  }
 
   // Business methods
   updateStatus(newStatus: ContractStatus): void {
@@ -116,7 +140,9 @@ export class Contract extends AggregateRoot<string> {
     // Don't generate ID here - let Firestore generate it
     const contractNumber = dto.contractNumber ? new ContractNumber(dto.contractNumber) : ContractNumber.generate();
     const clientName = new ClientName(dto.clientName);
-    const clientRepresentative = dto.clientRepresentative ? new ClientRepresentative(dto.clientRepresentative) : new ClientRepresentative('');
+    const clientRepresentative = dto.clientRepresentative
+      ? new ClientRepresentative(dto.clientRepresentative)
+      : new ClientRepresentative('');
     const contactPerson = dto.contactPerson ? new ContactPerson(dto.contactPerson) : new ContactPerson('');
     const contractName = new ContractName(dto.contractName);
     const amount = new Money(dto.amount);
@@ -155,4 +181,4 @@ export interface CreateContractDto {
   status?: string;
   contactPhone?: string;
   notes?: string;
-} 
+}

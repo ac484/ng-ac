@@ -6,7 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 
 /**
  * Interface Component: Header Clear Storage Widget
- * 
+ *
  * Widget component that provides functionality to clear local storage.
  * This component belongs to the Interface layer as it handles user
  * interaction and UI concerns related to storage management.
@@ -42,4 +42,4 @@ export class HeaderClearStorageComponent {
       }
     });
   }
-} 
+}

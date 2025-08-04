@@ -2,14 +2,7 @@
  * Contract DTOs for application layer
  */
 
-import {
-  BaseCreateDto,
-  BaseUpdateDto,
-  BaseResponseDto,
-  ListResponseDto,
-  SearchCriteriaDto,
-  BaseStatsDto
-} from './base.dto';
+import { BaseCreateDto, BaseUpdateDto, BaseResponseDto, ListResponseDto, SearchCriteriaDto, BaseStatsDto } from './base.dto';
 
 /**
  * DTO for creating a new contract
@@ -95,7 +88,5 @@ export interface ContractStatsDto extends BaseStatsDto {
   completed: number;
   totalAmount: number;
   averageAmount: number;
-  byStatus: {
-    [status: string]: number;
-  };
-} 
+  byStatus: Record<string, number>;
+}

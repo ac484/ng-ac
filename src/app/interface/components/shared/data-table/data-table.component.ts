@@ -1,12 +1,13 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NzTableModule } from 'ng-zorro-antd/table';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+
 import { TableColumn, TableAction, PaginationConfig, ScrollConfig } from './table-column.interface';
 
 /**
@@ -16,18 +17,9 @@ import { TableColumn, TableAction, PaginationConfig, ScrollConfig } from './tabl
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzTableModule,
-    NzButtonModule,
-    NzIconModule,
-    NzTagModule,
-    NzPopconfirmModule,
-    NzTooltipModule,
-    NzSpaceModule
-  ],
+  imports: [CommonModule, NzTableModule, NzButtonModule, NzIconModule, NzTagModule, NzPopconfirmModule, NzTooltipModule, NzSpaceModule],
   template: `
-    <nz-table 
+    <nz-table
       #table
       [nzData]="data"
       [nzLoading]="loading"
@@ -41,22 +33,24 @@ import { TableColumn, TableAction, PaginationConfig, ScrollConfig } from './tabl
       [nzBordered]="bordered"
       [nzScroll]="getScrollConfig()"
       (nzPageIndexChange)="onPageChange($event)"
-      (nzPageSizeChange)="onPageSizeChange($event)">
-      
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    >
       <thead>
         <tr>
-          <th *ngFor="let column of visibleColumns" 
-              [nzWidth]="column.width || null"
-              [nzAlign]="column.align || 'left'"
-              [nzSortFn]="column.sortable ? (column.sortFn || getDefaultSortFn(column.key)) : null"
-              [nzFilterFn]="column.filterable ? (column.filterFn || getDefaultFilterFn(column.key)) : null"
-              [nzFilters]="column.filters || []">
+          <th
+            *ngFor="let column of visibleColumns"
+            [nzWidth]="column.width || null"
+            [nzAlign]="column.align || 'left'"
+            [nzSortFn]="column.sortable ? column.sortFn || getDefaultSortFn(column.key) : null"
+            [nzFilterFn]="column.filterable ? column.filterFn || getDefaultFilterFn(column.key) : null"
+            [nzFilters]="column.filters || []"
+          >
             {{ column.title }}
           </th>
           <th *ngIf="showActions" nzWidth="120px" nzAlign="center">操作</th>
         </tr>
       </thead>
-      
+
       <tbody>
         <tr *ngFor="let item of table.data; trackBy: trackByFn">
           <td *ngFor="let column of visibleColumns" [nzAlign]="column.align || 'left'">
@@ -65,95 +59,101 @@ import { TableColumn, TableAction, PaginationConfig, ScrollConfig } from './tabl
               <span *ngSwitchCase="'text'">
                 {{ column.formatter ? column.formatter(getItemValue(item, column.key), item) : getItemValue(item, column.key) }}
               </span>
-              
+
               <!-- 狀態類型 -->
-              <nz-tag *ngSwitchCase="'status'" 
-                      [nzColor]="getStatusColor(getItemValue(item, column.key), column)">
+              <nz-tag *ngSwitchCase="'status'" [nzColor]="getStatusColor(getItemValue(item, column.key), column)">
                 {{ getStatusText(getItemValue(item, column.key), column) }}
               </nz-tag>
-              
+
               <!-- 貨幣類型 -->
               <span *ngSwitchCase="'currency'">
                 {{ formatCurrency(getItemValue(item, column.key)) }}
               </span>
-              
+
               <!-- 日期類型 -->
               <span *ngSwitchCase="'date'">
                 {{ formatDate(getItemValue(item, column.key)) }}
               </span>
-              
+
               <!-- 數字類型 -->
               <span *ngSwitchCase="'number'">
                 {{ formatNumber(getItemValue(item, column.key)) }}
               </span>
-              
+
               <!-- 布林類型 -->
-              <nz-tag *ngSwitchCase="'boolean'" 
-                      [nzColor]="getItemValue(item, column.key) ? 'green' : 'red'">
+              <nz-tag *ngSwitchCase="'boolean'" [nzColor]="getItemValue(item, column.key) ? 'green' : 'red'">
                 {{ getItemValue(item, column.key) ? '是' : '否' }}
               </nz-tag>
-              
+
               <!-- 預設類型 -->
               <span *ngSwitchDefault>
                 {{ column.formatter ? column.formatter(getItemValue(item, column.key), item) : getItemValue(item, column.key) }}
               </span>
             </ng-container>
           </td>
-          
+
           <!-- 操作欄位 -->
           <td *ngIf="showActions" nzAlign="center">
             <nz-space nzSize="small">
               <ng-container *ngFor="let action of getVisibleActions(item)">
                 <!-- 檢視按鈕 -->
-                <button *ngIf="action.type === 'view'"
-                        nz-button 
-                        nzType="link" 
-                        nzSize="small"
-                        nz-tooltip
-                        [nzTooltipTitle]="action.title"
-                        [disabled]="isActionDisabled(action, item)"
-                        (click)="onActionClick(action, item)">
+                <button
+                  *ngIf="action.type === 'view'"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  nz-tooltip
+                  [nzTooltipTitle]="action.title"
+                  [disabled]="isActionDisabled(action, item)"
+                  (click)="onActionClick(action, item)"
+                >
                   <span nz-icon [nzType]="action.icon"></span>
                 </button>
-                
+
                 <!-- 編輯按鈕 -->
-                <button *ngIf="action.type === 'edit'"
-                        nz-button 
-                        nzType="link" 
-                        nzSize="small"
-                        nz-tooltip
-                        [nzTooltipTitle]="action.title"
-                        [disabled]="isActionDisabled(action, item)"
-                        (click)="onActionClick(action, item)">
+                <button
+                  *ngIf="action.type === 'edit'"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  nz-tooltip
+                  [nzTooltipTitle]="action.title"
+                  [disabled]="isActionDisabled(action, item)"
+                  (click)="onActionClick(action, item)"
+                >
                   <span nz-icon [nzType]="action.icon"></span>
                 </button>
-                
+
                 <!-- 刪除按鈕 -->
-                <button *ngIf="action.type === 'delete'"
-                        nz-button 
-                        nzType="link" 
-                        nzSize="small"
-                        nzDanger
-                        nz-tooltip
-                        [nzTooltipTitle]="action.title"
-                        [disabled]="isActionDisabled(action, item)"
-                        nz-popconfirm
-                        nzPopconfirmTitle="確定要刪除這筆資料嗎？"
-                        nzPopconfirmPlacement="topRight"
-                        (nzOnConfirm)="onActionClick(action, item)">
+                <button
+                  *ngIf="action.type === 'delete'"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  nzDanger
+                  nz-tooltip
+                  [nzTooltipTitle]="action.title"
+                  [disabled]="isActionDisabled(action, item)"
+                  nz-popconfirm
+                  nzPopconfirmTitle="確定要刪除這筆資料嗎？"
+                  nzPopconfirmPlacement="topRight"
+                  (nzOnConfirm)="onActionClick(action, item)"
+                >
                   <span nz-icon [nzType]="action.icon"></span>
                 </button>
-                
+
                 <!-- 自定義按鈕 -->
-                <button *ngIf="action.type === 'custom'"
-                        nz-button 
-                        nzType="link" 
-                        nzSize="small"
-                        [nzDanger]="action.danger"
-                        nz-tooltip
-                        [nzTooltipTitle]="action.title"
-                        [disabled]="isActionDisabled(action, item)"
-                        (click)="onActionClick(action, item)">
+                <button
+                  *ngIf="action.type === 'custom'"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  [nzDanger]="action.danger"
+                  nz-tooltip
+                  [nzTooltipTitle]="action.title"
+                  [disabled]="isActionDisabled(action, item)"
+                  (click)="onActionClick(action, item)"
+                >
                   <span nz-icon [nzType]="action.icon"></span>
                 </button>
               </ng-container>
@@ -163,23 +163,25 @@ import { TableColumn, TableAction, PaginationConfig, ScrollConfig } from './tabl
       </tbody>
     </nz-table>
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
-    
-    .ant-table-tbody > tr > td {
-      padding: 8px 16px;
-    }
-    
-    .ant-btn-group .ant-btn {
-      margin-right: 4px;
-    }
-    
-    .ant-btn-group .ant-btn:last-child {
-      margin-right: 0;
-    }
-  `]
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+
+      .ant-table-tbody > tr > td {
+        padding: 8px 16px;
+      }
+
+      .ant-btn-group .ant-btn {
+        margin-right: 4px;
+      }
+
+      .ant-btn-group .ant-btn:last-child {
+        margin-right: 0;
+      }
+    `
+  ]
 })
 export class DataTableComponent<T = any> implements OnInit, OnChanges {
   /** 表格資料 */
@@ -307,9 +309,7 @@ export class DataTableComponent<T = any> implements OnInit, OnChanges {
    * 取得可見的操作按鈕
    */
   getVisibleActions(item: T): TableAction[] {
-    return this.actions.filter(action =>
-      !action.visible || action.visible(item)
-    );
+    return this.actions.filter(action => !action.visible || action.visible(item));
   }
 
   /**
@@ -335,16 +335,16 @@ export class DataTableComponent<T = any> implements OnInit, OnChanges {
     }
 
     // 預設狀態顏色映射
-    const defaultColors: { [key: string]: string } = {
-      'active': 'green',
-      'inactive': 'red',
-      'pending': 'orange',
-      'completed': 'blue',
-      'failed': 'red',
-      'success': 'green',
-      'error': 'red',
-      'warning': 'orange',
-      'info': 'blue'
+    const defaultColors: Record<string, string> = {
+      active: 'green',
+      inactive: 'red',
+      pending: 'orange',
+      completed: 'blue',
+      failed: 'red',
+      success: 'green',
+      error: 'red',
+      warning: 'orange',
+      info: 'blue'
     };
 
     return defaultColors[value] || 'default';
@@ -359,16 +359,16 @@ export class DataTableComponent<T = any> implements OnInit, OnChanges {
     }
 
     // 預設狀態文字映射
-    const defaultTexts: { [key: string]: string } = {
-      'active': '啟用',
-      'inactive': '停用',
-      'pending': '待處理',
-      'completed': '已完成',
-      'failed': '失敗',
-      'success': '成功',
-      'error': '錯誤',
-      'warning': '警告',
-      'info': '資訊'
+    const defaultTexts: Record<string, string> = {
+      active: '啟用',
+      inactive: '停用',
+      pending: '待處理',
+      completed: '已完成',
+      failed: '失敗',
+      success: '成功',
+      error: '錯誤',
+      warning: '警告',
+      info: '資訊'
     };
 
     return defaultTexts[value] || value;

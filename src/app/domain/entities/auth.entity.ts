@@ -3,8 +3,8 @@
  * Represents user authentication state and session management
  */
 import { AggregateRoot } from './aggregate-root';
-import { Email } from '../value-objects/authentication/email.value-object';
 import { UserAuthenticatedEvent, UserSignedOutEvent, AuthenticationFailedEvent, TokenRefreshedEvent } from '../events/auth-events';
+import { Email } from '../value-objects/authentication/email.value-object';
 
 export interface AuthUser {
   id: string;
@@ -64,14 +64,16 @@ export enum AuthProvider {
 export class Authentication extends AggregateRoot<string> {
   private user: AuthUser | null = null;
   private session: AuthSession | null = null;
-  private isAuthenticated: boolean = false;
+  private isAuthenticated = false;
 
   constructor(id: string) {
     super(id);
   }
 
   // Getter for id
-  get id(): string { return this.props; }
+  get id(): string {
+    return this.props;
+  }
 
   /**
    * Create authentication from Firebase user
@@ -79,18 +81,14 @@ export class Authentication extends AggregateRoot<string> {
    */
   static fromFirebaseUser(firebaseUser: any): Authentication {
     const auth = new Authentication(firebaseUser.uid);
-    
+
     // 通過實體內部邏輯創建用戶信息
     const user = auth.createUserFromFirebase(firebaseUser);
     auth.setUser(user);
     auth.setAuthenticated(true);
-    
-    auth.addDomainEvent(new UserAuthenticatedEvent(
-      firebaseUser.uid,
-      firebaseUser.providerId || 'firebase',
-      firebaseUser.email
-    ));
-    
+
+    auth.addDomainEvent(new UserAuthenticatedEvent(firebaseUser.uid, firebaseUser.providerId || 'firebase', firebaseUser.email));
+
     return auth;
   }
 
@@ -100,7 +98,7 @@ export class Authentication extends AggregateRoot<string> {
    */
   static fromTokenModel(tokenModel: any): Authentication {
     const auth = new Authentication(tokenModel.id || tokenModel.firebase?.uid);
-    
+
     // 通過實體內部邏輯創建用戶信息
     const user = auth.createUserFromTokenModel(tokenModel);
     const session = auth.createSessionFromTokenModel(tokenModel);
@@ -108,7 +106,7 @@ export class Authentication extends AggregateRoot<string> {
     auth.setUser(user);
     auth.setSession(session);
     auth.setAuthenticated(true);
-    
+
     return auth;
   }
 
@@ -280,12 +278,8 @@ export class Authentication extends AggregateRoot<string> {
     if (this.session) {
       this.session.token = newToken;
       this.session.expiresAt = expiresAt;
-      
-      this.addDomainEvent(new TokenRefreshedEvent(
-        this.user?.id || '',
-        newToken,
-        expiresAt
-      ));
+
+      this.addDomainEvent(new TokenRefreshedEvent(this.user?.id || '', newToken, expiresAt));
     }
   }
 
@@ -293,11 +287,7 @@ export class Authentication extends AggregateRoot<string> {
    * Handle authentication failure
    */
   handleAuthFailure(reason: string): void {
-    this.addDomainEvent(new AuthenticationFailedEvent(
-      this.user?.email.getValue() || '',
-      this.user?.providerId || 'unknown',
-      reason
-    ));
+    this.addDomainEvent(new AuthenticationFailedEvent(this.user?.email.getValue() || '', this.user?.providerId || 'unknown', reason));
   }
 
   /**
@@ -312,7 +302,7 @@ export class Authentication extends AggregateRoot<string> {
       if (!this.user.email) {
         errors.push('User email is required');
       }
-      
+
       if (!this.user.id) {
         errors.push('User ID is required');
       }
@@ -335,12 +325,12 @@ export class Authentication extends AggregateRoot<string> {
   /**
    * Get authentication summary
    */
-  getSummary(): { 
-    id: string; 
-    isAuthenticated: boolean; 
-    email: string | null; 
-    displayName: string | null; 
-    isAnonymous: boolean 
+  getSummary(): {
+    id: string;
+    isAuthenticated: boolean;
+    email: string | null;
+    displayName: string | null;
+    isAnonymous: boolean;
   } {
     return {
       id: this.id,
@@ -350,4 +340,4 @@ export class Authentication extends AggregateRoot<string> {
       isAnonymous: this.isUserAnonymous()
     };
   }
-} 
+}

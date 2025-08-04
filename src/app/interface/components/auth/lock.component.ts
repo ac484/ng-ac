@@ -40,4 +40,4 @@ export class UserLockComponent {
       this.router.navigate(['dashboard']);
     }
   }
-} 
+}

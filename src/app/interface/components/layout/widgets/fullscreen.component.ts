@@ -5,7 +5,7 @@ import screenfull from 'screenfull';
 
 /**
  * Interface Component: Header Fullscreen Widget
- * 
+ *
  * Widget component that provides fullscreen functionality for the application.
  * This component belongs to the Interface layer as it handles user interaction
  * and UI concerns related to display mode management.
@@ -43,4 +43,4 @@ export class HeaderFullScreenComponent {
       screenfull.toggle();
     }
   }
-} 
+}

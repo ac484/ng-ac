@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { TokenService, ITokenModel } from '@delon/auth';
 import { Router } from '@angular/router';
+import { TokenService, ITokenModel } from '@delon/auth';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, Subject } from 'rxjs';
 
 // 值物件導入
-import { Email } from '../../domain/value-objects/authentication/email.value-object';
-import { IsAnonymous } from '../../domain/value-objects/status/is-anonymous.value-object';
 import { AuthProvider } from '../../domain/value-objects/authentication/auth-provider.value-object';
+import { Email } from '../../domain/value-objects/authentication/email.value-object';
+import { SessionId } from '../../domain/value-objects/authentication/session-id.value-object';
+import { DeviceInfo } from '../../domain/value-objects/device/device-info.value-object';
+import { GeoLocation } from '../../domain/value-objects/device/geo-location.value-object';
+import { LoginContext } from '../../domain/value-objects/device/login-context.value-object';
+import { LoginSource } from '../../domain/value-objects/device/login-source.value-object';
+import { IsAnonymous } from '../../domain/value-objects/status/is-anonymous.value-object';
 import { IsEmailVerified } from '../../domain/value-objects/status/is-email-verified.value-object';
 import { JWTToken } from '../../domain/value-objects/token/jwt-token.value-object';
 import { TokenExpiresAt } from '../../domain/value-objects/token/token-expires-at.value-object';
-import { SessionId } from '../../domain/value-objects/authentication/session-id.value-object';
-import { DeviceInfo } from '../../domain/value-objects/device/device-info.value-object';
-import { LoginSource } from '../../domain/value-objects/device/login-source.value-object';
-import { GeoLocation } from '../../domain/value-objects/device/geo-location.value-object';
-import { LoginContext } from '../../domain/value-objects/device/login-context.value-object';
 
 /**
  * @delon/auth 適配器
@@ -64,7 +64,7 @@ export class DelonAuthAdapter {
   async clearToken(): Promise<void> {
     try {
       await this.tokenService.clear();
-      
+
       // 觸發認證狀態變更
       this.authStateSubject.next(null);
     } catch (error) {
@@ -124,7 +124,7 @@ export class DelonAuthAdapter {
       id: sessionId.getValue(),
       avatar: '',
       time: +new Date(),
-      expired: Date.now() + (60 * 60 * 1000), // 1 hour
+      expired: Date.now() + 60 * 60 * 1000, // 1 hour
       firebase: {
         uid: sessionId.getValue(),
         emailVerified: isEmailVerified.getValue(),
@@ -138,13 +138,7 @@ export class DelonAuthAdapter {
   /**
    * 創建郵箱用戶 Token
    */
-  createEmailToken(
-    email: Email,
-    userId: string,
-    displayName: string,
-    photoURL: string = '',
-    isEmailVerified: boolean = false
-  ): ITokenModel {
+  createEmailToken(email: Email, userId: string, displayName: string, photoURL = '', isEmailVerified = false): ITokenModel {
     const sessionId = SessionId.generate();
     const isAnonymous = IsAnonymous.AUTHENTICATED();
     const authProvider = new AuthProvider('email' as any);
@@ -156,7 +150,7 @@ export class DelonAuthAdapter {
       id: userId,
       avatar: photoURL,
       time: +new Date(),
-      expired: Date.now() + (60 * 60 * 1000), // 1 hour
+      expired: Date.now() + 60 * 60 * 1000, // 1 hour
       firebase: {
         uid: userId,
         emailVerified: isEmailVerified,
@@ -170,13 +164,7 @@ export class DelonAuthAdapter {
   /**
    * 創建 Google 用戶 Token
    */
-  createGoogleToken(
-    email: Email,
-    userId: string,
-    displayName: string,
-    photoURL: string = '',
-    isEmailVerified: boolean = true
-  ): ITokenModel {
+  createGoogleToken(email: Email, userId: string, displayName: string, photoURL = '', isEmailVerified = true): ITokenModel {
     const sessionId = SessionId.generate();
     const isAnonymous = IsAnonymous.AUTHENTICATED();
     const authProvider = new AuthProvider('google' as any);
@@ -188,7 +176,7 @@ export class DelonAuthAdapter {
       id: userId,
       avatar: photoURL,
       time: +new Date(),
-      expired: Date.now() + (60 * 60 * 1000), // 1 hour
+      expired: Date.now() + 60 * 60 * 1000, // 1 hour
       firebase: {
         uid: userId,
         emailVerified: isEmailVerified,
@@ -221,14 +209,14 @@ export class DelonAuthAdapter {
     const deviceInfo = DeviceInfo.fromBrowser();
     const loginSource = LoginSource.WEB();
     const geoLocation = await GeoLocation.fromIP('127.0.0.1'); // 實際實現中應獲取真實 IP
-    
+
     return new LoginContext('127.0.0.1', deviceInfo, geoLocation, loginSource);
   }
 
   /**
    * 處理認證成功
    */
-  async handleAuthenticationSuccess(tokenModel: ITokenModel, redirectUrl: string = '/'): Promise<void> {
+  async handleAuthenticationSuccess(tokenModel: ITokenModel, redirectUrl = '/'): Promise<void> {
     await this.setToken(tokenModel);
     this.message.success('認證成功');
     await this.router.navigate([redirectUrl]);
@@ -237,7 +225,7 @@ export class DelonAuthAdapter {
   /**
    * 處理認證失敗
    */
-  handleAuthenticationError(error: any, errorMessage: string = '認證失敗'): void {
+  handleAuthenticationError(error: any, errorMessage = '認證失敗'): void {
     this.message.error(errorMessage);
     console.error('Authentication error:', error);
   }
@@ -245,7 +233,7 @@ export class DelonAuthAdapter {
   /**
    * 處理登出
    */
-  async handleLogout(redirectUrl: string = '/auth/login'): Promise<void> {
+  async handleLogout(redirectUrl = '/auth/login'): Promise<void> {
     await this.clearToken();
     this.message.success('登出成功');
     await this.router.navigate([redirectUrl]);
@@ -293,4 +281,4 @@ export class DelonAuthAdapter {
   getAuthStateChanges(): Observable<ITokenModel | null> {
     return this.authStateSubject.asObservable();
   }
-} 
+}

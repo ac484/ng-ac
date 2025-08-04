@@ -4,8 +4,4 @@
 
 export { DataTableComponent } from './data-table.component';
 export { DataTableExampleComponent } from './data-table-example.component';
-export type {
-    TableColumn,
-    TableAction,
-    PaginationConfig
-} from './table-column.interface';
+export type { TableColumn, TableAction, PaginationConfig } from './table-column.interface';

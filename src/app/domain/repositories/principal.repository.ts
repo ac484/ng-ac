@@ -44,4 +44,4 @@ export interface PrincipalRepository {
    * Find principals by status
    */
   findByStatus(status: string): Promise<Principal[]>;
-} 
+}

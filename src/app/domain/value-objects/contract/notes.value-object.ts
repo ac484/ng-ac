@@ -19,4 +19,4 @@ export class Notes {
   static create(value: string): Notes {
     return new Notes(value);
   }
-} 
+}

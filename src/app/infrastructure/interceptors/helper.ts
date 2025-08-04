@@ -57,4 +57,4 @@ export function checkStatus(injector: Injector, ev: HttpResponseBase): void {
 
   const errortext = CODEMESSAGE[ev.status] || ev.statusText;
   injector.get(NzNotificationService).error(`Request error ${ev.status}: ${ev.url}`, errortext);
-} 
+}

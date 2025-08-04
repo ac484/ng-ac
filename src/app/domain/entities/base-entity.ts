@@ -23,4 +23,4 @@ export abstract class BaseEntity<TProps> {
   getProps(): TProps {
     return this.props;
   }
-} 
+}

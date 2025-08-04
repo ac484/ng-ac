@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+
+import { SharedUtilitiesService } from './shared-utilities.service';
 import { Transaction, TransactionType, TransactionStatus } from '../entities/transaction.entity';
 import { Money } from '../value-objects/account/money.value-object';
-import { SharedUtilitiesService } from './shared-utilities.service';
 
 /**
  * Optimized Transaction Domain Service - Pure Business Logic Only
@@ -10,8 +11,7 @@ import { SharedUtilitiesService } from './shared-utilities.service';
  */
 @Injectable({ providedIn: 'root' })
 export class TransactionDomainService {
-
-  constructor(private sharedUtilities: SharedUtilitiesService) { }
+  constructor(private sharedUtilities: SharedUtilitiesService) {}
 
   /**
    * Business rule: Validate transaction creation parameters
@@ -49,7 +49,7 @@ export class TransactionDomainService {
   }
 
   // Calculate transaction fees based on type and amount
-  calculateFees(transactionType: TransactionType, amount: number, currency: string = 'USD'): number {
+  calculateFees(transactionType: TransactionType, amount: number, currency = 'USD'): number {
     const money = new Money(amount, currency);
 
     switch (transactionType) {
@@ -82,7 +82,7 @@ export class TransactionDomainService {
   /**
    * Business rule: Validate transaction amount limits
    */
-  validateAmountLimits(amount: number, transactionType: TransactionType, currency: string = 'USD'): void {
+  validateAmountLimits(amount: number, transactionType: TransactionType, currency = 'USD'): void {
     // Define limits based on transaction type
     const limits: Record<TransactionType, { min: number; max: number }> = {
       [TransactionType.DEPOSIT]: { min: 1, max: 100000 },
@@ -146,15 +146,11 @@ export class TransactionDomainService {
   }
 
   // Validate transaction for account balance
-  validateAccountBalance(
-    transaction: Transaction,
-    currentBalance: number
-  ): { isValid: boolean; errors: string[] } {
+  validateAccountBalance(transaction: Transaction, currentBalance: number): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
     // Check if account has sufficient balance for withdrawals and transfers
-    if (transaction.transactionType === TransactionType.WITHDRAWAL ||
-      transaction.transactionType === TransactionType.TRANSFER) {
+    if (transaction.transactionType === TransactionType.WITHDRAWAL || transaction.transactionType === TransactionType.TRANSFER) {
       const totalAmount = transaction.getTotalAmount();
 
       if (currentBalance < totalAmount) {
@@ -238,7 +234,7 @@ export class TransactionDomainService {
     amount: number,
     transactionType: TransactionType,
     description: string,
-    currency: string = 'USD',
+    currency = 'USD',
     referenceNumber?: string,
     category?: string
   ): Transaction {
@@ -277,4 +273,4 @@ export class TransactionDomainService {
 
     return transaction;
   }
-} 
+}

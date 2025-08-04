@@ -1,20 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
-import { USER_REPOSITORY } from '../../domain/repositories/repository-tokens';
-import { User } from '../../domain/entities/user.entity';
-import { UserRepository } from '../../domain/repositories/user.repository';
-import { UserDomainService } from '../../domain/services/user-domain.service';
-import { ConversionUtilitiesService } from '../../domain/services/conversion-utilities.service';
+
 import { BaseApplicationService, SearchCriteriaDto } from './base-application.service';
 import { ErrorHandlerService } from './error-handler.service';
-import {
-  CreateUserDto,
-  UpdateUserDto,
-  UpdateUserStatusDto,
-  UserDto,
-  UserListDto,
-  UserSearchDto,
-  UserStatsDto
-} from '../dto/user.dto';
+import { User } from '../../domain/entities/user.entity';
+import { USER_REPOSITORY } from '../../domain/repositories/repository-tokens';
+import { UserRepository } from '../../domain/repositories/user.repository';
+import { ConversionUtilitiesService } from '../../domain/services/conversion-utilities.service';
+import { UserDomainService } from '../../domain/services/user-domain.service';
+import { CreateUserDto, UpdateUserDto, UpdateUserStatusDto, UserDto, UserListDto, UserSearchDto, UserStatsDto } from '../dto/user.dto';
 
 /**
  * Refactored User Application Service using BaseApplicationService
@@ -25,7 +18,6 @@ import {
   providedIn: 'root'
 })
 export class UserApplicationService extends BaseApplicationService<User, CreateUserDto, UpdateUserDto, UserDto> {
-
   constructor(
     @Inject(USER_REPOSITORY) userRepository: UserRepository,
     errorHandler: ErrorHandlerService,
@@ -49,11 +41,7 @@ export class UserApplicationService extends BaseApplicationService<User, CreateU
     }
 
     // Delegate to domain service for entity creation
-    return this.userDomainService.createUser(
-      dto.email,
-      dto.displayName,
-      dto.photoURL
-    );
+    return this.userDomainService.createUser(dto.email, dto.displayName, dto.photoURL);
   }
 
   /**
@@ -98,9 +86,8 @@ export class UserApplicationService extends BaseApplicationService<User, CreateU
    */
   protected override async filterByKeyword(entities: User[], keyword: string): Promise<User[]> {
     const lowerKeyword = keyword.toLowerCase();
-    return entities.filter(user =>
-      user.email.toLowerCase().includes(lowerKeyword) ||
-      user.displayName.toLowerCase().includes(lowerKeyword)
+    return entities.filter(
+      user => user.email.toLowerCase().includes(lowerKeyword) || user.displayName.toLowerCase().includes(lowerKeyword)
     );
   }
 
@@ -116,11 +103,7 @@ export class UserApplicationService extends BaseApplicationService<User, CreateU
    * Apply user-specific sorting
    * Overrides BaseApplicationService.applySorting
    */
-  protected override async applySorting(
-    entities: User[],
-    sortBy: string,
-    sortOrder: 'asc' | 'desc' = 'asc'
-  ): Promise<User[]> {
+  protected override async applySorting(entities: User[], sortBy: string, sortOrder: 'asc' | 'desc' = 'asc'): Promise<User[]> {
     const sorted = [...entities];
 
     sorted.sort((a, b) => {
@@ -155,15 +138,11 @@ export class UserApplicationService extends BaseApplicationService<User, CreateU
 
       // Handle different data types
       if (aValue instanceof Date && bValue instanceof Date) {
-        return sortOrder === 'asc'
-          ? aValue.getTime() - bValue.getTime()
-          : bValue.getTime() - aValue.getTime();
+        return sortOrder === 'asc' ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime();
       }
 
       if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return sortOrder === 'asc'
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
+        return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
       }
 
       return 0;
@@ -232,12 +211,14 @@ export class UserApplicationService extends BaseApplicationService<User, CreateU
 
     try {
       // Convert UserSearchDto to SearchCriteriaDto
-      const criteria: SearchCriteriaDto | undefined = searchDto ? {
-        keyword: searchDto.email || searchDto.displayName,
-        status: searchDto.status,
-        page: searchDto.page,
-        pageSize: searchDto.pageSize
-      } : undefined;
+      const criteria: SearchCriteriaDto | undefined = searchDto
+        ? {
+            keyword: searchDto.email || searchDto.displayName,
+            status: searchDto.status,
+            page: searchDto.page,
+            pageSize: searchDto.pageSize
+          }
+        : undefined;
 
       // Use base class method
       const result = await this.getList(criteria);
@@ -279,7 +260,7 @@ export class UserApplicationService extends BaseApplicationService<User, CreateU
         emailVerified: allUsers.filter(u => u.email && u.email.includes('@')).length, // Simple check
         anonymous: 0, // No anonymous users in current system
         byAuthProvider: {
-          'email': allUsers.length // All users use email auth for now
+          email: allUsers.length // All users use email auth for now
         }
       };
 

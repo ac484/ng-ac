@@ -39,4 +39,4 @@ export class LoginContext {
   getSource(): LoginSource {
     return this.source;
   }
-} 
+}

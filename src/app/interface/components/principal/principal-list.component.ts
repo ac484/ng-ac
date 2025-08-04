@@ -1,25 +1,27 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { Principal } from '../../../domain/entities/principal.entity';
-import { Contact } from '../../../domain/entities/contact.entity';
+
 import { PrincipalApplicationService } from '../../../application/services/principal-application.service';
-import { CommonModule } from '@angular/common';
-import { NzCardModule } from 'ng-zorro-antd/card';
+import { Contact } from '../../../domain/entities/contact.entity';
+import { Principal } from '../../../domain/entities/principal.entity';
+
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSplitterModule } from 'ng-zorro-antd/splitter';
-import { NzListModule } from 'ng-zorro-antd/list';
-import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @Component({
@@ -57,7 +59,7 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
     private principalService: PrincipalApplicationService,
     private modal: NzModalService,
     private message: NzMessageService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadPrincipals();
@@ -70,23 +72,24 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
 
   loadPrincipals(): void {
     this.loading = true;
-    this.principalService.getPrincipals().pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (principals) => {
-        this.principalList = principals;
-        console.log('載入的 Principal 數據:', principals);
-        principals.forEach(principal => {
-          console.log(`Principal: ${principal.name.getValue()}, 聯絡人數量: ${principal.contactCount}`);
-        });
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('載入 Principal 列表失敗:', error);
-        this.message.error('載入 Principal 列表失敗');
-        this.loading = false;
-      }
-    });
+    this.principalService
+      .getPrincipals()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: principals => {
+          this.principalList = principals;
+          console.log('載入的 Principal 數據:', principals);
+          principals.forEach(principal => {
+            console.log(`Principal: ${principal.name.getValue()}, 聯絡人數量: ${principal.contactCount}`);
+          });
+          this.loading = false;
+        },
+        error: error => {
+          console.error('載入 Principal 列表失敗:', error);
+          this.message.error('載入 Principal 列表失敗');
+          this.loading = false;
+        }
+      });
   }
 
   expandPrincipal(principal: Principal, expanded?: boolean): void {
@@ -164,17 +167,18 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
       nzOkText: '確定',
       nzCancelText: '取消',
       nzOnOk: () => {
-        this.principalService.deletePrincipal(principal.id.getValue()).pipe(
-          takeUntil(this.destroy$)
-        ).subscribe({
-          next: () => {
-            this.loadPrincipals();
-            this.message.success('Principal 刪除成功');
-          },
-          error: () => {
-            this.message.error('Principal 刪除失敗');
-          }
-        });
+        this.principalService
+          .deletePrincipal(principal.id.getValue())
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              this.loadPrincipals();
+              this.message.success('Principal 刪除成功');
+            },
+            error: () => {
+              this.message.error('Principal 刪除失敗');
+            }
+          });
       }
     });
   }
@@ -248,20 +252,18 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
       nzOkText: '確定',
       nzCancelText: '取消',
       nzOnOk: () => {
-        this.principalService.deleteContact(
-          this.selectedPrincipal!.id.getValue(),
-          contact.id
-        ).pipe(
-          takeUntil(this.destroy$)
-        ).subscribe({
-          next: () => {
-            this.loadPrincipals();
-            this.message.success('聯絡人刪除成功');
-          },
-          error: () => {
-            this.message.error('聯絡人刪除失敗');
-          }
-        });
+        this.principalService
+          .deleteContact(this.selectedPrincipal!.id.getValue(), contact.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              this.loadPrincipals();
+              this.message.success('聯絡人刪除成功');
+            },
+            error: () => {
+              this.message.error('聯絡人刪除失敗');
+            }
+          });
       }
     });
   }
@@ -280,4 +282,4 @@ export class PrincipalListComponent implements OnInit, OnDestroy {
       contact: contact // 保留原始 contact 對象用於操作
     }));
   }
-} 
+}

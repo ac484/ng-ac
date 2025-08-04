@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { TokenService } from '@delon/auth';
-import { User } from '../../domain/entities/user.entity';
+import { NzMessageService } from 'ng-zorro-antd/message';
+
 import { Authentication } from '../../domain/entities/auth.entity';
+import { User } from '../../domain/entities/user.entity';
 
 /**
  * 統一認證服務
@@ -22,7 +23,7 @@ export class UnifiedAuthService {
     private tokenService: TokenService,
     private message: NzMessageService,
     private router: Router
-  ) { }
+  ) {}
 
   /**
    * 匿名登入（帶緩存）
@@ -253,4 +254,4 @@ interface AuthenticationResult {
   token?: string;
   isAnonymous?: boolean;
   error?: string;
-} 
+}

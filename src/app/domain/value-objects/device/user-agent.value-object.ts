@@ -53,4 +53,4 @@ export class UserAgent {
 
     return { browser, device, os };
   }
-} 
+}

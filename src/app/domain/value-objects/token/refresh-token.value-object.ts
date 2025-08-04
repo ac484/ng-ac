@@ -26,4 +26,4 @@ export class RefreshToken {
   hasToken(): boolean {
     return this.token !== null;
   }
-} 
+}

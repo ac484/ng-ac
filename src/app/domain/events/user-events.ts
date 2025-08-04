@@ -55,9 +55,7 @@ export class UserDeactivatedEvent extends DomainEvent {
  * User activated domain event
  */
 export class UserActivatedEvent extends DomainEvent {
-  constructor(
-    public readonly userId: string
-  ) {
+  constructor(public readonly userId: string) {
     super();
   }
-} 
+}

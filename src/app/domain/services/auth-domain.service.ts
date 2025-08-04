@@ -3,6 +3,7 @@
  * Handles authentication business logic and validation rules
  */
 import { Injectable } from '@angular/core';
+
 import { Authentication, AuthResult, EmailAuthData, AuthProvider } from '../entities/auth.entity';
 import { User } from '../entities/user.entity';
 
@@ -10,7 +11,6 @@ import { User } from '../entities/user.entity';
   providedIn: 'root'
 })
 export class AuthDomainService {
-
   /**
    * Validate email authentication data
    * 改進：通過實體進行驗證，而不是直接創建值物件
@@ -151,4 +151,4 @@ export class AuthDomainService {
 
     return permissions;
   }
-} 
+}

@@ -1,31 +1,21 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef, NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
-import { Principal } from '../../../domain/entities/principal.entity';
-import { PrincipalApplicationService } from '../../../application/services/principal-application.service';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, Inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzModalRef, NZ_MODAL_DATA, NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+
+import { PrincipalApplicationService } from '../../../application/services/principal-application.service';
+import { Principal } from '../../../domain/entities/principal.entity';
 
 @Component({
   selector: 'app-principal-form',
   templateUrl: './principal-form.component.html',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    NzCardModule,
-    NzFormModule,
-    NzInputModule,
-    NzButtonModule,
-    NzModalModule,
-    NzSelectModule
-  ]
+  imports: [CommonModule, ReactiveFormsModule, NzCardModule, NzFormModule, NzInputModule, NzButtonModule, NzModalModule, NzSelectModule]
 })
 export class PrincipalFormComponent implements OnInit {
   principalFormGroup!: FormGroup;
@@ -59,44 +49,48 @@ export class PrincipalFormComponent implements OnInit {
   }
 
   submitForm(): Promise<boolean> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (this.principalFormGroup.valid) {
         this.loading = true;
         const formValue = this.principalFormGroup.value;
 
         if (this.data.mode === 'add') {
-          this.principalService.createPrincipal({
-            name: formValue.name,
-            status: formValue.status,
-            description: formValue.description
-          }).subscribe({
-            next: () => {
-              this.loading = false;
-              this.modalRef.close(true);
-              resolve(true);
-            },
-            error: () => {
-              this.loading = false;
-              resolve(false);
-            }
-          });
+          this.principalService
+            .createPrincipal({
+              name: formValue.name,
+              status: formValue.status,
+              description: formValue.description
+            })
+            .subscribe({
+              next: () => {
+                this.loading = false;
+                this.modalRef.close(true);
+                resolve(true);
+              },
+              error: () => {
+                this.loading = false;
+                resolve(false);
+              }
+            });
         } else if (this.data.mode === 'edit') {
-          this.principalService.updatePrincipal({
-            id: this.data.principal.id.getValue(),
-            name: formValue.name,
-            status: formValue.status,
-            description: formValue.description
-          }).subscribe({
-            next: () => {
-              this.loading = false;
-              this.modalRef.close(true);
-              resolve(true);
-            },
-            error: () => {
-              this.loading = false;
-              resolve(false);
-            }
-          });
+          this.principalService
+            .updatePrincipal({
+              id: this.data.principal.id.getValue(),
+              name: formValue.name,
+              status: formValue.status,
+              description: formValue.description
+            })
+            .subscribe({
+              next: () => {
+                this.loading = false;
+                this.modalRef.close(true);
+                resolve(true);
+              },
+              error: () => {
+                this.loading = false;
+                resolve(false);
+              }
+            });
         }
       } else {
         Object.values(this.principalFormGroup.controls).forEach(control => {
@@ -113,4 +107,4 @@ export class PrincipalFormComponent implements OnInit {
   handleCancel(): void {
     this.modalRef.close();
   }
-} 
+}

@@ -3,13 +3,12 @@
  * Migrates FirebaseAuthService to Infrastructure layer following DDD patterns
  */
 import { Injectable, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { 
-  Auth, 
-  User, 
-  signInWithEmailAndPassword, 
+import {
+  Auth,
+  User,
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signInWithPopup, 
+  signInWithPopup,
   signInAnonymously,
   GoogleAuthProvider,
   sendPasswordResetEmail,
@@ -18,7 +17,7 @@ import {
   signOut,
   UserCredential
 } from '@angular/fire/auth';
-import { StartupService } from '../services/startup.service';
+import { Router } from '@angular/router';
 import { ReuseTabService } from '@delon/abc/reuse-tab';
 import { DA_SERVICE_TOKEN, SocialService, ITokenModel } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
@@ -26,8 +25,9 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, from, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError, switchMap, tap } from 'rxjs/operators';
 
-import { AuthRepository } from '../../domain/repositories/auth.repository';
 import { Authentication, AuthResult, EmailAuthData, AuthSession } from '../../domain/entities/auth.entity';
+import { AuthRepository } from '../../domain/repositories/auth.repository';
+import { StartupService } from '../services/startup.service';
 
 @Injectable()
 export class FirebaseAuthRepository implements AuthRepository {
@@ -51,7 +51,7 @@ export class FirebaseAuthRepository implements AuthRepository {
    * Initialize authentication state listener
    */
   private initAuthStateListener(): void {
-    onAuthStateChanged(this.auth, (firebaseUser) => {
+    onAuthStateChanged(this.auth, firebaseUser => {
       if (firebaseUser) {
         const authentication = Authentication.fromFirebaseUser(firebaseUser);
         this.currentAuthSubject.next(authentication);
@@ -68,7 +68,7 @@ export class FirebaseAuthRepository implements AuthRepository {
    */
   signInWithGoogle(): Observable<AuthResult> {
     const provider = new GoogleAuthProvider();
-    
+
     return from(signInWithPopup(this.auth, provider)).pipe(
       switchMap(async (result: UserCredential) => {
         const authentication = Authentication.fromFirebaseUser(result.user);
@@ -80,16 +80,16 @@ export class FirebaseAuthRepository implements AuthRepository {
           message: 'Google sign in successful'
         };
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('Google sign in failed:', error);
         let message = 'Google sign in failed';
-        
+
         if (error.code === 'auth/popup-closed-by-user') {
           message = 'Sign in popup was closed';
         } else if (error.code === 'auth/popup-blocked') {
           message = 'Popup blocked, please allow popups';
         }
-        
+
         return throwError(() => ({ success: false, error, message }));
       })
     );
@@ -110,12 +110,12 @@ export class FirebaseAuthRepository implements AuthRepository {
           message: 'Anonymous sign in successful'
         };
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('Anonymous sign in failed:', error);
-        return throwError(() => ({ 
-          success: false, 
-          error, 
-          message: 'Anonymous sign in failed, please try again' 
+        return throwError(() => ({
+          success: false,
+          error,
+          message: 'Anonymous sign in failed, please try again'
         }));
       })
     );
@@ -136,7 +136,7 @@ export class FirebaseAuthRepository implements AuthRepository {
           message: 'Email sign in successful'
         };
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('Email sign in failed:', error);
         let message = 'Sign in failed, please try again';
 
@@ -173,7 +173,7 @@ export class FirebaseAuthRepository implements AuthRepository {
         if (authData.displayName && result.user) {
           await updateProfile(result.user, { displayName: authData.displayName });
         }
-        
+
         const authentication = Authentication.fromFirebaseUser(result.user);
         await this.handleAuthSuccess(authentication);
         return {
@@ -183,7 +183,7 @@ export class FirebaseAuthRepository implements AuthRepository {
           message: 'Registration successful'
         };
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('Email registration failed:', error);
         let message = 'Registration failed, please try again';
 
@@ -213,7 +213,7 @@ export class FirebaseAuthRepository implements AuthRepository {
         success: true,
         message: 'Password reset email sent, please check your inbox'
       })),
-      catchError((error) => {
+      catchError(error => {
         console.error('Send password reset email failed:', error);
         let message = 'Failed to send reset email, please try again';
 
@@ -245,7 +245,7 @@ export class FirebaseAuthRepository implements AuthRepository {
         this.reuseTabService?.clear();
         console.log('Firebase sign out successful');
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('Firebase sign out failed:', error);
         return throwError(() => error);
       })
@@ -294,13 +294,13 @@ export class FirebaseAuthRepository implements AuthRepository {
       }
 
       const idToken = await firebaseUser.getIdToken();
-      
-             // Create session
-       const session: AuthSession = {
-         token: idToken || '',
-         expiresAt: new Date(Date.now() + 1000 * 60 * 60), // 1 hour
-         refreshToken: undefined
-       };
+
+      // Create session
+      const session: AuthSession = {
+        token: idToken || '',
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60), // 1 hour
+        refreshToken: undefined
+      };
       authentication.setSession(session);
 
       // Build @delon/auth compatible token model
@@ -333,7 +333,6 @@ export class FirebaseAuthRepository implements AuthRepository {
       });
 
       this.message.success('Sign in successful');
-
     } catch (error) {
       console.error('Handle auth success failed:', error);
       this.message.error('Sign in processing failed, please try again');
@@ -364,14 +363,16 @@ export class FirebaseAuthRepository implements AuthRepository {
         };
         currentAuth.setSession(session);
 
-        return from(Promise.resolve({
-          success: true,
-          user: currentAuth.getUser() || undefined,
-          session: currentAuth.getSession() || undefined,
-          message: 'Token refreshed successfully'
-        }));
+        return from(
+          Promise.resolve({
+            success: true,
+            user: currentAuth.getUser() || undefined,
+            session: currentAuth.getSession() || undefined,
+            message: 'Token refreshed successfully'
+          })
+        );
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('Token refresh failed:', error);
         return throwError(() => ({ success: false, error, message: 'Token refresh failed' }));
       })
@@ -387,4 +388,4 @@ export class FirebaseAuthRepository implements AuthRepository {
       catchError(() => from([false]))
     );
   }
-} 
+}

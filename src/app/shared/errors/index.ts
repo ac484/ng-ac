@@ -29,27 +29,27 @@ export { GlobalErrorHandler } from './global-error-handler';
 export type { ErrorSeverity, ErrorHandlingOptions, ErrorStats } from './global-error-handler';
 
 // 常用錯誤創建函數
-import { ValidationError, ValidationRule } from './validation-error';
-import { NotFoundError } from './not-found-error';
 import { ApplicationError } from './application-error';
 import { AuthenticationError } from './authentication-error';
 import { NetworkError } from './network-error';
+import { NotFoundError } from './not-found-error';
 import { RepositoryError } from './repository-error';
+import { ValidationError, ValidationRule } from './validation-error';
 
 export const createValidationError = (field: string, rule: ValidationRule, context?: Record<string, any>) =>
-    ValidationError.createFieldError(field, rule, context);
+  ValidationError.createFieldError(field, rule, context);
 
 export const createNotFoundError = (resourceType: string, resourceId: string, context?: Record<string, any>) =>
-    NotFoundError.resourceNotFound(resourceType, resourceId, context);
+  NotFoundError.resourceNotFound(resourceType, resourceId, context);
 
 export const createApplicationError = (message: string, operation?: string, context?: Record<string, any>) =>
-    new ApplicationError(message, operation, undefined, context);
+  new ApplicationError(message, operation, undefined, context);
 
 export const createAuthenticationError = (message: string, authType?: string, context?: Record<string, any>) =>
-    new AuthenticationError(message, authType, undefined, context);
+  new AuthenticationError(message, authType, undefined, context);
 
 export const createNetworkError = (message: string, status?: number, url?: string, context?: Record<string, any>) =>
-    new NetworkError(message, status, url, undefined, undefined, context);
+  new NetworkError(message, status, url, undefined, undefined, context);
 
 export const createRepositoryError = (message: string, operation?: string, collection?: string, context?: Record<string, any>) =>
-    new RepositoryError(message, operation, collection, undefined, context);
+  new RepositoryError(message, operation, collection, undefined, context);

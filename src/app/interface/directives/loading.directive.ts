@@ -20,4 +20,4 @@ export class LoadingDirective {
     private loadingTemplate: TemplateRef<any>,
     private viewContainer: ViewContainerRef
   ) {}
-} 
+}

@@ -1,35 +1,36 @@
 import { Injectable, inject } from '@angular/core';
-import { 
-  Firestore, 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
+import {
+  Firestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
   startAfter,
   DocumentData,
   QueryDocumentSnapshot,
   Timestamp
 } from '@angular/fire/firestore';
+
 import { Contract } from '../../domain/entities/contract.entity';
 import { ContractRepository, ContractSearchCriteria } from '../../domain/repositories/contract.repository';
-import { 
-  ContractNumber, 
-  ContractStatus, 
-  ClientName, 
-  ClientRepresentative, 
-  ContactPerson, 
+import { Money } from '../../domain/value-objects/account/money.value-object';
+import {
+  ContractNumber,
+  ContractStatus,
+  ClientName,
+  ClientRepresentative,
+  ContactPerson,
   ContractName,
   ContactPhone,
   Notes
 } from '../../domain/value-objects/contract';
-import { Money } from '../../domain/value-objects/account/money.value-object';
 
 @Injectable()
 export class FirebaseContractRepository implements ContractRepository {
@@ -40,7 +41,7 @@ export class FirebaseContractRepository implements ContractRepository {
     try {
       const docRef = doc(this.firestore, this.collectionName, id);
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
         return this.fromFirestoreDoc(docSnap.data(), docSnap.id);
       }
@@ -53,12 +54,9 @@ export class FirebaseContractRepository implements ContractRepository {
 
   async findByContractNumber(contractNumber: string): Promise<Contract | null> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('contractNumber', '==', contractNumber)
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('contractNumber', '==', contractNumber));
       const querySnapshot = await getDocs(q);
-      
+
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         return this.fromFirestoreDoc(doc.data(), doc.id);
@@ -83,7 +81,7 @@ export class FirebaseContractRepository implements ContractRepository {
         where('createdAt', '<=', endOfDay),
         orderBy('createdAt', 'desc')
       );
-      
+
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => this.fromFirestoreDoc(doc.data(), doc.id));
     } catch (error) {
@@ -101,10 +99,10 @@ export class FirebaseContractRepository implements ContractRepository {
         q = query(q, where('status', '==', criteria.status));
       }
       if (criteria?.clientName) {
-        q = query(q, where('clientName', '>=', criteria.clientName), where('clientName', '<=', criteria.clientName + '\uf8ff'));
+        q = query(q, where('clientName', '>=', criteria.clientName), where('clientName', '<=', `${criteria.clientName}\uf8ff`));
       }
       if (criteria?.contractName) {
-        q = query(q, where('contractName', '>=', criteria.contractName), where('contractName', '<=', criteria.contractName + '\uf8ff'));
+        q = query(q, where('contractName', '>=', criteria.contractName), where('contractName', '<=', `${criteria.contractName}\uf8ff`));
       }
 
       // Apply ordering
@@ -113,7 +111,7 @@ export class FirebaseContractRepository implements ContractRepository {
       // Apply pagination
       const page = criteria?.page || 1;
       const pageSize = criteria?.pageSize || 10;
-      
+
       if (page > 1) {
         // For pagination, you would need to implement cursor-based pagination
         // This is a simplified version
@@ -133,7 +131,7 @@ export class FirebaseContractRepository implements ContractRepository {
   async save(contract: Contract): Promise<void> {
     try {
       const contractData = this.toFirestoreData(contract);
-      
+
       if (contract.id && contract.id.trim() !== '') {
         // Update existing contract
         const docRef = doc(this.firestore, this.collectionName, contract.id);
@@ -142,7 +140,7 @@ export class FirebaseContractRepository implements ContractRepository {
         // Create new contract
         const docRef = collection(this.firestore, this.collectionName);
         const docSnap = await addDoc(docRef, contractData);
-        
+
         // Update the contract entity with the generated ID
         // Note: This is a side effect, in a real DDD implementation,
         // you might want to return the updated entity or use events
@@ -166,10 +164,7 @@ export class FirebaseContractRepository implements ContractRepository {
 
   async countByStatus(status: string): Promise<number> {
     try {
-      const q = query(
-        collection(this.firestore, this.collectionName),
-        where('status', '==', status)
-      );
+      const q = query(collection(this.firestore, this.collectionName), where('status', '==', status));
       const querySnapshot = await getDocs(q);
       return querySnapshot.size;
     } catch (error) {
@@ -229,4 +224,4 @@ export class FirebaseContractRepository implements ContractRepository {
 
     return data;
   }
-} 
+}

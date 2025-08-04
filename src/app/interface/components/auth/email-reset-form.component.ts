@@ -11,6 +11,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
+
 import { FirebaseAuthService } from '../../../infrastructure/services/firebase-auth.service';
 
 @Component({
@@ -27,9 +28,7 @@ import { FirebaseAuthService } from '../../../infrastructure/services/firebase-a
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <button nz-button type="submit" nzType="primary" nzSize="large" [nzLoading]="loading" nzBlock> 
-          發送重置郵件 
-        </button>
+        <button nz-button type="submit" nzType="primary" nzSize="large" [nzLoading]="loading" nzBlock> 發送重置郵件 </button>
       </nz-form-item>
     </form>
   `,
@@ -64,14 +63,14 @@ export class EmailResetFormComponent {
     const { email } = this.resetForm.value;
 
     this.firebaseAuthService.sendPasswordResetEmail(email!).subscribe({
-      next: (result) => {
+      next: result => {
         if (result.success) {
           this.message.success(result.message || '密碼重設郵件已發送，請檢查您的郵箱');
           this.resetSuccess.emit();
           this.resetForm.reset();
         }
       },
-      error: (error) => {
+      error: error => {
         this.message.error(error.message || '發送失敗，請稍後再試');
         this.loading = false;
       },
@@ -92,4 +91,4 @@ export class EmailResetFormComponent {
       }
     });
   }
-} 
+}

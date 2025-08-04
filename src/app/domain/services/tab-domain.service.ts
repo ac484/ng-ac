@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import { TabModel, TabStatus, TabConfig, TabEvent } from '../entities/tab.entity';
 
 /**
  * Domain Service: Tab Domain Service
- * 
+ *
  * Contains core business logic for tab management including:
  * - Tab validation rules
  * - Tab state management
  * - Tab business rules
- * 
+ *
  * This service belongs to the Domain layer as it encapsulates
  * domain-specific business logic and rules.
  */
@@ -73,7 +74,7 @@ export class TabDomainService {
    */
   canAddTab(tab: TabModel): boolean {
     const currentTabs = this.getTabArray();
-    
+
     // Check if tab already exists
     const existingTab = currentTabs.find(t => t.path === tab.path);
     if (existingTab) {
@@ -98,7 +99,7 @@ export class TabDomainService {
    */
   canRemoveTab(tabIndex: number): boolean {
     const currentTabs = this.getTabArray();
-    
+
     if (tabIndex < 0 || tabIndex >= currentTabs.length) {
       return false;
     }
@@ -152,4 +153,4 @@ export class TabDomainService {
       timestamp: new Date()
     };
   }
-} 
+}

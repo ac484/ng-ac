@@ -780,4 +780,4 @@ export class FirebaseAuthError {
   private computeLocalizedMessage(code: string): string {
     return FIREBASE_AUTH_ERROR_MESSAGES[code] || '發生未知錯誤';
   }
-} 
+}

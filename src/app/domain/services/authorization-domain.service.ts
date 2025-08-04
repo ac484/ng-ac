@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { RoleEntity } from '../entities/role.entity';
+
 import { PermissionEntity } from '../entities/permission.entity';
-import { Role } from '../value-objects/authorization/role.value-object';
-import { Permission } from '../value-objects/authorization/permission.value-object';
-import { PermissionSet } from '../value-objects/authorization/permission-set.value-object';
+import { RoleEntity } from '../entities/role.entity';
 import { UserId } from '../value-objects/authentication/user-id.value-object';
+import { PermissionSet } from '../value-objects/authorization/permission-set.value-object';
+import { Permission } from '../value-objects/authorization/permission.value-object';
+import { Role } from '../value-objects/authorization/role.value-object';
 
 /**
  * 授權領域服務
@@ -16,7 +17,7 @@ import { UserId } from '../value-objects/authentication/user-id.value-object';
 export class AuthorizationDomainService {
   // 緩存角色權限映射
   private rolePermissionCache = new Map<string, Permission[]>();
-  
+
   constructor() {
     this.initializeRolePermissionCache();
   }
@@ -41,18 +42,14 @@ export class AuthorizationDomainService {
    * 檢查用戶是否具有指定權限集合中的任何權限
    */
   hasAnyPermission(userPermissions: Permission[], requiredPermissions: Permission[]): boolean {
-    return requiredPermissions.some(requiredPermission => 
-      this.hasPermission(userPermissions, requiredPermission)
-    );
+    return requiredPermissions.some(requiredPermission => this.hasPermission(userPermissions, requiredPermission));
   }
 
   /**
    * 檢查用戶是否具有指定權限集合中的所有權限
    */
   hasAllPermissions(userPermissions: Permission[], requiredPermissions: Permission[]): boolean {
-    return requiredPermissions.every(requiredPermission => 
-      this.hasPermission(userPermissions, requiredPermission)
-    );
+    return requiredPermissions.every(requiredPermission => this.hasPermission(userPermissions, requiredPermission));
   }
 
   /**
@@ -61,7 +58,7 @@ export class AuthorizationDomainService {
   getPermissionsForRole(role: Role): Permission[] {
     const roleName = role.getValue();
     const cached = this.rolePermissionCache.get(roleName);
-    
+
     if (cached) {
       return cached;
     }
@@ -76,7 +73,7 @@ export class AuthorizationDomainService {
    */
   getPermissionsForRoles(roles: Role[]): Permission[] {
     const allPermissions = new Set<string>();
-    
+
     roles.forEach(role => {
       const rolePermissions = this.getPermissionsForRole(role);
       rolePermissions.forEach(permission => {
@@ -108,7 +105,7 @@ export class AuthorizationDomainService {
     const roleName = role.getName();
     const isSystemRole = roleName === 'Admin' || roleName === 'User';
     const hasAssignedUsers = role.getAssignedUsers().size > 0;
-    
+
     return !isSystemRole && !hasAssignedUsers;
   }
 
@@ -118,7 +115,7 @@ export class AuthorizationDomainService {
   canDeletePermission(permission: PermissionEntity): boolean {
     const permissionName = permission.getName();
     const isSystemPermission = permissionName === 'user.read' || permissionName === 'user.write';
-    
+
     return !isSystemPermission;
   }
 
@@ -135,7 +132,7 @@ export class AuthorizationDomainService {
   canUserPerformAction(userRoles: Role[], resource: string, action: string): boolean {
     const userPermissions = this.getUserPermissions(userRoles);
     const requiredPermission = new Permission(`${resource}.${action}`);
-    
+
     return this.hasPermission(userPermissions, requiredPermission);
   }
 
@@ -170,42 +167,24 @@ export class AuthorizationDomainService {
 
   // 私有方法：初始化角色權限緩存
   private initializeRolePermissionCache(): void {
-    this.rolePermissionCache.set('Admin', [
-      Permission.CONTRACT_EDIT(),
-      Permission.USER_READ(),
-      Permission.USER_WRITE()
-    ]);
-    
-    this.rolePermissionCache.set('Editor', [
-      Permission.CONTRACT_EDIT(),
-      Permission.USER_READ()
-    ]);
-    
-    this.rolePermissionCache.set('User', [
-      Permission.USER_READ()
-    ]);
+    this.rolePermissionCache.set('Admin', [Permission.CONTRACT_EDIT(), Permission.USER_READ(), Permission.USER_WRITE()]);
+
+    this.rolePermissionCache.set('Editor', [Permission.CONTRACT_EDIT(), Permission.USER_READ()]);
+
+    this.rolePermissionCache.set('User', [Permission.USER_READ()]);
   }
 
   // 私有方法：計算角色權限
   private calculatePermissionsForRole(roleName: string): Permission[] {
     switch (roleName) {
       case 'Admin':
-        return [
-          Permission.CONTRACT_EDIT(),
-          Permission.USER_READ(),
-          Permission.USER_WRITE()
-        ];
+        return [Permission.CONTRACT_EDIT(), Permission.USER_READ(), Permission.USER_WRITE()];
       case 'Editor':
-        return [
-          Permission.CONTRACT_EDIT(),
-          Permission.USER_READ()
-        ];
+        return [Permission.CONTRACT_EDIT(), Permission.USER_READ()];
       case 'User':
-        return [
-          Permission.USER_READ()
-        ];
+        return [Permission.USER_READ()];
       default:
         return [];
     }
   }
-} 
+}

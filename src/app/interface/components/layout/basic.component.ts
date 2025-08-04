@@ -12,16 +12,16 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 
 import { HeaderClearStorageComponent } from './widgets/clear-storage.component';
 import { HeaderFullScreenComponent } from './widgets/fullscreen.component';
+import { HeaderI18nComponent } from './widgets/i18n.component';
 import { HeaderSearchComponent } from './widgets/search.component';
 import { HeaderUserComponent } from './widgets/user.component';
-import { HeaderI18nComponent } from './widgets/i18n.component';
 
 // DDD Tab Component
 import { TabComponent } from '../tab/tab.component';
 
 /**
  * Interface Component: Basic Layout
- * 
+ *
  * Main layout component for the application that provides the basic structure
  * including header, sidebar, and content areas. This component belongs to the
  * Interface layer as it handles UI layout and user interaction concerns.
@@ -132,4 +132,4 @@ export class LayoutBasicComponent {
   get user(): User {
     return this.settings.user;
   }
-} 
+}

@@ -42,4 +42,4 @@ export abstract class AggregateRoot<TId> extends BaseEntity<TId> {
   getDomainEventCount(): number {
     return this._domainEvents.length;
   }
-} 
+}

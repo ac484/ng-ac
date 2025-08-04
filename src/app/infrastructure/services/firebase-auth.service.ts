@@ -1,18 +1,17 @@
 /**
  * Firebase 認證服務
- * 
+ *
  * 整合 @angular/fire 與 @delon/auth，提供統一的認證介面
  * 確保 Firebase 認證與既有的 token 管理流程無縫銜接
  */
 
 import { Injectable, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { 
-  Auth, 
-  User, 
-  signInWithEmailAndPassword, 
+import {
+  Auth,
+  User,
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signInWithPopup, 
+  signInWithPopup,
   signInAnonymously,
   GoogleAuthProvider,
   sendPasswordResetEmail,
@@ -20,13 +19,15 @@ import {
   onAuthStateChanged,
   signOut
 } from '@angular/fire/auth';
-import { StartupService } from './startup.service';
+import { Router } from '@angular/router';
 import { ReuseTabService } from '@delon/abc/reuse-tab';
 import { DA_SERVICE_TOKEN, SocialService, ITokenModel } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, from, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
+
+import { StartupService } from './startup.service';
 
 export interface FirebaseAuthResult {
   success: boolean;
@@ -63,7 +64,7 @@ export class FirebaseAuthService {
    * 初始化認證狀態監聽器
    */
   private initAuthStateListener(): void {
-    onAuthStateChanged(this.auth, (user) => {
+    onAuthStateChanged(this.auth, user => {
       if (user) {
         console.log('Firebase 用戶已登入:', user.uid);
       } else {
@@ -77,23 +78,23 @@ export class FirebaseAuthService {
    */
   signInWithGoogle(): Observable<FirebaseAuthResult> {
     const provider = new GoogleAuthProvider();
-    
+
     return from(signInWithPopup(this.auth, provider)).pipe(
-      map((result) => ({
+      map(result => ({
         success: true,
         user: result.user,
         message: 'Google 登入成功'
       })),
-      catchError((error) => {
+      catchError(error => {
         console.error('Google 登入失敗:', error);
         let message = 'Google 登入失敗';
-        
+
         if (error.code === 'auth/popup-closed-by-user') {
           message = '登入視窗已關閉';
         } else if (error.code === 'auth/popup-blocked') {
           message = '彈出視窗被阻擋，請允許彈出視窗';
         }
-        
+
         return throwError(() => ({ success: false, error, message }));
       })
     );
@@ -104,17 +105,17 @@ export class FirebaseAuthService {
    */
   signInAnonymously(): Observable<FirebaseAuthResult> {
     return from(signInAnonymously(this.auth)).pipe(
-      map((result) => ({
+      map(result => ({
         success: true,
         user: result.user,
         message: '匿名登入成功'
       })),
-      catchError((error) => {
+      catchError(error => {
         console.error('匿名登入失敗:', error);
-        return throwError(() => ({ 
-          success: false, 
-          error, 
-          message: '匿名登入失敗，請稍後再試' 
+        return throwError(() => ({
+          success: false,
+          error,
+          message: '匿名登入失敗，請稍後再試'
         }));
       })
     );
@@ -125,12 +126,12 @@ export class FirebaseAuthService {
    */
   signInWithEmail(authData: EmailAuthData): Observable<FirebaseAuthResult> {
     return from(signInWithEmailAndPassword(this.auth, authData.email, authData.password)).pipe(
-      map((result) => ({
+      map(result => ({
         success: true,
         user: result.user,
         message: '郵箱登入成功'
       })),
-      catchError((error) => {
+      catchError(error => {
         console.error('郵箱登入失敗:', error);
         let message = '登入失敗，請稍後再試';
 
@@ -162,7 +163,7 @@ export class FirebaseAuthService {
    */
   createUserWithEmail(authData: EmailAuthData): Observable<FirebaseAuthResult> {
     return from(createUserWithEmailAndPassword(this.auth, authData.email, authData.password)).pipe(
-      switchMap(async (result) => {
+      switchMap(async result => {
         // 如果提供了顯示名稱，更新用戶資料
         if (authData.displayName && result.user) {
           await updateProfile(result.user, { displayName: authData.displayName });
@@ -173,7 +174,7 @@ export class FirebaseAuthService {
           message: '註冊成功'
         };
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('郵箱註冊失敗:', error);
         let message = '註冊失敗，請稍後再試';
 
@@ -203,7 +204,7 @@ export class FirebaseAuthService {
         success: true,
         message: '密碼重設郵件已發送，請檢查您的郵箱'
       })),
-      catchError((error) => {
+      catchError(error => {
         console.error('發送密碼重設郵件失敗:', error);
         let message = '發送失敗，請稍後再試';
 
@@ -235,7 +236,7 @@ export class FirebaseAuthService {
         this.reuseTabService?.clear();
         console.log('Firebase 登出成功');
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('Firebase 登出失敗:', error);
         return throwError(() => error);
       })
@@ -250,7 +251,7 @@ export class FirebaseAuthService {
     try {
       // 獲取 Firebase ID Token
       const idToken = await user.getIdToken();
-      
+
       // 構建 @delon/auth 兼容的用戶信息
       const tokenModel: ITokenModel = {
         token: idToken,
@@ -297,7 +298,6 @@ export class FirebaseAuthService {
       });
 
       this.message.success('登入成功');
-
     } catch (error) {
       console.error('處理認證成功流程失敗:', error);
       this.message.error('登入處理失敗，請稍後再試');
@@ -329,4 +329,4 @@ export class FirebaseAuthService {
     }
     return null;
   }
-} 
+}

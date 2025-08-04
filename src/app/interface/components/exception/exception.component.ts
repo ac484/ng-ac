@@ -13,4 +13,4 @@ export class ExceptionComponent {
   get type(): ExceptionType {
     return this.route.snapshot.data['type'];
   }
-} 
+}

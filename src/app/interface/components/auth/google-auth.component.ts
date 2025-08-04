@@ -10,6 +10,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+
 import { FirebaseAuthService } from '../../../infrastructure/services/firebase-auth.service';
 
 @Component({
@@ -55,16 +56,16 @@ export class GoogleAuthComponent {
 
   loginWithGoogle(): void {
     if (this.loading) return;
-    
+
     this.loading = true;
 
     this.firebaseAuthService.signInWithGoogle().subscribe({
-      next: async (result) => {
+      next: async result => {
         if (result.success && result.user) {
           await this.firebaseAuthService.handleAuthSuccess(result.user);
         }
       },
-      error: (error) => {
+      error: error => {
         this.message.error(error.message || 'Google 登入失敗，請稍後再試');
         this.loading = false;
       },
@@ -73,4 +74,4 @@ export class GoogleAuthComponent {
       }
     });
   }
-} 
+}

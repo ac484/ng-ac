@@ -53,7 +53,7 @@ describe('OptimizedUser', () => {
       // Assert
       expect(user.hasDomainEvents()).toBe(true);
       expect(user.getDomainEventCount()).toBe(1);
-      
+
       const events = user.getDomainEvents();
       expect(events[0].type).toBe('UserCreated');
       expect(events[0].userId).toBe(user.id);
@@ -77,7 +77,7 @@ describe('OptimizedUser', () => {
       expect(user.email).toBe(newEmail);
       expect(user.isEmailVerified).toBe(false);
       expect(user.hasDomainEvents()).toBe(true);
-      
+
       const events = user.getDomainEvents();
       const updateEvent = events.find(e => e.type === 'UserEmailUpdated');
       expect(updateEvent).toBeDefined();
@@ -121,7 +121,7 @@ describe('OptimizedUser', () => {
       // Assert
       expect(user.displayName).toBe(newDisplayName);
       expect(user.photoURL).toBe(newPhotoURL);
-      
+
       const events = user.getDomainEvents();
       const updateEvent = events.find(e => e.type === 'UserProfileUpdated');
       expect(updateEvent).toBeDefined();
@@ -156,7 +156,7 @@ describe('OptimizedUser', () => {
       // Assert
       expect(user.status).toBe('suspended');
       expect(user.isActive()).toBe(false);
-      
+
       const events = user.getDomainEvents();
       const statusEvent = events.find(e => e.type === 'UserStatusChanged');
       expect(statusEvent).toBeDefined();
@@ -193,7 +193,7 @@ describe('OptimizedUser', () => {
 
       // Assert
       expect(user.isEmailVerified).toBe(true);
-      
+
       const events = user.getDomainEvents();
       const verifyEvent = events.find(e => e.type === 'UserEmailVerified');
       expect(verifyEvent).toBeDefined();
@@ -435,9 +435,9 @@ describe('OptimizedUser', () => {
         email: 'test@example.com',
         displayName: 'Test User'
       });
-      
+
       const anonymousUser = OptimizedUser.createAnonymous();
-      
+
       const suspendedUser = OptimizedUser.create({
         email: 'suspended@example.com',
         displayName: 'Suspended User'
@@ -464,7 +464,7 @@ describe('OptimizedUser', () => {
       // Assert
       expect(user.lastLoginAt).toBeDefined();
       expect(user.lastLoginAt!.getTime()).toBeGreaterThanOrEqual(beforeLogin.getTime());
-      
+
       const events = user.getDomainEvents();
       const loginEvent = events.find(e => e.type === 'UserLoggedIn');
       expect(loginEvent).toBeDefined();

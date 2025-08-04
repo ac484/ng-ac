@@ -27,4 +27,4 @@ export class IsAnonymous {
   static fromFirebaseUser(user: any): IsAnonymous {
     return new IsAnonymous(user.isAnonymous || false);
   }
-} 
+}

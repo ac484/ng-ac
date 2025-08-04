@@ -21,14 +21,14 @@ export class ErrorHandlerService {
   handleAuthError(error: any, operation: string): void {
     const errorKey = `${operation}_${this.getErrorKey(error)}`;
     const cached = this.errorCache.get(errorKey);
-    
+
     if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
       return; // 避免重複顯示相同錯誤
     }
 
     const errorMessage = this.formatAuthErrorMessage(error, operation);
     this.message.error(errorMessage);
-    
+
     this.errorCache.set(errorKey, {
       message: errorMessage,
       timestamp: Date.now()
@@ -41,7 +41,7 @@ export class ErrorHandlerService {
   handleError(error: any, operation: string): Error {
     const errorMessage = this.formatErrorMessage(error, operation);
     console.error(`${operation} failed:`, error);
-    
+
     return new Error(errorMessage);
   }
 
@@ -51,13 +51,13 @@ export class ErrorHandlerService {
   handleWarning(warning: string, operation: string): void {
     const warningKey = `${operation}_${warning}`;
     const cached = this.errorCache.get(warningKey);
-    
+
     if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
       return;
     }
 
     this.message.warning(`${operation}: ${warning}`);
-    
+
     this.errorCache.set(warningKey, {
       message: warning,
       timestamp: Date.now()
@@ -110,7 +110,7 @@ export class ErrorHandlerService {
           return `${operation}失敗: ${error.message || '未知錯誤'}`;
       }
     }
-    
+
     return `${operation}失敗: ${error instanceof Error ? error.message : '未知錯誤'}`;
   }
 
@@ -119,11 +119,11 @@ export class ErrorHandlerService {
     if (error instanceof Error) {
       return `Failed to ${operation}: ${error.message}`;
     }
-    
+
     if (typeof error === 'string') {
       return `Failed to ${operation}: ${error}`;
     }
-    
+
     return `Failed to ${operation}: Unknown error occurred`;
   }
 
@@ -132,11 +132,11 @@ export class ErrorHandlerService {
     if (error?.code) {
       return error.code;
     }
-    
+
     if (error instanceof Error) {
       return error.message;
     }
-    
+
     return String(error);
   }
-} 
+}

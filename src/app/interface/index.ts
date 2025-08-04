@@ -51,4 +51,4 @@ export * from './components/tab/tab.component';
 
 // Routes
 export * from './routes';
-export * from './routes/ddd-routes'; 
+export * from './routes/ddd-routes';

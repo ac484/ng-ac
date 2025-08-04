@@ -133,4 +133,4 @@ export enum AccountTypeEnum {
   SAVINGS = 'SAVINGS',
   CREDIT = 'CREDIT',
   INVESTMENT = 'INVESTMENT'
-} 
+}

@@ -2,18 +2,18 @@
  * Account Settings Component
  * Personal settings page for user account configuration
  */
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 @Component({
@@ -170,21 +170,23 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
       </nz-card>
     </div>
   `,
-  styles: [`
-    .account-settings-container {
-      padding: 24px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .account-settings-container {
+        padding: 24px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
-    nz-form-item {
-      margin-bottom: 16px;
-    }
+      nz-form-item {
+        margin-bottom: 16px;
+      }
 
-    nz-divider {
-      margin: 24px 0;
-    }
-  `]
+      nz-divider {
+        margin: 24px 0;
+      }
+    `
+  ]
 })
 export class AccountSettingsComponent implements OnInit {
   basicForm!: FormGroup;
@@ -210,12 +212,15 @@ export class AccountSettingsComponent implements OnInit {
     });
 
     // 安全設置表單
-    this.securityForm = this.fb.group({
-      currentPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]],
-      twoFactorAuth: [false]
-    }, { validators: this.passwordMatchValidator });
+    this.securityForm = this.fb.group(
+      {
+        currentPassword: ['', [Validators.required]],
+        newPassword: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
+        twoFactorAuth: [false]
+      },
+      { validators: this.passwordMatchValidator }
+    );
 
     // 通知設置表單
     this.notificationForm = this.fb.group({
@@ -225,10 +230,10 @@ export class AccountSettingsComponent implements OnInit {
     });
   }
 
-  private passwordMatchValidator(group: FormGroup): {[key: string]: any} | null {
+  private passwordMatchValidator(group: FormGroup): Record<string, any> | null {
     const newPassword = group.get('newPassword')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
-    return newPassword === confirmPassword ? null : { 'passwordMismatch': true };
+    return newPassword === confirmPassword ? null : { passwordMismatch: true };
   }
 
   onBasicSubmit(): void {
@@ -249,4 +254,4 @@ export class AccountSettingsComponent implements OnInit {
     this.message.success('通知設置已保存');
     console.log('Notification form submitted:', this.notificationForm.value);
   }
-} 
+}

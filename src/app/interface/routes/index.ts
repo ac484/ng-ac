@@ -1,1 +1,1 @@
-export { dddRoutes } from './ddd-routes'; 
+export { dddRoutes } from './ddd-routes';

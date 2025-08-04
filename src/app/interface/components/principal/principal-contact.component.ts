@@ -1,27 +1,19 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef, NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
-import { Contact } from '../../../domain/entities/contact.entity';
-import { PrincipalApplicationService } from '../../../application/services/principal-application.service';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, Inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzModalRef, NZ_MODAL_DATA, NzModalModule } from 'ng-zorro-antd/modal';
+
+import { PrincipalApplicationService } from '../../../application/services/principal-application.service';
+import { Contact } from '../../../domain/entities/contact.entity';
 
 @Component({
   selector: 'app-principal-contact',
   templateUrl: './principal-contact.component.html',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    NzFormModule,
-    NzInputModule,
-    NzButtonModule,
-    NzModalModule
-  ]
+  imports: [CommonModule, ReactiveFormsModule, NzFormModule, NzInputModule, NzButtonModule, NzModalModule]
 })
 export class PrincipalContactComponent implements OnInit {
   contactFormGroup!: FormGroup;
@@ -55,46 +47,50 @@ export class PrincipalContactComponent implements OnInit {
   }
 
   submitForm(): Promise<boolean> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (this.contactFormGroup.valid) {
         this.loading = true;
         const formValue = this.contactFormGroup.value;
 
         if (this.data.mode === 'add') {
-          this.principalService.createContact({
-            principalId: this.data.principalId,
-            name: formValue.name,
-            email: formValue.email,
-            phone: formValue.phone
-          }).subscribe({
-            next: () => {
-              this.loading = false;
-              this.modalRef.close(true);
-              resolve(true);
-            },
-            error: () => {
-              this.loading = false;
-              resolve(false);
-            }
-          });
+          this.principalService
+            .createContact({
+              principalId: this.data.principalId,
+              name: formValue.name,
+              email: formValue.email,
+              phone: formValue.phone
+            })
+            .subscribe({
+              next: () => {
+                this.loading = false;
+                this.modalRef.close(true);
+                resolve(true);
+              },
+              error: () => {
+                this.loading = false;
+                resolve(false);
+              }
+            });
         } else if (this.data.mode === 'edit') {
-          this.principalService.updateContact({
-            principalId: this.data.principalId,
-            contactId: this.data.contact.id,
-            name: formValue.name,
-            email: formValue.email,
-            phone: formValue.phone
-          }).subscribe({
-            next: () => {
-              this.loading = false;
-              this.modalRef.close(true);
-              resolve(true);
-            },
-            error: () => {
-              this.loading = false;
-              resolve(false);
-            }
-          });
+          this.principalService
+            .updateContact({
+              principalId: this.data.principalId,
+              contactId: this.data.contact.id,
+              name: formValue.name,
+              email: formValue.email,
+              phone: formValue.phone
+            })
+            .subscribe({
+              next: () => {
+                this.loading = false;
+                this.modalRef.close(true);
+                resolve(true);
+              },
+              error: () => {
+                this.loading = false;
+                resolve(false);
+              }
+            });
         }
       } else {
         Object.values(this.contactFormGroup.controls).forEach(control => {
@@ -111,4 +107,4 @@ export class PrincipalContactComponent implements OnInit {
   handleCancel(): void {
     this.modalRef.close();
   }
-} 
+}

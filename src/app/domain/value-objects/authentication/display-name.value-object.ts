@@ -34,4 +34,4 @@ export class DisplayName {
   length(): number {
     return this.value.length;
   }
-} 
+}

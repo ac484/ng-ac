@@ -1,15 +1,9 @@
 import { inject, Injectable } from '@angular/core';
+
 import { Contract } from '../../domain/entities/contract.entity';
-import { ContractRepository, ContractSearchCriteria } from '../../domain/repositories/contract.repository';
+import { ContractRepository, ContractSearchCriteria, CONTRACT_REPOSITORY_TOKEN } from '../../domain/repositories/contract.repository';
 import { ContractDomainService } from '../../domain/services/contract-domain.service';
-import {
-  CreateContractDto,
-  UpdateContractDto,
-  ContractDto,
-  ContractListDto,
-  ContractSearchDto,
-  ContractStatsDto
-} from '../dto/contract.dto';
+import { Money } from '../../domain/value-objects/account/money.value-object';
 import {
   ClientName,
   ClientRepresentative,
@@ -19,8 +13,14 @@ import {
   ContactPhone,
   Notes
 } from '../../domain/value-objects/contract';
-import { Money } from '../../domain/value-objects/account/money.value-object';
-import { CONTRACT_REPOSITORY_TOKEN } from '../../domain/repositories/contract.repository';
+import {
+  CreateContractDto,
+  UpdateContractDto,
+  ContractDto,
+  ContractListDto,
+  ContractSearchDto,
+  ContractStatsDto
+} from '../dto/contract.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -34,9 +34,8 @@ export class ContractApplicationService {
       // If no contract number is provided, generate one
       if (!dto.contractNumber) {
         const today = new Date();
-        const dateStr = today.getFullYear().toString() +
-          String(today.getMonth() + 1).padStart(2, '0') +
-          String(today.getDate()).padStart(2, '0');
+        const dateStr =
+          today.getFullYear().toString() + String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0');
 
         const timestamp = Date.now();
         const sequence = timestamp % 10000;
@@ -151,7 +150,7 @@ export class ContractApplicationService {
         total,
         page,
         pageSize,
-        hasNext: (page * pageSize) < total,
+        hasNext: page * pageSize < total,
         hasPrevious: page > 1
       };
     } catch (error) {
@@ -222,4 +221,4 @@ export class ContractApplicationService {
       updatedAt: contract.updatedAt.toISOString()
     };
   }
-} 
+}

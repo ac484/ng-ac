@@ -26,4 +26,4 @@ export class ContactPerson {
   static fromString(value: string): ContactPerson {
     return new ContactPerson(value);
   }
-} 
+}

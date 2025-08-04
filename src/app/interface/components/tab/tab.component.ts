@@ -1,23 +1,22 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzDropDownModule, NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { TabModel } from '../../../domain/entities/tab.entity';
 import { TabApplicationService } from '../../../application/services/tab-application.service';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { TabModel } from '../../../domain/entities/tab.entity';
 
 /**
  * Interface Component: Tab Component
- * 
+ *
  * UI component for managing tabs in the application. This component
  * belongs to the Interface layer as it handles user interface concerns
  * and user interactions.
@@ -26,21 +25,16 @@ import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dro
   selector: 'app-tab',
   template: `
     <nz-card id="multi-tab" class="m-t-10" style="height: 35px" [nzBodyStyle]="{ padding: 0 }" [nzBordered]="false">
-      <nz-tabset 
-        [nzHideAdd]="true" 
-        [nzSelectedIndex]="currentIndex" 
-        [nzTabBarStyle]="{ height: '35px' }" 
-        [nzTabPosition]="'top'" 
-        [nzType]="'editable-card'" 
+      <nz-tabset
+        [nzHideAdd]="true"
+        [nzSelectedIndex]="currentIndex"
+        [nzTabBarStyle]="{ height: '35px' }"
+        [nzTabPosition]="'top'"
+        [nzType]="'editable-card'"
         (nzClose)="clickCloseIcon($event)"
       >
         @for (tab of tabsSourceData$ | async; track trackByTab(i, tab); let i = $index) {
-          <nz-tab 
-            nzClosable 
-            [nzTitle]="tab.title" 
-            (nzClick)="goPage(tab)" 
-            (nzContextmenu)="contextMenu($event, menu)"
-          >
+          <nz-tab nzClosable [nzTitle]="tab.title" (nzClick)="goPage(tab)" (nzContextmenu)="contextMenu($event, menu)">
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
                 <li nz-menu-item [nzDisabled]="router.url !== tab.path" (click)="refresh()">刷新</li>
@@ -58,15 +52,7 @@ import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dro
   styleUrls: ['./tab.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    CommonModule,
-    NzCardModule,
-    NzTabsModule,
-    NzDropDownModule,
-    NzMenuModule,
-    NzButtonModule,
-    NzIconModule
-  ]
+  imports: [CommonModule, NzCardModule, NzTabsModule, NzDropDownModule, NzMenuModule, NzButtonModule, NzIconModule]
 })
 export class TabComponent implements OnInit {
   private readonly tabApplicationService = inject(TabApplicationService);
@@ -187,4 +173,4 @@ export class TabComponent implements OnInit {
   contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {
     this.nzContextMenuService.create($event, menu);
   }
-} 
+}

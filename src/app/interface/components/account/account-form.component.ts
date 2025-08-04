@@ -5,4 +5,4 @@ import { Component } from '@angular/core';
   standalone: true,
   template: `<div>Account Form Component</div>`
 })
-export class AccountFormComponent {} 
+export class AccountFormComponent {}

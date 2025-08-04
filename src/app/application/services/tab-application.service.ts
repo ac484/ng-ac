@@ -1,18 +1,19 @@
 import { Injectable, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import { TabModel, TabEvent } from '../../domain/entities/tab.entity';
 import { TabDomainService } from '../../domain/services/tab-domain.service';
 
 /**
  * Application Service: Tab Application Service
- * 
+ *
  * Coordinates between domain services and infrastructure layer.
  * Handles application-specific tab operations and orchestrates
  * the interaction between different layers.
- * 
+ *
  * This service belongs to the Application layer as it coordinates
  * domain logic with infrastructure concerns.
  */
@@ -50,7 +51,7 @@ export class TabApplicationService {
   private handleRouteChange(event: NavigationEnd): void {
     const url = event.urlAfterRedirects;
     const title = this.getRouteTitle(url);
-    
+
     // Skip root path and passport routes
     if (title && url !== '/' && !url.startsWith('/passport')) {
       const tabModel: TabModel = {
@@ -58,7 +59,7 @@ export class TabApplicationService {
         path: url,
         snapshotArray: [this.activatedRoute.snapshot]
       };
-      
+
       this.addTab(tabModel);
     }
   }
@@ -68,7 +69,7 @@ export class TabApplicationService {
    */
   private getRouteTitle(url: string): string {
     // Simple mapping of routes to titles
-    const routeTitles: { [key: string]: string } = {
+    const routeTitles: Record<string, string> = {
       '/dashboard': '儀表板',
       '/accounts': '帳戶管理',
       '/transactions': '交易管理',
@@ -79,12 +80,12 @@ export class TabApplicationService {
       '/pro/account/center': '個人中心',
       '/pro/account/settings': '個人設置'
     };
-    
+
     // Check for exact match first
     if (routeTitles[url]) {
       return routeTitles[url];
     }
-    
+
     // Check for pattern matches (for dynamic routes)
     if (url.startsWith('/contracts/') && url !== '/contracts') {
       const parts = url.split('/');
@@ -92,23 +93,23 @@ export class TabApplicationService {
         return `合約詳情 #${parts[2]}`;
       }
     }
-    
+
     if (url.startsWith('/accounts/')) {
       return '帳戶詳情';
     }
-    
+
     if (url.startsWith('/transactions/')) {
       return '交易詳情';
     }
-    
+
     if (url.startsWith('/users/')) {
       return '用戶詳情';
     }
-    
+
     if (url.startsWith('/principal/')) {
       return 'Principal 詳情';
     }
-    
+
     // Generate unique title for unknown routes
     const timestamp = Date.now();
     return `頁面_${timestamp}`;
@@ -145,7 +146,7 @@ export class TabApplicationService {
     }
 
     const currentTabs = this.getTabArray();
-    
+
     // Check if tab already exists by path
     const existingTabIndex = currentTabs.findIndex(tab => tab.path === tabModel.path);
     if (existingTabIndex !== -1) {
@@ -200,7 +201,7 @@ export class TabApplicationService {
 
     // Get tabs to be removed
     const tabsToRemove = currentTabs.filter((_, index) => index > tabIndex);
-    
+
     // Remove right tabs
     currentTabs.length = tabIndex + 1;
 
@@ -256,7 +257,7 @@ export class TabApplicationService {
   changeTabTitle(title: string): void {
     const currentTabs = this.getTabArray();
     const currentIndex = this.getCurrentTabIndex();
-    
+
     if (currentTabs[currentIndex]) {
       currentTabs[currentIndex].title = title;
       this.updateTabArray(currentTabs);
@@ -300,4 +301,4 @@ export class TabApplicationService {
   private setCurrentTabIndex(index: number): void {
     this.tabDomainService.setCurrentTabIndex(index);
   }
-} 
+}

@@ -3,11 +3,11 @@ import { Observable } from 'rxjs';
 
 /**
  * Interface Guard: Start Page Guard
- * 
+ *
  * Dynamically load the start page based on application state.
  * This guard belongs to the Interface layer as it handles routing
  * and navigation concerns specific to the user interface.
- * 
+ *
  * 动态加载启动页
  */
 export const startPageGuard: CanActivateFn = (): boolean | Observable<boolean> => {
@@ -19,4 +19,4 @@ export const startPageGuard: CanActivateFn = (): boolean | Observable<boolean> =
   //   return false;
   // }
   return true;
-}; 
+};

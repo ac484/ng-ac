@@ -42,4 +42,4 @@ export enum AuthProviderType {
   GOOGLE = 'google',
   FACEBOOK = 'facebook',
   ANONYMOUS = 'anonymous'
-} 
+}

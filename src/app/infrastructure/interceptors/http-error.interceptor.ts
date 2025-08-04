@@ -25,9 +25,9 @@ import {
     NotFoundError,
     ApplicationError,
     AuthenticationError,
-    GlobalErrorHandler,
-    ErrorSeverity
+    GlobalErrorHandler
 } from '../../shared/errors';
+import { ErrorSeverity } from '../../shared/errors/global-error-handler';
 
 /**
  * 重試配置介面
@@ -147,8 +147,8 @@ function convertHttpErrorToAppError(error: HttpErrorResponse, request: HttpReque
             '網路連線失敗，請檢查網路設定',
             0,
             request.url,
+            request.method,
             error,
-            '網路連線異常',
             context
         );
     }
@@ -159,12 +159,14 @@ function convertHttpErrorToAppError(error: HttpErrorResponse, request: HttpReque
             // 檢查是否為驗證錯誤
             if (error.error?.errors || error.error?.validationErrors) {
                 const validationErrors = error.error.errors || error.error.validationErrors;
-                return ValidationError.fromServerResponse(validationErrors, context);
+                // 使用 ValidationError 的靜態方法建立驗證錯誤
+                return ValidationError.createFieldError('request', { type: 'custom', message: '請求參數驗證失敗' }, context);
             }
             return new ValidationError(
                 error.error?.message || '請求參數錯誤',
-                'REQUEST_VALIDATION',
                 undefined,
+                undefined,
+                error,
                 context
             );
 
@@ -187,7 +189,8 @@ function convertHttpErrorToAppError(error: HttpErrorResponse, request: HttpReque
         case 404:
             return new NotFoundError(
                 error.error?.message || '請求的資源不存在',
-                'RESOURCE_NOT_FOUND',
+                'resource',
+                undefined,
                 error,
                 context
             );
@@ -197,8 +200,8 @@ function convertHttpErrorToAppError(error: HttpErrorResponse, request: HttpReque
                 '請求逾時，請稍後再試',
                 408,
                 request.url,
+                request.method,
                 error,
-                '請求逾時',
                 context
             );
 
@@ -213,7 +216,8 @@ function convertHttpErrorToAppError(error: HttpErrorResponse, request: HttpReque
         case 422:
             return new ValidationError(
                 error.error?.message || '資料驗證失敗',
-                'DATA_VALIDATION',
+                undefined,
+                undefined,
                 error,
                 context
             );
@@ -223,8 +227,8 @@ function convertHttpErrorToAppError(error: HttpErrorResponse, request: HttpReque
                 '請求過於頻繁，請稍後再試',
                 429,
                 request.url,
+                request.method,
                 error,
-                '請求限流',
                 context
             );
 
@@ -241,8 +245,8 @@ function convertHttpErrorToAppError(error: HttpErrorResponse, request: HttpReque
                 '閘道錯誤，請稍後再試',
                 502,
                 request.url,
+                request.method,
                 error,
-                '閘道錯誤',
                 context
             );
 
@@ -251,8 +255,8 @@ function convertHttpErrorToAppError(error: HttpErrorResponse, request: HttpReque
                 '服務暫時無法使用，請稍後再試',
                 503,
                 request.url,
+                request.method,
                 error,
-                '服務不可用',
                 context
             );
 
@@ -261,8 +265,8 @@ function convertHttpErrorToAppError(error: HttpErrorResponse, request: HttpReque
                 '閘道逾時，請稍後再試',
                 504,
                 request.url,
+                request.method,
                 error,
-                '閘道逾時',
                 context
             );
 
@@ -384,27 +388,27 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, n
  */
 function determineSeverityFromStatus(status: number): ErrorSeverity {
     if (status === 0) {
-        return 'high'; // 網路連線問題
+        return ErrorSeverity.HIGH; // 網路連線問題
     }
 
     if (status >= 400 && status < 500) {
         if (status === 401 || status === 403) {
-            return 'medium'; // 認證/授權問題
+            return ErrorSeverity.MEDIUM; // 認證/授權問題
         }
         if (status === 404) {
-            return 'low'; // 資源不存在
+            return ErrorSeverity.LOW; // 資源不存在
         }
         if (status === 422 || status === 400) {
-            return 'low'; // 驗證錯誤
+            return ErrorSeverity.LOW; // 驗證錯誤
         }
-        return 'medium'; // 其他客戶端錯誤
+        return ErrorSeverity.MEDIUM; // 其他客戶端錯誤
     }
 
     if (status >= 500) {
-        return 'high'; // 伺服器錯誤
+        return ErrorSeverity.HIGH; // 伺服器錯誤
     }
 
-    return 'medium'; // 其他錯誤
+    return ErrorSeverity.MEDIUM; // 其他錯誤
 }
 
 /**

@@ -1,26 +1,20 @@
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 
-import { AccountApplicationService } from '../../../application/services/account-application.service';
 import { AccountDto } from '../../../application/dto/account.dto';
+import { AccountApplicationService } from '../../../application/services/account-application.service';
 
 @Component({
   selector: 'app-account-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzTableModule,
-    NzButtonModule,
-    NzIconModule,
-    NzTagModule
-  ],
+  imports: [CommonModule, NzTableModule, NzButtonModule, NzIconModule, NzTagModule],
   template: `
     <div class="account-list-container">
       <div class="header">
@@ -39,8 +33,8 @@ import { AccountDto } from '../../../application/dto/account.dto';
         [nzPageSize]="pageSize"
         [nzPageIndex]="pageIndex"
         (nzPageIndexChange)="onPageIndexChange($event)"
-        (nzPageSizeChange)="onPageSizeChange($event)">
-        
+        (nzPageSizeChange)="onPageSizeChange($event)"
+      >
         <thead>
           <tr>
             <th>帳戶號</th>
@@ -52,7 +46,7 @@ import { AccountDto } from '../../../application/dto/account.dto';
             <th>操作</th>
           </tr>
         </thead>
-        
+
         <tbody>
           <tr *ngFor="let account of basicTable.data">
             <td>{{ account.accountNumber }}</td>
@@ -62,13 +56,13 @@ import { AccountDto } from '../../../application/dto/account.dto';
                 {{ getTypeText(account.accountType) }}
               </nz-tag>
             </td>
-            <td>{{ account.balance | currency:'USD' }}</td>
+            <td>{{ account.balance | currency: 'USD' }}</td>
             <td>
               <nz-tag [nzColor]="getStatusColor(account.status)">
                 {{ getStatusText(account.status) }}
               </nz-tag>
             </td>
-            <td>{{ account.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ account.createdAt | date: 'yyyy-MM-dd HH:mm' }}</td>
             <td>
               <button nz-button nzType="link" (click)="viewAccount(account)">
                 <span nz-icon nzType="eye"></span>
@@ -85,22 +79,24 @@ import { AccountDto } from '../../../application/dto/account.dto';
       </nz-table>
     </div>
   `,
-  styles: [`
-    .account-list-container {
-      padding: 24px;
-    }
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    
-    .header h2 {
-      margin: 0;
-    }
-  `]
+  styles: [
+    `
+      .account-list-container {
+        padding: 24px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .header h2 {
+        margin: 0;
+      }
+    `
+  ]
 })
 export class AccountListComponent implements OnInit {
   private readonly accountApplicationService = inject(AccountApplicationService);
@@ -177,41 +173,61 @@ export class AccountListComponent implements OnInit {
 
   getTypeColor(type: string): string {
     switch (type) {
-      case 'CHECKING': return 'blue';
-      case 'SAVINGS': return 'green';
-      case 'CREDIT': return 'orange';
-      case 'INVESTMENT': return 'purple';
-      default: return 'default';
+      case 'CHECKING':
+        return 'blue';
+      case 'SAVINGS':
+        return 'green';
+      case 'CREDIT':
+        return 'orange';
+      case 'INVESTMENT':
+        return 'purple';
+      default:
+        return 'default';
     }
   }
 
   getTypeText(type: string): string {
     switch (type) {
-      case 'CHECKING': return '支票帳戶';
-      case 'SAVINGS': return '儲蓄帳戶';
-      case 'CREDIT': return '信用帳戶';
-      case 'INVESTMENT': return '投資帳戶';
-      default: return '未知';
+      case 'CHECKING':
+        return '支票帳戶';
+      case 'SAVINGS':
+        return '儲蓄帳戶';
+      case 'CREDIT':
+        return '信用帳戶';
+      case 'INVESTMENT':
+        return '投資帳戶';
+      default:
+        return '未知';
     }
   }
 
   getStatusColor(status: string): string {
     switch (status) {
-      case 'ACTIVE': return 'green';
-      case 'INACTIVE': return 'red';
-      case 'SUSPENDED': return 'orange';
-      case 'CLOSED': return 'red';
-      default: return 'default';
+      case 'ACTIVE':
+        return 'green';
+      case 'INACTIVE':
+        return 'red';
+      case 'SUSPENDED':
+        return 'orange';
+      case 'CLOSED':
+        return 'red';
+      default:
+        return 'default';
     }
   }
 
   getStatusText(status: string): string {
     switch (status) {
-      case 'ACTIVE': return '啟用';
-      case 'INACTIVE': return '停用';
-      case 'SUSPENDED': return '暫停';
-      case 'CLOSED': return '已關閉';
-      default: return '未知';
+      case 'ACTIVE':
+        return '啟用';
+      case 'INACTIVE':
+        return '停用';
+      case 'SUSPENDED':
+        return '暫停';
+      case 'CLOSED':
+        return '已關閉';
+      default:
+        return '未知';
     }
   }
-} 
+}

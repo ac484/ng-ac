@@ -53,4 +53,4 @@ export class TransactionCancelledEvent extends DomainEvent {
   ) {
     super();
   }
-} 
+}

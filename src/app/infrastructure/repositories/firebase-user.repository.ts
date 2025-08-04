@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Firestore, DocumentData, Query, where, query as firestoreQuery } from '@angular/fire/firestore';
-import { User } from '../../domain/entities/user.entity';
-import { UserRepository } from '../../domain/repositories/user.repository';
+
 import { BaseFirebaseRepository } from './base-firebase.repository';
+import { User } from '../../domain/entities/user.entity';
 import { SearchCriteria } from '../../domain/interfaces/search-criteria.interface';
+import { UserRepository } from '../../domain/repositories/user.repository';
 
 /**
  * Firebase implementation of UserRepository using BaseFirebaseRepository
@@ -13,7 +14,6 @@ import { SearchCriteria } from '../../domain/interfaces/search-criteria.interfac
   providedIn: 'root'
 })
 export class FirebaseUserRepository extends BaseFirebaseRepository<User> implements UserRepository {
-
   constructor(firestore: Firestore) {
     super(firestore, 'users');
   }
@@ -168,4 +168,4 @@ export class FirebaseUserRepository extends BaseFirebaseRepository<User> impleme
       lastLoginAt: entity.lastLoginAt
     };
   }
-} 
+}

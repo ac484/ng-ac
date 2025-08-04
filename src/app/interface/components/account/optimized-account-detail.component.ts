@@ -3,25 +3,28 @@
  * 整合 Money 值物件的顯示格式化，實作帳戶餘額的即時更新
  */
 
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil, interval } from 'rxjs';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTimelineModule } from 'ng-zorro-antd/timeline';
+import { Subject, takeUntil, interval } from 'rxjs';
 
-import { OptimizedAccountApplicationService, AccountResponseDto } from '../../../application/services/optimized-account-application.service';
+import {
+  OptimizedAccountApplicationService,
+  AccountResponseDto
+} from '../../../application/services/optimized-account-application.service';
 import { AccountType, AccountStatus } from '../../../domain/entities/optimized-account.entity';
 
 interface TransactionHistory {
@@ -57,10 +60,7 @@ interface TransactionHistory {
       <nz-card class="overview-card" [nzExtra]="actionsTemplate">
         <nz-row [nzGutter]="24">
           <nz-col [nzSpan]="8">
-            <nz-statistic
-              nzTitle="當前餘額"
-              [nzValue]="account.balance"
-              [nzValueStyle]="getBalanceStyle()">
+            <nz-statistic nzTitle="當前餘額" [nzValue]="account.balance" [nzValueStyle]="getBalanceStyle()">
               <ng-template #nzFormatter let-value>
                 {{ balanceFormatter(value) }}
               </ng-template>
@@ -69,23 +69,17 @@ interface TransactionHistory {
               [nzPercent]="getBalanceHealthPercentage()"
               [nzStrokeColor]="getBalanceHealthColor()"
               [nzShowInfo]="false"
-              nzSize="small">
+              nzSize="small"
+            >
             </nz-progress>
           </nz-col>
           <nz-col [nzSpan]="8">
-            <nz-statistic
-              nzTitle="帳戶狀態"
-              [nzValue]="account.statusText"
-              [nzValueStyle]="getStatusStyle()">
-            </nz-statistic>
+            <nz-statistic nzTitle="帳戶狀態" [nzValue]="account.statusText" [nzValueStyle]="getStatusStyle()"> </nz-statistic>
           </nz-col>
           <nz-col [nzSpan]="8">
-            <nz-statistic
-              nzTitle="最後更新"
-              [nzValue]="account.updatedAt"
-              [nzValueStyle]="{ fontSize: '16px' }">
+            <nz-statistic nzTitle="最後更新" [nzValue]="account.updatedAt" [nzValueStyle]="{ fontSize: '16px' }">
               <ng-template #nzFormatter let-value>
-                {{ value | date:'yyyy-MM-dd HH:mm' }}
+                {{ value | date: 'yyyy-MM-dd HH:mm' }}
               </ng-template>
             </nz-statistic>
           </nz-col>
@@ -120,10 +114,10 @@ interface TransactionHistory {
             </nz-tag>
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="創建時間">
-            {{ account.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}
+            {{ account.createdAt | date: 'yyyy-MM-dd HH:mm:ss' }}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="最後交易時間">
-            {{ account.lastTransactionDate ? (account.lastTransactionDate | date:'yyyy-MM-dd HH:mm:ss') : '無交易記錄' }}
+            {{ account.lastTransactionDate ? (account.lastTransactionDate | date: 'yyyy-MM-dd HH:mm:ss') : '無交易記錄' }}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="帳戶描述" [nzSpan]="2">
             {{ account.description || '無描述' }}
@@ -159,7 +153,8 @@ interface TransactionHistory {
           <nz-timeline-item
             *ngFor="let transaction of recentTransactions"
             [nzColor]="getTransactionColor(transaction.type)"
-            [nzDot]="getTransactionIcon(transaction.type)">
+            [nzDot]="getTransactionIcon(transaction.type)"
+          >
             <div class="transaction-item">
               <div class="transaction-header">
                 <span class="transaction-type">{{ getTransactionTypeText(transaction.type) }}</span>
@@ -168,11 +163,11 @@ interface TransactionHistory {
                 </span>
               </div>
               <div class="transaction-description">{{ transaction.description }}</div>
-              <div class="transaction-time">{{ transaction.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}</div>
+              <div class="transaction-time">{{ transaction.timestamp | date: 'yyyy-MM-dd HH:mm:ss' }}</div>
             </div>
           </nz-timeline-item>
         </nz-timeline>
-        
+
         <ng-template #noTransactions>
           <div class="no-transactions">
             <span nz-icon nzType="inbox" nzTheme="outline" style="font-size: 48px; color: #d9d9d9;"></span>
@@ -218,87 +213,89 @@ interface TransactionHistory {
       </button>
     </ng-template>
   `,
-  styles: [`
-    .account-detail-container {
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .account-detail-container {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    .overview-card,
-    .info-card,
-    .actions-card,
-    .history-card {
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+      .overview-card,
+      .info-card,
+      .actions-card,
+      .history-card {
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
 
-    .overview-card .ant-statistic {
-      text-align: center;
-    }
+      .overview-card .ant-statistic {
+        text-align: center;
+      }
 
-    .actions-card .ant-space {
-      width: 100%;
-      justify-content: center;
-    }
+      .actions-card .ant-space {
+        width: 100%;
+        justify-content: center;
+      }
 
-    .transaction-item {
-      padding: 8px 0;
-    }
+      .transaction-item {
+        padding: 8px 0;
+      }
 
-    .transaction-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-    }
+      .transaction-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
 
-    .transaction-type {
-      font-weight: 500;
-      font-size: 14px;
-    }
+      .transaction-type {
+        font-weight: 500;
+        font-size: 14px;
+      }
 
-    .transaction-amount {
-      font-weight: 600;
-      font-size: 16px;
-    }
+      .transaction-amount {
+        font-weight: 600;
+        font-size: 16px;
+      }
 
-    .transaction-amount.positive {
-      color: #52c41a;
-    }
+      .transaction-amount.positive {
+        color: #52c41a;
+      }
 
-    .transaction-amount.negative {
-      color: #ff4d4f;
-    }
+      .transaction-amount.negative {
+        color: #ff4d4f;
+      }
 
-    .transaction-description {
-      color: #666;
-      font-size: 12px;
-      margin-bottom: 2px;
-    }
+      .transaction-description {
+        color: #666;
+        font-size: 12px;
+        margin-bottom: 2px;
+      }
 
-    .transaction-time {
-      color: #999;
-      font-size: 11px;
-    }
+      .transaction-time {
+        color: #999;
+        font-size: 11px;
+      }
 
-    .no-transactions {
-      text-align: center;
-      padding: 40px;
-      color: #999;
-    }
+      .no-transactions {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+      }
 
-    .loading-container {
-      padding: 24px;
-    }
+      .loading-container {
+        padding: 24px;
+      }
 
-    code {
-      background: #f5f5f5;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    }
-  `]
+      code {
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      }
+    `
+  ]
 })
 export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
   private readonly accountService = inject(OptimizedAccountApplicationService);
@@ -352,7 +349,6 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
 
       // 暫時使用模擬資料
       this.account = this.generateMockAccount();
-
     } catch (error) {
       this.message.error('載入帳戶資料失敗');
       console.error('Error loading account data:', error);
@@ -373,7 +369,6 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
 
       // 暫時使用模擬資料
       this.recentTransactions = this.generateMockTransactions();
-
     } catch (error) {
       console.error('Error loading recent transactions:', error);
     }
@@ -395,10 +390,7 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
    * 重新整理資料
    */
   async refreshData(): Promise<void> {
-    await Promise.all([
-      this.loadAccountData(),
-      this.loadRecentTransactions()
-    ]);
+    await Promise.all([this.loadAccountData(), this.loadRecentTransactions()]);
     this.message.success('資料已重新整理');
   }
 
@@ -508,10 +500,14 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
    */
   getTypeColor(type: AccountType): string {
     switch (type) {
-      case AccountType.CHECKING: return 'blue';
-      case AccountType.SAVINGS: return 'green';
-      case AccountType.CREDIT: return 'orange';
-      default: return 'default';
+      case AccountType.CHECKING:
+        return 'blue';
+      case AccountType.SAVINGS:
+        return 'green';
+      case AccountType.CREDIT:
+        return 'orange';
+      default:
+        return 'default';
     }
   }
 
@@ -520,10 +516,14 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
    */
   getTypeText(type: AccountType): string {
     switch (type) {
-      case AccountType.CHECKING: return '支票帳戶';
-      case AccountType.SAVINGS: return '儲蓄帳戶';
-      case AccountType.CREDIT: return '信用帳戶';
-      default: return '未知類型';
+      case AccountType.CHECKING:
+        return '支票帳戶';
+      case AccountType.SAVINGS:
+        return '儲蓄帳戶';
+      case AccountType.CREDIT:
+        return '信用帳戶';
+      default:
+        return '未知類型';
     }
   }
 
@@ -532,11 +532,16 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
    */
   getStatusColor(status: AccountStatus | string): string {
     switch (status) {
-      case AccountStatus.ACTIVE: return 'green';
-      case AccountStatus.INACTIVE: return 'red';
-      case AccountStatus.SUSPENDED: return 'orange';
-      case AccountStatus.CLOSED: return 'red';
-      default: return 'default';
+      case AccountStatus.ACTIVE:
+        return 'green';
+      case AccountStatus.INACTIVE:
+        return 'red';
+      case AccountStatus.SUSPENDED:
+        return 'orange';
+      case AccountStatus.CLOSED:
+        return 'red';
+      default:
+        return 'default';
     }
   }
 
@@ -544,11 +549,11 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
    * 取得狀態顏色十六進制值
    */
   private getStatusColorHex(colorName: string): string {
-    const colorMap: { [key: string]: string } = {
-      'green': '#52c41a',
-      'red': '#ff4d4f',
-      'orange': '#faad14',
-      'default': '#666666'
+    const colorMap: Record<string, string> = {
+      green: '#52c41a',
+      red: '#ff4d4f',
+      orange: '#faad14',
+      default: '#666666'
     };
     return colorMap[colorName] || '#666666';
   }
@@ -558,10 +563,14 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
    */
   getTransactionColor(type: string): string {
     switch (type) {
-      case 'deposit': return 'green';
-      case 'withdrawal': return 'red';
-      case 'transfer': return 'blue';
-      default: return 'default';
+      case 'deposit':
+        return 'green';
+      case 'withdrawal':
+        return 'red';
+      case 'transfer':
+        return 'blue';
+      default:
+        return 'default';
     }
   }
 
@@ -569,10 +578,10 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
    * 取得交易圖示
    */
   getTransactionIcon(type: string): any {
-    const iconMap: { [key: string]: string } = {
-      'deposit': 'plus-circle',
-      'withdrawal': 'minus-circle',
-      'transfer': 'swap'
+    const iconMap: Record<string, string> = {
+      deposit: 'plus-circle',
+      withdrawal: 'minus-circle',
+      transfer: 'swap'
     };
 
     return {
@@ -585,10 +594,14 @@ export class OptimizedAccountDetailComponent implements OnInit, OnDestroy {
    */
   getTransactionTypeText(type: string): string {
     switch (type) {
-      case 'deposit': return '存款';
-      case 'withdrawal': return '提款';
-      case 'transfer': return '轉帳';
-      default: return '未知';
+      case 'deposit':
+        return '存款';
+      case 'withdrawal':
+        return '提款';
+      case 'transfer':
+        return '轉帳';
+      default:
+        return '未知';
     }
   }
 

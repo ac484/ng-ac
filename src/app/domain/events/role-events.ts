@@ -83,4 +83,4 @@ export class RoleDeletedEvent extends DomainEvent {
     this.roleId = roleId;
     this.data = data;
   }
-} 
+}

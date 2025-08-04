@@ -2,7 +2,6 @@ import { HttpContext } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { StartupService } from '../../../infrastructure/services/startup.service';
 import { ReuseTabService } from '@delon/abc/reuse-tab';
 import { ALLOW_ANONYMOUS, DA_SERVICE_TOKEN, SocialOpenType, SocialService } from '@delon/auth';
 import { I18nPipe, SettingsService, _HttpClient } from '@delon/theme';
@@ -18,10 +17,10 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { finalize } from 'rxjs';
 
 // 改進：導入實體而不是直接使用應用服務
-import { User } from '../../../domain/entities/user.entity';
-import { Authentication } from '../../../domain/entities/auth.entity';
 import { AuthApplicationService } from '../../../application/services/auth-application.service';
-import { AuthResult } from '../../../domain/entities/auth.entity';
+import { Authentication, AuthResult } from '../../../domain/entities/auth.entity';
+import { User } from '../../../domain/entities/user.entity';
+import { StartupService } from '../../../infrastructure/services/startup.service';
 
 @Component({
   selector: 'passport-login',
@@ -278,4 +277,4 @@ export class UserLoginComponent implements OnDestroy {
       clearInterval(this.interval$);
     }
   }
-} 
+}

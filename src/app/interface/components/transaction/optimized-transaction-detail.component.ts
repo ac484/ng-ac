@@ -3,24 +3,24 @@
  * 整合交易狀態的視覺化呈現，實作交易歷史的進階篩選
  */
 
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTimelineModule } from 'ng-zorro-antd/timeline';
-import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { Subject, takeUntil } from 'rxjs';
 
 import {
   OptimizedTransactionApplicationService,
@@ -60,39 +60,27 @@ interface TransactionStatusHistory {
       <nz-card class="overview-card" [nzExtra]="actionsTemplate">
         <nz-row [nzGutter]="24">
           <nz-col [nzSpan]="6">
-            <nz-statistic
-              nzTitle="交易金額"
-              [nzValue]="transaction.amount"
-              [nzValueStyle]="getAmountStyle()">
+            <nz-statistic nzTitle="交易金額" [nzValue]="transaction.amount" [nzValueStyle]="getAmountStyle()">
               <ng-template #nzFormatter let-value>
                 {{ formatCurrency(value, transaction.currency) }}
               </ng-template>
             </nz-statistic>
           </nz-col>
           <nz-col [nzSpan]="6">
-            <nz-statistic
-              nzTitle="總金額"
-              [nzValue]="transaction.totalAmount"
-              [nzValueStyle]="getTotalAmountStyle()">
+            <nz-statistic nzTitle="總金額" [nzValue]="transaction.totalAmount" [nzValueStyle]="getTotalAmountStyle()">
               <ng-template #nzFormatter let-value>
                 {{ formatCurrency(value, transaction.currency) }}
               </ng-template>
             </nz-statistic>
           </nz-col>
           <nz-col [nzSpan]="6">
-            <nz-statistic
-              nzTitle="交易狀態"
-              [nzValue]="getStatusText(transaction.status)"
-              [nzValueStyle]="getStatusStyle()">
+            <nz-statistic nzTitle="交易狀態" [nzValue]="getStatusText(transaction.status)" [nzValueStyle]="getStatusStyle()">
             </nz-statistic>
           </nz-col>
           <nz-col [nzSpan]="6">
-            <nz-statistic
-              nzTitle="創建時間"
-              [nzValue]="transaction.createdAt"
-              [nzValueStyle]="{ fontSize: '16px' }">
+            <nz-statistic nzTitle="創建時間" [nzValue]="transaction.createdAt" [nzValueStyle]="{ fontSize: '16px' }">
               <ng-template #nzFormatter let-value>
-                {{ value | date:'yyyy-MM-dd HH:mm:ss' }}
+                {{ value | date: 'yyyy-MM-dd HH:mm:ss' }}
               </ng-template>
             </nz-statistic>
           </nz-col>
@@ -106,7 +94,8 @@ interface TransactionStatusHistory {
         nzMessage="交易失敗"
         [nzDescription]="getFailureReason()"
         nzShowIcon
-        class="status-alert">
+        class="status-alert"
+      >
       </nz-alert>
 
       <nz-alert
@@ -115,7 +104,8 @@ interface TransactionStatusHistory {
         nzMessage="交易已取消"
         [nzDescription]="getCancellationReason()"
         nzShowIcon
-        class="status-alert">
+        class="status-alert"
+      >
       </nz-alert>
 
       <!-- 交易詳細資訊 -->
@@ -154,10 +144,10 @@ interface TransactionStatusHistory {
             {{ transaction.referenceNumber }}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="創建時間">
-            {{ transaction.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}
+            {{ transaction.createdAt | date: 'yyyy-MM-dd HH:mm:ss' }}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="最後更新">
-            {{ transaction.updatedAt | date:'yyyy-MM-dd HH:mm:ss' }}
+            {{ transaction.updatedAt | date: 'yyyy-MM-dd HH:mm:ss' }}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="描述" [nzSpan]="2">
             {{ transaction.description }}
@@ -173,11 +163,7 @@ interface TransactionStatusHistory {
         <nz-steps [nzCurrent]="getCurrentStep()" nzStatus="process">
           <nz-step nzTitle="創建" nzDescription="交易已創建"></nz-step>
           <nz-step nzTitle="處理中" nzDescription="正在處理交易"></nz-step>
-          <nz-step 
-            [nzTitle]="getFinalStepTitle()" 
-            [nzDescription]="getFinalStepDescription()"
-            [nzStatus]="getFinalStepStatus()">
-          </nz-step>
+          <nz-step [nzTitle]="getFinalStepTitle()" [nzDescription]="getFinalStepDescription()" [nzStatus]="getFinalStepStatus()"> </nz-step>
         </nz-steps>
       </nz-card>
 
@@ -187,11 +173,12 @@ interface TransactionStatusHistory {
           <nz-timeline-item
             *ngFor="let history of statusHistory"
             [nzColor]="getHistoryColor(history.status)"
-            [nzDot]="getHistoryIcon(history.status)">
+            [nzDot]="getHistoryIcon(history.status)"
+          >
             <div class="history-item">
               <div class="history-header">
                 <span class="history-status">{{ getStatusText(history.status) }}</span>
-                <span class="history-time">{{ history.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+                <span class="history-time">{{ history.timestamp | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
               </div>
               <div class="history-reason" *ngIf="history.reason">{{ history.reason }}</div>
               <div class="history-operator" *ngIf="history.operator">操作者: {{ history.operator }}</div>
@@ -203,49 +190,41 @@ interface TransactionStatusHistory {
       <!-- 快速操作 -->
       <nz-card nzTitle="快速操作" class="actions-card" *ngIf="canPerformActions()">
         <nz-space nzSize="large">
-          <button 
-            nz-button 
-            nzType="primary" 
-            nzSize="large" 
+          <button
+            nz-button
+            nzType="primary"
+            nzSize="large"
             (click)="processTransaction()"
-            *ngIf="transaction.status === TransactionStatus.PENDING">
+            *ngIf="transaction.status === TransactionStatus.PENDING"
+          >
             <span nz-icon nzType="play-circle"></span>
             處理交易
           </button>
-          <button 
-            nz-button 
-            nzType="primary" 
-            nzSize="large" 
+          <button
+            nz-button
+            nzType="primary"
+            nzSize="large"
             (click)="completeTransaction()"
-            *ngIf="transaction.status === TransactionStatus.PROCESSING">
+            *ngIf="transaction.status === TransactionStatus.PROCESSING"
+          >
             <span nz-icon nzType="check-circle"></span>
             完成交易
           </button>
-          <button 
-            nz-button 
-            nzType="primary" 
-            nzDanger 
-            nzSize="large" 
-            (click)="failTransaction()"
-            *ngIf="canFail()">
+          <button nz-button nzType="primary" nzDanger nzSize="large" (click)="failTransaction()" *ngIf="canFail()">
             <span nz-icon nzType="close-circle"></span>
             標記失敗
           </button>
-          <button 
-            nz-button 
-            nzType="default" 
-            nzSize="large" 
+          <button
+            nz-button
+            nzType="default"
+            nzSize="large"
             (click)="retryTransaction()"
-            *ngIf="transaction.status === TransactionStatus.FAILED">
+            *ngIf="transaction.status === TransactionStatus.FAILED"
+          >
             <span nz-icon nzType="reload"></span>
             重試交易
           </button>
-          <button 
-            nz-button 
-            nzType="default" 
-            nzSize="large" 
-            (click)="cancelTransaction()"
-            *ngIf="canCancel()">
+          <button nz-button nzType="default" nzSize="large" (click)="cancelTransaction()" *ngIf="canCancel()">
             <span nz-icon nzType="stop"></span>
             取消交易
           </button>
@@ -281,78 +260,80 @@ interface TransactionStatusHistory {
       </nz-space>
     </ng-template>
   `,
-  styles: [`
-    .transaction-detail-container {
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .transaction-detail-container {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    .overview-card,
-    .info-card,
-    .process-card,
-    .history-card,
-    .actions-card {
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+      .overview-card,
+      .info-card,
+      .process-card,
+      .history-card,
+      .actions-card {
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
 
-    .status-alert {
-      margin-bottom: 16px;
-    }
+      .status-alert {
+        margin-bottom: 16px;
+      }
 
-    .overview-card .ant-statistic {
-      text-align: center;
-    }
+      .overview-card .ant-statistic {
+        text-align: center;
+      }
 
-    .actions-card .ant-space {
-      width: 100%;
-      justify-content: center;
-    }
+      .actions-card .ant-space {
+        width: 100%;
+        justify-content: center;
+      }
 
-    .history-item {
-      padding: 8px 0;
-    }
+      .history-item {
+        padding: 8px 0;
+      }
 
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-    }
+      .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
 
-    .history-status {
-      font-weight: 500;
-      font-size: 14px;
-    }
+      .history-status {
+        font-weight: 500;
+        font-size: 14px;
+      }
 
-    .history-time {
-      color: #999;
-      font-size: 12px;
-    }
+      .history-time {
+        color: #999;
+        font-size: 12px;
+      }
 
-    .history-reason {
-      color: #666;
-      font-size: 12px;
-      margin-bottom: 2px;
-    }
+      .history-reason {
+        color: #666;
+        font-size: 12px;
+        margin-bottom: 2px;
+      }
 
-    .history-operator {
-      color: #999;
-      font-size: 11px;
-    }
+      .history-operator {
+        color: #999;
+        font-size: 11px;
+      }
 
-    .loading-container {
-      padding: 24px;
-    }
+      .loading-container {
+        padding: 24px;
+      }
 
-    code {
-      background: #f5f5f5;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    }
-  `]
+      code {
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      }
+    `
+  ]
 })
 export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
   private readonly transactionService = inject(OptimizedTransactionApplicationService);
@@ -419,13 +400,10 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
     }
   }
   /**
-    * 重新整理資料
-    */
+   * 重新整理資料
+   */
   async refreshData(): Promise<void> {
-    await Promise.all([
-      this.loadTransactionData(),
-      this.loadStatusHistory()
-    ]);
+    await Promise.all([this.loadTransactionData(), this.loadStatusHistory()]);
     this.message.success('資料已重新整理');
   }
 
@@ -601,13 +579,20 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
    */
   getTypeColor(type: TransactionType): string {
     switch (type) {
-      case TransactionType.DEPOSIT: return 'green';
-      case TransactionType.WITHDRAWAL: return 'red';
-      case TransactionType.TRANSFER: return 'blue';
-      case TransactionType.PAYMENT: return 'orange';
-      case TransactionType.REFUND: return 'purple';
-      case TransactionType.FEE: return 'gray';
-      default: return 'default';
+      case TransactionType.DEPOSIT:
+        return 'green';
+      case TransactionType.WITHDRAWAL:
+        return 'red';
+      case TransactionType.TRANSFER:
+        return 'blue';
+      case TransactionType.PAYMENT:
+        return 'orange';
+      case TransactionType.REFUND:
+        return 'purple';
+      case TransactionType.FEE:
+        return 'gray';
+      default:
+        return 'default';
     }
   }
 
@@ -616,13 +601,20 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
    */
   getTypeText(type: TransactionType): string {
     switch (type) {
-      case TransactionType.DEPOSIT: return '存款';
-      case TransactionType.WITHDRAWAL: return '提款';
-      case TransactionType.TRANSFER: return '轉帳';
-      case TransactionType.PAYMENT: return '付款';
-      case TransactionType.REFUND: return '退款';
-      case TransactionType.FEE: return '手續費';
-      default: return '未知類型';
+      case TransactionType.DEPOSIT:
+        return '存款';
+      case TransactionType.WITHDRAWAL:
+        return '提款';
+      case TransactionType.TRANSFER:
+        return '轉帳';
+      case TransactionType.PAYMENT:
+        return '付款';
+      case TransactionType.REFUND:
+        return '退款';
+      case TransactionType.FEE:
+        return '手續費';
+      default:
+        return '未知類型';
     }
   }
 
@@ -631,12 +623,18 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
    */
   getStatusColor(status: TransactionStatus): string {
     switch (status) {
-      case TransactionStatus.PENDING: return 'orange';
-      case TransactionStatus.PROCESSING: return 'blue';
-      case TransactionStatus.COMPLETED: return 'green';
-      case TransactionStatus.FAILED: return 'red';
-      case TransactionStatus.CANCELLED: return 'gray';
-      default: return 'default';
+      case TransactionStatus.PENDING:
+        return 'orange';
+      case TransactionStatus.PROCESSING:
+        return 'blue';
+      case TransactionStatus.COMPLETED:
+        return 'green';
+      case TransactionStatus.FAILED:
+        return 'red';
+      case TransactionStatus.CANCELLED:
+        return 'gray';
+      default:
+        return 'default';
     }
   }
 
@@ -645,12 +643,18 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
    */
   getStatusText(status: TransactionStatus): string {
     switch (status) {
-      case TransactionStatus.PENDING: return '待處理';
-      case TransactionStatus.PROCESSING: return '處理中';
-      case TransactionStatus.COMPLETED: return '已完成';
-      case TransactionStatus.FAILED: return '失敗';
-      case TransactionStatus.CANCELLED: return '已取消';
-      default: return '未知狀態';
+      case TransactionStatus.PENDING:
+        return '待處理';
+      case TransactionStatus.PROCESSING:
+        return '處理中';
+      case TransactionStatus.COMPLETED:
+        return '已完成';
+      case TransactionStatus.FAILED:
+        return '失敗';
+      case TransactionStatus.CANCELLED:
+        return '已取消';
+      default:
+        return '未知狀態';
     }
   }
 
@@ -658,14 +662,14 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
    * 取得狀態顏色十六進制值
    */
   private getStatusColorHex(colorName: string): string {
-    const colorMap: { [key: string]: string } = {
-      'green': '#52c41a',
-      'red': '#ff4d4f',
-      'orange': '#faad14',
-      'blue': '#1890ff',
-      'purple': '#722ed1',
-      'gray': '#8c8c8c',
-      'default': '#666666'
+    const colorMap: Record<string, string> = {
+      green: '#52c41a',
+      red: '#ff4d4f',
+      orange: '#faad14',
+      blue: '#1890ff',
+      purple: '#722ed1',
+      gray: '#8c8c8c',
+      default: '#666666'
     };
     return colorMap[colorName] || '#666666';
   }
@@ -679,12 +683,16 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
     if (!this.transaction) return 0;
 
     switch (this.transaction.status) {
-      case TransactionStatus.PENDING: return 0;
-      case TransactionStatus.PROCESSING: return 1;
+      case TransactionStatus.PENDING:
+        return 0;
+      case TransactionStatus.PROCESSING:
+        return 1;
       case TransactionStatus.COMPLETED:
       case TransactionStatus.FAILED:
-      case TransactionStatus.CANCELLED: return 2;
-      default: return 0;
+      case TransactionStatus.CANCELLED:
+        return 2;
+      default:
+        return 0;
     }
   }
 
@@ -695,10 +703,14 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
     if (!this.transaction) return '完成';
 
     switch (this.transaction.status) {
-      case TransactionStatus.COMPLETED: return '完成';
-      case TransactionStatus.FAILED: return '失敗';
-      case TransactionStatus.CANCELLED: return '取消';
-      default: return '完成';
+      case TransactionStatus.COMPLETED:
+        return '完成';
+      case TransactionStatus.FAILED:
+        return '失敗';
+      case TransactionStatus.CANCELLED:
+        return '取消';
+      default:
+        return '完成';
     }
   }
 
@@ -709,10 +721,14 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
     if (!this.transaction) return '交易已完成';
 
     switch (this.transaction.status) {
-      case TransactionStatus.COMPLETED: return '交易已完成';
-      case TransactionStatus.FAILED: return '交易處理失敗';
-      case TransactionStatus.CANCELLED: return '交易已取消';
-      default: return '等待完成';
+      case TransactionStatus.COMPLETED:
+        return '交易已完成';
+      case TransactionStatus.FAILED:
+        return '交易處理失敗';
+      case TransactionStatus.CANCELLED:
+        return '交易已取消';
+      default:
+        return '等待完成';
     }
   }
 
@@ -723,10 +739,14 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
     if (!this.transaction) return 'wait';
 
     switch (this.transaction.status) {
-      case TransactionStatus.COMPLETED: return 'finish';
-      case TransactionStatus.FAILED: return 'error';
-      case TransactionStatus.CANCELLED: return 'error';
-      default: return 'wait';
+      case TransactionStatus.COMPLETED:
+        return 'finish';
+      case TransactionStatus.FAILED:
+        return 'error';
+      case TransactionStatus.CANCELLED:
+        return 'error';
+      default:
+        return 'wait';
     }
   }
 
@@ -741,7 +761,7 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
    * 取得歷史圖示
    */
   getHistoryIcon(status: TransactionStatus): any {
-    const iconMap: { [key: string]: string } = {
+    const iconMap: Record<string, string> = {
       [TransactionStatus.PENDING]: 'clock-circle',
       [TransactionStatus.PROCESSING]: 'loading',
       [TransactionStatus.COMPLETED]: 'check-circle',
@@ -774,8 +794,7 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
    * 是否可以標記失敗
    */
   canFail(): boolean {
-    return this.transaction?.status === TransactionStatus.PENDING ||
-      this.transaction?.status === TransactionStatus.PROCESSING;
+    return this.transaction?.status === TransactionStatus.PENDING || this.transaction?.status === TransactionStatus.PROCESSING;
   }
 
   /**
@@ -810,7 +829,7 @@ export class OptimizedTransactionDetailComponent implements OnInit, OnDestroy {
   /**
    * 格式化貨幣
    */
-  formatCurrency(value: number, currency: string = 'TWD'): string {
+  formatCurrency(value: number, currency = 'TWD'): string {
     return new Intl.NumberFormat('zh-TW', {
       style: 'currency',
       currency: currency

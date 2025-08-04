@@ -1,12 +1,5 @@
+import { BaseCreateDto, BaseUpdateDto, BaseResponseDto, ListResponseDto, SearchCriteriaDto, BaseStatsDto } from './base.dto';
 import { AccountStatus, AccountType } from '../../domain/entities/account.entity';
-import {
-  BaseCreateDto,
-  BaseUpdateDto,
-  BaseResponseDto,
-  ListResponseDto,
-  SearchCriteriaDto,
-  BaseStatsDto
-} from './base.dto';
 
 // Re-export domain types for convenience
 export { AccountStatus, AccountType };
@@ -122,12 +115,8 @@ export interface AccountStatsDto extends BaseStatsDto {
   closed: number;
   totalBalance: number;
   averageBalance: number;
-  byType: {
-    [key: string]: number;
-  };
-  byCurrency: {
-    [currency: string]: number;
-  };
+  byType: Record<string, number>;
+  byCurrency: Record<string, number>;
 }
 
 /**
@@ -177,4 +166,4 @@ export interface AccountTransactionListDto {
   total: number;
   page: number;
   pageSize: number;
-} 
+}

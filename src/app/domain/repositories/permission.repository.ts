@@ -108,5 +108,5 @@ export interface PermissionRepository {
   /**
    * 獲取權限使用統計
    */
-  getPermissionUsageStats(): Promise<{ permissionId: string; usageCount: number }[]>;
-} 
+  getPermissionUsageStats(): Promise<Array<{ permissionId: string; usageCount: number }>>;
+}

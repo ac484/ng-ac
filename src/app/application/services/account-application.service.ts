@@ -1,11 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
-import { ACCOUNT_REPOSITORY } from '../../domain/repositories/repository-tokens';
+
 import { Account } from '../../domain/entities/account.entity';
 import { AccountRepository } from '../../domain/repositories/account.repository';
+import { ACCOUNT_REPOSITORY } from '../../domain/repositories/repository-tokens';
 import { AccountDomainService } from '../../domain/services/account-domain.service';
 import { ConversionUtilitiesService } from '../../domain/services/conversion-utilities.service';
-import { AccountType } from '../../domain/value-objects/account/account-type.value-object';
 import { AccountStatus } from '../../domain/value-objects/account/account-status.value-object';
+import { AccountType } from '../../domain/value-objects/account/account-type.value-object';
 import {
   CreateAccountDto,
   UpdateAccountDto,
@@ -35,7 +36,7 @@ export class AccountApplicationService {
     @Inject(ACCOUNT_REPOSITORY) private accountRepository: AccountRepository,
     private accountDomainService: AccountDomainService,
     private conversionUtilities: ConversionUtilitiesService
-  ) { }
+  ) {}
 
   /**
    * Coordinate account creation
@@ -69,6 +70,7 @@ export class AccountApplicationService {
 
   /**
    * Get account by ID
+   *
    * @param id Account ID
    * @returns Account DTO or null
    */
@@ -83,6 +85,7 @@ export class AccountApplicationService {
 
   /**
    * Get account by account number
+   *
    * @param accountNumber Account number
    * @returns Account DTO or null
    */
@@ -97,6 +100,7 @@ export class AccountApplicationService {
 
   /**
    * Get accounts by user ID
+   *
    * @param userId User ID
    * @returns Array of account DTOs
    */
@@ -111,6 +115,7 @@ export class AccountApplicationService {
 
   /**
    * Update account information
+   *
    * @param id Account ID
    * @param updateAccountDto Update data
    * @returns Updated account DTO
@@ -135,6 +140,7 @@ export class AccountApplicationService {
 
   /**
    * Update account status
+   *
    * @param id Account ID
    * @param updateStatusDto Status update data
    * @returns Updated account DTO
@@ -158,6 +164,7 @@ export class AccountApplicationService {
 
   /**
    * Process account deposit
+   *
    * @param id Account ID
    * @param depositDto Deposit data
    * @returns Updated account DTO
@@ -180,6 +187,7 @@ export class AccountApplicationService {
 
   /**
    * Process account withdrawal
+   *
    * @param id Account ID
    * @param withdrawalDto Withdrawal data
    * @returns Updated account DTO
@@ -202,6 +210,7 @@ export class AccountApplicationService {
 
   /**
    * Process account transfer
+   *
    * @param sourceAccountId Source account ID
    * @param transferDto Transfer data
    * @returns Updated source account DTO
@@ -231,6 +240,7 @@ export class AccountApplicationService {
 
   /**
    * Delete account
+   *
    * @param id Account ID
    */
   async deleteAccount(id: string): Promise<void> {
@@ -252,6 +262,7 @@ export class AccountApplicationService {
 
   /**
    * Get all accounts with search and pagination
+   *
    * @param searchDto Search parameters
    * @returns Account list DTO
    */
@@ -280,7 +291,7 @@ export class AccountApplicationService {
         total,
         page,
         pageSize,
-        hasNext: (page * pageSize) < total,
+        hasNext: page * pageSize < total,
         hasPrevious: page > 1
       };
     } catch (error) {
@@ -290,6 +301,7 @@ export class AccountApplicationService {
 
   /**
    * Get account statistics
+   *
    * @returns Account statistics DTO
    */
   async getAccountStats(): Promise<AccountStatsDto> {
@@ -306,11 +318,11 @@ export class AccountApplicationService {
       const averageBalance = total > 0 ? totalBalance / total : 0;
 
       // Calculate additional statistics
-      const byType: { [key: string]: number } = {
-        'CHECKING': 0,
-        'SAVINGS': 0,
-        'CREDIT': 0,
-        'INVESTMENT': 0
+      const byType: Record<string, number> = {
+        CHECKING: 0,
+        SAVINGS: 0,
+        CREDIT: 0,
+        INVESTMENT: 0
       };
 
       allAccounts.forEach(account => {
@@ -318,7 +330,7 @@ export class AccountApplicationService {
         byType[typeKey] = (byType[typeKey] || 0) + 1;
       });
 
-      const byCurrency: { [currency: string]: number } = {};
+      const byCurrency: Record<string, number> = {};
       allAccounts.forEach(account => {
         const currency = account.currency.getValue();
         byCurrency[currency] = (byCurrency[currency] || 0) + 1;
@@ -343,6 +355,7 @@ export class AccountApplicationService {
 
   /**
    * Get account balance
+   *
    * @param id Account ID
    * @returns Account balance DTO
    */
@@ -368,6 +381,7 @@ export class AccountApplicationService {
 
   /**
    * Filter accounts based on search criteria
+   *
    * @param accounts Accounts to filter
    * @param searchDto Search criteria
    * @returns Filtered accounts
@@ -378,7 +392,8 @@ export class AccountApplicationService {
     return accounts.filter(account => {
       if (searchDto.userId && account.userId.getValue() !== searchDto.userId) return false;
       if (searchDto.accountNumber && !account.accountNumber.getValue().includes(searchDto.accountNumber)) return false;
-      if (searchDto.accountName && !account.accountName.getValue().toLowerCase().includes(searchDto.accountName.toLowerCase())) return false;
+      if (searchDto.accountName && !account.accountName.getValue().toLowerCase().includes(searchDto.accountName.toLowerCase()))
+        return false;
       if (searchDto.minBalance !== undefined && account.balance.getAmount() < searchDto.minBalance) return false;
       if (searchDto.maxBalance !== undefined && account.balance.getAmount() > searchDto.maxBalance) return false;
       if (searchDto.currency && account.currency.getValue() !== searchDto.currency) return false;
@@ -388,6 +403,7 @@ export class AccountApplicationService {
 
   /**
    * Map domain entity to DTO
+   *
    * @param account Account entity
    * @returns Account DTO
    */
@@ -416,4 +432,4 @@ export class AccountApplicationService {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return new Error(`Failed to ${operation}: ${message}`);
   }
-} 
+}

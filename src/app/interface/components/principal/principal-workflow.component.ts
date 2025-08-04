@@ -1,51 +1,51 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Principal } from '../../../domain/entities/principal.entity';
 import { PrincipalApplicationService } from '../../../application/services/principal-application.service';
-import { CommonModule } from '@angular/common';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzCollapseModule } from 'ng-zorro-antd/collapse';
-import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { FormsModule } from '@angular/forms';
 
 // 流程狀態枚舉
-export type WorkflowStateType = 
-  | 'draft'           // 草稿
-  | 'submitted'       // 已提交
-  | 'under_review'    // 審核中
-  | 'approved'        // 已通過
-  | 'rejected'        // 已拒絕
-  | 'withdrawn'       // 已撤回
-  | 'finance_check'   // 財務檢查中
+export type WorkflowStateType =
+  | 'draft' // 草稿
+  | 'submitted' // 已提交
+  | 'under_review' // 審核中
+  | 'approved' // 已通過
+  | 'rejected' // 已拒絕
+  | 'withdrawn' // 已撤回
+  | 'finance_check' // 財務檢查中
   | 'payment_processing' // 付款處理中
-  | 'completed'       // 已完成
-  | 'cancelled';      // 已取消
+  | 'completed' // 已完成
+  | 'cancelled'; // 已取消
 
 // 操作類型
-export type WorkflowActionType = 
-  | 'submit'          // 提交
-  | 'withdraw'        // 撤回
-  | 'approve'         // 通過
-  | 'reject'          // 拒絕
-  | 'return'          // 退回
+export type WorkflowActionType =
+  | 'submit' // 提交
+  | 'withdraw' // 撤回
+  | 'approve' // 通過
+  | 'reject' // 拒絕
+  | 'return' // 退回
   | 'process_payment' // 處理付款
-  | 'complete'        // 完成
-  | 'cancel';         // 取消
+  | 'complete' // 完成
+  | 'cancel'; // 取消
 
 // 條件類型
 export interface WorkflowCondition {
@@ -105,32 +105,32 @@ export interface WorkflowStepConfig {
   required?: boolean;
   autoApprove?: boolean;
   timeout?: number; // 超時時間（小時）
-  
+
   // 審核相關
   approvers?: string[];
   minApprovers?: number;
   approvalLevel?: number;
-  
+
   // 財務相關
   amountLimit?: number;
   currency?: string;
   budgetCode?: string;
-  
+
   // 通知相關
   notifyRecipients?: string[];
   notifyTemplate?: string;
-  
+
   // 文件相關
   requiredDocuments?: string[];
   documentTypes?: string[];
-  
+
   // 付款相關
   paymentMethod?: string;
   paymentTerms?: string;
-  
+
   // 狀態轉換相關
   stateTransitions?: WorkflowTransition[];
-  
+
   // 自定義配置
   customFields?: Record<string, any>;
 }
@@ -147,23 +147,23 @@ export interface WorkflowStep {
 }
 
 // 請款流程步驟類型枚舉
-export type WorkflowStepType = 
-  | 'application'      // 申請
-  | 'review'           // 審核
-  | 'approval'         // 審批
-  | 'finance_check'    // 財務檢查
-  | 'budget_check'     // 預算檢查
-  | 'legal_review'     // 法務審查
-  | 'document_upload'  // 文件上傳
-  | 'document_verify'  // 文件驗證
-  | 'notification'     // 通知
-  | 'payment_process'  // 付款處理
-  | 'reimbursement'    // 報銷
-  | 'expense_claim'    // 費用申請
-  | 'vendor_payment'   // 供應商付款
-  | 'tax_processing'   // 稅務處理
-  | 'audit_trail'      // 審計追蹤
-  | 'completion';      // 完成
+export type WorkflowStepType =
+  | 'application' // 申請
+  | 'review' // 審核
+  | 'approval' // 審批
+  | 'finance_check' // 財務檢查
+  | 'budget_check' // 預算檢查
+  | 'legal_review' // 法務審查
+  | 'document_upload' // 文件上傳
+  | 'document_verify' // 文件驗證
+  | 'notification' // 通知
+  | 'payment_process' // 付款處理
+  | 'reimbursement' // 報銷
+  | 'expense_claim' // 費用申請
+  | 'vendor_payment' // 供應商付款
+  | 'tax_processing' // 稅務處理
+  | 'audit_trail' // 審計追蹤
+  | 'completion'; // 完成
 
 // 步驟類型配置
 export const WORKFLOW_STEP_TYPES = [
@@ -318,7 +318,7 @@ export const WORKFLOW_ACTIONS = [
     FormsModule
   ]
 })
-export class PrincipalWorkflowComponent implements OnInit {
+export class PrincipalWorkflowComponent implements OnInit, OnChanges {
   @Input() principal: Principal | null = null;
   @Output() workflowSaved = new EventEmitter<WorkflowStep[]>();
 
@@ -373,7 +373,7 @@ export class PrincipalWorkflowComponent implements OnInit {
       isActive: true,
       stateTransitions: []
     };
-    
+
     this.workflowSteps = [...this.workflowSteps, newStep];
   }
 
@@ -434,7 +434,7 @@ export class PrincipalWorkflowComponent implements OnInit {
 
   onStepTypeChange(step: WorkflowStep, newType: WorkflowStepType): void {
     step.type = newType;
-    
+
     // 根據步驟類型設置預設配置和狀態轉換
     switch (newType) {
       case 'application':
@@ -574,7 +574,7 @@ export class PrincipalWorkflowComponent implements OnInit {
       description: '',
       isActive: true
     };
-    
+
     step.stateTransitions = [...(step.stateTransitions || []), newTransition];
   }
 
@@ -597,44 +597,42 @@ export class PrincipalWorkflowComponent implements OnInit {
   }
 
   getApprovalStepsCount(): number {
-    return this.workflowSteps.filter(s => 
-      ['review', 'approval', 'finance_check', 'legal_review'].includes(s.type)
-    ).length;
+    return this.workflowSteps.filter(s => ['review', 'approval', 'finance_check', 'legal_review'].includes(s.type)).length;
   }
 
   getTotalTransitionsCount(): number {
-    return this.workflowSteps.reduce((total, step) => 
-      total + (step.stateTransitions?.length || 0), 0
-    );
+    return this.workflowSteps.reduce((total, step) => total + (step.stateTransitions?.length || 0), 0);
   }
 
   saveWorkflow(): void {
     if (!this.principal) return;
 
     this.loading = true;
-    
-    this.principalApplicationService.updateWorkflow({
-      principalId: this.principal.id.getValue(),
-      workflowSteps: this.workflowSteps
-    }).subscribe({
-      next: (success) => {
-        if (success) {
-          this.message.success('請款流程保存成功');
-          this.workflowSaved.emit(this.workflowSteps);
-        } else {
+
+    this.principalApplicationService
+      .updateWorkflow({
+        principalId: this.principal.id.getValue(),
+        workflowSteps: this.workflowSteps
+      })
+      .subscribe({
+        next: success => {
+          if (success) {
+            this.message.success('請款流程保存成功');
+            this.workflowSaved.emit(this.workflowSteps);
+          } else {
+            this.message.error('請款流程保存失敗');
+          }
+          this.loading = false;
+        },
+        error: error => {
+          console.error('保存請款流程時發生錯誤:', error);
           this.message.error('請款流程保存失敗');
+          this.loading = false;
         }
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('保存請款流程時發生錯誤:', error);
-        this.message.error('請款流程保存失敗');
-        this.loading = false;
-      }
-    });
+      });
   }
 
   private generateId(): string {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
-} 
+}

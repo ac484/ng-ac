@@ -2,8 +2,8 @@ import { AggregateRoot } from './aggregate-root';
 import { AccountCreatedEvent, AccountUpdatedEvent, AccountBalanceChangedEvent, AccountClosedEvent } from '../events/account-events';
 
 // 導入值物件
-import { AccountNumber } from '../value-objects/account/account-number.value-object';
 import { AccountName } from '../value-objects/account/account-name.value-object';
+import { AccountNumber } from '../value-objects/account/account-number.value-object';
 import { AccountStatus } from '../value-objects/account/account-status.value-object';
 import { AccountType } from '../value-objects/account/account-type.value-object';
 import { Currency } from '../value-objects/account/currency.value-object';
@@ -37,7 +37,7 @@ export class Account extends AggregateRoot<string> {
     lastTransactionDate?: Date
   ) {
     super(id);
-    
+
     // 私有屬性使用值物件
     this._id = id;
     this._accountNumber = accountNumber;
@@ -68,18 +68,42 @@ export class Account extends AggregateRoot<string> {
   private _lastTransactionDate?: Date;
 
   // Getter 方法
-  get id(): string { return this._id; }
-  get accountNumber(): AccountNumber { return this._accountNumber; }
-  get accountName(): AccountName { return this._accountName; }
-  get accountType(): AccountType { return this._accountType; }
-  get balance(): Money { return this._balance; }
-  get currency(): Currency { return this._currency; }
-  get status(): AccountStatus { return this._status; }
-  get userId(): UserId { return this._userId; }
-  get createdAt(): Date { return this._createdAt; }
-  get updatedAt(): Date { return this._updatedAt; }
-  get description(): string | undefined { return this._description; }
-  get lastTransactionDate(): Date | undefined { return this._lastTransactionDate; }
+  get id(): string {
+    return this._id;
+  }
+  get accountNumber(): AccountNumber {
+    return this._accountNumber;
+  }
+  get accountName(): AccountName {
+    return this._accountName;
+  }
+  get accountType(): AccountType {
+    return this._accountType;
+  }
+  get balance(): Money {
+    return this._balance;
+  }
+  get currency(): Currency {
+    return this._currency;
+  }
+  get status(): AccountStatus {
+    return this._status;
+  }
+  get userId(): UserId {
+    return this._userId;
+  }
+  get createdAt(): Date {
+    return this._createdAt;
+  }
+  get updatedAt(): Date {
+    return this._updatedAt;
+  }
+  get description(): string | undefined {
+    return this._description;
+  }
+  get lastTransactionDate(): Date | undefined {
+    return this._lastTransactionDate;
+  }
 
   /**
    * Create a new account with rich value objects
@@ -90,7 +114,7 @@ export class Account extends AggregateRoot<string> {
     accountName: string,
     accountType: AccountType,
     userId: string,
-    initialBalance: number = 0,
+    initialBalance = 0,
     description?: string
   ): Account {
     const accountNumberVO = new AccountNumber(accountNumber);
@@ -113,7 +137,7 @@ export class Account extends AggregateRoot<string> {
       new Date(),
       description
     );
-    
+
     account.addDomainEvent(new AccountCreatedEvent(id, userId, initialBalance));
     return account;
   }
@@ -126,7 +150,7 @@ export class Account extends AggregateRoot<string> {
     accountName: string,
     accountType: AccountType,
     userId: string,
-    initialBalance: number = 0,
+    initialBalance = 0,
     description?: string
   ): Account {
     const accountNumberVO = AccountNumber.generate();
@@ -149,13 +173,14 @@ export class Account extends AggregateRoot<string> {
       new Date(),
       description
     );
-    
+
     account.addDomainEvent(new AccountCreatedEvent(id, userId, initialBalance));
     return account;
   }
 
   /**
    * Deposit money into the account
+   *
    * @param amount Amount to deposit
    * @throws Error if amount is negative or account is not active
    */
@@ -166,17 +191,18 @@ export class Account extends AggregateRoot<string> {
     if (!this._status.canReceiveDeposits()) {
       throw new Error('Cannot deposit to inactive account');
     }
-    
+
     const oldBalance = this._balance;
     this._balance = this._balance.add(amount);
     this._lastTransactionDate = new Date();
     this._updatedAt = new Date();
-    
+
     this.addDomainEvent(new AccountBalanceChangedEvent(this._id, oldBalance.getAmount(), this._balance.getAmount(), amount.getAmount()));
   }
 
   /**
    * Withdraw money from the account
+   *
    * @param amount Amount to withdraw
    * @throws Error if amount is negative, insufficient funds, or account is not active
    */
@@ -190,17 +216,18 @@ export class Account extends AggregateRoot<string> {
     if (!this.hasSufficientFunds(amount)) {
       throw new Error('Insufficient funds');
     }
-    
+
     const oldBalance = this._balance;
     this._balance = this._balance.subtract(amount);
     this._lastTransactionDate = new Date();
     this._updatedAt = new Date();
-    
+
     this.addDomainEvent(new AccountBalanceChangedEvent(this._id, oldBalance.getAmount(), this._balance.getAmount(), -amount.getAmount()));
   }
 
   /**
    * Transfer money to another account
+   *
    * @param targetAccount Target account to transfer to
    * @param amount Amount to transfer
    */
@@ -211,23 +238,25 @@ export class Account extends AggregateRoot<string> {
 
   /**
    * Update account information
+   *
    * @param accountName New account name
    * @param description New description
    */
   updateInfo(accountName: string, description?: string): void {
     const accountNameVO = new AccountName(accountName);
     this._accountName = accountNameVO;
-    
+
     if (description !== undefined) {
       this._description = description;
     }
     this._updatedAt = new Date();
-    
+
     this.addDomainEvent(new AccountUpdatedEvent(this._id, this._userId.getValue(), this._balance.getAmount()));
   }
 
   /**
    * Update account status
+   *
    * @param status New account status
    */
   updateStatus(status: AccountStatus): void {
@@ -287,6 +316,7 @@ export class Account extends AggregateRoot<string> {
 
   /**
    * Check if account has sufficient funds
+   *
    * @param amount Amount to check
    */
   hasSufficientFunds(amount: Money): boolean {
@@ -296,11 +326,11 @@ export class Account extends AggregateRoot<string> {
   /**
    * Get account summary with value objects
    */
-  getSummary(): { 
-    id: string; 
-    accountNumber: string; 
-    accountName: string; 
-    balance: number; 
+  getSummary(): {
+    id: string;
+    accountNumber: string;
+    accountName: string;
+    balance: number;
     status: string;
     isActive: boolean;
     canPerformTransactions: boolean;
@@ -389,4 +419,4 @@ export class Account extends AggregateRoot<string> {
       lastTransactionDate: this._lastTransactionDate
     };
   }
-} 
+}

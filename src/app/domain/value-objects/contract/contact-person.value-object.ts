@@ -21,4 +21,4 @@ export class ContactPerson {
       throw new Error('Contact person cannot exceed 50 characters');
     }
   }
-} 
+}

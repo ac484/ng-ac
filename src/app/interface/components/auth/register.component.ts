@@ -148,4 +148,4 @@ export class UserRegisterComponent implements OnDestroy {
       clearInterval(this.interval$);
     }
   }
-} 
+}

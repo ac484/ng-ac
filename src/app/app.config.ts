@@ -1,6 +1,16 @@
+import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import zh from '@angular/common/locales/zh';
 import { default as ngLang } from '@angular/common/locales/zh-Hant';
 import { ApplicationConfig, EnvironmentProviders, Provider, importProvidersFrom, ErrorHandler } from '@angular/core';
+import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
+import { getAuth, provideAuth as provideAuth_alias } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getFunctions, provideFunctions } from '@angular/fire/functions';
+import { getMessaging, provideMessaging } from '@angular/fire/messaging';
+import { FormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withComponentInputBinding, withViewTransitions, withInMemoryScrolling, withHashLocation, RouterFeatures, RouteReuseStrategy } from '@angular/router';
 import { provideCellWidgets } from '@delon/abc/cell';
@@ -22,21 +32,12 @@ import { ICONS } from '../style-icons';
 import { ICONS_AUTO } from '../style-icons-auto';
 import { icons } from './icons-provider';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
-import { registerLocaleData } from '@angular/common';
-import zh from '@angular/common/locales/zh';
-import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth as provideAuth_alias } from '@angular/fire/auth';
-import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
-import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getFunctions, provideFunctions } from '@angular/fire/functions';
-import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
+
 import { provideRepositories } from './infrastructure/providers/repository.providers';
 
 // Import migrated services from infrastructure layer
@@ -74,15 +75,17 @@ if (environment.useHash) routerFeatures.push(withHashLocation());
 
 // Firebase providers
 const firebaseProviders: Array<Provider | EnvironmentProviders> = [
-  provideFirebaseApp(() => initializeApp({
-    projectId: "ng-acc",
-    appId: "1:289956121604:web:4dd9d608a2db962aeaf951",
-    storageBucket: "ng-acc.firebasestorage.app",
-    apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ",
-    authDomain: "ng-acc.firebaseapp.com",
-    messagingSenderId: "289956121604",
-    measurementId: "G-6YM5S9LCNV"
-  })),
+  provideFirebaseApp(() =>
+    initializeApp({
+      projectId: 'ng-acc',
+      appId: '1:289956121604:web:4dd9d608a2db962aeaf951',
+      storageBucket: 'ng-acc.firebasestorage.app',
+      apiKey: 'AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ',
+      authDomain: 'ng-acc.firebaseapp.com',
+      messagingSenderId: '289956121604',
+      measurementId: 'G-6YM5S9LCNV'
+    })
+  ),
   provideAuth_alias(() => getAuth()),
   provideAnalytics(() => getAnalytics()),
   ScreenTrackingService,
@@ -104,7 +107,9 @@ const firebaseProviders: Array<Provider | EnvironmentProviders> = [
 export const appConfig: ApplicationConfig = {
   providers: [
     // Core Angular providers
-    provideHttpClient(withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, dddAuthInterceptor, httpErrorInterceptor])),
+    provideHttpClient(
+      withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, dddAuthInterceptor, httpErrorInterceptor])
+    ),
     provideAnimations(),
     provideAnimationsAsync(),
     provideRouter(dddRoutes, ...routerFeatures),
@@ -140,11 +145,11 @@ export const appConfig: ApplicationConfig = {
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
 
     // Environment specific providers
-    ...(environment.providers || []),
+    ...(environment.providers || [])
 
     // Auth refresh provider (conditional) - Removed as part of DDD migration
-    // ...(environment.api?.refreshTokenEnabled && environment.api.refreshTokenType === 'auth-refresh' 
-    //   ? [provideBindAuthRefresh()] 
+    // ...(environment.api?.refreshTokenEnabled && environment.api.refreshTokenType === 'auth-refresh'
+    //   ? [provideBindAuthRefresh()]
     //   : [])
   ]
 };

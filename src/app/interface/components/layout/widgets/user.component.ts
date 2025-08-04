@@ -9,7 +9,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 
 /**
  * Interface Component: Header User Widget
- * 
+ *
  * Widget component that displays user information and provides user-related actions.
  * This component belongs to the Interface layer as it handles user interaction
  * and UI concerns related to user account management.
@@ -51,7 +51,7 @@ export class HeaderUserComponent {
   private readonly settings = inject(SettingsService);
   private readonly router = inject(Router);
   private readonly tokenService = inject(DA_SERVICE_TOKEN);
-  
+
   get user(): User {
     return this.settings.user;
   }
@@ -64,4 +64,4 @@ export class HeaderUserComponent {
     this.tokenService.clear();
     this.router.navigateByUrl(this.tokenService.login_url!);
   }
-} 
+}

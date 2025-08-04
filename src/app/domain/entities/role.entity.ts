@@ -1,8 +1,8 @@
 import { AggregateRoot } from './aggregate-root';
-import { Role } from '../value-objects/authorization/role.value-object';
-import { PermissionSet } from '../value-objects/authorization/permission-set.value-object';
-import { UserId } from '../value-objects/authentication/user-id.value-object';
 import { RoleCreatedEvent, RoleUpdatedEvent, RoleDeletedEvent } from '../events/role-events';
+import { UserId } from '../value-objects/authentication/user-id.value-object';
+import { PermissionSet } from '../value-objects/authorization/permission-set.value-object';
+import { Role } from '../value-objects/authorization/role.value-object';
 
 /**
  * 角色聚合根
@@ -20,10 +20,10 @@ export class RoleEntity extends AggregateRoot<string> {
   constructor(
     id: string,
     name: string,
-    description: string = '',
+    description = '',
     permissions: PermissionSet = new PermissionSet(),
-    assignedUsers: Set<string> = new Set(),
-    isActive: boolean = true,
+    assignedUsers = new Set<string>(),
+    isActive = true,
     createdAt: Date = new Date(),
     updatedAt: Date = new Date()
   ) {
@@ -75,46 +75,54 @@ export class RoleEntity extends AggregateRoot<string> {
     if (!newName || newName.trim().length === 0) {
       throw new Error('Role name cannot be empty');
     }
-    
+
     const oldName = this.name;
     this.name = newName.trim();
     this.updatedAt = new Date();
-    
-    this.addDomainEvent(new RoleUpdatedEvent(this.id, {
-      oldName,
-      newName: this.name,
-      updatedAt: this.updatedAt
-    }));
+
+    this.addDomainEvent(
+      new RoleUpdatedEvent(this.id, {
+        oldName,
+        newName: this.name,
+        updatedAt: this.updatedAt
+      })
+    );
   }
 
   updateDescription(newDescription: string): void {
     this.description = newDescription.trim();
     this.updatedAt = new Date();
-    
-    this.addDomainEvent(new RoleUpdatedEvent(this.id, {
-      description: this.description,
-      updatedAt: this.updatedAt
-    }));
+
+    this.addDomainEvent(
+      new RoleUpdatedEvent(this.id, {
+        description: this.description,
+        updatedAt: this.updatedAt
+      })
+    );
   }
 
   addPermission(permission: any): void {
     this.permissions.addPermission(permission);
     this.updatedAt = new Date();
-    
-    this.addDomainEvent(new RoleUpdatedEvent(this.id, {
-      addedPermission: permission.getValue(),
-      updatedAt: this.updatedAt
-    }));
+
+    this.addDomainEvent(
+      new RoleUpdatedEvent(this.id, {
+        addedPermission: permission.getValue(),
+        updatedAt: this.updatedAt
+      })
+    );
   }
 
   removePermission(permission: any): void {
     this.permissions.removePermission(permission);
     this.updatedAt = new Date();
-    
-    this.addDomainEvent(new RoleUpdatedEvent(this.id, {
-      removedPermission: permission.getValue(),
-      updatedAt: this.updatedAt
-    }));
+
+    this.addDomainEvent(
+      new RoleUpdatedEvent(this.id, {
+        removedPermission: permission.getValue(),
+        updatedAt: this.updatedAt
+      })
+    );
   }
 
   assignUser(userId: UserId): void {
@@ -122,14 +130,16 @@ export class RoleEntity extends AggregateRoot<string> {
     if (this.assignedUsers.has(userIdStr)) {
       throw new Error('User is already assigned to this role');
     }
-    
+
     this.assignedUsers.add(userIdStr);
     this.updatedAt = new Date();
-    
-    this.addDomainEvent(new RoleUpdatedEvent(this.id, {
-      assignedUserId: userIdStr,
-      updatedAt: this.updatedAt
-    }));
+
+    this.addDomainEvent(
+      new RoleUpdatedEvent(this.id, {
+        assignedUserId: userIdStr,
+        updatedAt: this.updatedAt
+      })
+    );
   }
 
   unassignUser(userId: UserId): void {
@@ -137,42 +147,48 @@ export class RoleEntity extends AggregateRoot<string> {
     if (!this.assignedUsers.has(userIdStr)) {
       throw new Error('User is not assigned to this role');
     }
-    
+
     this.assignedUsers.delete(userIdStr);
     this.updatedAt = new Date();
-    
-    this.addDomainEvent(new RoleUpdatedEvent(this.id, {
-      unassignedUserId: userIdStr,
-      updatedAt: this.updatedAt
-    }));
+
+    this.addDomainEvent(
+      new RoleUpdatedEvent(this.id, {
+        unassignedUserId: userIdStr,
+        updatedAt: this.updatedAt
+      })
+    );
   }
 
   activate(): void {
     if (this.isActive) {
       throw new Error('Role is already active');
     }
-    
+
     this.isActive = true;
     this.updatedAt = new Date();
-    
-    this.addDomainEvent(new RoleUpdatedEvent(this.id, {
-      isActive: true,
-      updatedAt: this.updatedAt
-    }));
+
+    this.addDomainEvent(
+      new RoleUpdatedEvent(this.id, {
+        isActive: true,
+        updatedAt: this.updatedAt
+      })
+    );
   }
 
   deactivate(): void {
     if (!this.isActive) {
       throw new Error('Role is already inactive');
     }
-    
+
     this.isActive = false;
     this.updatedAt = new Date();
-    
-    this.addDomainEvent(new RoleUpdatedEvent(this.id, {
-      isActive: false,
-      updatedAt: this.updatedAt
-    }));
+
+    this.addDomainEvent(
+      new RoleUpdatedEvent(this.id, {
+        isActive: false,
+        updatedAt: this.updatedAt
+      })
+    );
   }
 
   hasPermission(permission: any): boolean {
@@ -188,19 +204,16 @@ export class RoleEntity extends AggregateRoot<string> {
   }
 
   // 靜態工廠方法
-  static create(
-    id: string,
-    name: string,
-    description: string = '',
-    permissions: PermissionSet = new PermissionSet()
-  ): RoleEntity {
+  static create(id: string, name: string, description = '', permissions: PermissionSet = new PermissionSet()): RoleEntity {
     const role = new RoleEntity(id, name, description, permissions);
-    role.addDomainEvent(new RoleCreatedEvent(id, {
-      name: role.name,
-      description: role.description,
-      permissions: role.permissions,
-      createdAt: role.createdAt
-    }));
+    role.addDomainEvent(
+      new RoleCreatedEvent(id, {
+        name: role.name,
+        description: role.description,
+        permissions: role.permissions,
+        createdAt: role.createdAt
+      })
+    );
     return role;
   }
 
@@ -224,4 +237,4 @@ export class RoleEntity extends AggregateRoot<string> {
     ]);
     return RoleEntity.create('editor', 'Editor', 'Content editor', editorPermissions);
   }
-} 
+}

@@ -68,4 +68,4 @@ export class Email {
   private generateTemporaryEmail(input: string): string {
     return `temp_${Date.now()}_${input.replace(/[^a-zA-Z0-9]/g, '')}@temp.local`;
   }
-} 
+}

@@ -17,12 +17,12 @@ export * from './contract.dto';
 
 // 為了向後相容性，重新匯出常用的基礎介面
 export type {
-    BaseCreateDto,
-    BaseUpdateDto,
-    BaseResponseDto,
-    ListResponseDto,
-    SearchCriteriaDto,
-    BaseStatsDto,
-    OperationResultDto,
-    ValidationResultDto
+  BaseCreateDto,
+  BaseUpdateDto,
+  BaseResponseDto,
+  ListResponseDto,
+  SearchCriteriaDto,
+  BaseStatsDto,
+  OperationResultDto,
+  ValidationResultDto
 } from './base.dto';

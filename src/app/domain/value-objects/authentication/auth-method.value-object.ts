@@ -42,4 +42,4 @@ export enum AuthMethodType {
   GOOGLE_COM = 'google.com',
   FACEBOOK_COM = 'facebook.com',
   ANONYMOUS = 'anonymous'
-} 
+}

@@ -14,7 +14,7 @@ import { DddHeaderI18nComponent } from '../../widgets/ddd-header-i18n.component'
       <div class="wrap">
         <div class="top">
           <div class="head">
-            <img class="logo" src="./assets/logo-color.svg">
+            <img class="logo" src="./assets/logo-color.svg" />
             <span class="title">NG-ALAIN</span>
           </div>
           <div class="desc">武林中最有影响力的《葵花宝典》；欲练神功，挥刀自宫</div>
@@ -22,8 +22,7 @@ import { DddHeaderI18nComponent } from '../../widgets/ddd-header-i18n.component'
         <router-outlet />
         <global-footer [links]="links">
           Copyright
-          <i class="anticon anticon-copyright"></i> 2025
-          <a href="//github.com/cipchk" target="_blank">卡色</a>出品
+          <i class="anticon anticon-copyright"></i> 2025 <a href="//github.com/cipchk" target="_blank">卡色</a>出品
         </global-footer>
       </div>
     </div>

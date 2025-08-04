@@ -25,4 +25,4 @@ export class VerificationStatus {
   static UNVERIFIED(): VerificationStatus {
     return new VerificationStatus(false);
   }
-} 
+}

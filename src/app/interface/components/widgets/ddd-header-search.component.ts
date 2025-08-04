@@ -116,4 +116,4 @@ export class DddHeaderSearchComponent implements AfterViewInit, OnDestroy {
     this.search$.complete();
     this.search$.unsubscribe();
   }
-} 
+}

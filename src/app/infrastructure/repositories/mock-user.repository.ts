@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../domain/entities/user.entity';
-import { UserRepository } from '../../domain/repositories/user.repository';
+
 import { BaseMockRepository } from './base-mock.repository';
+import { User } from '../../domain/entities/user.entity';
 import { SearchCriteria } from '../../domain/interfaces/search-criteria.interface';
+import { UserRepository } from '../../domain/repositories/user.repository';
 
 /**
  * Mock implementation of UserRepository using BaseMockRepository
@@ -12,7 +13,6 @@ import { SearchCriteria } from '../../domain/interfaces/search-criteria.interfac
   providedIn: 'root'
 })
 export class MockUserRepository extends BaseMockRepository<User> implements UserRepository {
-
   constructor() {
     super();
   }
@@ -98,9 +98,8 @@ export class MockUserRepository extends BaseMockRepository<User> implements User
    */
   protected override applyKeywordSearch(entities: User[], keyword: string): User[] {
     const lowerKeyword = keyword.toLowerCase();
-    return entities.filter(user =>
-      user.displayName.toLowerCase().includes(lowerKeyword) ||
-      user.email.toLowerCase().includes(lowerKeyword)
+    return entities.filter(
+      user => user.displayName.toLowerCase().includes(lowerKeyword) || user.email.toLowerCase().includes(lowerKeyword)
     );
   }
 
@@ -145,4 +144,4 @@ export class MockUserRepository extends BaseMockRepository<User> implements User
   addMockUser(user: User): void {
     this.addMockEntity(user);
   }
-} 
+}

@@ -29,4 +29,4 @@ export class PrincipalId {
   static fromString(value: string): PrincipalId {
     return new PrincipalId(value);
   }
-} 
+}

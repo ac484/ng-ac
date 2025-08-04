@@ -23,4 +23,4 @@ export class TokenExpiresAt {
   static fromTimestamp(timestamp: number): TokenExpiresAt {
     return new TokenExpiresAt(new Date(timestamp * 1000));
   }
-} 
+}
