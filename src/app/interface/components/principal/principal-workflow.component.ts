@@ -16,26 +16,87 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { FormsModule } from '@angular/forms';
 
-// 請款流程步驟類型枚舉
-export type WorkflowStepType = 
-  | 'application'      // 申請
-  | 'review'           // 審核
-  | 'approval'         // 審批
-  | 'finance_check'    // 財務檢查
-  | 'budget_check'     // 預算檢查
-  | 'legal_review'     // 法務審查
-  | 'document_upload'  // 文件上傳
-  | 'document_verify'  // 文件驗證
-  | 'notification'     // 通知
-  | 'payment_process'  // 付款處理
-  | 'reimbursement'    // 報銷
-  | 'expense_claim'    // 費用申請
-  | 'vendor_payment'   // 供應商付款
-  | 'tax_processing'   // 稅務處理
-  | 'audit_trail'      // 審計追蹤
-  | 'completion';      // 完成
+// 流程狀態枚舉
+export type WorkflowStateType = 
+  | 'draft'           // 草稿
+  | 'submitted'       // 已提交
+  | 'under_review'    // 審核中
+  | 'approved'        // 已通過
+  | 'rejected'        // 已拒絕
+  | 'withdrawn'       // 已撤回
+  | 'finance_check'   // 財務檢查中
+  | 'payment_processing' // 付款處理中
+  | 'completed'       // 已完成
+  | 'cancelled';      // 已取消
+
+// 操作類型
+export type WorkflowActionType = 
+  | 'submit'          // 提交
+  | 'withdraw'        // 撤回
+  | 'approve'         // 通過
+  | 'reject'          // 拒絕
+  | 'return'          // 退回
+  | 'process_payment' // 處理付款
+  | 'complete'        // 完成
+  | 'cancel';         // 取消
+
+// 條件類型
+export interface WorkflowCondition {
+  type: 'amount' | 'role' | 'department' | 'custom';
+  operator: 'eq' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'not_in';
+  value: any;
+  field?: string;
+}
+
+// 通知配置
+export interface NotificationConfig {
+  type: 'email' | 'sms' | 'system' | 'webhook';
+  recipients: string[];
+  template: string;
+  trigger: 'on_state_change' | 'on_action' | 'on_timeout';
+}
+
+// 權限配置
+export interface PermissionConfig {
+  roles: string[];
+  departments: string[];
+  users: string[];
+  minApprovers?: number;
+  maxApprovers?: number;
+}
+
+// 狀態轉換
+export interface WorkflowTransition {
+  id: string;
+  fromState: WorkflowStateType;
+  toState: WorkflowStateType;
+  action: WorkflowActionType;
+  conditions?: WorkflowCondition[];
+  permissions?: PermissionConfig;
+  notifications?: NotificationConfig[];
+  description?: string;
+  isActive?: boolean;
+}
+
+// 流程狀態配置
+export interface WorkflowState {
+  type: WorkflowStateType;
+  name: string;
+  description: string;
+  color: string;
+  icon: string;
+  allowedActions: WorkflowActionType[];
+  defaultTransitions: WorkflowTransition[];
+  permissions?: PermissionConfig;
+  notifications?: NotificationConfig[];
+  isActive?: boolean;
+}
 
 // 步驟配置接口
 export interface WorkflowStepConfig {
@@ -66,6 +127,9 @@ export interface WorkflowStepConfig {
   paymentMethod?: string;
   paymentTerms?: string;
   
+  // 狀態轉換相關
+  stateTransitions?: WorkflowTransition[];
+  
   // 自定義配置
   customFields?: Record<string, any>;
 }
@@ -78,7 +142,27 @@ export interface WorkflowStep {
   config: WorkflowStepConfig;
   description?: string;
   isActive?: boolean;
+  stateTransitions?: WorkflowTransition[];
 }
+
+// 請款流程步驟類型枚舉
+export type WorkflowStepType = 
+  | 'application'      // 申請
+  | 'review'           // 審核
+  | 'approval'         // 審批
+  | 'finance_check'    // 財務檢查
+  | 'budget_check'     // 預算檢查
+  | 'legal_review'     // 法務審查
+  | 'document_upload'  // 文件上傳
+  | 'document_verify'  // 文件驗證
+  | 'notification'     // 通知
+  | 'payment_process'  // 付款處理
+  | 'reimbursement'    // 報銷
+  | 'expense_claim'    // 費用申請
+  | 'vendor_payment'   // 供應商付款
+  | 'tax_processing'   // 稅務處理
+  | 'audit_trail'      // 審計追蹤
+  | 'completion';      // 完成
 
 // 步驟類型配置
 export const WORKFLOW_STEP_TYPES = [
@@ -98,6 +182,112 @@ export const WORKFLOW_STEP_TYPES = [
   { value: 'tax_processing', label: '稅務處理', description: '稅務申報和處理' },
   { value: 'audit_trail', label: '審計追蹤', description: '審計記錄和追蹤' },
   { value: 'completion', label: '完成', description: '流程完成確認' }
+];
+
+// 狀態配置
+export const WORKFLOW_STATES: WorkflowState[] = [
+  {
+    type: 'draft',
+    name: '草稿',
+    description: '申請草稿狀態',
+    color: '#8c8c8c',
+    icon: 'file-text',
+    allowedActions: ['submit'],
+    defaultTransitions: []
+  },
+  {
+    type: 'submitted',
+    name: '已提交',
+    description: '申請已提交，等待審核',
+    color: '#1890ff',
+    icon: 'upload',
+    allowedActions: ['withdraw'],
+    defaultTransitions: []
+  },
+  {
+    type: 'under_review',
+    name: '審核中',
+    description: '正在進行審核',
+    color: '#faad14',
+    icon: 'eye',
+    allowedActions: ['approve', 'reject', 'return'],
+    defaultTransitions: []
+  },
+  {
+    type: 'approved',
+    name: '已通過',
+    description: '審核已通過',
+    color: '#52c41a',
+    icon: 'check-circle',
+    allowedActions: ['process_payment'],
+    defaultTransitions: []
+  },
+  {
+    type: 'rejected',
+    name: '已拒絕',
+    description: '審核被拒絕',
+    color: '#ff4d4f',
+    icon: 'close-circle',
+    allowedActions: ['cancel'],
+    defaultTransitions: []
+  },
+  {
+    type: 'withdrawn',
+    name: '已撤回',
+    description: '申請已撤回',
+    color: '#722ed1',
+    icon: 'rollback',
+    allowedActions: ['cancel'],
+    defaultTransitions: []
+  },
+  {
+    type: 'finance_check',
+    name: '財務檢查中',
+    description: '正在進行財務檢查',
+    color: '#13c2c2',
+    icon: 'account-book',
+    allowedActions: ['approve', 'reject', 'return'],
+    defaultTransitions: []
+  },
+  {
+    type: 'payment_processing',
+    name: '付款處理中',
+    description: '正在處理付款',
+    color: '#eb2f96',
+    icon: 'credit-card',
+    allowedActions: ['complete', 'cancel'],
+    defaultTransitions: []
+  },
+  {
+    type: 'completed',
+    name: '已完成',
+    description: '流程已完成',
+    color: '#52c41a',
+    icon: 'check',
+    allowedActions: [],
+    defaultTransitions: []
+  },
+  {
+    type: 'cancelled',
+    name: '已取消',
+    description: '流程已取消',
+    color: '#ff4d4f',
+    icon: 'stop',
+    allowedActions: [],
+    defaultTransitions: []
+  }
+];
+
+// 操作配置
+export const WORKFLOW_ACTIONS = [
+  { value: 'submit', label: '提交', description: '提交申請' },
+  { value: 'withdraw', label: '撤回', description: '撤回申請' },
+  { value: 'approve', label: '通過', description: '通過審核' },
+  { value: 'reject', label: '拒絕', description: '拒絕申請' },
+  { value: 'return', label: '退回', description: '退回修改' },
+  { value: 'process_payment', label: '處理付款', description: '執行付款' },
+  { value: 'complete', label: '完成', description: '完成流程' },
+  { value: 'cancel', label: '取消', description: '取消流程' }
 ];
 
 @Component({
@@ -120,6 +310,10 @@ export const WORKFLOW_STEP_TYPES = [
     NzSwitchModule,
     NzInputNumberModule,
     NzTagModule,
+    NzTabsModule,
+    NzCollapseModule,
+    NzCheckboxModule,
+    NzRadioModule,
     FormsModule
   ]
 })
@@ -129,7 +323,10 @@ export class PrincipalWorkflowComponent implements OnInit {
 
   workflowSteps: WorkflowStep[] = [];
   workflowStepTypes = WORKFLOW_STEP_TYPES;
+  workflowStates = WORKFLOW_STATES;
+  workflowActions = WORKFLOW_ACTIONS;
   loading = false;
+  activeTab = 0;
 
   constructor(private message: NzMessageService) {}
 
@@ -163,7 +360,25 @@ export class PrincipalWorkflowComponent implements OnInit {
             timeout: 24
           },
           description: '提交請款申請',
-          isActive: true
+          isActive: true,
+          stateTransitions: [
+            {
+              id: '1-1',
+              fromState: 'draft',
+              toState: 'submitted',
+              action: 'submit',
+              description: '提交申請',
+              isActive: true
+            },
+            {
+              id: '1-2',
+              fromState: 'submitted',
+              toState: 'withdrawn',
+              action: 'withdraw',
+              description: '撤回申請',
+              isActive: true
+            }
+          ]
         },
         {
           id: '2',
@@ -177,7 +392,41 @@ export class PrincipalWorkflowComponent implements OnInit {
             approvalLevel: 1
           },
           description: '部門主管初步審核',
-          isActive: true
+          isActive: true,
+          stateTransitions: [
+            {
+              id: '2-1',
+              fromState: 'submitted',
+              toState: 'under_review',
+              action: 'submit',
+              description: '開始審核',
+              isActive: true
+            },
+            {
+              id: '2-2',
+              fromState: 'under_review',
+              toState: 'approved',
+              action: 'approve',
+              description: '通過審核',
+              isActive: true
+            },
+            {
+              id: '2-3',
+              fromState: 'under_review',
+              toState: 'rejected',
+              action: 'reject',
+              description: '拒絕申請',
+              isActive: true
+            },
+            {
+              id: '2-4',
+              fromState: 'under_review',
+              toState: 'submitted',
+              action: 'return',
+              description: '退回修改',
+              isActive: true
+            }
+          ]
         },
         {
           id: '3',
@@ -191,60 +440,64 @@ export class PrincipalWorkflowComponent implements OnInit {
             budgetCode: 'FIN001'
           },
           description: '財務合規性檢查',
-          isActive: true
+          isActive: true,
+          stateTransitions: [
+            {
+              id: '3-1',
+              fromState: 'approved',
+              toState: 'finance_check',
+              action: 'submit',
+              description: '開始財務檢查',
+              isActive: true
+            },
+            {
+              id: '3-2',
+              fromState: 'finance_check',
+              toState: 'payment_processing',
+              action: 'approve',
+              description: '財務檢查通過',
+              isActive: true
+            },
+            {
+              id: '3-3',
+              fromState: 'finance_check',
+              toState: 'rejected',
+              action: 'reject',
+              description: '財務檢查不通過',
+              isActive: true
+            }
+          ]
         },
         {
           id: '4',
-          name: '文件驗證',
-          type: 'document_verify',
-          order: 3,
-          config: {
-            required: true,
-            requiredDocuments: ['發票', '合約', '收據'],
-            documentTypes: ['pdf', 'jpg', 'png']
-          },
-          description: '驗證必要文件',
-          isActive: true
-        },
-        {
-          id: '5',
-          name: '最終審批',
-          type: 'approval',
-          order: 4,
-          config: {
-            required: true,
-            approvers: ['財務經理', '總經理'],
-            minApprovers: 2,
-            approvalLevel: 2
-          },
-          description: '最終審批確認',
-          isActive: true
-        },
-        {
-          id: '6',
           name: '付款處理',
           type: 'payment_process',
-          order: 5,
+          order: 3,
           config: {
             required: true,
             paymentMethod: '銀行轉帳',
             paymentTerms: 'T+3'
           },
           description: '執行付款流程',
-          isActive: true
-        },
-        {
-          id: '7',
-          name: '完成通知',
-          type: 'notification',
-          order: 6,
-          config: {
-            required: true,
-            notifyRecipients: ['申請人', '財務部門'],
-            notifyTemplate: 'payment_completed'
-          },
-          description: '發送完成通知',
-          isActive: true
+          isActive: true,
+          stateTransitions: [
+            {
+              id: '4-1',
+              fromState: 'payment_processing',
+              toState: 'completed',
+              action: 'complete',
+              description: '付款完成',
+              isActive: true
+            },
+            {
+              id: '4-2',
+              fromState: 'payment_processing',
+              toState: 'cancelled',
+              action: 'cancel',
+              description: '付款失敗',
+              isActive: true
+            }
+          ]
         }
       ];
       this.loading = false;
@@ -262,7 +515,8 @@ export class PrincipalWorkflowComponent implements OnInit {
         autoApprove: false
       },
       description: '',
-      isActive: true
+      isActive: true,
+      stateTransitions: []
     };
     
     this.workflowSteps = [...this.workflowSteps, newStep];
@@ -308,10 +562,25 @@ export class PrincipalWorkflowComponent implements OnInit {
     return stepType ? stepType.description : '';
   }
 
+  getStateLabel(type: WorkflowStateType): string {
+    const state = this.workflowStates.find(s => s.type === type);
+    return state ? state.name : type;
+  }
+
+  getStateColor(type: WorkflowStateType): string {
+    const state = this.workflowStates.find(s => s.type === type);
+    return state ? state.color : '#8c8c8c';
+  }
+
+  getActionLabel(action: WorkflowActionType): string {
+    const actionConfig = this.workflowActions.find(a => a.value === action);
+    return actionConfig ? actionConfig.label : action;
+  }
+
   onStepTypeChange(step: WorkflowStep, newType: WorkflowStepType): void {
     step.type = newType;
     
-    // 根據步驟類型設置預設配置
+    // 根據步驟類型設置預設配置和狀態轉換
     switch (newType) {
       case 'application':
         step.config = {
@@ -319,6 +588,24 @@ export class PrincipalWorkflowComponent implements OnInit {
           autoApprove: false,
           timeout: 24
         };
+        step.stateTransitions = [
+          {
+            id: this.generateId(),
+            fromState: 'draft',
+            toState: 'submitted',
+            action: 'submit',
+            description: '提交申請',
+            isActive: true
+          },
+          {
+            id: this.generateId(),
+            fromState: 'submitted',
+            toState: 'withdrawn',
+            action: 'withdraw',
+            description: '撤回申請',
+            isActive: true
+          }
+        ];
         break;
       case 'review':
       case 'approval':
@@ -328,6 +615,32 @@ export class PrincipalWorkflowComponent implements OnInit {
           minApprovers: 1,
           approvalLevel: 1
         };
+        step.stateTransitions = [
+          {
+            id: this.generateId(),
+            fromState: 'submitted',
+            toState: 'under_review',
+            action: 'submit',
+            description: '開始審核',
+            isActive: true
+          },
+          {
+            id: this.generateId(),
+            fromState: 'under_review',
+            toState: 'approved',
+            action: 'approve',
+            description: '通過審核',
+            isActive: true
+          },
+          {
+            id: this.generateId(),
+            fromState: 'under_review',
+            toState: 'rejected',
+            action: 'reject',
+            description: '拒絕申請',
+            isActive: true
+          }
+        ];
         break;
       case 'finance_check':
         step.config = {
@@ -336,21 +649,32 @@ export class PrincipalWorkflowComponent implements OnInit {
           currency: 'TWD',
           budgetCode: ''
         };
-        break;
-      case 'document_upload':
-      case 'document_verify':
-        step.config = {
-          required: true,
-          requiredDocuments: [],
-          documentTypes: ['pdf', 'jpg', 'png']
-        };
-        break;
-      case 'notification':
-        step.config = {
-          required: true,
-          notifyRecipients: [],
-          notifyTemplate: ''
-        };
+        step.stateTransitions = [
+          {
+            id: this.generateId(),
+            fromState: 'approved',
+            toState: 'finance_check',
+            action: 'submit',
+            description: '開始財務檢查',
+            isActive: true
+          },
+          {
+            id: this.generateId(),
+            fromState: 'finance_check',
+            toState: 'payment_processing',
+            action: 'approve',
+            description: '財務檢查通過',
+            isActive: true
+          },
+          {
+            id: this.generateId(),
+            fromState: 'finance_check',
+            toState: 'rejected',
+            action: 'reject',
+            description: '財務檢查不通過',
+            isActive: true
+          }
+        ];
         break;
       case 'payment_process':
         step.config = {
@@ -358,13 +682,49 @@ export class PrincipalWorkflowComponent implements OnInit {
           paymentMethod: '銀行轉帳',
           paymentTerms: 'T+3'
         };
+        step.stateTransitions = [
+          {
+            id: this.generateId(),
+            fromState: 'payment_processing',
+            toState: 'completed',
+            action: 'complete',
+            description: '付款完成',
+            isActive: true
+          },
+          {
+            id: this.generateId(),
+            fromState: 'payment_processing',
+            toState: 'cancelled',
+            action: 'cancel',
+            description: '付款失敗',
+            isActive: true
+          }
+        ];
         break;
       default:
         step.config = {
           required: true,
           autoApprove: false
         };
+        step.stateTransitions = [];
     }
+  }
+
+  addStateTransition(step: WorkflowStep): void {
+    const newTransition: WorkflowTransition = {
+      id: this.generateId(),
+      fromState: 'draft',
+      toState: 'submitted',
+      action: 'submit',
+      description: '',
+      isActive: true
+    };
+    
+    step.stateTransitions = [...(step.stateTransitions || []), newTransition];
+  }
+
+  removeStateTransition(step: WorkflowStep, transitionId: string): void {
+    step.stateTransitions = step.stateTransitions?.filter(t => t.id !== transitionId) || [];
   }
 
   configureStep(step: WorkflowStep): void {
@@ -385,6 +745,12 @@ export class PrincipalWorkflowComponent implements OnInit {
     return this.workflowSteps.filter(s => 
       ['review', 'approval', 'finance_check', 'legal_review'].includes(s.type)
     ).length;
+  }
+
+  getTotalTransitionsCount(): number {
+    return this.workflowSteps.reduce((total, step) => 
+      total + (step.stateTransitions?.length || 0), 0
+    );
   }
 
   saveWorkflow(): void {
