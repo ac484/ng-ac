@@ -136,7 +136,7 @@ export class Menu extends BaseEntity<string> {
 
   public removeChild(childId: string): void {
     if (this.props.children) {
-      this.props.children = this.props.children.filter(child => child.id !== childId);
+      this.props.children = this.props.children.filter((child: Menu) => child.id !== childId);
     }
   }
 

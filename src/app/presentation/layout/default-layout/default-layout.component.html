@@ -4,9 +4,9 @@
     <nz-sider
       nzBreakpoint="lg"
       [nzCollapsed]="layout?.isCollapsed"
-      [nzCollapsedWidth]="layout?.collapsedWidth"
-      [nzTheme]="layout?.theme"
-      [nzWidth]="layout?.sidebarWidth"
+      [nzCollapsedWidth]="layout?.collapsedWidth ?? 80"
+      [nzTheme]="layout?.theme ?? 'light'"
+      [nzWidth]="layout?.sidebarWidth ?? 200"
       [nzCollapsible]="true"
       [nzTrigger]="trigger"
       (nzCollapsedChange)="toggleCollapsed()"
@@ -62,7 +62,7 @@
 </nz-layout>
 
 <ng-template #trigger>
-  <ul nz-menu nzMode="inline" [nzSelectable]="false" [nzTheme]="layout?.theme">
+  <ul nz-menu nzMode="inline" [nzSelectable]="false" [nzTheme]="layout?.theme ?? 'light'">
     <li nz-menu-item [nzPaddingLeft]="16">
       <i nz-icon [nzType]="layout?.isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
     </li>

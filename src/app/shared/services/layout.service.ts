@@ -22,7 +22,7 @@ export class LayoutService {
 
   async loadLayout(): Promise<void> {
     try {
-      const layouts = await this.layoutService.repository.findAll();
+      const layouts = await this.layoutService.findAll();
       const layout = layouts.length > 0 ? layouts[0] : await this.createDefaultLayout();
       this.layoutSubject.next(layout);
     } catch (error) {
@@ -34,7 +34,7 @@ export class LayoutService {
 
   async loadTabs(): Promise<void> {
     try {
-      const tabs = await this.tabService.repository.findAll();
+      const tabs = await this.tabService.findAll();
       this.tabsSubject.next(tabs);
       
       const currentTab = tabs.find(tab => tab.isActive) || null;

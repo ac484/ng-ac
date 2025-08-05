@@ -9,14 +9,13 @@ import { NzNoAnimationModule } from 'ng-zorro-antd/core/no-animation';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 import { LayoutApplicationService } from '../../../application/layout/layout.application.service';
 import { TabApplicationService } from '../../../application/layout/tab.application.service';
 import { Layout, LayoutMode, ThemeMode } from '../../../domain/layout/layout.entity';
 import { Tab } from '../../../domain/layout/tab.entity';
-import { SidebarComponent } from '../sidebar/sidebar.component
+import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
 import { TabComponent } from '../tab/tab.component';
 
@@ -36,7 +35,6 @@ import { TabComponent } from '../tab/tab.component';
     NzCardModule,
     NzTabsModule,
     NzDropDownModule,
-    NzMessageModule,
     SidebarComponent,
     HeaderComponent,
     TabComponent,
@@ -63,7 +61,7 @@ export class DefaultLayoutComponent implements OnInit {
 
   private async loadLayout(): Promise<void> {
     try {
-      const layouts = await this.layoutService.repository.findAll();
+      const layouts = await this.layoutService.findAll();
       this.layout = layouts.length > 0 ? layouts[0] : await this.createDefaultLayout();
     } catch (error) {
       console.error('Failed to load layout:', error);
@@ -73,7 +71,7 @@ export class DefaultLayoutComponent implements OnInit {
 
   private async loadTabs(): Promise<void> {
     try {
-      this.tabs = await this.tabService.repository.findAll();
+      this.tabs = await this.tabService.findAll();
       this.currentTab = this.tabs.find(tab => tab.isActive) || null;
     } catch (error) {
       console.error('Failed to load tabs:', error);
