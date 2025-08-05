@@ -1,5 +1,5 @@
 import { Injectable, inject, APP_INITIALIZER, Provider } from '@angular/core';
-import { Observable, of, throwError, catchError, tap, delay } from 'rxjs';
+import { Observable, of, throwError, catchError, tap } from 'rxjs';
 import { DA_SERVICE_TOKEN } from '@delon/auth';
 import { MenuService, SettingsService, TitleService } from '@delon/theme';
 import { ACLService } from '@delon/acl';
@@ -37,7 +37,6 @@ export class StartupApplicationService {
   load(): Observable<void> {
     return this.initializeApp()
       .pipe(
-        delay(500), // 給用戶一個視覺反饋
         tap(() => console.log('Startup service completed')),
         catchError(error => {
           console.error('Startup service error:', error);
