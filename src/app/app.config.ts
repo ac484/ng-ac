@@ -19,18 +19,16 @@ import { authSimpleInterceptor, provideAuth } from '@delon/auth';
 import { provideSFConfig } from '@delon/form';
 import { AlainProvideLang, provideAlain, zh_TW as delonLang } from '@delon/theme';
 import { AlainConfig } from '@delon/util/config';
-import { environment } from '@env/environment';
-import { CELL_WIDGETS, ST_WIDGETS, SF_WIDGETS } from '@shared';
+import { environment } from '../environments/environment';
 import { zhTW as dateLang } from 'date-fns/locale';
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 import { zh_TW as zorroLang, provideNzI18n } from 'ng-zorro-antd/i18n';
+import { provideNzMessage } from 'ng-zorro-antd/message';
+import { provideNzModal } from 'ng-zorro-antd/modal';
 
-import { dddAuthInterceptor } from './infrastructure/interceptors/ddd-auth.interceptor';
-import { httpErrorInterceptor } from './infrastructure/interceptors/http-error.interceptor';
-import { dddRoutes } from './interface/routes/routes';
+import { routes } from './app.routes';
 import { ICONS } from '../style-icons';
 import { ICONS_AUTO } from '../style-icons-auto';
-import { icons } from './icons-provider';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { getPerformance, providePerformance } from '@angular/fire/performance';
@@ -108,24 +106,26 @@ export const appConfig: ApplicationConfig = {
   providers: [
     // Core Angular providers
     provideHttpClient(
-      withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, dddAuthInterceptor, httpErrorInterceptor])
+      withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor])
     ),
     provideAnimations(),
     provideAnimationsAsync(),
-    provideRouter(dddRoutes, ...routerFeatures),
+    provideRouter(routes, ...routerFeatures),
 
     // ng-zorro-antd providers
-    provideNzIcons(icons),
+    provideNzIcons(ICONS_AUTO),
     provideNzI18n(zorroLang),
     provideNzConfig(ngZorroConfig),
+    provideNzMessage(),
+    provideNzModal(),
 
     // ng-alain providers
     provideAlain({ config: alainConfig, defaultLang, i18nClass: I18NService, icons: [...ICONS_AUTO, ...ICONS] }),
     provideAuth(),
-    provideCellWidgets(...CELL_WIDGETS),
-    provideSTWidgets(...ST_WIDGETS),
+    provideCellWidgets(),
+    provideSTWidgets(),
     provideSFConfig({
-      widgets: [...SF_WIDGETS]
+      widgets: []
     }),
     provideStartup(),
 
@@ -146,10 +146,5 @@ export const appConfig: ApplicationConfig = {
 
     // Environment specific providers
     ...(environment.providers || [])
-
-    // Auth refresh provider (conditional) - Removed as part of DDD migration
-    // ...(environment.api?.refreshTokenEnabled && environment.api.refreshTokenType === 'auth-refresh'
-    //   ? [provideBindAuthRefresh()]
-    //   : [])
   ]
 };

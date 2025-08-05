@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { authJWTCanActivate } from '@delon/auth';
 
-export const routes: Routes = [
+export const dddRoutes: Routes = [
   {
     path: 'passport/login',
     loadComponent: () => import('../../presentation/auth/login/login.component').then(m => m.LoginComponent)

@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
+import { dddRoutes } from './interface/routes/ddd-routes';
 
 export const routes: Routes = [
   // DDD Routes - 主要應用路由
   {
     path: '',
-    loadChildren: () => import('./interface/routes/routes').then(m => m.routes)
+    loadChildren: () => import('./interface/routes/ddd-routes').then(m => m.dddRoutes)
   }
 ];
