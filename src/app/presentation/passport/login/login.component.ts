@@ -5,6 +5,9 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzTabsModule, NzTabChangeEvent } from 'ng-zorro-antd/tabs';
+import { NzRowDirective } from 'ng-zorro-antd/grid';
+import { NzColDirective } from 'ng-zorro-antd/grid';
 import { CommonModule } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { finalize } from 'rxjs/operators';
@@ -21,7 +24,10 @@ import { LoginUseCase } from '../../../application/auth/login.use-case';
     NzFormModule,
     NzInputModule,
     NzButtonModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzTabsModule,
+    NzRowDirective,
+    NzColDirective
   ],
   providers: [NzMessageService]
 })
@@ -62,8 +68,8 @@ export class LoginComponent {
   }
   // #endregion
 
-  switch(ret: { type: number; index: number }): void {
-    this.type = ret.index;
+  switch(event: NzTabChangeEvent): void {
+    this.type = event.index ?? 0;
   }
 
   submit(): void {

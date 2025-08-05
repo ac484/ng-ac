@@ -37,12 +37,12 @@
             <nz-form-item>
               <nz-form-control [nzErrorTip]="errorTpl">
                 <div nz-row [nzGutter]="8">
-                  <div nz-col nzSpan="16">
+                  <div nz-col [nzSpan]="16">
                     <nz-input-group nzPrefixIcon="mail">
                       <input type="text" nz-input formControlName="captcha" placeholder="Verification code" />
                     </nz-input-group>
                   </div>
-                  <div nz-col nzSpan="8">
+                  <div nz-col [nzSpan]="8">
                     <button nz-button [nzBlock]="true">Get Code</button>
                   </div>
                 </div>
@@ -67,7 +67,7 @@
           Other login methods
           <a (click)="$event.preventDefault()"><span nz-icon nzType="wechat" class="icon"></span></a>
           <a (click)="$event.preventDefault()"><span nz-icon nzType="alipay-circle" class="icon"></span></a>
-          <a (click)="$event.preventDefault()"><span nz-icon nzType="google" class.icon></span></a>
+          <a (click)="$event.preventDefault()"><span nz-icon nzType="google" class="icon"></span></a>
           <a routerLink="/passport/register" class="register">Register</a>
         </div>
         <ng-template #errorTpl let-control>
