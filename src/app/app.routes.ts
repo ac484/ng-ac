@@ -27,11 +27,11 @@ export const routes: Routes = [
     path: 'passport/callback',
     loadComponent: () => import('./presentation/passport/callback/callback.component').then(m => m.CallbackComponent)
   },
-  // Default layout routes
+  // Basic layout routes (using ng-alain standard layout)
   {
     path: '',
     canActivate: [authJWTCanActivate],
-    loadComponent: () => import('./presentation/layout/default-layout/default-layout.component').then(m => m.DefaultLayoutComponent),
+    loadComponent: () => import('./presentation/layout/basic/basic.component').then(m => m.LayoutBasicComponent),
     children: [
       {
         path: '',

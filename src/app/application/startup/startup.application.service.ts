@@ -46,7 +46,7 @@ export class StartupApplicationService {
 
     // 檢查認證狀態並設置相應配置
     const tokenData = this.tokenService.get();
-    
+
     if (tokenData?.token) {
       this.setupAuthenticatedUser(tokenData);
     } else {
@@ -62,9 +62,17 @@ export class StartupApplicationService {
   private setupAuthenticatedUser(tokenData: any): void {
     // 設置用戶信息
     this.settingService.setUser({
-      name: tokenData.name || 'User',
-      avatar: tokenData.avatar || './assets/tmp/img/avatar.jpg',
-      email: tokenData.email || 'user@example.com'
+      name: tokenData.name || 'Admin',
+      avatar: tokenData.avatar || './assets/logo-color.svg',
+      email: tokenData.email || 'admin@ng-ac.com'
+    });
+
+    // 設置Layout配置
+    this.settingService.setLayout({
+      fixed: true,
+      collapsed: false,
+      boxed: false,
+      lang: null
     });
 
     // 設置權限
@@ -79,7 +87,17 @@ export class StartupApplicationService {
           {
             text: 'Dashboard',
             link: '/dashboard',
-            icon: 'appstore'
+            icon: 'dashboard'
+          },
+          {
+            text: 'User Management',
+            link: '/users',
+            icon: 'user'
+          },
+          {
+            text: 'Settings',
+            link: '/settings',
+            icon: 'setting'
           }
         ]
       }
