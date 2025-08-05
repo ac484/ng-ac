@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, UserCredential } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, UserCredential, GoogleAuthProvider, signInWithPopup, signInAnonymously } from '@angular/fire/auth';
 import { DA_SERVICE_TOKEN, ITokenService, ITokenModel } from '@delon/auth';
 import { from, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -14,6 +14,28 @@ export class FirebaseAuthService {
 
   login(credentials: LoginRequest): Observable<ITokenModel> {
     return from(signInWithEmailAndPassword(this.auth, credentials.email, credentials.password)).pipe(
+      switchMap((userCredential: UserCredential) => from(userCredential.user.getIdToken())),
+      map(token => {
+        const tokenModel: ITokenModel = { token, uid: this.auth.currentUser?.uid };
+        this.tokenService.set(tokenModel);
+        return tokenModel;
+      })
+    );
+  }
+
+  loginWithGoogle(): Observable<ITokenModel> {
+    return from(signInWithPopup(this.auth, new GoogleAuthProvider())).pipe(
+      switchMap((userCredential: UserCredential) => from(userCredential.user.getIdToken())),
+      map(token => {
+        const tokenModel: ITokenModel = { token, uid: this.auth.currentUser?.uid };
+        this.tokenService.set(tokenModel);
+        return tokenModel;
+      })
+    );
+  }
+
+  loginAnonymously(): Observable<ITokenModel> {
+    return from(signInAnonymously(this.auth)).pipe(
       switchMap((userCredential: UserCredential) => from(userCredential.user.getIdToken())),
       map(token => {
         const tokenModel: ITokenModel = { token, uid: this.auth.currentUser?.uid };

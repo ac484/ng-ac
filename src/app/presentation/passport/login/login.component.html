@@ -65,9 +65,8 @@
         </button>
         <div class="other">
           Other login methods
-          <a (click)="$event.preventDefault()"><span nz-icon nzType="wechat" class="icon"></span></a>
-          <a (click)="$event.preventDefault()"><span nz-icon nzType="alipay-circle" class="icon"></span></a>
-          <a (click)="$event.preventDefault()"><span nz-icon nzType="google" class="icon"></span></a>
+          <a (click)="loginWithGoogle()"><span nz-icon nzType="google" class="icon"></span></a>
+          <a (click)="loginAnonymously()"><span nz-icon nzType="user" class="icon"></span></a>
           <a routerLink="/passport/register" class="register">Register</a>
         </div>
         <ng-template #errorTpl let-control>

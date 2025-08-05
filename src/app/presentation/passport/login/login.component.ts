@@ -12,6 +12,9 @@ import { CommonModule } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { finalize } from 'rxjs/operators';
 import { LoginUseCase } from '../../../application/auth/login.use-case';
+import { LoginWithGoogleUseCase } from '../../../application/auth/login-with-google.use-case';
+import { LoginAnonymouslyUseCase } from '../../../application/auth/login-anonymously.use-case';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-passport-login',
@@ -27,7 +30,8 @@ import { LoginUseCase } from '../../../application/auth/login.use-case';
     NzCheckboxModule,
     NzTabsModule,
     NzRowDirective,
-    NzColDirective
+    NzColDirective,
+    NzIconModule
   ],
   providers: [NzMessageService]
 })
@@ -40,6 +44,8 @@ export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly loginUseCase = inject(LoginUseCase);
+  private readonly loginWithGoogleUseCase = inject(LoginWithGoogleUseCase);
+  private readonly loginAnonymouslyUseCase = inject(LoginAnonymouslyUseCase);
   private readonly message = inject(NzMessageService);
 
 
@@ -95,6 +101,38 @@ export class LoginComponent {
     this.loading = true;
     const { userName, password } = this.form.value;
     this.loginUseCase.execute({ email: userName, password })
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: () => {
+          this.message.success('Login successful!');
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.error = err.message || 'Login failed';
+          this.message.error(this.error);
+        }
+      });
+  }
+
+  loginWithGoogle(): void {
+    this.loading = true;
+    this.loginWithGoogleUseCase.execute()
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: () => {
+          this.message.success('Login successful!');
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.error = err.message || 'Login failed';
+          this.message.error(this.error);
+        }
+      });
+  }
+
+  loginAnonymously(): void {
+    this.loading = true;
+    this.loginAnonymouslyUseCase.execute()
       .pipe(finalize(() => this.loading = false))
       .subscribe({
         next: () => {
