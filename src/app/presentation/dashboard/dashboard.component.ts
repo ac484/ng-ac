@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { FirebaseAuthService } from '../../infrastructure/auth/firebase-auth.service';
+import { LogoutUseCase } from '../../application/auth/logout.use-case';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,11 +13,11 @@ import { FirebaseAuthService } from '../../infrastructure/auth/firebase-auth.ser
   imports: [NzButtonModule]
 })
 export class DashboardComponent {
-  private readonly authService = inject(FirebaseAuthService);
+  private readonly logoutUseCase = inject(LogoutUseCase);
   private readonly router = inject(Router);
 
   logout(): void {
-    this.authService.logout();
+    this.logoutUseCase.execute();
     this.router.navigate(['/passport/login']);
   }
 } 

@@ -1,0 +1,79 @@
+@import 'ng-zorro-antd/style/index';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #f0f2f5;
+  background-image: url('https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg');
+}
+
+.wrap {
+  width: 368px;
+  margin: 0 auto;
+}
+
+.top {
+  text-align: center;
+}
+
+.head {
+  height: 44px;
+  line-height: 44px;
+
+  .logo {
+    height: 44px;
+    vertical-align: top;
+    margin-right: 16px;
+  }
+
+  .title {
+    font-size: 33px;
+    color: @heading-color;
+    font-family: 'Myriad Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    position: relative;
+    top: 2px;
+  }
+}
+
+.desc {
+  font-size: @font-size-base;
+  color: @text-color-secondary;
+  margin-top: 12px;
+  margin-bottom: 40px;
+}
+
+.main {
+  .forgot {
+    color: @text-color-secondary;
+  }
+
+  .other {
+    margin-top: 24px;
+    line-height: 22px;
+    text-align: left;
+
+    .icon {
+      font-size: 24px;
+      color: rgba(0, 0, 0, 0.2);
+      margin-left: 16px;
+      vertical-align: middle;
+      cursor: pointer;
+      transition: color 0.3s;
+
+      &:hover {
+        color: @primary-color;
+      }
+    }
+
+    .register {
+      float: right;
+    }
+  }
+}
+.text-right {
+  text-align: right;
+} 

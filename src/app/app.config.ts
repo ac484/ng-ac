@@ -2,7 +2,7 @@ import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import zh from '@angular/common/locales/zh';
 import { default as ngLang } from '@angular/common/locales/zh-Hant';
-import { ApplicationConfig, EnvironmentProviders, Provider, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, EnvironmentProviders, Provider, importProvidersFrom, ErrorHandler } from '@angular/core';
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
@@ -31,6 +31,8 @@ import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
+import { errorInterceptor } from './infrastructure/interceptors/error.interceptor.fn';
+import { GlobalErrorHandler } from './shared/services/error-handler.service';
 
 registerLocaleData(zh);
 
@@ -90,7 +92,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     // Core Angular providers
     provideHttpClient(
-      withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor])
+      withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, errorInterceptor])
     ),
     provideAnimations(),
     provideAnimationsAsync(),
@@ -111,6 +113,9 @@ export const appConfig: ApplicationConfig = {
 
     // Firebase providers
     ...firebaseProviders,
+
+    // Global Error Handler
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
 
     // Environment specific providers
     ...(environment.providers || [])

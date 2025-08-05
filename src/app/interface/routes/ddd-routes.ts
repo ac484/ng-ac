@@ -4,7 +4,7 @@ import { authJWTCanActivate } from '@delon/auth';
 export const dddRoutes: Routes = [
   {
     path: 'passport/login',
-    loadComponent: () => import('../../presentation/auth/login/login.component').then(m => m.LoginComponent)
+    loadComponent: () => import('../../presentation/passport/login/login.component').then(m => m.LoginComponent)
   },
   {
     path: 'dashboard',
