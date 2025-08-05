@@ -27,14 +27,29 @@ export const routes: Routes = [
     path: 'passport/callback',
     loadComponent: () => import('./presentation/passport/callback/callback.component').then(m => m.CallbackComponent)
   },
-  {
-    path: 'dashboard',
-    canActivate: [authJWTCanActivate],
-    loadComponent: () => import('./presentation/dashboard/dashboard.component').then(m => m.DashboardComponent)
-  },
+  // Default layout routes
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'dashboard'
+    canActivate: [authJWTCanActivate],
+    loadComponent: () => import('./presentation/layout/default-layout/default-layout.component').then(m => m.DefaultLayoutComponent),
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard'
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./presentation/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./presentation/user/user-list/user-list.component').then(m => m.UserListComponent)
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./presentation/settings/settings.component').then(m => m.SettingsComponent)
+      }
+    ]
   }
 ];

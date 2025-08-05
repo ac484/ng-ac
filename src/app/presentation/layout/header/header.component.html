@@ -1,0 +1,70 @@
+<div class="header-container">
+  <!-- Left Section -->
+  <div class="header-left">
+    <button nz-button
+            nzType="text"
+            nzSize="large"
+            (click)="onToggleCollapsed()">
+      <i nz-icon [nzType]="layout?.isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+    </button>
+    
+    <div class="header-title">
+      <img src="assets/logo-color.svg" alt="Logo" />
+      <span>NG-AC</span>
+    </div>
+  </div>
+
+  <!-- Right Section -->
+  <div class="header-right">
+    <!-- Layout Mode Toggle -->
+    <nz-dropdown>
+      <button nz-button nzType="text" nz-dropdown>
+        <i nz-icon nzType="setting"></i>
+      </button>
+      <ul nz-menu nz-dropdown-menu>
+        <li nz-menu-item (click)="onSetMode('side')">
+          <i nz-icon nzType="menu"></i>
+          Side Layout
+        </li>
+        <li nz-menu-item (click)="onSetMode('top')">
+          <i nz-icon nzType="menu"></i>
+          Top Layout
+        </li>
+        <li nz-menu-item (click)="onSetMode('mixin')">
+          <i nz-icon nzType="menu"></i>
+          Mix Layout
+        </li>
+      </ul>
+    </nz-dropdown>
+
+    <!-- Theme Toggle -->
+    <button nz-button
+            nzType="text"
+            (click)="onSetTheme(layout?.theme === 'light' ? 'dark' : 'light')">
+      <i nz-icon [nzType]="layout?.theme === 'light' ? 'moon' : 'sun'"></i>
+    </button>
+
+    <!-- User Menu -->
+    <nz-dropdown>
+      <div class="user-info">
+        <nz-avatar nzIcon="user"></nz-avatar>
+        <span class="username">Admin</span>
+      </div>
+      <ul nz-menu nz-dropdown-menu>
+        <li nz-menu-item>
+          <i nz-icon nzType="user"></i>
+          Profile
+        </li>
+        <li nz-menu-item>
+          <i nz-icon nzType="setting"></i>
+          Settings
+        </li>
+        <li nz-menu-divider></li>
+        <li nz-menu-item (click)="onLogout()">
+          <i nz-icon nzType="logout"></i>
+          Logout
+        </li>
+      </ul>
+    </nz-dropdown>
+  </div>
+</div> 

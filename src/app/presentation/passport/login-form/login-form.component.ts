@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -31,8 +31,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzTabsModule,
     NzRowDirective,
     NzColDirective,
-    NzIconModule,
-    RouterLink
+    NzIconModule
   ],
   providers: [NzMessageService]
 })

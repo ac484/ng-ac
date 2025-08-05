@@ -1,0 +1,44 @@
+<nz-card class="tab-container" [nzBodyStyle]="{ padding: 0 }" [nzBordered]="false">
+  <nz-tabset
+    [nzHideAdd]="true"
+    [nzSelectedIndex]="currentTab ? tabs.findIndex(tab => tab.id === currentTab.id) : 0"
+    [nzTabBarStyle]="{ height: '40px' }"
+    [nzTabPosition]="'top'"
+    [nzType]="'editable-card'"
+    (nzClose)="onTabClose($event, $event)">
+    
+    @for (tab of tabs; track trackByTab($index, tab); let i = $index) {
+      <nz-tab
+        [nzClosable]="tab.isClosable"
+        [nzTitle]="tab.title"
+        (nzClick)="onTabClick(tab.id)"
+        (nzContextmenu)="contextMenu($event, menu)">
+        
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="onRefreshTab(tab.id)">
+              <i nz-icon nzType="reload"></i>
+              Refresh
+            </li>
+            <li nz-menu-item (click)="onTabClose(tab.id, $event)">
+              <i nz-icon nzType="close"></i>
+              Close Tab
+            </li>
+            <li nz-menu-item (click)="onCloseOtherTabs(tab.id)">
+              <i nz-icon nzType="close-circle"></i>
+              Close Other Tabs
+            </li>
+            <li nz-menu-item (click)="onCloseRightTabs(tab.id)">
+              <i nz-icon nzType="close-circle"></i>
+              Close Right Tabs
+            </li>
+            <li nz-menu-item (click)="onCloseLeftTabs(tab.id)">
+              <i nz-icon nzType="close-circle"></i>
+              Close Left Tabs
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </nz-tab>
+    }
+  </nz-tabset>
+</nz-card> 
