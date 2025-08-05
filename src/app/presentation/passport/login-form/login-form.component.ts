@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -15,6 +15,7 @@ import { LoginUseCase } from '../../../application/auth/login.use-case';
 import { LoginWithGoogleUseCase } from '../../../application/auth/login-with-google.use-case';
 import { LoginAnonymouslyUseCase } from '../../../application/auth/login-anonymously.use-case';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { FirebaseAuthService } from '../../../infrastructure/auth/firebase-auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -31,7 +32,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzTabsModule,
     NzRowDirective,
     NzColDirective,
-    NzIconModule
+    NzIconModule,
+    RouterLink
   ],
   providers: [NzMessageService]
 })
@@ -47,6 +49,7 @@ export class LoginFormComponent {
   private readonly loginWithGoogleUseCase = inject(LoginWithGoogleUseCase);
   private readonly loginAnonymouslyUseCase = inject(LoginAnonymouslyUseCase);
   private readonly message = inject(NzMessageService);
+  private readonly firebaseAuthService = inject(FirebaseAuthService);
 
 
   constructor() {
@@ -116,18 +119,7 @@ export class LoginFormComponent {
 
   loginWithGoogle(): void {
     this.loading = true;
-    this.loginWithGoogleUseCase.execute()
-      .pipe(finalize(() => this.loading = false))
-      .subscribe({
-        next: () => {
-          this.message.success('Login successful!');
-          this.router.navigate(['/dashboard']);
-        },
-        error: (err) => {
-          this.error = err.message || 'Login failed';
-          this.message.error(this.error);
-        }
-      });
+    this.firebaseAuthService.loginWithGoogleRedirect();
   }
 
   loginAnonymously(): void {

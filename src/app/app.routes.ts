@@ -1,10 +1,40 @@
 import { Routes } from '@angular/router';
-import { dddRoutes } from './interface/routes/ddd-routes';
+import { authJWTCanActivate } from '@delon/auth';
 
 export const routes: Routes = [
-  // DDD Routes - 主要應用路由
+  // Passport routes
+  {
+    path: 'passport/login',
+    loadComponent: () => import('./presentation/passport/login/login.component').then(m => m.LoginComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./presentation/passport/login-form/login-form.component').then(m => m.LoginFormComponent)
+      }
+    ]
+  },
+  {
+    path: 'passport/register',
+    loadComponent: () => import('./presentation/passport/register/register.component').then(m => m.RegisterComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./presentation/passport/register-form/register-form.component').then(m => m.RegisterFormComponent)
+      }
+    ]
+  },
+  {
+    path: 'passport/callback',
+    loadComponent: () => import('./presentation/passport/callback/callback.component').then(m => m.CallbackComponent)
+  },
+  {
+    path: 'dashboard',
+    canActivate: [authJWTCanActivate],
+    loadComponent: () => import('./presentation/dashboard/dashboard.component').then(m => m.DashboardComponent)
+  },
   {
     path: '',
-    loadChildren: () => import('./interface/routes/ddd-routes').then(m => m.dddRoutes)
+    pathMatch: 'full',
+    redirectTo: 'dashboard'
   }
 ];

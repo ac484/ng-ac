@@ -22,7 +22,7 @@ import { zhTW as dateLang } from 'date-fns/locale';
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 import { zh_TW as zorroLang, provideNzI18n } from 'ng-zorro-antd/i18n';
 
-import { dddRoutes as routes } from './interface/routes/ddd-routes';
+import { routes } from './app.routes';
 import { ICONS } from '../style-icons';
 import { ICONS_AUTO } from '../style-icons-auto';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
@@ -33,6 +33,7 @@ import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-confi
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
 import { errorInterceptor } from './infrastructure/interceptors/error.interceptor.fn';
 import { GlobalErrorHandler } from './shared/services/error-handler.service';
+import { provideStartup } from './application/startup/startup.application.service';
 
 registerLocaleData(zh);
 
@@ -116,6 +117,9 @@ export const appConfig: ApplicationConfig = {
 
     // Global Error Handler
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
+
+    // Startup Service
+    ...provideStartup(),
 
     // Environment specific providers
     ...(environment.providers || [])
