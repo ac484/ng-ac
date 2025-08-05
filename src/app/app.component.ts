@@ -3,7 +3,7 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { StartupApplicationService } from './application/startup/startup.application.service';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { stepPreloader } from '@delon/theme';
 import { TitleService } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -14,7 +14,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
     <div class="app-container">
       <ng-container *ngIf="isLoading$ | async; else content">
         <div class="loading-container">
-          <nz-spin nzSize="large" nzTip="Initializing application..."></nz-spin>
+          <nz-spin nzSize="large" nzTip="Loading..."></nz-spin>
         </div>
       </ng-container>
       <ng-template #content>
@@ -47,14 +47,14 @@ export class AppComponent implements OnInit {
   private loadingSubject = new BehaviorSubject<boolean>(true);
   isLoading$ = this.loadingSubject.asObservable();
   
-  // 關鍵：使用 stepPreloader 來管理加載狀態
+  // 使用 stepPreloader 管理加載狀態
   private donePreloader = stepPreloader();
 
   ngOnInit(): void {
     // 監聽路由事件，完成預加載器
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
-        this.donePreloader(); // 關鍵：完成預加載器
+        this.donePreloader();
         this.titleSrv.setTitle();
         this.modalSrv.closeAll();
       }
@@ -63,12 +63,9 @@ export class AppComponent implements OnInit {
     // 啟動服務完成後隱藏加載指示器
     this.startupService.load().subscribe({
       next: () => {
-        console.log('Application initialization completed');
         this.loadingSubject.next(false);
       },
-      error: (error) => {
-        console.error('Application initialization failed:', error);
-        // 即使失敗也要隱藏加載指示器，讓用戶可以繼續使用
+      error: () => {
         this.loadingSubject.next(false);
       }
     });
