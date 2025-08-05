@@ -10,7 +10,7 @@
   <!-- Menu -->
   <ul nz-menu
       [nzMode]="layout?.isCollapsed ? 'inline' : 'inline'"
-      [nzTheme]="layout?.theme"
+      [nzTheme]="layout?.theme ?? 'light'"
       [nzInlineCollapsed]="layout?.isCollapsed">
     
     @for (menu of menus; track menu.id) {

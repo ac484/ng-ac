@@ -39,8 +39,10 @@ export class TabComponent {
     this.tabClick.emit(tabId);
   }
 
-  onTabClose(tabId: string, event: Event): void {
-    event.stopPropagation();
+  onTabClose(tabId: string, event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.tabClose.emit(tabId);
   }
 

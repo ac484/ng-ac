@@ -1,18 +1,17 @@
 <nz-card class="tab-container" [nzBodyStyle]="{ padding: 0 }" [nzBordered]="false">
   <nz-tabset
     [nzHideAdd]="true"
-    [nzSelectedIndex]="currentTab ? tabs.findIndex(tab => tab.id === currentTab.id) : 0"
+    [nzSelectedIndex]="currentTab ? tabs.indexOf(currentTab) : 0"
     [nzTabBarStyle]="{ height: '40px' }"
     [nzTabPosition]="'top'"
     [nzType]="'editable-card'"
-    (nzClose)="onTabClose($event, $event)">
+    (nzClose)="onTabClose(tabs[$event.index].id)">
     
     @for (tab of tabs; track trackByTab($index, tab); let i = $index) {
       <nz-tab
         [nzClosable]="tab.isClosable"
         [nzTitle]="tab.title"
-        (nzClick)="onTabClick(tab.id)"
-        (nzContextmenu)="contextMenu($event, menu)">
+        (nzClick)="onTabClick(tab.id)">
         
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu>
