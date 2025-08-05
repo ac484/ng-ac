@@ -27,7 +27,7 @@ import { zh_TW as zorroLang, provideNzI18n } from 'ng-zorro-antd/i18n';
 
 import { dddAuthInterceptor } from './infrastructure/interceptors/ddd-auth.interceptor';
 import { httpErrorInterceptor } from './infrastructure/interceptors/http-error.interceptor';
-import { dddRoutes } from './interface/routes/ddd-routes';
+import { dddRoutes } from './interface/routes/routes';
 import { ICONS } from '../style-icons';
 import { ICONS_AUTO } from '../style-icons-auto';
 import { icons } from './icons-provider';
