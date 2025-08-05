@@ -22,7 +22,8 @@ import { finalize } from 'rxjs/operators';
     NzInputModule,
     NzButtonModule,
     NzCheckboxModule
-  ]
+  ],
+  providers: [NzMessageService]
 })
 export class LoginComponent {
   validateForm: FormGroup;
