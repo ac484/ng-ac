@@ -1,12 +1,12 @@
-import { BaseEntity } from './base-entity';
+import { OptimizedBaseEntity, createEntityData } from './optimized-base-entity';
 import { Contact } from './contact.entity';
 import { WorkflowStep } from '../../interface/components/principal/principal-workflow.component';
 import { PrincipalId } from '../value-objects/principal/principal-id.value-object';
 import { PrincipalName } from '../value-objects/principal/principal-name.value-object';
 
-export interface PrincipalProps {
-  id: PrincipalId;
-  name: PrincipalName;
+export interface PrincipalData {
+  id: string;
+  name: string;
   status: 'active' | 'inactive';
   description?: string;
   contacts: Contact[];
@@ -15,126 +15,137 @@ export interface PrincipalProps {
   updatedAt: Date;
 }
 
-export class Principal extends BaseEntity<PrincipalProps> {
-  constructor(props: PrincipalProps) {
-    super(props);
+export class Principal extends OptimizedBaseEntity {
+  name: string;
+  status: 'active' | 'inactive';
+  description?: string;
+  contacts: Contact[];
+  workflowSteps: WorkflowStep[];
+
+  constructor(data: PrincipalData) {
+    super(data);
+    this.name = data.name;
+    this.status = data.status;
+    this.description = data.description;
+    this.contacts = [...data.contacts];
+    this.workflowSteps = [...data.workflowSteps];
   }
 
-  static create(props: Omit<PrincipalProps, 'id' | 'createdAt' | 'updatedAt'>): Principal {
+  static create(props: Omit<PrincipalData, 'id' | 'createdAt' | 'updatedAt'>): Principal {
     const now = new Date();
     return new Principal({
       ...props,
-      id: PrincipalId.generate(),
+      id: PrincipalId.generate().getValue(),
       createdAt: now,
       updatedAt: now
     });
   }
 
-  get id(): PrincipalId {
-    return this.props.id;
-  }
-
-  get name(): PrincipalName {
-    return this.props.name;
-  }
-
-  get status(): 'active' | 'inactive' {
-    return this.props.status;
-  }
-
-  get description(): string | undefined {
-    return this.props.description;
-  }
-
-  get contacts(): Contact[] {
-    return [...this.props.contacts];
-  }
-
   get contactCount(): number {
-    return this.props.contacts.length;
-  }
-
-  get workflowSteps(): WorkflowStep[] {
-    return [...this.props.workflowSteps];
+    return this.contacts.length;
   }
 
   get workflowStepCount(): number {
-    return this.props.workflowSteps.length;
+    return this.workflowSteps.length;
   }
 
-  get createdAt(): Date {
-    return this.props.createdAt;
-  }
-
-  get updatedAt(): Date {
-    return this.props.updatedAt;
-  }
-
-  updateName(name: PrincipalName): void {
-    this.props.name = name;
-    this.props.updatedAt = new Date();
+  updateName(name: string): void {
+    this.name = name;
+    this.touch();
   }
 
   updateStatus(status: 'active' | 'inactive'): void {
-    this.props.status = status;
-    this.props.updatedAt = new Date();
+    this.status = status;
+    this.touch();
   }
 
   updateDescription(description: string): void {
-    this.props.description = description;
-    this.props.updatedAt = new Date();
+    this.description = description;
+    this.touch();
   }
 
   addContact(contact: Contact): void {
-    this.props.contacts.push(contact);
-    this.props.updatedAt = new Date();
+    this.contacts.push(contact);
+    this.touch();
   }
 
   removeContact(contactId: string): void {
-    this.props.contacts = this.props.contacts.filter(c => c.id !== contactId);
-    this.props.updatedAt = new Date();
+    this.contacts = this.contacts.filter(c => c.id !== contactId);
+    this.touch();
   }
 
   updateContact(contact: Contact): void {
-    const index = this.props.contacts.findIndex(c => c.id === contact.id);
+    const index = this.contacts.findIndex(c => c.id === contact.id);
     if (index !== -1) {
-      this.props.contacts[index] = contact;
-      this.props.updatedAt = new Date();
+      this.contacts[index] = contact;
+      this.touch();
     }
   }
 
   updateWorkflowSteps(workflowSteps: WorkflowStep[]): void {
-    this.props.workflowSteps = [...workflowSteps];
-    this.props.updatedAt = new Date();
+    this.workflowSteps = [...workflowSteps];
+    this.touch();
   }
 
   addWorkflowStep(workflowStep: WorkflowStep): void {
-    this.props.workflowSteps.push(workflowStep);
-    this.props.updatedAt = new Date();
+    this.workflowSteps.push(workflowStep);
+    this.touch();
   }
 
   removeWorkflowStep(stepId: string): void {
-    this.props.workflowSteps = this.props.workflowSteps.filter(s => s.id !== stepId);
-    this.props.updatedAt = new Date();
+    this.workflowSteps = this.workflowSteps.filter(s => s.id !== stepId);
+    this.touch();
   }
 
   updateWorkflowStep(workflowStep: WorkflowStep): void {
-    const index = this.props.workflowSteps.findIndex(s => s.id === workflowStep.id);
+    const index = this.workflowSteps.findIndex(s => s.id === workflowStep.id);
     if (index !== -1) {
-      this.props.workflowSteps[index] = workflowStep;
-      this.props.updatedAt = new Date();
+      this.workflowSteps[index] = workflowStep;
+      this.touch();
     }
   }
 
   isActive(): boolean {
-    return this.props.status === 'active';
+    return this.status === 'active';
   }
 
   hasContacts(): boolean {
-    return this.props.contacts.length > 0;
+    return this.contacts.length > 0;
   }
 
   hasWorkflowSteps(): boolean {
-    return this.props.workflowSteps.length > 0;
+    return this.workflowSteps.length > 0;
+  }
+
+  validate(): { isValid: boolean; errors: string[] } {
+    const errors = this.validateBase();
+
+    if (!this.name || this.name.trim() === '') {
+      errors.push('名稱不能為空');
+    }
+
+    if (!this.status) {
+      errors.push('狀態不能為空');
+    }
+
+    if (this.description && this.description.length > 1000) {
+      errors.push('描述不能超過1000字元');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors
+    };
+  }
+
+  toJSON(): any {
+    return {
+      ...super.toJSON(),
+      name: this.name,
+      status: this.status,
+      description: this.description,
+      contacts: this.contacts,
+      workflowSteps: this.workflowSteps
+    };
   }
 }

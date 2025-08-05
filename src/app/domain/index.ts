@@ -1,18 +1,19 @@
 // Base entities
-export * from './entities/base-entity';
-export * from './entities/aggregate-root';
-
-// Optimized entities
 export * from './entities/optimized-base-entity';
 
+// Optimized entities
+export * from './entities/optimized-user.entity';
+export * from './entities/optimized-account.entity';
+export * from './entities/optimized-transaction.entity';
+
 // Domain entities
-export * from './entities/user.entity';
-export * from './entities/account.entity';
-export * from './entities/transaction.entity';
 export * from './entities/auth.entity';
 export * from './entities/role.entity';
 export * from './entities/permission.entity';
 export * from './entities/tab.entity';
+export * from './entities/principal.entity';
+export * from './entities/contact.entity';
+export * from './entities/contract.entity';
 
 // Value objects
 export * from './value-objects/authentication/email.value-object';
