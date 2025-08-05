@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-dashboard',
   template: `
     <div style="padding: 24px;">
-      <h1>Welcome to the Dashboard!</h1>
+      <h1>Welcome to NG-AC!</h1>
       <div *ngIf="userInfo">
         <p>Hello, {{ userInfo['name'] }}!</p>
         <p>Email: {{ userInfo['email'] }}</p>

@@ -9,55 +9,25 @@
     </div>
     <div class="main">
       <form nz-form [formGroup]="form" (ngSubmit)="submit()">
-        <nz-tabset [nzSelectedIndex]="type" (nzSelectChange)="switch($event)">
-          <nz-tab nzTitle="Account Login">
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="errorTpl">
-                <nz-input-group nzPrefixIcon="user">
-                  <input type="text" nz-input formControlName="userName" placeholder="admin" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="errorTpl">
-                <nz-input-group nzPrefixIcon="lock">
-                  <input type="password" nz-input formControlName="password" placeholder="123456" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </nz-tab>
-          <nz-tab nzTitle="Mobile Login">
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="errorTpl">
-                <nz-input-group nzPrefixIcon="mobile">
-                  <input type="text" nz-input formControlName="mobile" placeholder="Mobile number" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="errorTpl">
-                <div nz-row [nzGutter]="8">
-                  <div nz-col [nzSpan]="16">
-                    <nz-input-group nzPrefixIcon="mail">
-                      <input type="text" nz-input formControlName="captcha" placeholder="Verification code" />
-                    </nz-input-group>
-                  </div>
-                  <div nz-col [nzSpan]="8">
-                    <button nz-button [nzBlock]="true">Get Code</button>
-                  </div>
-                </div>
-              </nz-form-control>
-            </nz-form-item>
-          </nz-tab>
-        </nz-tabset>
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="userName" placeholder="Email" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-input-group nzPrefixIcon="lock">
+              <input type="password" nz-input formControlName="password" placeholder="Password" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
         <div nz-row>
           <div nz-col [nzSpan]="12">
             <label nz-checkbox formControlName="remember">
               <span>Remember me</span>
             </label>
-          </div>
-          <div nz-col [nzSpan]="12" class="text-right">
-            <a class="forgot">Forgot password?</a>
           </div>
         </div>
         <button nz-button [nzType]="'primary'" [nzBlock]="true" [nzLoading]="loading">
@@ -67,12 +37,10 @@
           Other login methods
           <a (click)="loginWithGoogle()"><span nz-icon nzType="google" class="icon"></span></a>
           <a (click)="loginAnonymously()"><span nz-icon nzType="user" class="icon"></span></a>
-          <a routerLink="/passport/register" class="register">Register</a>
         </div>
         <ng-template #errorTpl let-control>
           <ng-container *ngIf="control.hasError('required')">Required</ng-container>
           <ng-container *ngIf="control.hasError('email')">Invalid email</ng-container>
-          <ng-container *ngIf="control.hasError('pattern')">Invalid format</ng-container>
         </ng-template>
       </form>
     </div>
