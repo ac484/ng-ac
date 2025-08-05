@@ -81,8 +81,6 @@ import { HeaderUserComponent } from './widgets/header-user.component';
     standalone: true,
     imports: [
         RouterOutlet,
-        RouterLink,
-        I18nPipe,
         LayoutDefaultModule,
         NzIconModule,
         NzMenuModule,
