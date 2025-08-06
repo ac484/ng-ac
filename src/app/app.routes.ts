@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authJWTCanActivate } from '@delon/auth';
 import { MainLayoutComponent } from './shared/presentation/layout/main-layout/main-layout.component';
+import { tabGuard } from './shared/infrastructure/guards/tab.guard';
 
 export const routes: Routes = [
     {
@@ -19,10 +20,14 @@ export const routes: Routes = [
             },
             {
                 path: 'dashboard',
+                data: { title: 'Dashboard' },
+                canActivate: [tabGuard],
                 loadChildren: () => import('./domain/dashboard/presentation/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
             },
             {
                 path: 'users',
+                data: { title: 'Users' },
+                canActivate: [tabGuard],
                 loadChildren: () => import('./domain/user/presentation/user.routes').then(m => m.USER_ROUTES)
             },
         ]
