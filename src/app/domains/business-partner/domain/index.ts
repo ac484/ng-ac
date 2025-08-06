@@ -1,6 +1,8 @@
-// Domain Layer
-export * from './entities';
-export * from './repositories';
-export * from './services';
-export * from './value-objects';
+// Entities
+export * from './entities/contact.entity';
 
+// Value Objects
+export * from './value-objects/contact-id.vo';
+
+// Repositories
+export * from './repositories/contact.repository.interface';

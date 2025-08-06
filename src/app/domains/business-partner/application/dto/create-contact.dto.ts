@@ -6,13 +6,7 @@ export interface CreateContactDto {
     status: boolean;
 }
 
-export interface UpdateContactDto {
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    phone?: string;
-    status?: boolean;
-}
+export interface UpdateContactDto extends Partial<CreateContactDto> { }
 
 export interface ContactResponseDto {
     id: string;
@@ -21,13 +15,8 @@ export interface ContactResponseDto {
     email: string;
     phone: string;
     status: boolean;
-    createdAt: string;
-    updatedAt: string;
     fullName: string;
     initials: string;
+    createdAt: string;
+    updatedAt: string;
 }
-
-export interface ContactSearchDto {
-    query: string;
-}
-

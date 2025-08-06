@@ -1,97 +1,73 @@
-import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, map, switchMap } from 'rxjs';
 import { Contact } from '../../domain/entities/contact.entity';
-import { ContactDomainService } from '../../domain/services/contact.service';
-import { CreateContactDto, UpdateContactDto, ContactResponseDto, ContactSearchDto } from '../dto/contact.dto';
+import { ContactRepositoryImpl } from '../../infrastructure/repositories/contact.repository.impl';
+import { CreateContactDto, UpdateContactDto, ContactResponseDto } from '../dto/create-contact.dto';
 
+/**
+ * 聯絡人應用服務
+ * 協調領域對象和外部服務
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class ContactApplicationService {
-    constructor(private contactDomainService: ContactDomainService) { }
+    private readonly contactRepository = inject(ContactRepositoryImpl);
 
     getAllContacts(): Observable<ContactResponseDto[]> {
-        return this.contactDomainService.loadContacts().pipe(
-            map(contacts => contacts.map(contact => this.mapToResponseDto(contact)))
+        return this.contactRepository.getAll().pipe(
+            map((contacts: Contact[]) => contacts.map(contact => this.toResponseDto(contact)))
         );
     }
 
     getContactById(id: string): Observable<ContactResponseDto | null> {
-        return this.contactDomainService.getContactById(id).pipe(
-            map(contact => contact ? this.mapToResponseDto(contact) : null)
+        return this.contactRepository.getById(id).pipe(
+            map((contact: Contact | null) => contact ? this.toResponseDto(contact) : null)
         );
     }
 
     createContact(dto: CreateContactDto): Observable<ContactResponseDto> {
-        const contactData = {
-            firstName: dto.firstName,
-            lastName: dto.lastName,
-            email: dto.email,
-            phone: dto.phone,
-            status: dto.status
-        };
-        return this.contactDomainService.createContact(contactData).pipe(
-            map(contact => this.mapToResponseDto(contact))
+        const contact = Contact.create(dto);
+        return this.contactRepository.create(contact).pipe(
+            map((createdContact: Contact) => this.toResponseDto(createdContact))
         );
     }
 
     updateContact(id: string, dto: UpdateContactDto): Observable<ContactResponseDto> {
-        return this.contactDomainService.updateContact(id, dto).pipe(
-            map(contact => this.mapToResponseDto(contact))
+        return this.contactRepository.getById(id).pipe(
+            switchMap((contact: Contact | null) => {
+                if (!contact) {
+                    throw new Error('Contact not found');
+                }
+                contact.update(dto);
+                return this.contactRepository.update(id, contact);
+            }),
+            map((updatedContact: Contact) => this.toResponseDto(updatedContact))
         );
     }
 
     deleteContact(id: string): Observable<void> {
-        return this.contactDomainService.deleteContact(id);
+        return this.contactRepository.delete(id);
     }
 
-    searchContacts(dto: ContactSearchDto): Observable<ContactResponseDto[]> {
-        return this.contactDomainService.searchContacts(dto.query).pipe(
-            map(contacts => contacts.map(contact => this.mapToResponseDto(contact)))
+    searchContacts(query: string): Observable<ContactResponseDto[]> {
+        return this.contactRepository.search(query).pipe(
+            map((contacts: Contact[]) => contacts.map(contact => this.toResponseDto(contact)))
         );
     }
 
-    selectContact(contact: ContactResponseDto | null): void {
-        if (contact) {
-            // Convert back to domain entity for selection
-            const domainContact = this.mapToDomainEntity(contact);
-            this.contactDomainService.selectContact(domainContact);
-        } else {
-            this.contactDomainService.selectContact(null);
-        }
-    }
-
-    getSelectedContact(): Observable<ContactResponseDto | null> {
-        return this.contactDomainService.selectedContact$.pipe(
-            map(contact => contact ? this.mapToResponseDto(contact) : null)
-        );
-    }
-
-    private mapToResponseDto(contact: Contact): ContactResponseDto {
+    private toResponseDto(contact: Contact): ContactResponseDto {
         return {
-            id: contact.id,
+            id: (contact as any).id.value, // 臨時解決方案
             firstName: contact.firstName,
             lastName: contact.lastName,
             email: contact.email,
             phone: contact.phone,
             status: contact.status,
-            createdAt: contact.createdAt.toISOString(),
-            updatedAt: contact.updatedAt.toISOString(),
             fullName: contact.fullName,
-            initials: contact.initials
+            initials: contact.initials,
+            createdAt: contact.createdAt.toISOString(),
+            updatedAt: contact.updatedAt.toISOString()
         };
-    }
-
-    private mapToDomainEntity(dto: ContactResponseDto): Contact {
-        return new Contact(
-            dto.id,
-            dto.firstName,
-            dto.lastName,
-            dto.email,
-            dto.phone,
-            dto.status,
-            new Date(dto.createdAt),
-            new Date(dto.updatedAt)
-        );
     }
 }

@@ -196,7 +196,7 @@ export class UserLoginComponent implements OnDestroy {
   signInAnonymously(): void {
     this.loading = true;
     this.cdr.detectChanges();
-    
+
     this.authBridgeService.signInAnonymously()
       .pipe(
         finalize(() => {
@@ -211,14 +211,14 @@ export class UserLoginComponent implements OnDestroy {
             this.cdr.detectChanges();
             return;
           }
-          
+
           // 清空路由复用信息
           this.reuseTabService?.clear();
-          
+
           // 設置用戶Token信息
           res.user.expired = +new Date() + 1000 * 60 * 60 * 24; // 24小時過期
           this.tokenService.set(res.user);
-          
+
           // 重新獲取 StartupService 內容
           this.startupSrv.load().subscribe(() => {
             let url = this.tokenService.referrer!.url || '/';

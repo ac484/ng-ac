@@ -1,108 +1,61 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Firestore, collection, collectionData, doc, docData, addDoc, updateDoc, deleteDoc, query, where, orderBy } from '@angular/fire/firestore';
+import { Observable, map, from } from 'rxjs';
 import { Contact } from '../../domain/entities/contact.entity';
 import { ContactRepository } from '../../domain/repositories/contact.repository.interface';
 
+/**
+ * 使用 @angular/fire 實現的聯絡人倉儲
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class ContactRepositoryImpl implements ContactRepository {
-    private readonly baseUrl = 'https://recipe-book-70db1-default-rtdb.firebaseio.com/contact-book.json';
-
-    constructor(private http: HttpClient) { }
+    private readonly firestore = inject(Firestore);
+    private readonly collectionName = 'contacts';
 
     getAll(): Observable<Contact[]> {
-        return this.http.get<any[]>(this.baseUrl).pipe(
-            map(response => {
-                if (!response) return [];
-                return Object.entries(response).map(([id, data]: [string, any]) =>
-                    new Contact(
-                        id,
-                        data.firstName || data.fname || '',
-                        data.lastName || data.lname || '',
-                        data.email || '',
-                        data.phone || '',
-                        data.status || false,
-                        new Date(data.createdAt || Date.now()),
-                        new Date(data.updatedAt || Date.now())
-                    )
-                );
-            })
+        const contactsRef = collection(this.firestore, this.collectionName);
+        return collectionData(contactsRef, { idField: 'id' }).pipe(
+            map(docs => docs.map(doc => Contact.fromFirestore(doc.id, doc)))
         );
     }
 
     getById(id: string): Observable<Contact | null> {
-        return this.http.get<any>(`${this.baseUrl.replace('.json', '')}/${id}.json`).pipe(
-            map(data => {
-                if (!data) return null;
-                return new Contact(
-                    id,
-                    data.firstName || data.fname || '',
-                    data.lastName || data.lname || '',
-                    data.email || '',
-                    data.phone || '',
-                    data.status || false,
-                    new Date(data.createdAt || Date.now()),
-                    new Date(data.updatedAt || Date.now())
-                );
+        const contactRef = doc(this.firestore, this.collectionName, id);
+        return docData(contactRef, { idField: 'id' }).pipe(
+            map(doc => doc ? Contact.fromFirestore(id, doc) : null)
+        );
+    }
+
+    create(contact: Contact): Observable<Contact> {
+        const contactsRef = collection(this.firestore, this.collectionName);
+        return from(addDoc(contactsRef, contact.toFirestore())).pipe(
+            map(docRef => {
+                // 重建聯絡人實體，使用 Firestore 生成的 ID
+                return Contact.fromFirestore(docRef.id, contact.toFirestore());
             })
         );
     }
 
-    create(contactData: { firstName: string; lastName: string; email: string; phone: string; status: boolean }): Observable<Contact> {
-        const newContact = {
-            firstName: contactData.firstName,
-            lastName: contactData.lastName,
-            email: contactData.email,
-            phone: contactData.phone,
-            status: contactData.status,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        };
-
-        return this.http.post<{ name: string }>(this.baseUrl, newContact).pipe(
-            map(response => new Contact(
-                response.name,
-                contactData.firstName,
-                contactData.lastName,
-                contactData.email,
-                contactData.phone,
-                contactData.status,
-                new Date(),
-                new Date()
-            ))
-        );
-    }
-
-    update(id: string, contactData: Partial<Contact>): Observable<Contact> {
-        const updateData = {
-            ...contactData,
-            updatedAt: new Date().toISOString()
-        };
-
-        return this.http.patch<any>(`${this.baseUrl.replace('.json', '')}/${id}.json`, updateData).pipe(
-            map(() => {
-                // Return updated contact - in a real implementation, you'd get the full updated object
-                return new Contact(
-                    id,
-                    contactData.firstName || '',
-                    contactData.lastName || '',
-                    contactData.email || '',
-                    contactData.phone || '',
-                    contactData.status || false,
-                    new Date(),
-                    new Date()
-                );
-            })
+    update(id: string, contact: Contact): Observable<Contact> {
+        const contactRef = doc(this.firestore, this.collectionName, id);
+        return from(updateDoc(contactRef, contact.toFirestore())).pipe(
+            map(() => contact)
         );
     }
 
     delete(id: string): Observable<void> {
-        return this.http.delete<void>(`${this.baseUrl.replace('.json', '')}/${id}.json`);
+        const contactRef = doc(this.firestore, this.collectionName, id);
+        return from(deleteDoc(contactRef));
     }
 
     search(query: string): Observable<Contact[]> {
+        if (!query.trim()) {
+            return this.getAll();
+        }
+
+        // 簡化搜尋：獲取所有數據並在客戶端過濾
         return this.getAll().pipe(
             map(contacts => contacts.filter(contact =>
                 contact.fullName.toLowerCase().includes(query.toLowerCase()) ||

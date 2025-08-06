@@ -1,2 +1,5 @@
-// Presentation Layer
-export * from './pages';
+// Pages
+export * from './pages/contact-manager.component';
+
+// Components
+export * from './components/contact-list.component';

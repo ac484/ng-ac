@@ -1,3 +1,2 @@
-// Infrastructure Layer
-export * from './repositories';
-
+// Repositories
+export * from './repositories/contact.repository.impl';
