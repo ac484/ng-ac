@@ -3,6 +3,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AnalysisComponent } from './pages/analysis/analysis.component';
 import { MonitorComponent } from './pages/monitor/monitor.component';
 import { WorkplaceComponent } from './pages/workplace/workplace.component';
+import { ThemeDemoComponent } from './pages/theme-demo/theme-demo.component';
 import { tabGuard } from '../../../shared/infrastructure/guards/tab.guard';
 
 export const DASHBOARD_ROUTES: Routes = [
@@ -28,6 +29,12 @@ export const DASHBOARD_ROUTES: Routes = [
         path: 'workplace',
         component: WorkplaceComponent,
         data: { title: '工作臺', key: 'dashboard-workplace' },
+        canActivate: [tabGuard]
+    },
+    {
+        path: 'theme-demo',
+        component: ThemeDemoComponent,
+        data: { title: '主題演示', key: 'dashboard-theme-demo' },
         canActivate: [tabGuard]
     }
 ];

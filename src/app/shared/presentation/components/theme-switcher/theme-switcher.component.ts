@@ -5,6 +5,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+
 import { ThemeService, ThemeConfig } from '../../../infrastructure/services/theme.service';
 
 @Component({
@@ -23,12 +24,11 @@ import { ThemeService, ThemeConfig } from '../../../infrastructure/services/them
       [nzDropdownMenu]="menu"
       nzPlacement="bottomRight"
       [nzTrigger]="'click'">
-      <button
-        nz-button
-        nzType="text"
-        nz-tooltip
-        nzTooltipTitle="切換主題"
-        class="theme-switcher-btn">
+             <button
+         nz-button
+         nzType="text"
+         nzTooltipTitle="切換主題"
+         class="theme-switcher-btn">
         <span nz-icon nzType="skin" nzTheme="outline"></span>
         <span class="theme-name">{{ currentTheme?.name }}</span>
       </button>
