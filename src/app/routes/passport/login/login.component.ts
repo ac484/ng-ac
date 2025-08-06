@@ -16,6 +16,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabChangeEvent, NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { finalize } from 'rxjs';
+import { AuthBridgeService } from '../../../domains/auth/application/services/auth-bridge.service';
 
 @Component({
   selector: 'passport-login',
@@ -46,6 +47,7 @@ export class UserLoginComponent implements OnDestroy {
   private readonly startupSrv = inject(StartupService);
   private readonly http = inject(_HttpClient);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly authBridgeService = inject(AuthBridgeService);
 
   form = inject(FormBuilder).nonNullable.group({
     userName: ['', [Validators.required, Validators.pattern(/^(admin|user)$/)]],
@@ -186,6 +188,51 @@ export class UserLoginComponent implements OnDestroy {
         type: 'href'
       });
     }
+  }
+
+  /**
+   * 匿名登入
+   */
+  signInAnonymously(): void {
+    this.loading = true;
+    this.cdr.detectChanges();
+    
+    this.authBridgeService.signInAnonymously()
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.msg !== 'ok') {
+            this.error = res.msg || '匿名登入失敗';
+            this.cdr.detectChanges();
+            return;
+          }
+          
+          // 清空路由复用信息
+          this.reuseTabService?.clear();
+          
+          // 設置用戶Token信息
+          res.user.expired = +new Date() + 1000 * 60 * 60 * 24; // 24小時過期
+          this.tokenService.set(res.user);
+          
+          // 重新獲取 StartupService 內容
+          this.startupSrv.load().subscribe(() => {
+            let url = this.tokenService.referrer!.url || '/';
+            if (url.includes('/passport')) {
+              url = '/';
+            }
+            this.router.navigateByUrl(url);
+          });
+        },
+        error: (err) => {
+          this.error = '匿名登入失敗: ' + (err.message || '未知錯誤');
+          this.cdr.detectChanges();
+        }
+      });
   }
 
   ngOnDestroy(): void {

@@ -75,5 +75,6 @@
   <i nz-tooltip nzTooltipTitle="in fact Github via redirect" (click)="open('github')" nz-icon nzType="taobao-circle"
     class="icon"></i>
   <i (click)="open('weibo', 'window')" nz-icon nzType="weibo-circle" class="icon"></i>
+  <i nz-tooltip nzTooltipTitle="匿名登入" (click)="signInAnonymously()" nz-icon nzType="user" class="icon"></i>
   <a class="register" routerLink="/passport/register">{{ 'app.login.signup' | i18n }}</a>
 </div>

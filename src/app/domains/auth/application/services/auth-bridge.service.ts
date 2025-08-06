@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, user } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, user, signInAnonymously } from '@angular/fire/auth';
 import { DA_SERVICE_TOKEN } from '@delon/auth';
 import { Observable, from, map, switchMap, of } from 'rxjs';
 import { User } from '../../domain/entities/user.entity';
@@ -45,6 +45,20 @@ export class AuthBridgeService {
             map(credential => {
                 const firebaseUser = credential.user;
                 const user = User.fromFirebaseUser(firebaseUser);
+                return this.setDelonAuthToken(user);
+            })
+        );
+    }
+
+    /**
+     * 匿名登入
+     */
+    signInAnonymously(): Observable<any> {
+        return from(signInAnonymously(this.firebaseAuth)).pipe(
+            map(credential => {
+                const firebaseUser = credential.user;
+                // 匿名用戶沒有 email，需要特殊處理
+                const user = User.fromAnonymousUser(firebaseUser);
                 return this.setDelonAuthToken(user);
             })
         );
