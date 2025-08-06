@@ -7,12 +7,12 @@ import { DelonFormModule } from '@delon/form';
 import { CurrencyPricePipe } from '@delon/util';
 
 export const SHARED_DELON_MODULES = [
-    DelonFormModule,
-    STModule,
-    SVModule,
-    SEModule,
-    PageHeaderModule,
-    ACLDirective,
-    ACLIfDirective,
-    CurrencyPricePipe
+  DelonFormModule,
+  STModule,
+  SVModule,
+  SEModule,
+  PageHeaderModule,
+  ACLDirective,
+  ACLIfDirective,
+  CurrencyPricePipe
 ];

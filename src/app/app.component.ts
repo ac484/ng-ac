@@ -1,87 +1,49 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { TitleService, stepPreloader } from '@delon/theme';
+import { NavigationEnd, NavigationError, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router';
+import { TitleService, VERSION as VERSION_ALAIN, stepPreloader } from '@delon/theme';
+import { environment } from '@env/environment';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
-import { SettingsService } from '@delon/theme';
-import { ACLService } from '@delon/acl';
-import { DA_SERVICE_TOKEN } from '@delon/auth';
-import { SHARED_IMPORTS } from './shared/shared-imports';
-import { ThemeBtnComponent } from '@delon/theme/theme-btn';
-import { SettingDrawerModule } from '@delon/theme/setting-drawer';
-import { environment } from '../environments/environment';
+import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd/version';
 
 @Component({
   selector: 'app-root',
-  template: `
-    <router-outlet />
-    <theme-btn />
-    @if (showSettingDrawer) {
-      <setting-drawer />
-    }
-  `,
-  imports: [RouterOutlet, ...SHARED_IMPORTS, ThemeBtnComponent, SettingDrawerModule],
-  standalone: true
+  template: `<router-outlet />`,
+  imports: [RouterOutlet],
+  host: {
+    '[attr.ng-alain-version]': 'ngAlainVersion',
+    '[attr.ng-zorro-version]': 'ngZorroVersion'
+  }
 })
 export class AppComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly titleSrv = inject(TitleService);
   private readonly modalSrv = inject(NzModalService);
-  private readonly auth = inject(Auth);
-  private readonly settingsService = inject(SettingsService);
-  private readonly aclService = inject(ACLService);
-  private readonly tokenService = inject(DA_SERVICE_TOKEN);
+  ngAlainVersion = VERSION_ALAIN.full;
+  ngZorroVersion = VERSION_ZORRO.full;
 
-  showSettingDrawer = !environment.production;
   private donePreloader = stepPreloader();
 
   ngOnInit(): void {
-    // Centralized auth state listener
-    onAuthStateChanged(this.auth, async user => {
-      if (user) {
-        console.log('AppComponent: User signed in. Setting app state.');
-        try {
-          const idToken = await user.getIdToken();
-          const displayName = user.isAnonymous ? '匿名用戶' : user.displayName || user.email || '用戶';
-
-          this.settingsService.setUser({
-            name: displayName,
-            avatar: user.photoURL,
-            email: user.email,
-            uid: user.uid
-          });
-
-          this.tokenService.set({
-            token: idToken,
-            name: displayName,
-            avatar: user.photoURL,
-            email: user.email,
-            uid: user.uid
-          });
-
-          this.aclService.setFull(true);
-        } catch (error) {
-          console.error('AppComponent: Error setting auth state:', error);
-          this.clearAuthState();
-        }
-      } else {
-        console.log('AppComponent: User signed out. Clearing app state.');
-        this.clearAuthState();
-      }
-    });
-
+    let configLoad = false;
     this.router.events.subscribe(ev => {
+      if (ev instanceof RouteConfigLoadStart) {
+        configLoad = true;
+      }
+      if (configLoad && ev instanceof NavigationError) {
+        this.modalSrv.confirm({
+          nzTitle: `提醒`,
+          nzContent: environment.production ? `应用可能已发布新版本，请点击刷新才能生效。` : `无法加载路由：${ev.url}`,
+          nzCancelDisabled: false,
+          nzOkText: '刷新',
+          nzCancelText: '忽略',
+          nzOnOk: () => location.reload()
+        });
+      }
       if (ev instanceof NavigationEnd) {
         this.donePreloader();
         this.titleSrv.setTitle();
         this.modalSrv.closeAll();
       }
     });
-  }
-
-  private clearAuthState(): void {
-    this.settingsService.setUser(null);
-    this.tokenService.clear();
-    this.aclService.setFull(false);
   }
 }

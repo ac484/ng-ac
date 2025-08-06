@@ -1,3 +1,21 @@
-// # 3rd Party Library
-// If the library doesn't have typings available at `@types/`,
-// you can still use it by manually adding typings for it
+declare module '@angular/common/locales/zh' {
+    const locale: any;
+    export default locale;
+  }
+  
+  declare module '@angular/common/locales/zh-Hant' {
+    const locale: any;
+    export default locale;
+  }
+  
+  declare module '@angular/common/locales/en' {
+    const locale: any;
+    export default locale;
+  }
+  
+  // 如果你還有其他語系，例如：
+  declare module '@angular/common/locales/ja' {
+    const locale: any;
+    export default locale;
+  }
+  

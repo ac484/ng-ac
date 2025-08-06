@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+[[calls]]
+match = "when the user mentions 'c7'"
+tool  = "context7"

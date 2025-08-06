@@ -3,22 +3,31 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "isolatedModules": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
     "experimentalDecorators": true,
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve",
-    "allowSyntheticDefaultImports": true,
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "isolatedModules": true,
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
     "baseUrl": "./",
     "paths": {
       "@shared": [
-        "src/app/shared/*"
+        "src/app/shared/index"
       ],
       "@core": [
         "src/app/core/index"
@@ -28,9 +37,6 @@
       ],
       "@_mock": [
         "_mock/index"
-      ],
-      "@app": [
-        "src/app/*"
       ]
     }
   },
@@ -38,17 +44,6 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "typeCheckHostBindings": true,
     "strictTemplates": true
-  },
-  // Trigger re-evaluation again
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
+  }
 }
