@@ -25,7 +25,6 @@ import {
   FullscreenOutline,
   GithubOutline,
   GlobalOutline,
-  GoogleOutline,
   HddOutline,
   LaptopOutline,
   LikeOutline,
@@ -52,8 +51,7 @@ import {
   TrophyOutline,
   UsbOutline,
   UserOutline,
-  WeiboCircleOutline,
-  WindowsOutline
+  WeiboCircleOutline
 } from '@ant-design/icons-angular/icons';
 
 export const ICONS_AUTO = [
@@ -78,7 +76,6 @@ export const ICONS_AUTO = [
   FullscreenOutline,
   GithubOutline,
   GlobalOutline,
-  GoogleOutline,
   HddOutline,
   LaptopOutline,
   LikeOutline,
@@ -105,6 +102,5 @@ export const ICONS_AUTO = [
   TrophyOutline,
   UsbOutline,
   UserOutline,
-  WeiboCircleOutline,
-  WindowsOutline
+  WeiboCircleOutline
 ];

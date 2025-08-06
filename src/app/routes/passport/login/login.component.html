@@ -70,28 +70,6 @@
 </form>
 <div class="other">
   {{ 'app.login.sign-in-with' | i18n }}
-
-  <!-- Firebase Auth 最少代碼登入按鈕 -->
-  <button nz-button nzType="default" nzSize="small" (click)="signInAnonymously()" [nzLoading]="loading"
-    class="anonymous-btn">
-    匿名登入
-  </button>
-
-  <button nz-button nzType="default" nzSize="small" (click)="signInWithGoogle()" [nzLoading]="loading"
-    class="google-btn">
-    <i nz-icon nzType="user"></i>
-    Google
-  </button>
-
-  <!-- Firebase Auth 提供商圖標 -->
-  <i nz-tooltip nzTooltipTitle="Google 登入 via Firebase Auth" (click)="open('google')" nz-icon nzType="google"
-    class="icon"></i>
-  <i nz-tooltip nzTooltipTitle="GitHub 登入 via Firebase Auth" (click)="open('github')" nz-icon nzType="github"
-    class="icon"></i>
-  <i nz-tooltip nzTooltipTitle="Microsoft 登入 via Firebase Auth" (click)="open('microsoft')" nz-icon nzType="windows"
-    class="icon"></i>
-
-  <!-- 原有的 Auth0 和其他社交登入 -->
   <i nz-tooltip nzTooltipTitle="in fact Auth0 via window" (click)="open('auth0', 'window')" nz-icon
     nzType="alipay-circle" class="icon"></i>
   <i nz-tooltip nzTooltipTitle="in fact Github via redirect" (click)="open('github')" nz-icon nzType="taobao-circle"
