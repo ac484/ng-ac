@@ -1,4 +1,4 @@
-import { BaseAggregateRoot } from 'src/app/shared/domain/base-aggregate-root';
+import { BaseAggregateRoot } from '../../../../shared/domain/base-aggregate-root';
 import { UserId } from '../value-objects/user-id.vo';
 import { Email } from '../value-objects/email.vo';
 import { UserProfile } from '../value-objects/user-profile.vo';

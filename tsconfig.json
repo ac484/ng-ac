@@ -18,7 +18,7 @@
     "baseUrl": "./",
     "paths": {
       "@shared": [
-        "src/app/shared/index"
+        "src/app/shared/*"
       ],
       "@core": [
         "src/app/core/index"
@@ -41,6 +41,7 @@
     "typeCheckHostBindings": true,
     "strictTemplates": true
   },
+  // Trigger re-evaluation again
   "files": [],
   "references": [
     {

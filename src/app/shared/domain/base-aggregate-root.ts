@@ -1,7 +1,8 @@
 import { DomainEvent } from './domain-event';
 import { BaseEntity } from './base-entity';
+import { ValueObject } from './value-object';
 
-export abstract class BaseAggregateRoot<T> extends BaseEntity<T> {
+export abstract class BaseAggregateRoot<T extends ValueObject<any>> extends BaseEntity<T> {
   private _domainEvents: DomainEvent[] = [];
 
   get domainEvents(): DomainEvent[] {
