@@ -6,10 +6,9 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ContractService, ContractSearchService } from '../../../application';
+import { ContractService } from '../../../application/services/contract.service';
 import { ContractId } from '../../../domain/entities/contract.entity';
 import { ContractStatusBadgeComponent } from '../../shared/components/contract-status-badge';
 import { ContractSearchComponent, ContractSearchCriteria } from '../../features/components/contract-search';
@@ -24,7 +23,6 @@ import { ContractSearchComponent, ContractSearchCriteria } from '../../features/
     NzSpaceModule,
     NzCardModule,
     NzTypographyModule,
-    NzModalModule,
     NzGridModule,
     ContractStatusBadgeComponent,
     ContractSearchComponent
@@ -36,13 +34,12 @@ import { ContractSearchComponent, ContractSearchCriteria } from '../../features/
           <h2 nz-typography>合約管理</h2>
         </nz-col>
         <nz-col>
-          <button nz-button nzType="primary" (click)="showCreateModal()">
+          <button nz-button nzType="primary" (click)="createContract()">
             新增合約
           </button>
         </nz-col>
       </div>
 
-      <!-- 搜索組件 -->
       <app-contract-search
         (search)="onSearch($event)"
         (reset)="onReset()">
@@ -50,11 +47,11 @@ import { ContractSearchComponent, ContractSearchCriteria } from '../../features/
 
       <nz-table
         #basicTable
-        [nzData]="filteredContracts"
+        [nzData]="displayContracts"
         [nzLoading]="loading"
         nzShowSizeChanger
         nzShowQuickJumper
-        [nzTotal]="total"
+        [nzTotal]="displayContracts.length"
         [nzPageSize]="10"
         [nzPageSizeOptions]="[10, 20, 50]">
         
@@ -107,13 +104,11 @@ import { ContractSearchComponent, ContractSearchCriteria } from '../../features/
 export class ContractListComponent implements OnInit {
   contracts$ = this.contractService.getContracts();
   loading = false;
-  total = 0;
-  filteredContracts: ContractId[] = [];
+  displayContracts: ContractId[] = [];
   allContracts: ContractId[] = [];
 
   constructor(
     private contractService: ContractService,
-    private contractSearchService: ContractSearchService,
     private router: Router,
     private message: NzMessageService
   ) {}
@@ -127,8 +122,7 @@ export class ContractListComponent implements OnInit {
     this.contracts$.subscribe({
       next: (contracts) => {
         this.allContracts = contracts;
-        this.filteredContracts = contracts;
-        this.total = contracts.length;
+        this.displayContracts = contracts;
         this.loading = false;
       },
       error: (error) => {
@@ -139,7 +133,7 @@ export class ContractListComponent implements OnInit {
     });
   }
 
-  showCreateModal(): void {
+  createContract(): void {
     this.router.navigate(['/dashboard/contract-management/create']);
   }
 
@@ -163,12 +157,29 @@ export class ContractListComponent implements OnInit {
   }
 
   onSearch(criteria: ContractSearchCriteria): void {
-    this.filteredContracts = this.contractSearchService.filterContracts(this.allContracts, criteria);
-    this.total = this.filteredContracts.length;
+    this.displayContracts = this.allContracts.filter(contract => {
+      if (criteria.keyword) {
+        const keyword = criteria.keyword.toLowerCase();
+        const matchesKeyword = 
+          contract.contractNumber.toLowerCase().includes(keyword) ||
+          contract.contractName.toLowerCase().includes(keyword) ||
+          contract.clientCompany.toLowerCase().includes(keyword);
+        if (!matchesKeyword) return false;
+      }
+
+      if (criteria.status && contract.status !== criteria.status) return false;
+      if (criteria.contractType && contract.contractType !== criteria.contractType) return false;
+      if (criteria.riskLevel && contract.riskLevel !== criteria.riskLevel) return false;
+      if (criteria.startDate && contract.startDate < criteria.startDate) return false;
+      if (criteria.endDate && contract.endDate > criteria.endDate) return false;
+      if (criteria.clientCompany && 
+          !contract.clientCompany.toLowerCase().includes(criteria.clientCompany.toLowerCase())) return false;
+
+      return true;
+    });
   }
 
   onReset(): void {
-    this.filteredContracts = this.allContracts;
-    this.total = this.allContracts.length;
+    this.displayContracts = this.allContracts;
   }
 }
