@@ -3,6 +3,12 @@
 // Utils
 export * from './utils/yuan';
 
+// Domain
+export * from './domain/base/value-object';
+export * from './domain/base/domain-event';
+export * from './domain/base/base-aggregate-root';
+export * from './domain/value-objects/tab-id.vo';
+
 // Module
 export * from './shared-imports';
 export * from './json-schema/index';

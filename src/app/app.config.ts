@@ -39,6 +39,7 @@ import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-confi
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
 import { CONTRACT_MANAGEMENT_PROVIDERS } from './domains/contract-management';
 import { BUSINESS_PARTNER_PROVIDERS } from './domains/business-partner/business-partner.providers';
+import { AUTH_PROVIDERS } from './domains/auth/auth.providers';
 
 const defaultLang: AlainProvideLang = {
   abbr: 'zh-CN',
@@ -80,6 +81,7 @@ const providers: Array<Provider | EnvironmentProviders> = [
   provideStartup(),
   ...CONTRACT_MANAGEMENT_PROVIDERS,
   ...BUSINESS_PARTNER_PROVIDERS,
+  ...AUTH_PROVIDERS,
   ...(environment.providers || [])
 ];
 
