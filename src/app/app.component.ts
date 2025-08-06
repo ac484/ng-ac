@@ -6,11 +6,17 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { SettingsService } from '@delon/theme';
 import { ACLService } from '@delon/acl';
 import { SHARED_IMPORTS } from './shared/shared-imports';
+import { ThemeBtnComponent } from './shared/components/theme-btn/theme-btn.component';
+import { SettingDrawerComponent } from './shared/components/setting-drawer/setting-drawer.component';
 
 @Component({
   selector: 'app-root',
-  template: `<router-outlet />`,
-  imports: [RouterOutlet, ...SHARED_IMPORTS],
+  template: `
+    <router-outlet />
+    <app-theme-btn />
+    <app-setting-drawer />
+  `,
+  imports: [RouterOutlet, ...SHARED_IMPORTS, ThemeBtnComponent, SettingDrawerComponent],
   standalone: true
 })
 export class AppComponent implements OnInit {
