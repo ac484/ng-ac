@@ -42,10 +42,7 @@
     "*"
   ],
   "files.exclude": {
-    "**/.cursor": true,
-    "**/.cursorignore": true,
     "**/.jpg": true,
-    "**/old-sys": true
   },
   "editor.experimental.preferTreeSitter": [
     "typescript"
