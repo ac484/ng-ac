@@ -8,14 +8,13 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, Subscription } from 'rxjs';
-import { ThemeSwitcherComponent } from '../../components/theme-switcher/theme-switcher.component';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.less'],
     standalone: true,
-    imports: [CommonModule, NzIconModule, NzAvatarModule, NzDropDownModule, NzMenuModule, ThemeSwitcherComponent]
+    imports: [CommonModule, NzIconModule, NzAvatarModule, NzDropDownModule, NzMenuModule]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
     @Input() isCollapsed!: boolean;
