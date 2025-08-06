@@ -26,6 +26,17 @@ import { zh_CN as zorroLang } from 'ng-zorro-antd/i18n';
 import { ICONS } from '../style-icons';
 import { ICONS_AUTO } from '../style-icons-auto';
 import { routes } from './routes/routes';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth as provideAuth_alias } from '@angular/fire/auth';
+import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getFunctions, provideFunctions } from '@angular/fire/functions';
+import { getMessaging, provideMessaging } from '@angular/fire/messaging';
+import { getPerformance, providePerformance } from '@angular/fire/performance';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
+import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
 
 const defaultLang: AlainProvideLang = {
   abbr: 'zh-CN',
@@ -74,5 +85,11 @@ if (environment.api?.refreshTokenEnabled && environment.api.refreshTokenType ===
 }
 
 export const appConfig: ApplicationConfig = {
-  providers: providers
+  providers: [
+  ...providers,
+  provideFirebaseApp(() => initializeApp({ projectId: "ng-acc", appId: "1:289956121604:web:4dd9d608a2db962aeaf951", storageBucket: "ng-acc.firebasestorage.app", apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", authDomain: "ng-acc.firebaseapp.com", messagingSenderId: "289956121604", measurementId: "G-6YM5S9LCNV" })), provideAuth_alias(() => getAuth()), provideAnalytics(() => getAnalytics()), ScreenTrackingService, UserTrackingService, provideAppCheck(() => {
+  // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
+  const provider = new ReCaptchaEnterpriseProvider('6Lfet5crAAAAAFDXayzMocp-GhB88FewdQ8Z9E69');
+  return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
+}), provideFirestore(() => getFirestore()), provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig()), provideVertexAI(() => getVertexAI())]
 };

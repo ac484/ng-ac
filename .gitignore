@@ -59,3 +59,8 @@ yarn-error.log
 .pnp.*
 
 .eslintcache
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json
