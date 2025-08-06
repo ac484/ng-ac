@@ -39,6 +39,21 @@
               "text": "工作台",
               "link": "/dashboard/workplace",
               "i18n": "menu.dashboard.workplace"
+            },
+            {
+              "text": "合約管理",
+              "link": "/dashboard/contract-management",
+              "i18n": "menu.dashboard.contract-management"
+            },
+            {
+              "text": "任務管理",
+              "link": "/dashboard/task-management",
+              "i18n": "menu.dashboard.task-management"
+            },
+            {
+              "text": "預算管理",
+              "link": "/dashboard/budget-management",
+              "i18n": "menu.dashboard.budget-management"
             }
           ]
         },
