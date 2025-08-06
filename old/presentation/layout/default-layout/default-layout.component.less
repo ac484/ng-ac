@@ -1,0 +1,32 @@
+.min-screen-full-height {
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: calc(100vh - 64px);
+}
+
+.fixed {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  width: calc(100% - 200px);
+  transition: width 0.2s;
+}
+
+.fixed-collapsed {
+  width: calc(100% - 80px);
+}
+
+@media (max-width: 768px) {
+  .fixed {
+    width: 100%;
+  }
+  
+  .fixed-collapsed {
+    width: 100%;
+  }
+} 

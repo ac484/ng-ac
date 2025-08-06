@@ -53,6 +53,7 @@ import { LoginCommand } from 'src/app/domain/auth/application/dto/commands/login
             <div class="other">
               Other login methods
               <a (click)="loginWithGoogle()"><span nz-icon nzType="google" class="icon"></span></a>
+              <a (click)="loginAnonymously()"><span nz-icon nzType="user" class="icon"></span></a>
             </div>
             <ng-template #errorTpl let-control>
               <ng-container *ngIf="control.hasError('required')">Required</ng-container>
@@ -188,6 +189,20 @@ export class LoginFormComponent {
     this.loading = true;
     try {
       await this.authService.loginWithGoogle();
+      this.message.success('Login successful!');
+      this.router.navigate(['/dashboard']);
+    } catch (err: any) {
+      this.error = err.message || 'Login failed';
+      this.message.error(this.error);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async loginAnonymously() {
+    this.loading = true;
+    try {
+      await this.authService.loginAnonymously();
       this.message.success('Login successful!');
       this.router.navigate(['/dashboard']);
     } catch (err: any) {

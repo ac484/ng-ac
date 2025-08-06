@@ -1,0 +1,27 @@
+<div class="sidebar-container">
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <img src="assets/logo-color.svg" alt="Logo" />
+    @if (!layout?.isCollapsed) {
+      <span class="logo-text">NG-AC</span>
+    }
+  </div>
+
+  <!-- Menu -->
+  <ul nz-menu
+      [nzMode]="layout?.isCollapsed ? 'inline' : 'inline'"
+      [nzTheme]="layout?.theme ?? 'light'"
+      [nzInlineCollapsed]="layout?.isCollapsed">
+    
+    @for (menu of menus; track menu.id) {
+      <li nz-menu-item
+          [nzSelected]="isMenuActive(menu)"
+          (click)="onMenuClick(menu)">
+        @if (menu.icon) {
+          <i nz-icon [nzType]="menu.icon"></i>
+        }
+        <span>{{ menu.text }}</span>
+      </li>
+    }
+  </ul>
+</div> 

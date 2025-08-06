@@ -25,6 +25,10 @@ export class AuthApplicationService {
     return this.loginWithGoogleUseCase.execute();
   }
 
+  loginAnonymously(): Promise<AuthResponse> {
+    return this.loginAnonymouslyUseCase.execute();
+  }
+
   logout(): Promise<void> {
     return this.logoutUseCase.execute();
   }
