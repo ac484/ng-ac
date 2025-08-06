@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { authJWTCanActivate } from '@delon/auth';
-import { MainLayoutComponent } from './domain/layout/presentation/main-layout/main-layout.component';
+import { MainLayoutComponent } from './shared/presentation/layout/main-layout/main-layout.component';
 
 export const routes: Routes = [
     {
