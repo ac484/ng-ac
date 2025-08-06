@@ -6,4 +6,3 @@ export * from './domain-event';
 export * from './specification';
 export * from './exceptions';
 export * from './tab.model';
-export * from './theme';
