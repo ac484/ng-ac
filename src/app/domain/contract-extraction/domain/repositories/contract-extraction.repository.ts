@@ -1,4 +1,5 @@
 // src/app/domain/contract-extraction/domain/repositories/contract-extraction.repository.ts
+import { InjectionToken } from '@angular/core';
 import { ContractExtraction } from '../entities/contract-extraction.entity';
 import { ExtractionId } from '../value-objects/extraction-id.vo';
 import { ContractId } from '../../../contract-management/domain/value-objects/contract-id.vo';
@@ -35,4 +36,7 @@ export interface ContractExtractionRepository extends BaseRepository<ContractExt
      * Delete extraction and all related entities
      */
     deleteWithEntities(extractionId: ExtractionId): Promise<void>;
-} 
+}
+
+// Injection token for the repository interface
+export const CONTRACT_EXTRACTION_REPOSITORY = new InjectionToken<ContractExtractionRepository>('ContractExtractionRepository'); 

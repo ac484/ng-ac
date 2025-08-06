@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { authJWTCanActivate } from '@delon/auth';
 import { MainLayoutComponent } from './shared/presentation/layout/main-layout/main-layout.component';
 import { tabGuard } from './shared/infrastructure/guards/tab.guard';
+import { firebaseAuthGuard } from './shared/infrastructure/guards/firebase-auth.guard';
 
 export const routes: Routes = [
     {
@@ -11,7 +11,7 @@ export const routes: Routes = [
     {
         path: '',
         component: MainLayoutComponent,
-        canActivate: [authJWTCanActivate],
+        canActivate: [firebaseAuthGuard],
         children: [
             {
                 path: '',

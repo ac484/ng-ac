@@ -1,7 +1,7 @@
 // src/app/domain/contract-extraction/infrastructure/firebase/firebase-contract-extraction.repository.ts
 import { Injectable } from '@angular/core';
 import { Firestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, query, where, orderBy } from '@angular/fire/firestore';
-import { ContractExtractionRepository } from '../../domain/repositories/contract-extraction.repository';
+import { ContractExtractionRepository, CONTRACT_EXTRACTION_REPOSITORY } from '../../domain/repositories/contract-extraction.repository';
 import { ContractExtraction } from '../../domain/entities/contract-extraction.entity';
 import { ExtractionId } from '../../domain/value-objects/extraction-id.vo';
 import { ContractId } from '../../../contract-management/domain/value-objects/contract-id.vo';

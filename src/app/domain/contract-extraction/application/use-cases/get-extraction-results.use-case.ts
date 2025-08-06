@@ -1,6 +1,6 @@
 // src/app/domain/contract-extraction/application/use-cases/get-extraction-results.use-case.ts
-import { Injectable } from '@angular/core';
-import { ContractExtractionRepository } from '../../domain/repositories/contract-extraction.repository';
+import { Injectable, Inject } from '@angular/core';
+import { ContractExtractionRepository, CONTRACT_EXTRACTION_REPOSITORY } from '../../domain/repositories/contract-extraction.repository';
 import { ExtractionId } from '../../domain/value-objects/extraction-id.vo';
 import { ContractExtraction } from '../../domain/entities/contract-extraction.entity';
 
@@ -54,6 +54,7 @@ export interface GetExtractionResultsResponse {
 export class GetExtractionResultsUseCase {
 
     constructor(
+        @Inject(CONTRACT_EXTRACTION_REPOSITORY)
         private contractExtractionRepository: ContractExtractionRepository
     ) { }
 

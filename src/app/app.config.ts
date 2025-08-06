@@ -35,6 +35,7 @@ import { errorInterceptor } from './shared/infrastructure/interceptors/error.int
 import { UnitOfWork } from './shared/application/unit-of-work';
 import { FirebaseUnitOfWork } from './shared/infrastructure/firebase-unit-of-work';
 import { SimpleReuseStrategy } from './shared/infrastructure/reuse-strategy';
+import { CONTRACT_EXTRACTION_PROVIDERS } from './domain/contract-extraction/infrastructure/providers';
 
 registerLocaleData(zh);
 
@@ -111,6 +112,9 @@ export const appConfig: ApplicationConfig = {
 
         // Unit of Work
         { provide: UnitOfWork, useClass: FirebaseUnitOfWork },
+
+        // Domain providers
+        ...CONTRACT_EXTRACTION_PROVIDERS,
 
         // Environment specific providers
         ...(environment.providers || [])
