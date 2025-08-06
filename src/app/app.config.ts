@@ -12,7 +12,7 @@ import { getFunctions, provideFunctions } from '@angular/fire/functions';
 import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { FormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideRouter, withComponentInputBinding, withViewTransitions, withInMemoryScrolling, withHashLocation, RouterFeatures } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withViewTransitions, withInMemoryScrolling, withHashLocation, RouterFeatures, RouteReuseStrategy } from '@angular/router';
 import { authSimpleInterceptor, provideAuth } from '@delon/auth';
 import { provideSFConfig } from '@delon/form';
 import { AlainProvideLang, provideAlain, zh_TW as delonLang } from '@delon/theme';
@@ -34,6 +34,7 @@ import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
 import { errorInterceptor } from './shared/infrastructure/interceptors/error.interceptor';
 import { UnitOfWork } from './shared/application/unit-of-work';
 import { FirebaseUnitOfWork } from './shared/infrastructure/firebase-unit-of-work';
+import { SimpleReuseStrategy } from './shared/infrastructure/reuse-strategy';
 
 registerLocaleData(zh);
 
@@ -90,6 +91,7 @@ export const appConfig: ApplicationConfig = {
         provideAnimations(),
         provideAnimationsAsync(),
         provideRouter(routes, ...routerFeatures),
+        { provide: RouteReuseStrategy, useClass: SimpleReuseStrategy },
 
         // ng-zorro-antd providers
         provideNzIcons(ICONS_AUTO),
