@@ -32,6 +32,8 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
 import { errorInterceptor } from './shared/infrastructure/interceptors/error.interceptor';
+import { UnitOfWork } from './shared/application/unit-of-work';
+import { FirebaseUnitOfWork } from './shared/infrastructure/firebase-unit-of-work';
 
 registerLocaleData(zh);
 
@@ -105,7 +107,8 @@ export const appConfig: ApplicationConfig = {
         // Firebase providers
         ...firebaseProviders,
 
-
+        // Unit of Work
+        { provide: UnitOfWork, useClass: FirebaseUnitOfWork },
 
         // Environment specific providers
         ...(environment.providers || [])
