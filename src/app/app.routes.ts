@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './shared/presentation/layout/main-layout/main-layout.component';
 import { tabGuard } from './shared/infrastructure/guards/tab.guard';
 import { firebaseAuthGuard } from './shared/infrastructure/guards/firebase-auth.guard';
+import { authSimpleCanActivate, authSimpleCanActivateChild } from '@delon/auth';
 
 export const routes: Routes = [
     {
@@ -11,7 +12,8 @@ export const routes: Routes = [
     {
         path: '',
         component: MainLayoutComponent,
-        canActivate: [firebaseAuthGuard],
+        canActivate: [firebaseAuthGuard, authSimpleCanActivate],
+        canActivateChild: [authSimpleCanActivateChild],
         children: [
             {
                 path: '',

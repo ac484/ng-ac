@@ -6,10 +6,11 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { Auth, signOut } from '@angular/fire/auth';
 
 @Component({
-    selector: 'header-user',
-    template: `
+  selector: 'header-user',
+  template: `
     <div class="alain-default__nav-item d-flex align-items-center px-sm" nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="userMenu">
       <nz-avatar [nzSrc]="user.avatar" nzSize="small" class="mr-sm" />
       {{ user.name }}
@@ -32,20 +33,34 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
       </div>
     </nz-dropdown-menu>
   `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [RouterLink, NzDropDownModule, NzMenuModule, NzIconModule, I18nPipe, NzAvatarModule]
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, NzDropDownModule, NzMenuModule, NzIconModule, I18nPipe, NzAvatarModule]
 })
 export class HeaderUserComponent {
-    private readonly settings = inject(SettingsService);
-    private readonly router = inject(Router);
-    private readonly tokenService = inject(DA_SERVICE_TOKEN);
+  private readonly settings = inject(SettingsService);
+  private readonly router = inject(Router);
+  private readonly tokenService = inject(DA_SERVICE_TOKEN);
+  private readonly firebaseAuth = inject(Auth);
 
-    get user(): User {
-        return this.settings.user;
-    }
+  get user(): User {
+    return this.settings.user;
+  }
 
-    logout(): void {
-        this.tokenService.clear();
-        this.router.navigateByUrl(this.tokenService.login_url!);
+  async logout(): Promise<void> {
+    try {
+      // 清理 Firebase 認證
+      await signOut(this.firebaseAuth);
+
+      // 清理 @delon/auth 的 token
+      this.tokenService.clear();
+
+      // 清理 SettingsService 的用戶信息
+      this.settings.setUser(null);
+
+      // 導航到登入頁面
+      this.router.navigateByUrl('/auth/login');
+    } catch (error) {
+      console.error('登出失敗:', error);
     }
+  }
 }

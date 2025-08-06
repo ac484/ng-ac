@@ -11,6 +11,8 @@ import { finalize } from 'rxjs/operators';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { AuthApplicationService } from 'src/app/domain/auth/application/services/auth-application.service';
 import { LoginCommand } from 'src/app/domain/auth/application/dto/commands/login.command';
+import { SettingsService } from '@delon/theme';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-login-form',
@@ -139,6 +141,8 @@ export class LoginFormComponent {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthApplicationService);
   private readonly message = inject(NzMessageService);
+  private readonly settingsService = inject(SettingsService);
+  private readonly firebaseAuth = inject(Auth);
 
   constructor() {
     this.form = this.fb.group({
@@ -153,6 +157,16 @@ export class LoginFormComponent {
   }
   get password() {
     return this.form.controls['password'];
+  }
+
+  private async updateUserInfo(user: any) {
+    // 更新 SettingsService 的用戶信息
+    this.settingsService.setUser({
+      name: user.displayName || user.email || 'User',
+      avatar: user.photoURL,
+      email: user.email,
+      uid: user.uid
+    });
   }
 
   async submit() {
@@ -171,7 +185,20 @@ export class LoginFormComponent {
 
     try {
       await this.authService.loginWithEmail(new LoginCommand(email, password));
+
+      // 等待 Firebase 認證狀態更新並更新用戶信息
+      await new Promise<void>((resolve) => {
+        const unsubscribe = onAuthStateChanged(this.firebaseAuth, (user) => {
+          unsubscribe();
+          if (user) {
+            this.updateUserInfo(user);
+            resolve();
+          }
+        });
+      });
+
       this.message.success('Login successful!');
+      // 讓 @delon/auth 的路由守衛處理自動跳轉
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
       this.error = err.message || 'Login failed';
@@ -185,7 +212,20 @@ export class LoginFormComponent {
     this.loading = true;
     try {
       await this.authService.loginWithGoogle();
+
+      // 等待 Firebase 認證狀態更新並更新用戶信息
+      await new Promise<void>((resolve) => {
+        const unsubscribe = onAuthStateChanged(this.firebaseAuth, (user) => {
+          unsubscribe();
+          if (user) {
+            this.updateUserInfo(user);
+            resolve();
+          }
+        });
+      });
+
       this.message.success('Login successful!');
+      // 讓 @delon/auth 的路由守衛處理自動跳轉
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
       this.error = err.message || 'Login failed';
@@ -199,7 +239,20 @@ export class LoginFormComponent {
     this.loading = true;
     try {
       await this.authService.loginAnonymously();
+
+      // 等待 Firebase 認證狀態更新並更新用戶信息
+      await new Promise<void>((resolve) => {
+        const unsubscribe = onAuthStateChanged(this.firebaseAuth, (user) => {
+          unsubscribe();
+          if (user) {
+            this.updateUserInfo(user);
+            resolve();
+          }
+        });
+      });
+
       this.message.success('Login successful!');
+      // 讓 @delon/auth 的路由守衛處理自動跳轉
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
       this.error = err.message || 'Login failed';

@@ -23,11 +23,14 @@ export class LoginAnonymouslyUseCase implements UseCase<void, AuthResponse> {
       const user = authData.user;
       const idToken = await user.getIdToken();
 
+      // 設置 @delon/auth 的 token
       this.tokenService.set({
         token: idToken,
+        name: 'Anonymous User',
+        avatar: '',
+        email: '',
         uid: user.uid,
-        username: 'Anonymous',
-        email: ''
+        expired: +new Date() + 1000 * 60 * 60 * 24 * 7 // 7天後過期
       });
 
       // this.eventBus.publish(new UserLoggedInEvent(UserId.create(user.uid)));

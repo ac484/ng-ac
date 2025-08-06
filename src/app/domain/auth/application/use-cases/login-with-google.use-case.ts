@@ -23,11 +23,14 @@ export class LoginWithGoogleUseCase implements UseCase<void, AuthResponse> {
       const user = authData.user;
       const idToken = await user.getIdToken();
 
+      // 設置 @delon/auth 的 token
       this.tokenService.set({
         token: idToken,
+        name: user.displayName || user.email || 'User',
+        avatar: user.photoURL,
+        email: user.email,
         uid: user.uid,
-        username: user.displayName || '',
-        email: user.email || ''
+        expired: +new Date() + 1000 * 60 * 60 * 24 * 7 // 7天後過期
       });
 
       // this.eventBus.publish(new UserLoggedInEvent(UserId.create(user.uid)));

@@ -36,6 +36,7 @@ import { UnitOfWork } from './shared/application/unit-of-work';
 import { FirebaseUnitOfWork } from './shared/infrastructure/firebase-unit-of-work';
 import { SimpleReuseStrategy } from './shared/infrastructure/reuse-strategy';
 import { CONTRACT_EXTRACTION_PROVIDERS } from './domain/contract-extraction/infrastructure/providers';
+import { provideStartup } from './shared/infrastructure/services/startup.service';
 
 
 
@@ -120,7 +121,8 @@ export const appConfig: ApplicationConfig = {
         // Firebase providers
         ...firebaseProviders,
 
-
+        // Startup service
+        ...provideStartup(),
 
         // Unit of Work
         { provide: UnitOfWork, useClass: FirebaseUnitOfWork },
