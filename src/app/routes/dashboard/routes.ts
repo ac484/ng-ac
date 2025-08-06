@@ -7,6 +7,7 @@ import { DashboardWorkplaceComponent } from './workplace/workplace.component';
 import { ContractListComponent, ContractCreateComponent } from '../../domains/contract-management';
 import { TaskListComponent } from '../../domains/task-management';
 import { BudgetListComponent } from '../../domains/budget-management';
+import { ContactManagerComponent } from '../../domains/business-partner';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'v1', pathMatch: 'full' },
@@ -14,13 +15,14 @@ export const routes: Routes = [
   { path: 'analysis', component: DashboardAnalysisComponent },
   { path: 'monitor', component: DashboardMonitorComponent },
   { path: 'workplace', component: DashboardWorkplaceComponent },
-  { 
-    path: 'contract-management', 
+  {
+    path: 'contract-management',
     children: [
       { path: '', component: ContractListComponent },
       { path: 'create', component: ContractCreateComponent }
     ]
   },
   { path: 'task-management', component: TaskListComponent },
-  { path: 'budget-management', component: BudgetListComponent }
+  { path: 'budget-management', component: BudgetListComponent },
+  { path: 'business-partner', component: ContactManagerComponent }
 ];

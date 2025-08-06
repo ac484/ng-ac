@@ -75,7 +75,7 @@ export class TabService {
 
   closeTab(tabId: string): void {
     const tabs = this.tabs.filter(tab => tab.id !== tabId);
-    
+
     if (tabs.length === 0) {
       this.tabsSubject.next([]);
       this.activeTabSubject.next(null);
@@ -125,7 +125,8 @@ export class TabService {
       '/dashboard/workplace': { title: '工作台', icon: 'desktop', closable: true },
       '/dashboard/contract-management': { title: '合約管理', icon: 'file-text', closable: true },
       '/dashboard/task-management': { title: '任務管理', icon: 'check-square', closable: true },
-      '/dashboard/budget-management': { title: '預算管理', icon: 'dollar', closable: true }
+      '/dashboard/budget-management': { title: '預算管理', icon: 'dollar', closable: true },
+      '/dashboard/business-partner': { title: '業務夥伴', icon: 'user', closable: true }
     };
 
     return routeMap[url] || { title: '新頁面', closable: true };

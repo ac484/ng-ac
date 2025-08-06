@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Contact } from '../entities/contact.entity';
 import { ContactRepository } from '../repositories/contact.repository.interface';
+import { CONTACT_REPOSITORY } from '../../business-partner.providers';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,7 @@ export class ContactDomainService {
     private contactsSubject = new BehaviorSubject<Contact[]>([]);
     private selectedContactSubject = new BehaviorSubject<Contact | null>(null);
 
-    constructor(private contactRepository: ContactRepository) { }
+    constructor(@Inject(CONTACT_REPOSITORY) private contactRepository: ContactRepository) { }
 
     get contacts$(): Observable<Contact[]> {
         return this.contactsSubject.asObservable();

@@ -1,64 +1,109 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzGridModule } from 'ng-zorro-antd/grid';
 import { ContactApplicationService } from '../../../application/services/contact.application.service';
 import { ContactResponseDto } from '../../../application/dto/contact.dto';
 
 @Component({
-    selector: 'app-contact-list',
-    standalone: true,
-    imports: [CommonModule, FormsModule],
-    template: `
-    <div class="contact-list-container">
-      <div class="d-flex align-items-center justify-content-between mb-3">
-        <h4>Contacts</h4>
-        <button class="btn btn-primary btn-sm" (click)="addNewContact()">Add new contact</button>
+  selector: 'app-contact-list',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    NzCardModule,
+    NzButtonModule,
+    NzInputModule,
+    NzSpaceModule,
+    NzAvatarModule,
+    NzTypographyModule,
+    NzTagModule,
+    NzEmptyModule,
+    NzIconModule,
+    NzGridModule
+  ],
+  template: `
+    <nz-card>
+      <div nz-row nzJustify="space-between" nzAlign="middle" class="mb-4">
+        <nz-col>
+          <h3 nz-typography>聯絡人管理</h3>
+        </nz-col>
+        <nz-col>
+          <button nz-button nzType="primary" (click)="addNewContact()">
+            新增聯絡人
+          </button>
+        </nz-col>
       </div>
       
-      <div class="search-container mb-3">
-        <input 
-          type="text" 
-          class="form-control" 
-          placeholder="Search contacts..." 
-          [(ngModel)]="searchQuery"
-          (input)="onSearch()"
-          *ngIf="contacts.length > 0">
+      <div class="search-container mb-4" *ngIf="contacts.length > 0">
+        <nz-input-group [nzSuffix]="suffixIcon">
+          <input 
+            nz-input 
+            placeholder="搜尋聯絡人..." 
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()" />
+        </nz-input-group>
+        <ng-template #suffixIcon>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
       </div>
 
       <div class="contacts-container">
-        <div 
-          class="card mb-3 w-100 contact-item" 
-          role="button" 
+        <nz-card 
+          *ngFor="let contact of filteredContacts; let index = index"
+          class="contact-item"
           [class.selected]="contact.id === selectedContactId"
           (click)="selectContact(contact)"
-          *ngFor="let contact of filteredContacts; let index = index">
+          [nzBodyStyle]="{ padding: '12px', cursor: 'pointer' }">
           
-          <div class="row no-gutters">
-            <div class="col-2 d-flex align-items-center justify-content-center">
-              <div class="contact-avatar" [class]="getAvatarClass(index)">
-                {{ contact.initials }}
+          <div nz-row nzAlign="middle">
+            <nz-col nzSpan="4">
+              <nz-avatar 
+                [nzText]="contact.initials"
+                [nzSize]="40"
+                [style.background-color]="getAvatarColor(index)">
+              </nz-avatar>
+            </nz-col>
+            <nz-col nzSpan="20">
+              <div nz-row nzJustify="space-between" nzAlign="middle">
+                <nz-col>
+                  <h4 nz-typography class="contact-name">{{ contact.fullName }}</h4>
+                  <p nz-typography class="contact-info">{{ contact.phone }} - {{ contact.email }}</p>
+                </nz-col>
+                <nz-col>
+                  <nz-tag [nzColor]="contact.status ? 'green' : 'red'">
+                    {{ contact.status ? '啟用' : '停用' }}
+                  </nz-tag>
+                </nz-col>
               </div>
-            </div>
-            <div class="card-body col-10" [class.inactive]="!contact.status">
-              <h5 class="card-title text-truncate">{{ contact.fullName }}</h5>
-              <p class="card-text">{{ contact.phone }} - {{ contact.email }}</p>
-            </div>
+            </nz-col>
           </div>
-        </div>
+        </nz-card>
 
         <div *ngIf="!contacts.length" class="text-center text-muted">
-          <p>No contacts found. Add your first contact!</p>
+          <nz-empty nzNotFoundImage="simple" nzNotFoundContent="暫無聯絡人資料">
+            <button nz-button nzType="primary" (click)="addNewContact()">新增第一個聯絡人</button>
+          </nz-empty>
         </div>
       </div>
-    </div>
+    </nz-card>
   `,
-    styles: [`
-    .contact-list-container {
-      padding: 16px;
+  styles: [`
+    .mb-4 {
+      margin-bottom: 16px;
     }
     
     .contact-item {
-      cursor: pointer;
+      margin-bottom: 12px;
       transition: all 0.2s ease;
     }
     
@@ -68,81 +113,68 @@ import { ContactResponseDto } from '../../../application/dto/contact.dto';
     }
     
     .contact-item.selected {
-      border-color: #007bff;
-      box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+      border-color: #1890ff;
+      box-shadow: 0 0 0 2px rgba(24,144,255,0.2);
     }
     
-    .contact-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
+    .contact-name {
+      margin-bottom: 4px !important;
+      font-weight: 500;
     }
     
-    .card-body.inactive {
-      border-right: 10px solid #dc3545;
+    .contact-info {
+      color: #666;
+      margin-bottom: 0 !important;
     }
     
-    .card-body:not(.inactive) {
-      border-right: 10px solid #28a745;
+    .search-container {
+      margin-bottom: 16px;
     }
-    
-    .avatar-blue { background: #007bff; }
-    .avatar-red { background: #dc3545; }
-    .avatar-green { background: #28a745; }
-    .avatar-yellow { background: #ffc107; }
-    .avatar-purple { background: #6f42c1; }
-    .avatar-pink { background: #e83e8c; }
   `]
 })
 export class ContactListComponent implements OnInit {
-    contacts: ContactResponseDto[] = [];
-    filteredContacts: ContactResponseDto[] = [];
-    selectedContactId: string | null = null;
-    searchQuery: string = '';
+  contacts: ContactResponseDto[] = [];
+  filteredContacts: ContactResponseDto[] = [];
+  selectedContactId: string | null = null;
+  searchQuery: string = '';
 
-    constructor(private contactApplicationService: ContactApplicationService) { }
+  constructor(private contactApplicationService: ContactApplicationService) { }
 
-    ngOnInit(): void {
-        this.loadContacts();
+  ngOnInit(): void {
+    this.loadContacts();
+  }
+
+  loadContacts(): void {
+    this.contactApplicationService.getAllContacts().subscribe(contacts => {
+      this.contacts = contacts;
+      this.filteredContacts = contacts;
+    });
+  }
+
+  selectContact(contact: ContactResponseDto): void {
+    this.selectedContactId = contact.id;
+    this.contactApplicationService.selectContact(contact);
+  }
+
+  addNewContact(): void {
+    // This would typically navigate to a form component
+    console.log('Add new contact clicked');
+  }
+
+  onSearch(): void {
+    if (!this.searchQuery.trim()) {
+      this.filteredContacts = this.contacts;
+      return;
     }
 
-    loadContacts(): void {
-        this.contactApplicationService.getAllContacts().subscribe(contacts => {
-            this.contacts = contacts;
-            this.filteredContacts = contacts;
-        });
-    }
+    this.contactApplicationService.searchContacts({ query: this.searchQuery }).subscribe(results => {
+      this.filteredContacts = results;
+    });
+  }
 
-    selectContact(contact: ContactResponseDto): void {
-        this.selectedContactId = contact.id;
-        this.contactApplicationService.selectContact(contact);
-    }
-
-    addNewContact(): void {
-        // This would typically navigate to a form component
-        console.log('Add new contact clicked');
-    }
-
-    onSearch(): void {
-        if (!this.searchQuery.trim()) {
-            this.filteredContacts = this.contacts;
-            return;
-        }
-
-        this.contactApplicationService.searchContacts({ query: this.searchQuery }).subscribe(results => {
-            this.filteredContacts = results;
-        });
-    }
-
-    getAvatarClass(index: number): string {
-        const colors = ['avatar-blue', 'avatar-red', 'avatar-green', 'avatar-yellow', 'avatar-purple', 'avatar-pink'];
-        return colors[index % colors.length];
-    }
+  getAvatarColor(index: number): string {
+    const colors = ['#1890ff', '#f5222d', '#52c41a', '#faad14', '#722ed1', '#eb2f96'];
+    return colors[index % colors.length];
+  }
 }
 

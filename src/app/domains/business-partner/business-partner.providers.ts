@@ -1,6 +1,12 @@
-import { Provider } from '@angular/core';
+import { Provider, InjectionToken } from '@angular/core';
+import { ContactRepository } from './domain/repositories/contact.repository.interface';
 import { ContactRepositoryImpl } from './infrastructure/repositories/contact.repository.impl';
 
+export const CONTACT_REPOSITORY = new InjectionToken<ContactRepository>('ContactRepository');
+
 export const BUSINESS_PARTNER_PROVIDERS: Provider[] = [
-  ContactRepositoryImpl
+  {
+    provide: CONTACT_REPOSITORY,
+    useClass: ContactRepositoryImpl
+  }
 ];

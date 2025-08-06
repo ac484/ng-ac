@@ -38,6 +38,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
 import { CONTRACT_MANAGEMENT_PROVIDERS } from './domains/contract-management';
+import { BUSINESS_PARTNER_PROVIDERS } from './domains/business-partner/business-partner.providers';
 
 const defaultLang: AlainProvideLang = {
   abbr: 'zh-CN',
@@ -78,6 +79,7 @@ const providers: Array<Provider | EnvironmentProviders> = [
   provideSFConfig({ widgets: SF_WIDGETS }),
   provideStartup(),
   ...CONTRACT_MANAGEMENT_PROVIDERS,
+  ...BUSINESS_PARTNER_PROVIDERS,
   ...(environment.providers || [])
 ];
 
@@ -88,10 +90,10 @@ if (environment.api?.refreshTokenEnabled && environment.api.refreshTokenType ===
 
 export const appConfig: ApplicationConfig = {
   providers: [
-  ...providers,
-  provideFirebaseApp(() => initializeApp({ projectId: "ng-acc", appId: "1:289956121604:web:4dd9d608a2db962aeaf951", storageBucket: "ng-acc.firebasestorage.app", apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", authDomain: "ng-acc.firebaseapp.com", messagingSenderId: "289956121604", measurementId: "G-6YM5S9LCNV" })), provideAuth_alias(() => getAuth()), provideAnalytics(() => getAnalytics()), ScreenTrackingService, UserTrackingService, provideAppCheck(() => {
-  // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
-  const provider = new ReCaptchaEnterpriseProvider('6Lfet5crAAAAAFDXayzMocp-GhB88FewdQ8Z9E69');
-  return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
-}), provideFirestore(() => getFirestore()), provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig()), provideVertexAI(() => getVertexAI())]
+    ...providers,
+    provideFirebaseApp(() => initializeApp({ projectId: "ng-acc", appId: "1:289956121604:web:4dd9d608a2db962aeaf951", storageBucket: "ng-acc.firebasestorage.app", apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", authDomain: "ng-acc.firebaseapp.com", messagingSenderId: "289956121604", measurementId: "G-6YM5S9LCNV" })), provideAuth_alias(() => getAuth()), provideAnalytics(() => getAnalytics()), ScreenTrackingService, UserTrackingService, provideAppCheck(() => {
+      // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
+      const provider = new ReCaptchaEnterpriseProvider('6Lfet5crAAAAAFDXayzMocp-GhB88FewdQ8Z9E69');
+      return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
+    }), provideFirestore(() => getFirestore()), provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig()), provideVertexAI(() => getVertexAI())]
 };
