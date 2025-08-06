@@ -37,10 +37,7 @@ import { FirebaseUnitOfWork } from './shared/infrastructure/firebase-unit-of-wor
 import { SimpleReuseStrategy } from './shared/infrastructure/reuse-strategy';
 import { CONTRACT_EXTRACTION_PROVIDERS } from './domain/contract-extraction/infrastructure/providers';
 
-// Theme providers
-import { ThemeRepository } from './shared/domain/theme/theme.repository';
-import { LocalStorageThemeRepository } from './shared/infrastructure/theme/theme-repository.impl';
-import { ThemeInitService } from './shared/infrastructure/theme/theme-init.service';
+
 
 registerLocaleData(zh);
 
@@ -88,11 +85,7 @@ const firebaseProviders: Array<Provider | EnvironmentProviders> = [
     provideVertexAI(() => getVertexAI())
 ];
 
-// Theme providers
-const themeProviders: Array<Provider | EnvironmentProviders> = [
-    { provide: ThemeRepository, useClass: LocalStorageThemeRepository },
-    ThemeInitService
-];
+
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -121,8 +114,7 @@ export const appConfig: ApplicationConfig = {
         // Firebase providers
         ...firebaseProviders,
 
-        // Theme providers
-        ...themeProviders,
+
 
         // Unit of Work
         { provide: UnitOfWork, useClass: FirebaseUnitOfWork },
