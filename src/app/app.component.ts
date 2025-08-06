@@ -6,17 +6,20 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { SettingsService } from '@delon/theme';
 import { ACLService } from '@delon/acl';
 import { SHARED_IMPORTS } from './shared/shared-imports';
-import { ThemeBtnComponent } from './shared/presentation/common/theme-btn/theme-btn.component';
-import { SettingDrawerComponent } from './shared/presentation/common/setting-drawer/setting-drawer.component';
+import { ThemeBtnComponent } from '@delon/theme/theme-btn';
+import { SettingDrawerModule } from '@delon/theme/setting-drawer';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   template: `
     <router-outlet />
-    <app-theme-btn />
-    <app-setting-drawer />
+    <theme-btn />
+    @if (showSettingDrawer) {
+      <setting-drawer />
+    }
   `,
-  imports: [RouterOutlet, ...SHARED_IMPORTS, ThemeBtnComponent, SettingDrawerComponent],
+  imports: [RouterOutlet, ...SHARED_IMPORTS, ThemeBtnComponent, SettingDrawerModule],
   standalone: true
 })
 export class AppComponent implements OnInit {
@@ -27,6 +30,7 @@ export class AppComponent implements OnInit {
   private readonly settingsService = inject(SettingsService);
   private readonly aclService = inject(ACLService);
 
+  showSettingDrawer = !environment.production;
   private donePreloader = stepPreloader();
 
   ngOnInit(): void {
