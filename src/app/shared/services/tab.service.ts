@@ -46,7 +46,7 @@ export class TabService {
     }
 
     const newTab: TabData = {
-      id: `tab_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `tab_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       title,
       url,
       icon,
@@ -118,8 +118,8 @@ export class TabService {
 
   getRouteData(url: string): { title: string; icon?: string; closable: boolean } | null {
     const routeMap: Record<string, { title: string; icon?: string; closable: boolean }> = {
-      '/dashboard': { title: '儀表板', icon: 'dashboard', closable: false },
-      '/dashboard/v1': { title: '儀表板', icon: 'dashboard', closable: false },
+      '/dashboard': { title: '儀表板', icon: 'dashboard', closable: true }, // ✅ 改為可關閉
+      '/dashboard/v1': { title: '儀表板', icon: 'dashboard', closable: true }, // ✅ 改為可關閉
       '/dashboard/analysis': { title: '分析', icon: 'bar-chart', closable: true },
       '/dashboard/monitor': { title: '監控', icon: 'monitor', closable: true },
       '/dashboard/workplace': { title: '工作台', icon: 'desktop', closable: true },
@@ -129,5 +129,19 @@ export class TabService {
     };
 
     return routeMap[url] || { title: '新頁面', closable: true };
+  }
+
+  // 更新所有現有標籤的 closable 屬性
+  updateAllTabsClosable(): void {
+    const updatedTabs = this.tabs.map(tab => {
+      const routeData = this.getRouteData(tab.url);
+      return {
+        ...tab,
+        closable: routeData?.closable ?? true
+      };
+    });
+
+    this.tabsSubject.next(updatedTabs);
+    this.saveTabs(updatedTabs);
   }
 }

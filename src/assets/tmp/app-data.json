@@ -54,6 +54,11 @@
               "text": "預算管理",
               "link": "/dashboard/budget-management",
               "i18n": "menu.dashboard.budget-management"
+            },
+            {
+              "text": "業務夥伴",
+              "link": "/dashboard/business-partner",
+              "i18n": "menu.dashboard.business-partner"
             }
           ]
         },
