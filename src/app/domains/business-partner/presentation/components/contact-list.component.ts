@@ -7,10 +7,12 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ContactApplicationService } from '../../application/services/contact.application.service';
 import { ContactResponseDto } from '../../application/dto/create-contact.dto';
+import { ContactCreateModalComponent } from './contact-create-modal.component';
+import { ContactEditModalComponent } from './contact-edit-modal.component';
 
 @Component({
   selector: 'app-contact-list',
@@ -139,6 +141,7 @@ import { ContactResponseDto } from '../../application/dto/create-contact.dto';
 export class ContactListComponent implements OnInit {
   private readonly contactService = inject(ContactApplicationService);
   private readonly message = inject(NzMessageService);
+  private readonly modalService = inject(NzModalService);
 
   contacts = signal<ContactResponseDto[]>([]);
   loading = signal(false);
@@ -156,7 +159,8 @@ export class ContactListComponent implements OnInit {
         this.loading.set(false);
       },
       error: (error) => {
-        this.message.error('載入聯絡人失敗');
+        console.error('Contact loading error:', error);
+        this.message.error(`載入聯絡人失敗: ${error.message || '未知錯誤'}`);
         this.loading.set(false);
       }
     });
@@ -176,24 +180,68 @@ export class ContactListComponent implements OnInit {
         this.loading.set(false);
       },
       error: (error) => {
-        this.message.error('搜尋失敗');
+        console.error('Contact search error:', error);
+        this.message.error(`搜尋失敗: ${error.message || '未知錯誤'}`);
         this.loading.set(false);
       }
     });
   }
 
   showCreateModal(): void {
-    // TODO: 實現新增聯絡人模態框
-    this.message.info('新增聯絡人功能開發中');
+    const modal = this.modalService.create({
+      nzTitle: '新增聯絡人',
+      nzContent: ContactCreateModalComponent,
+      nzWidth: 600,
+      nzFooter: null,
+      nzClosable: true,
+      nzMaskClosable: false
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result) {
+        this.loadContacts();
+      }
+    });
   }
 
   editContact(contact: ContactResponseDto): void {
-    // TODO: 實現編輯聯絡人模態框
-    this.message.info(`編輯聯絡人: ${contact.fullName}`);
+    const modal = this.modalService.create({
+      nzTitle: '編輯聯絡人',
+      nzContent: ContactEditModalComponent,
+      nzData: { contact },
+      nzWidth: 600,
+      nzFooter: null,
+      nzClosable: true,
+      nzMaskClosable: false
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result) {
+        this.loadContacts();
+      }
+    });
   }
 
   deleteContact(contact: ContactResponseDto): void {
-    // TODO: 實現刪除確認對話框
-    this.message.info(`刪除聯絡人: ${contact.fullName}`);
+    this.modalService.confirm({
+      nzTitle: '確認刪除',
+      nzContent: `確定要刪除聯絡人 "${contact.fullName}" 嗎？此操作無法撤銷。`,
+      nzOkText: '確定刪除',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: '取消',
+      nzOnOk: () => {
+        this.contactService.deleteContact(contact.id).subscribe({
+          next: () => {
+            this.message.success('聯絡人刪除成功');
+            this.loadContacts();
+          },
+          error: (error) => {
+            console.error('Contact deletion error:', error);
+            this.message.error(`刪除聯絡人失敗: ${error.message || '未知錯誤'}`);
+          }
+        });
+      }
+    });
   }
 }

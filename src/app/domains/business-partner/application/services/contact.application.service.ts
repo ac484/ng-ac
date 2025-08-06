@@ -58,7 +58,7 @@ export class ContactApplicationService {
 
     private toResponseDto(contact: Contact): ContactResponseDto {
         return {
-            id: (contact as any).id.value, // 臨時解決方案
+            id: contact.contactId, // 修復：使用公共 getter 方法
             firstName: contact.firstName,
             lastName: contact.lastName,
             email: contact.email,

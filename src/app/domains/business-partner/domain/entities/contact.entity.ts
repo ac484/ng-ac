@@ -90,6 +90,9 @@ export class Contact extends BaseAggregateRoot<ContactId> {
         return `${this._firstName.charAt(0)}${this._lastName.charAt(0)}`.toUpperCase();
     }
 
+    // 添加公共的 id getter
+    get contactId(): string { return this.id.value; }
+
     /**
      * 更新聯絡人資料
      */
