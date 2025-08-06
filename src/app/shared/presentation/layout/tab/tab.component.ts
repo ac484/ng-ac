@@ -1,4 +1,4 @@
-import { NgClass, NgStyle, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 
 import { TabService } from '../../../infrastructure/services/tab.service';
 import { TabModel } from '../../../domain/tab.model';
-import { MouseHoverShowDirective } from '../../directives/mouse-hover-show.directive';
+
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzContextMenuService, NzDropdownMenuComponent, NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -21,12 +21,12 @@ import { NzCardModule } from 'ng-zorro-antd/card';
     styleUrls: ['./tab.component.less'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [NzCardModule, NzTabsModule, NzDropDownModule, NzMenuModule, NgClass, NgStyle, MouseHoverShowDirective, NzIconModule, AsyncPipe]
+    imports: [NzCardModule, NzTabsModule, NzDropDownModule, NzMenuModule, NzIconModule, AsyncPipe]
 })
 export class TabComponent implements OnInit {
     private tabService = inject(TabService);
     private nzContextMenuService = inject(NzContextMenuService);
-    private router = inject(Router);
+    public router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
 
     tabsSourceData: TabModel[] = [];
