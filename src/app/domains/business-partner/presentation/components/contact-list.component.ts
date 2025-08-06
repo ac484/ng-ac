@@ -13,20 +13,20 @@ import { ContactApplicationService } from '../../application/services/contact.ap
 import { ContactResponseDto } from '../../application/dto/create-contact.dto';
 
 @Component({
-    selector: 'app-contact-list',
-    standalone: true,
-    imports: [
-        CommonModule,
-        FormsModule,
-        NzTableModule,
-        NzInputModule,
-        NzButtonModule,
-        NzTagModule,
-        NzAvatarModule,
-        NzIconModule,
-        NzModalModule
-    ],
-    template: `
+  selector: 'app-contact-list',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    NzTableModule,
+    NzInputModule,
+    NzButtonModule,
+    NzTagModule,
+    NzAvatarModule,
+    NzIconModule,
+    NzModalModule
+  ],
+  template: `
     <div class="contact-list">
       <div class="header">
         <h2>聯絡人管理</h2>
@@ -81,7 +81,7 @@ import { ContactResponseDto } from '../../application/dto/create-contact.dto';
             <td>{{ contact.email }}</td>
             <td>{{ contact.phone }}</td>
             <td>
-              <nz-tag [nzColor]="contact.status ? 'green' : 'red'">
+              <nz-tag>
                 {{ contact.status ? '啟用' : '停用' }}
               </nz-tag>
             </td>
@@ -98,7 +98,7 @@ import { ContactResponseDto } from '../../application/dto/create-contact.dto';
       </nz-table>
     </div>
   `,
-    styles: [`
+  styles: [`
     .contact-list {
       padding: 24px;
     }
@@ -129,73 +129,71 @@ import { ContactResponseDto } from '../../application/dto/create-contact.dto';
     
     .name {
       font-weight: 500;
-      color: #262626;
     }
     
     .subtitle {
       font-size: 12px;
-      color: #8c8c8c;
     }
   `]
 })
 export class ContactListComponent implements OnInit {
-    private readonly contactService = inject(ContactApplicationService);
-    private readonly message = inject(NzMessageService);
+  private readonly contactService = inject(ContactApplicationService);
+  private readonly message = inject(NzMessageService);
 
-    contacts = signal<ContactResponseDto[]>([]);
-    loading = signal(false);
-    searchQuery = '';
+  contacts = signal<ContactResponseDto[]>([]);
+  loading = signal(false);
+  searchQuery = '';
 
-    ngOnInit(): void {
-        this.loadContacts();
+  ngOnInit(): void {
+    this.loadContacts();
+  }
+
+  loadContacts(): void {
+    this.loading.set(true);
+    this.contactService.getAllContacts().subscribe({
+      next: (contacts) => {
+        this.contacts.set(contacts);
+        this.loading.set(false);
+      },
+      error: (error) => {
+        this.message.error('載入聯絡人失敗');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  onSearch(query: string): void {
+    this.searchQuery = query;
+    if (!query.trim()) {
+      this.loadContacts();
+      return;
     }
 
-    loadContacts(): void {
-        this.loading.set(true);
-        this.contactService.getAllContacts().subscribe({
-            next: (contacts) => {
-                this.contacts.set(contacts);
-                this.loading.set(false);
-            },
-            error: (error) => {
-                this.message.error('載入聯絡人失敗');
-                this.loading.set(false);
-            }
-        });
-    }
+    this.loading.set(true);
+    this.contactService.searchContacts(query).subscribe({
+      next: (contacts) => {
+        this.contacts.set(contacts);
+        this.loading.set(false);
+      },
+      error: (error) => {
+        this.message.error('搜尋失敗');
+        this.loading.set(false);
+      }
+    });
+  }
 
-    onSearch(query: string): void {
-        this.searchQuery = query;
-        if (!query.trim()) {
-            this.loadContacts();
-            return;
-        }
+  showCreateModal(): void {
+    // TODO: 實現新增聯絡人模態框
+    this.message.info('新增聯絡人功能開發中');
+  }
 
-        this.loading.set(true);
-        this.contactService.searchContacts(query).subscribe({
-            next: (contacts) => {
-                this.contacts.set(contacts);
-                this.loading.set(false);
-            },
-            error: (error) => {
-                this.message.error('搜尋失敗');
-                this.loading.set(false);
-            }
-        });
-    }
+  editContact(contact: ContactResponseDto): void {
+    // TODO: 實現編輯聯絡人模態框
+    this.message.info(`編輯聯絡人: ${contact.fullName}`);
+  }
 
-    showCreateModal(): void {
-        // TODO: 實現新增聯絡人模態框
-        this.message.info('新增聯絡人功能開發中');
-    }
-
-    editContact(contact: ContactResponseDto): void {
-        // TODO: 實現編輯聯絡人模態框
-        this.message.info(`編輯聯絡人: ${contact.fullName}`);
-    }
-
-    deleteContact(contact: ContactResponseDto): void {
-        // TODO: 實現刪除確認對話框
-        this.message.info(`刪除聯絡人: ${contact.fullName}`);
-    }
+  deleteContact(contact: ContactResponseDto): void {
+    // TODO: 實現刪除確認對話框
+    this.message.info(`刪除聯絡人: ${contact.fullName}`);
+  }
 }
