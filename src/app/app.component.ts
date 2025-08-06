@@ -2,16 +2,15 @@ import { Component, OnInit, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { TitleService, stepPreloader } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { CommonModule } from '@angular/common';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { SettingsService } from '@delon/theme';
 import { ACLService } from '@delon/acl';
+import { SHARED_IMPORTS } from './shared/shared-imports';
 
 @Component({
   selector: 'app-root',
   template: `<router-outlet />`,
-  imports: [RouterOutlet, CommonModule, NzSpinModule],
+  imports: [RouterOutlet, ...SHARED_IMPORTS],
   standalone: true
 })
 export class AppComponent implements OnInit {
