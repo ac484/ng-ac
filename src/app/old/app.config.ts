@@ -17,14 +17,14 @@ import { authSimpleInterceptor, provideAuth } from '@delon/auth';
 import { provideSFConfig } from '@delon/form';
 import { AlainProvideLang, provideAlain, zh_TW as delonLang } from '@delon/theme';
 import { AlainConfig } from '@delon/util/config';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { zhTW as dateLang } from 'date-fns/locale';
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 import { zh_TW as zorroLang, provideNzI18n } from 'ng-zorro-antd/i18n';
 
 import { routes } from './app.routes';
-import { ICONS } from '../style-icons';
-import { ICONS_AUTO } from '../style-icons-auto';
+import { ICONS } from '../../style-icons';
+import { ICONS_AUTO } from '../../style-icons-auto';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { getPerformance, providePerformance } from '@angular/fire/performance';
