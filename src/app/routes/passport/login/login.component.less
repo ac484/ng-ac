@@ -46,6 +46,52 @@
       .register {
         float: right;
       }
+
+      // Firebase Auth 按鈕樣式 - 最少代碼實現
+      .anonymous-btn {
+        margin-right: 8px;
+        background: #6c757d;
+        border-color: #6c757d;
+        color: white;
+        font-size: 12px;
+        padding: 4px 8px;
+        height: auto;
+        
+        &:hover {
+          background: #5a6268;
+          border-color: #545b62;
+        }
+        
+        &:disabled {
+          background: #adb5bd;
+          border-color: #adb5bd;
+        }
+      }
+
+      .google-btn {
+        margin-right: 8px;
+        background: #4285f4;
+        border-color: #4285f4;
+        color: white;
+        font-size: 12px;
+        padding: 4px 8px;
+        height: auto;
+        
+        &:hover {
+          background: #3367d6;
+          border-color: #2f5bb7;
+        }
+        
+        &:disabled {
+          background: #a8c7fa;
+          border-color: #a8c7fa;
+        }
+        
+        i {
+          margin-right: 4px;
+          font-size: 14px;
+        }
+      }
     }
   }
 }
@@ -57,6 +103,28 @@
 
       &:hover {
         color: #fff;
+      }
+    }
+    
+    .other {
+      .anonymous-btn {
+        background: #495057;
+        border-color: #495057;
+        
+        &:hover {
+          background: #343a40;
+          border-color: #212529;
+        }
+      }
+      
+      .google-btn {
+        background: #1a73e8;
+        border-color: #1a73e8;
+        
+        &:hover {
+          background: #1557b0;
+          border-color: #0d47a1;
+        }
       }
     }
   }

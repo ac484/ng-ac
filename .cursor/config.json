@@ -6,7 +6,7 @@
         "tool": "sequential-thinking"
       },
       {
-        "match": "when the user message mentions any of ['c7', '最新', '現代', '實現', '實踐', '官方', '文件']",
+        "match": "when the user message mentions any of ['7', 'c7', '最新', '現代', '實現', '實踐', '官方', '文件']",
         "tool": "context7"
       }
     ]

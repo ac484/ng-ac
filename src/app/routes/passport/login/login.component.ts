@@ -16,6 +16,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabChangeEvent, NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { finalize } from 'rxjs';
+// Firebase imports - 最少代碼實現
+import { Auth, signInAnonymously, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, OAuthProvider, UserCredential } from '@angular/fire/auth';
 
 @Component({
   selector: 'passport-login',
@@ -46,6 +48,8 @@ export class UserLoginComponent implements OnDestroy {
   private readonly startupSrv = inject(StartupService);
   private readonly http = inject(_HttpClient);
   private readonly cdr = inject(ChangeDetectorRef);
+  // Firebase Auth - 直接注入
+  private readonly auth = inject(Auth);
 
   form = inject(FormBuilder).nonNullable.group({
     userName: ['', [Validators.required, Validators.pattern(/^(admin|user)$/)]],
@@ -149,7 +153,152 @@ export class UserLoginComponent implements OnDestroy {
       });
   }
 
+  // Firebase Auth 方法 - 最少代碼實現
+  async signInWithFirebase(provider: 'google' | 'github' | 'microsoft'): Promise<void> {
+    try {
+      this.loading = true;
+      this.cdr.detectChanges();
+
+      // 直接使用 Firebase Auth - 最少代碼
+      let authProvider;
+      switch (provider) {
+        case 'google':
+          authProvider = new GoogleAuthProvider();
+          break;
+        case 'github':
+          authProvider = new GithubAuthProvider();
+          break;
+        case 'microsoft':
+          authProvider = new OAuthProvider('microsoft.com');
+          break;
+        default:
+          throw new Error(`Unsupported provider: ${provider}`);
+      }
+      
+      const result = await signInWithPopup(this.auth, authProvider);
+      
+      // 轉換用戶信息並設置到 @delon/auth - 與 Auth0 一樣獲取 token
+      const userInfo = {
+        token: await result.user.getIdToken(), // 獲取 Firebase ID Token
+        name: result.user.displayName || result.user.email || 'User',
+        email: result.user.email,
+        avatar: result.user.photoURL,
+        id: result.user.uid,
+        time: +new Date(),
+        expired: +new Date() + 1000 * 60 * 60 * 24 * 7, // 7天過期
+        firebaseUser: result.user
+      };
+      
+      this.settingsService.setUser(userInfo);
+      this.reuseTabService?.clear();
+      
+      this.startupSrv.load().subscribe(() => {
+        let url = this.tokenService.referrer!.url || '/';
+        if (url.includes('/passport')) {
+          url = '/';
+        }
+        this.router.navigateByUrl(url);
+      });
+
+    } catch (error: any) {
+      console.error('Firebase Auth Error:', error);
+      this.error = error.message || '登入失敗';
+      this.cdr.detectChanges();
+    } finally {
+      this.loading = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  // 匿名登入 - 最少代碼實現 (官方推薦)
+  async signInAnonymously(): Promise<void> {
+    try {
+      this.loading = true;
+      this.cdr.detectChanges();
+      
+      // 最少代碼：只需要這一行 - 官方推薦
+      const result = await signInAnonymously(this.auth);
+      
+      // 轉換用戶信息並設置到 @delon/auth - 與 Auth0 一樣獲取 token
+      const userInfo = {
+        token: await result.user.getIdToken(), // 獲取 Firebase ID Token
+        name: result.user.displayName || result.user.email || 'Anonymous User',
+        email: result.user.email,
+        avatar: result.user.photoURL,
+        id: result.user.uid,
+        time: +new Date(),
+        expired: +new Date() + 1000 * 60 * 60 * 24 * 7, // 7天過期
+        firebaseUser: result.user
+      };
+      
+      this.settingsService.setUser(userInfo);
+      this.reuseTabService?.clear();
+      
+      this.startupSrv.load().subscribe(() => {
+        let url = this.tokenService.referrer!.url || '/';
+        if (url.includes('/passport')) {
+          url = '/';
+        }
+        this.router.navigateByUrl(url);
+      });
+    } catch (error: any) {
+      this.error = error.message || '匿名登入失敗';
+      this.cdr.detectChanges();
+    } finally {
+      this.loading = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  // Google 登入 - 最少代碼實現 (官方推薦)
+  async signInWithGoogle(): Promise<void> {
+    try {
+      this.loading = true;
+      this.cdr.detectChanges();
+      
+      // 最少代碼：只需要這兩行 - 官方推薦
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(this.auth, provider);
+      
+      // 轉換用戶信息並設置到 @delon/auth - 與 Auth0 一樣獲取 token
+      const userInfo = {
+        token: await result.user.getIdToken(), // 獲取 Firebase ID Token
+        name: result.user.displayName || result.user.email || 'Google User',
+        email: result.user.email,
+        avatar: result.user.photoURL,
+        id: result.user.uid,
+        time: +new Date(),
+        expired: +new Date() + 1000 * 60 * 60 * 24 * 7, // 7天過期
+        firebaseUser: result.user
+      };
+      
+      this.settingsService.setUser(userInfo);
+      this.reuseTabService?.clear();
+      
+      this.startupSrv.load().subscribe(() => {
+        let url = this.tokenService.referrer!.url || '/';
+        if (url.includes('/passport')) {
+          url = '/';
+        }
+        this.router.navigateByUrl(url);
+      });
+    } catch (error: any) {
+      this.error = error.message || 'Google 登入失敗';
+      this.cdr.detectChanges();
+    } finally {
+      this.loading = false;
+      this.cdr.detectChanges();
+    }
+  }
+
   open(type: string, openType: SocialOpenType = 'href'): void {
+    // 如果是 Firebase 提供商，使用新的 Firebase Auth 方法
+    if (['google', 'github', 'microsoft'].includes(type)) {
+      this.signInWithFirebase(type as 'google' | 'github' | 'microsoft');
+      return;
+    }
+
+    // 原有的 Auth0 和其他社交登入邏輯
     let url = ``;
     let callback = ``;
     if (environment.production) {
