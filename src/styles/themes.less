@@ -1,0 +1,251 @@
+// 主題系統樣式定義
+// 使用 CSS 變量實現動態主題切換
+
+// 預設主題 (藍色)
+.theme-default {
+  --primary-color: #1890ff;
+  --primary-color-hover: #40a9ff;
+  --primary-color-active: #096dd9;
+  --primary-color-outline: rgba(24, 144, 255, 0.2);
+  --primary-1: #e6f7ff;
+  --primary-2: #bae7ff;
+  --primary-3: #91d5ff;
+  --primary-4: #69c0ff;
+  --primary-5: #40a9ff;
+  --primary-6: #1890ff;
+  --primary-7: #096dd9;
+  --primary-8: #0050b3;
+  --primary-9: #003a8c;
+  --primary-10: #002766;
+}
+
+// 深色主題
+.theme-dark {
+  --primary-color: #177ddc;
+  --primary-color-hover: #3c9ae8;
+  --primary-color-active: #0958b5;
+  --primary-color-outline: rgba(23, 125, 220, 0.2);
+  --primary-1: #111b26;
+  --primary-2: #112a45;
+  --primary-3: #153450;
+  --primary-4: #15417e;
+  --primary-5: #1554b5;
+  --primary-6: #177ddc;
+  --primary-7: #3c9ae8;
+  --primary-8: #65b7f3;
+  --primary-9: #8ac4f6;
+  --primary-10: #b7d9f8;
+}
+
+// 綠色主題
+.theme-green {
+  --primary-color: #52c41a;
+  --primary-color-hover: #73d13d;
+  --primary-color-active: #389e0d;
+  --primary-color-outline: rgba(82, 196, 26, 0.2);
+  --primary-1: #f6ffed;
+  --primary-2: #d9f7be;
+  --primary-3: #b7eb8f;
+  --primary-4: #95de64;
+  --primary-5: #73d13d;
+  --primary-6: #52c41a;
+  --primary-7: #389e0d;
+  --primary-8: #237804;
+  --primary-9: #135200;
+  --primary-10: #092b00;
+}
+
+// 紫色主題
+.theme-purple {
+  --primary-color: #722ed1;
+  --primary-color-hover: #9254de;
+  --primary-color-active: #531dab;
+  --primary-color-outline: rgba(114, 46, 209, 0.2);
+  --primary-1: #f9f0ff;
+  --primary-2: #efdbff;
+  --primary-3: #d3adf7;
+  --primary-4: #b37feb;
+  --primary-5: #9254de;
+  --primary-6: #722ed1;
+  --primary-7: #531dab;
+  --primary-8: #391085;
+  --primary-9: #22075e;
+  --primary-10: #120338;
+}
+
+// 橙色主題
+.theme-orange {
+  --primary-color: #fa8c16;
+  --primary-color-hover: #ffa940;
+  --primary-color-active: #d46b08;
+  --primary-color-outline: rgba(250, 140, 22, 0.2);
+  --primary-1: #fff7e6;
+  --primary-2: #ffe7ba;
+  --primary-3: #ffd591;
+  --primary-4: #ffc069;
+  --primary-5: #ffa940;
+  --primary-6: #fa8c16;
+  --primary-7: #d46b08;
+  --primary-8: #ad4e00;
+  --primary-9: #873800;
+  --primary-10: #612500;
+}
+
+// 全局主題變量應用
+:root {
+  // 使用 CSS 變量，這些會被主題類覆蓋
+  --primary-color: #1890ff;
+  --primary-color-hover: #40a9ff;
+  --primary-color-active: #096dd9;
+  --primary-color-outline: rgba(24, 144, 255, 0.2);
+}
+
+// 主題切換動畫
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// 組件主題適配
+.ant-btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  
+  &:hover {
+    background-color: var(--primary-color-hover);
+    border-color: var(--primary-color-hover);
+  }
+  
+  &:active {
+    background-color: var(--primary-color-active);
+    border-color: var(--primary-color-active);
+  }
+}
+
+.ant-btn-primary:focus {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-outline);
+}
+
+.ant-input:focus,
+.ant-input-focused {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-outline);
+}
+
+.ant-select-focused .ant-select-selector {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px var(--primary-color-outline) !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.ant-radio-checked .ant-radio-inner {
+  border-color: var(--primary-color);
+  
+  &::after {
+    background-color: var(--primary-color);
+  }
+}
+
+.ant-switch-checked {
+  background-color: var(--primary-color);
+}
+
+.ant-slider-track {
+  background-color: var(--primary-color);
+}
+
+.ant-slider-handle {
+  border-color: var(--primary-color);
+}
+
+.ant-pagination-item-active {
+  border-color: var(--primary-color);
+  
+  a {
+    color: var(--primary-color);
+  }
+}
+
+.ant-menu-item-selected {
+  background-color: var(--primary-color) !important;
+}
+
+.ant-menu-item:hover {
+  color: var(--primary-color) !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--primary-color);
+}
+
+.ant-tabs-ink-bar {
+  background: var(--primary-color);
+}
+
+.ant-progress-bg {
+  background-color: var(--primary-color);
+}
+
+.ant-alert-success {
+  border-color: var(--primary-color);
+  
+  .ant-alert-icon {
+    color: var(--primary-color);
+  }
+}
+
+// 深色主題特殊處理
+.theme-dark {
+  background-color: #141414;
+  color: rgba(255, 255, 255, 0.85);
+  
+  .ant-layout {
+    background-color: #141414;
+  }
+  
+  .ant-layout-header {
+    background-color: #1f1f1f;
+  }
+  
+  .ant-layout-sider {
+    background-color: #1f1f1f;
+  }
+  
+  .ant-menu {
+    background-color: #1f1f1f;
+  }
+  
+  .ant-menu-item {
+    color: rgba(255, 255, 255, 0.85);
+    
+    &:hover {
+      background-color: #177ddc;
+    }
+  }
+  
+  .ant-card {
+    background-color: #1f1f1f;
+    border-color: #303030;
+  }
+  
+  .ant-input {
+    background-color: #141414;
+    border-color: #434343;
+    color: rgba(255, 255, 255, 0.85);
+    
+    &:hover {
+      border-color: #177ddc;
+    }
+  }
+  
+  .ant-select-selector {
+    background-color: #141414 !important;
+    border-color: #434343 !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+}
