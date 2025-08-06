@@ -6,8 +6,8 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { SettingsService } from '@delon/theme';
 import { ACLService } from '@delon/acl';
 import { SHARED_IMPORTS } from './shared/shared-imports';
-import { ThemeBtnComponent } from './shared/components/theme-btn/theme-btn.component';
-import { SettingDrawerComponent } from './shared/components/setting-drawer/setting-drawer.component';
+import { ThemeBtnComponent } from './shared/presentation/common/theme-btn/theme-btn.component';
+import { SettingDrawerComponent } from './shared/presentation/common/setting-drawer/setting-drawer.component';
 
 @Component({
   selector: 'app-root',
