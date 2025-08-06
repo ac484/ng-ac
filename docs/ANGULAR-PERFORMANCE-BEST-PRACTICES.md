@@ -1,4 +1,4 @@
-# Angular 20+ 系統效能優化技術清單
+# Angular 20+ 系統效能優化技術清單 (精選版)
 
 ## 原有技術 (1-20)
 
@@ -84,7 +84,7 @@
 
 ---
 
-## Angular 20+ 新增技術 (21-45)
+## Angular 20+ 新增技術 (21-33)
 
 ### 21. Enhanced Control Flow (@if, @for, @switch)
 ```typescript
@@ -110,123 +110,67 @@
 provideHttpClient(withFetch())
 ```
 
-### 24. Material 3 Design System 整合
-- Angular Material 支援 Material 3 設計系統
-- 與 ng-zorro-antd 混合使用時，統一設計語言
-
-### 25. 新版 Angular DevKit & Builders
-- 使用最新的 `@angular/build` (Vite 支援)
-- 比 Webpack 更快的熱重載和建構時間
-
-### 26. ng-zorro-antd 按需引入優化
+### 24. ng-zorro-antd 虛擬滾動優化
 ```typescript
-import { NzButtonModule } from 'ng-zorro-antd/button';
 <nz-table [nzVirtualScroll]="true" [nzVirtualItemSize]="54">
 ```
 
-### 27. Angular/Fire 與 Signals 整合
+### 25. Angular/Fire 與 Signals 整合
 ```typescript
 readonly tasks = toSignal(
   collectionData(tasksQuery, { idField: 'id' })
 );
 ```
 
-### 28. ng-alain Schema Form
+### 26. ng-alain Schema Form
 ```typescript
 <sf [schema]="schema" [ui]="ui" [formData]="formData">
 ```
 
-### 29. angular-gridster2 信號驅動
-```typescript
-readonly gridItems = signal<GridsterItem[]>([]);
-readonly gridOptions = signal<GridsterConfig>({});
-```
-
-### 30. 全新的 SSR 渲染模式
-```typescript
-provideServerRendering(),
-provideServerRoutesPrerendering()
-```
-
-### 31. 新版 Angular CLI 與 ESBuild
-```bash
-ng build --optimization=true
-# 建構速度提升 40-60%
-```
-
-### 32. Experimental Esbuild Dev Server
-```bash
-ng serve --experimental-esbuild
-# 開發模式啟動速度提升 70%
-```
-
-### 33. ViewTransitions API 支援
-```typescript
-style({ viewTransitionName: 'page-transition' })
-```
-
-### 34. Image Optimization 增強
+### 27. Image Optimization 增強
 ```html
 <img ngSrc="/project-photo.jpg" 
      width="800" height="600"
-     priority placeholder="blur">
+     priority>
 ```
 
-### 35. Service Worker 與 PWA 增強
-```typescript
-import { SwUpdate } from '@angular/service-worker';
-swUpdate.versionUpdates.subscribe(evt => {});
-```
-
-### 36. Angular Language Service 增強
-- 模板中的 TypeScript 類型檢查更嚴格
-- 自動完成和重構功能提升
-
-### 37. 新版 Angular DevTools
-- 支援 Signals 調試
-- 效能分析工具更詳細
-
-### 38. Standalone Schematics
+### 28. Standalone Schematics
 ```bash
 ng generate component my-component --standalone
 ng generate guard auth --functional
 ```
 
-### 39. 內建效能監控
-```typescript
-import { PERFORMANCE_MARKING } from '@angular/core';
-private perf = inject(PERFORMANCE_MARKING);
-```
-
-### 40. Web Vitals 整合
+### 29. Web Vitals 整合
 ```typescript
 import { getCLS, getFID, getLCP } from 'web-vitals';
 getCLS(console.log);
 ```
 
-### 41. CSS Container Queries 支援
+### 30. Build Cache 啟用
+```typescript
+// angular.json
+"buildCache": true
+```
+
+### 31. CSS Container Queries 支援
 ```css
 @container (max-width: 400px) {
   .widget-title { font-size: 1.2rem; }
 }
 ```
 
-### 42. Differential Loading 2.0
-- 自動生成現代瀏覽器和舊瀏覽器版本
-- ES2022 目標建構
-
-### 43. Build Cache & Remote Caching
-```typescript
-"buildCache": true
-```
-
-### 44. Touch & Gesture 增強
-```typescript
-@HostListener('swipe', ['$event'])
-onSwipe(event: any) {}
-```
-
-### 45. Modern CSS Features
-- CSS Grid 子網格支援
-- CSS `clamp()` 函數
+### 32. Modern CSS Features
+- CSS `clamp()` 函數響應式設計
 - CSS 自定義屬性與主題切換
+
+### 33. 按需引入優化
+```typescript
+// 只引入需要的模組
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzTableModule } from 'ng-zorro-antd/table';
+
+### 34. angular-gridster2 信號驅動
+
+typescriptreadonly gridItems = signal<GridsterItem[]>([]);
+readonly gridOptions = signal<GridsterConfig>({});
+```
