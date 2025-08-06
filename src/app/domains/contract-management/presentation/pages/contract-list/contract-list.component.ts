@@ -9,8 +9,10 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ContractService } from '../../../application/services/contract.service';
+import { ContractService, ContractSearchService } from '../../../application';
 import { ContractId } from '../../../domain/entities/contract.entity';
+import { ContractStatusBadgeComponent } from '../../shared/components/contract-status-badge';
+import { ContractSearchComponent, ContractSearchCriteria } from '../../features/components/contract-search';
 
 @Component({
   selector: 'app-contract-list',
@@ -23,7 +25,9 @@ import { ContractId } from '../../../domain/entities/contract.entity';
     NzCardModule,
     NzTypographyModule,
     NzModalModule,
-    NzGridModule
+    NzGridModule,
+    ContractStatusBadgeComponent,
+    ContractSearchComponent
   ],
   template: `
     <nz-card>
@@ -38,9 +42,15 @@ import { ContractId } from '../../../domain/entities/contract.entity';
         </nz-col>
       </div>
 
+      <!-- 搜索組件 -->
+      <app-contract-search
+        (search)="onSearch($event)"
+        (reset)="onReset()">
+      </app-contract-search>
+
       <nz-table
         #basicTable
-        [nzData]="(contracts$ | async) || []"
+        [nzData]="filteredContracts"
         [nzLoading]="loading"
         nzShowSizeChanger
         nzShowQuickJumper
@@ -55,6 +65,7 @@ import { ContractId } from '../../../domain/entities/contract.entity';
             <th>客戶公司</th>
             <th>客戶代表</th>
             <th>總金額</th>
+            <th>狀態</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -66,6 +77,9 @@ import { ContractId } from '../../../domain/entities/contract.entity';
             <td>{{ contract.clientCompany }}</td>
             <td>{{ contract.clientRepresentative }}</td>
             <td>{{ contract.totalAmount | currency:'TWD':'symbol':'1.0-0' }}</td>
+            <td>
+              <app-contract-status-badge [status]="contract.status"></app-contract-status-badge>
+            </td>
             <td>
               <nz-space>
                 <button nz-button nzSize="small" (click)="viewContract(contract)">
@@ -94,9 +108,12 @@ export class ContractListComponent implements OnInit {
   contracts$ = this.contractService.getContracts();
   loading = false;
   total = 0;
+  filteredContracts: ContractId[] = [];
+  allContracts: ContractId[] = [];
 
   constructor(
     private contractService: ContractService,
+    private contractSearchService: ContractSearchService,
     private router: Router,
     private message: NzMessageService
   ) {}
@@ -109,10 +126,13 @@ export class ContractListComponent implements OnInit {
     this.loading = true;
     this.contracts$.subscribe({
       next: (contracts) => {
+        this.allContracts = contracts;
+        this.filteredContracts = contracts;
         this.total = contracts.length;
         this.loading = false;
       },
       error: (error) => {
+        console.error('Error loading contracts:', error);
         this.message.error('載入合約列表失敗');
         this.loading = false;
       }
@@ -137,7 +157,18 @@ export class ContractListComponent implements OnInit {
       this.message.success('合約刪除成功');
       this.loadContracts();
     } catch (error) {
+      console.error('Error deleting contract:', error);
       this.message.error('合約刪除失敗');
     }
+  }
+
+  onSearch(criteria: ContractSearchCriteria): void {
+    this.filteredContracts = this.contractSearchService.filterContracts(this.allContracts, criteria);
+    this.total = this.filteredContracts.length;
+  }
+
+  onReset(): void {
+    this.filteredContracts = this.allContracts;
+    this.total = this.allContracts.length;
   }
 }
