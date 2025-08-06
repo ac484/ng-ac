@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, UserCredential, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, UserCredential, createUserWithEmailAndPassword, signInAnonymously } from '@angular/fire/auth';
 import { from, Observable } from 'rxjs';
 
 @Injectable({
@@ -22,5 +22,9 @@ export class AuthFirebaseRepository {
 
   registerWithEmail(email: string, password: string):Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password);
+  }
+
+  loginAnonymously(): Promise<UserCredential> {
+    return signInAnonymously(this.auth);
   }
 }

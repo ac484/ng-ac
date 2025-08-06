@@ -9,7 +9,7 @@ import { UnitOfWork } from 'src/app/shared/application/unit-of-work';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginWithGoogleUseCase implements UseCase<void, AuthResponse> {
+export class LoginAnonymouslyUseCase implements UseCase<void, AuthResponse> {
   constructor(
     @Inject(DA_SERVICE_TOKEN) private readonly tokenService: ITokenService,
     private readonly authRepository: AuthFirebaseRepository,
@@ -19,15 +19,15 @@ export class LoginWithGoogleUseCase implements UseCase<void, AuthResponse> {
 
   async execute(): Promise<AuthResponse> {
     return this.unitOfWork.execute(async () => {
-      const authData = await this.authRepository.loginWithGoogle();
+      const authData = await this.authRepository.loginAnonymously();
       const user = authData.user;
       const idToken = await user.getIdToken();
 
       this.tokenService.set({
         token: idToken,
         uid: user.uid,
-        username: user.displayName || '',
-        email: user.email || ''
+        username: 'Anonymous',
+        email: ''
       });
 
       // this.eventBus.publish(new UserLoggedInEvent(UserId.create(user.uid)));

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LoginAnonymouslyUseCase } from 'src/app/domain/auth/application/use-cases/login-anonymously.use-case';
 import { LoginWithEmailUseCase } from 'src/app/domain/auth/application/use-cases/login-with-email.use-case';
 import { LoginWithGoogleUseCase } from 'src/app/domain/auth/application/use-cases/login-with-google.use-case';
 import { LogoutUseCase } from 'src/app/domain/auth/application/use-cases/logout.use-case';
@@ -12,6 +13,7 @@ export class AuthApplicationService {
   constructor(
     private readonly loginWithEmailUseCase: LoginWithEmailUseCase,
     private readonly loginWithGoogleUseCase: LoginWithGoogleUseCase,
+    private readonly loginAnonymouslyUseCase: LoginAnonymouslyUseCase,
     private readonly logoutUseCase: LogoutUseCase
   ) { }
 
