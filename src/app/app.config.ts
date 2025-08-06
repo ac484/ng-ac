@@ -31,6 +31,7 @@ import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
+import { provideStartup } from './shared/application/startup.service';
 import { errorInterceptor } from './shared/infrastructure/interceptors/error.interceptor';
 
 registerLocaleData(zh);
@@ -104,6 +105,9 @@ export const appConfig: ApplicationConfig = {
 
         // Firebase providers
         ...firebaseProviders,
+
+        // Startup Service
+        provideStartup(),
 
         // Environment specific providers
         ...(environment.providers || [])
