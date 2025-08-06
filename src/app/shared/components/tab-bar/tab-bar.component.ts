@@ -1,8 +1,10 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, NavigationEnd } from '@angular/router';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { TabData } from '../../services/tab.service';
+import { Subject, takeUntil, filter } from 'rxjs';
+import { TabService, TabData } from '../../services/tab.service';
 
 @Component({
   selector: 'app-tab-bar',
@@ -19,8 +21,7 @@ import { TabData } from '../../services/tab.service';
         (nzSelectedIndexChange)="onTabChange($event)"
         [nzType]="'card'"
         [nzAnimated]="false"
-        [nzTabBarGutter]="0"
-        [nzTabBarStyle]="{ marginBottom: '0', borderBottom: '1px solid #f0f0f0' }">
+        [nzTabBarGutter]="0">
         
         <nz-tab
           *ngFor="let tab of tabs; trackBy: trackByTabId"
@@ -40,11 +41,6 @@ import { TabData } from '../../services/tab.service';
     </div>
   `,
   styles: [`
-    .tab-bar {
-      background-color: #fff;
-      border-bottom: 1px solid #f0f0f0;
-    }
-    
     .tab-title {
       display: flex;
       align-items: center;
@@ -58,39 +54,31 @@ import { TabData } from '../../services/tab.service';
       white-space: nowrap;
     }
     
-    :host ::ng-deep .ant-tabs-tab {
-      padding: 8px 16px;
-      margin-right: 0;
-      border-right: 1px solid #f0f0f0;
-      background-color: #fafafa;
-    }
-    
-    :host ::ng-deep .ant-tabs-tab-active {
-      background-color: #fff;
-      border-bottom: 2px solid #1890ff;
-    }
-    
-    :host ::ng-deep .ant-tabs-tab-remove {
-      margin-left: 8px;
-      color: #999;
-    }
-    
-    :host ::ng-deep .ant-tabs-tab-remove:hover {
-      color: #ff4d4f;
-    }
-    
     :host ::ng-deep .ant-tabs-content-holder {
       display: none;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TabBarComponent {
-  @Input() tabs: TabData[] = [];
-  @Input() activeTabId?: string;
-  
-  @Output() tabChange = new EventEmitter<string>();
-  @Output() tabClose = new EventEmitter<string>();
+export class TabBarComponent implements OnInit, OnDestroy {
+  tabs: TabData[] = [];
+  activeTabId?: string;
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private tabService: TabService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.subscribeToTabs();
+    this.subscribeToRouter();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   get activeTabIndex(): number {
     if (!this.activeTabId) return 0;
@@ -105,11 +93,66 @@ export class TabBarComponent {
   onTabChange(index: number): void {
     const tab = this.tabs[index];
     if (tab) {
-      this.tabChange.emit(tab.id);
+      this.tabService.activateTab(tab.id);
+      this.router.navigateByUrl(tab.url);
     }
   }
 
   onTabClose(tab: TabData): void {
-    this.tabClose.emit(tab.id);
+    this.tabService.closeTab(tab.id);
+    
+    // If we closed the active tab, navigate to the new active tab
+    const activeTab = this.tabs.find(t => t.active);
+    if (activeTab) {
+      this.router.navigateByUrl(activeTab.url);
+    }
+  }
+
+  private subscribeToTabs(): void {
+    this.tabService.tabs$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(tabs => {
+        this.tabs = tabs;
+      });
+
+    this.tabService.activeTab$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(activeTab => {
+        this.activeTabId = activeTab?.id;
+      });
+  }
+
+  private subscribeToRouter(): void {
+    this.router.events
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(event => event instanceof NavigationEnd)
+      )
+      .subscribe(() => {
+        this.handleRouteChange();
+      });
+  }
+
+  private handleRouteChange(): void {
+    const currentUrl = this.router.url;
+    
+    // Check if a tab already exists for this URL
+    const existingTab = this.tabs.find(tab => tab.url === currentUrl);
+    
+    if (existingTab) {
+      // Activate existing tab
+      this.tabService.activateTab(existingTab.id);
+    } else {
+      // Create new tab based on route
+      const routeData = this.tabService.getRouteData(currentUrl);
+      if (routeData) {
+        this.tabService.createTab(
+          routeData.title,
+          currentUrl,
+          routeData.icon,
+          routeData.closable
+        );
+      }
+    }
   }
 }

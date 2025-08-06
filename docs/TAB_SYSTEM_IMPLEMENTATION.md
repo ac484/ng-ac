@@ -2,11 +2,11 @@
 
 ## 📋 概述
 
-本專案已成功實現了一個類似瀏覽器的標籤頁系統，支援多頁面標籤管理、標籤切換、關閉等功能。
+本專案已成功實現了一個類似瀏覽器的標籤頁系統，支援多頁面標籤管理、標籤切換、關閉等功能。**採用高內聚低耦合的架構設計**。
 
 ## 🏗️ 架構設計
 
-### 符合 DDD 架構的實現
+### 高內聚低耦合的實現
 
 ```
 src/app/shared/
@@ -20,7 +20,7 @@ src/app/shared/
 │   └── tab.service.ts        # 標籤管理服務
 └── components/               # 表現層
     └── tab-bar/
-        └── tab-bar.component.ts  # 標籤欄組件
+        └── tab-bar.component.ts  # 標籤欄組件（高內聚）
 ```
 
 ## 🎯 核心功能
@@ -63,30 +63,50 @@ export class TabService {
 }
 ```
 
-### 2. LayoutBasicComponent 整合
+### 2. TabBarComponent 高內聚設計
 
-標籤頁系統已整合到主佈局組件中：
+**所有標籤頁邏輯都集中在 TabBarComponent 中**：
+
+```typescript
+@Component({
+  selector: 'app-tab-bar',
+  template: `...`,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class TabBarComponent implements OnInit, OnDestroy {
+  // 自包含的標籤邏輯
+  private subscribeToTabs(): void { /* ... */ }
+  private subscribeToRouter(): void { /* ... */ }
+  private handleRouteChange(): void { /* ... */ }
+  
+  onTabChange(index: number): void { /* ... */ }
+  onTabClose(tab: TabData): void { /* ... */ }
+}
+```
+
+### 3. LayoutBasicComponent 簡潔整合
+
+佈局組件只負責結構，不包含標籤邏輯：
 
 ```typescript
 @Component({
   template: `
     <layout-default>
       <!-- 側邊欄 -->
-      <!-- 標籤欄 -->
-      <app-tab-bar
-        [tabs]="tabs"
-        [activeTabId]="activeTabId"
-        (tabChange)="onTabChange($event)"
-        (tabClose)="onTabClose($event)">
-      </app-tab-bar>
+      <!-- 標籤欄（自包含） -->
+      <app-tab-bar></app-tab-bar>
       <!-- 內容區域 -->
       <router-outlet />
     </layout-default>
   `
 })
+export class LayoutBasicComponent {
+  // 只包含佈局相關邏輯
+  // 不包含任何標籤頁邏輯
+}
 ```
 
-### 3. 路由映射
+### 4. 路由映射
 
 系統自動將路由映射為標籤：
 
@@ -127,9 +147,10 @@ this.router.navigate(['/dashboard/contract-management']);
 點擊標籤即可切換到對應頁面：
 
 ```typescript
-// 點擊標籤時
-onTabChange(tabId: string) {
-  const tab = this.tabs.find(t => t.id === tabId);
+// TabBarComponent 內部處理
+onTabChange(index: number) {
+  const tab = this.tabs[index];
+  this.tabService.activateTab(tab.id);
   this.router.navigateByUrl(tab.url);
 }
 ```
@@ -138,9 +159,9 @@ onTabChange(tabId: string) {
 點擊標籤的關閉按鈕即可關閉標籤：
 
 ```typescript
-// 關閉標籤時
-onTabClose(tabId: string) {
-  this.tabService.closeTab(tabId);
+// TabBarComponent 內部處理
+onTabClose(tab: TabData) {
+  this.tabService.closeTab(tab.id);
   // 如果關閉的是活躍標籤，自動切換到下一個標籤
 }
 ```
@@ -199,8 +220,8 @@ trackByTabId(index: number, tab: TabData): string {
 
 ### 1. 單元測試
 - TabService 的方法測試
-- TabBarComponent 的交互測試
-- LayoutBasicComponent 的整合測試
+- TabBarComponent 的交互測試（自包含測試）
+- LayoutBasicComponent 的佈局測試
 
 ### 2. 整合測試
 - 路由導航與標籤創建的整合
@@ -233,20 +254,29 @@ trackByTabId(index: number, tab: TabData): string {
 - 狀態管理：標籤的增刪改查
 
 ### 3. 表現層 (Presentation)
-- `TabBarComponent`：標籤的 UI 展示
-- `LayoutBasicComponent`：標籤與佈局的整合
+- `TabBarComponent`：**高內聚的標籤 UI 和邏輯**
+- `LayoutBasicComponent`：**只負責佈局，不包含標籤邏輯**
 
 ### 4. 基礎設施層 (Infrastructure)
 - localStorage：標籤狀態的持久化
 - 路由系統：標籤與 URL 的同步
 
-## ✅ 實現成果
+## ✅ 高內聚低耦合的實現成果
 
-1. **高效簡潔**：使用 ng-zorro-antd 組件，避免重複造輪子
-2. **符合 DDD**：嚴格遵循領域驅動設計架構
-3. **用戶友好**：類似瀏覽器的標籤體驗
-4. **性能優化**：使用 OnPush 檢測和 trackBy 函數
-5. **狀態持久化**：標籤狀態自動保存和恢復
-6. **路由同步**：URL 與標籤狀態完全同步
+### 🎯 高內聚
+1. **TabBarComponent 自包含**：所有標籤頁邏輯都集中在一個組件中
+2. **單一職責**：每個組件都有明確的職責範圍
+3. **封裝性**：標籤邏輯對外部組件透明
 
-這個標籤頁系統為整個應用程式提供了強大的多頁面管理能力，提升了用戶的工作效率。
+### 🔗 低耦合
+1. **LayoutBasicComponent 簡潔**：只負責佈局，不包含標籤邏輯
+2. **組件獨立**：標籤組件可以獨立使用和測試
+3. **依賴注入**：通過服務進行組件間通信
+
+### 🚀 架構優勢
+1. **可維護性**：標籤邏輯集中，易於維護和擴展
+2. **可測試性**：組件職責清晰，便於單元測試
+3. **可重用性**：TabBarComponent 可以在其他佈局中重用
+4. **可擴展性**：新增標籤功能只需修改 TabBarComponent
+
+這個標籤頁系統為整個應用程式提供了強大的多頁面管理能力，同時嚴格遵循高內聚低耦合的設計原則。

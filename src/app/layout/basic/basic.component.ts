@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { RouterLink, RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { I18nPipe, SettingsService, User } from '@delon/theme';
 import { LayoutDefaultModule, LayoutDefaultOptions } from '@delon/theme/layout-default';
 import { SettingDrawerModule } from '@delon/theme/setting-drawer';
@@ -9,7 +9,6 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { Subject, takeUntil, filter } from 'rxjs';
 
 import { HeaderClearStorageComponent } from './widgets/clear-storage.component';
 import { HeaderFullScreenComponent } from './widgets/fullscreen.component';
@@ -21,7 +20,6 @@ import { HeaderSearchComponent } from './widgets/search.component';
 import { HeaderTaskComponent } from './widgets/task.component';
 import { HeaderUserComponent } from './widgets/user.component';
 import { TabBarComponent } from '../../shared/components/tab-bar/tab-bar.component';
-import { TabService, TabData } from '../../shared/services/tab.service';
 
 @Component({
   selector: 'layout-basic',
@@ -95,12 +93,7 @@ import { TabService, TabData } from '../../shared/services/tab.service';
       </ng-template>
       <ng-template #contentTpl>
         <div class="tab-container">
-          <app-tab-bar
-            [tabs]="tabs"
-            [activeTabId]="activeTabId"
-            (tabChange)="onTabChange($event)"
-            (tabClose)="onTabClose($event)">
-          </app-tab-bar>
+          <app-tab-bar></app-tab-bar>
           <div class="content-area">
             <router-outlet />
           </div>
@@ -122,7 +115,6 @@ import { TabService, TabData } from '../../shared/services/tab.service';
     .content-area {
       flex: 1;
       overflow: auto;
-      background-color: #fff;
     }
   `],
   imports: [
@@ -148,99 +140,15 @@ import { TabService, TabData } from '../../shared/services/tab.service';
     TabBarComponent
   ]
 })
-export class LayoutBasicComponent implements OnInit, OnDestroy {
+export class LayoutBasicComponent {
   private readonly settings = inject(SettingsService);
-  private readonly router = inject(Router);
-  private readonly tabService = inject(TabService);
-  private destroy$ = new Subject<void>();
-
   options: LayoutDefaultOptions = {
     logoExpanded: `./assets/logo-full.svg`,
     logoCollapsed: `./assets/logo.svg`
   };
   searchToggleStatus = false;
   showSettingDrawer = !environment.production;
-  
-  tabs: TabData[] = [];
-  activeTabId?: string;
-
   get user(): User {
     return this.settings.user;
-  }
-
-  ngOnInit(): void {
-    this.subscribeToTabs();
-    this.subscribeToRouter();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  onTabChange(tabId: string): void {
-    const tab = this.tabs.find(t => t.id === tabId);
-    if (tab) {
-      this.tabService.activateTab(tabId);
-      this.router.navigateByUrl(tab.url);
-    }
-  }
-
-  onTabClose(tabId: string): void {
-    this.tabService.closeTab(tabId);
-    
-    // If we closed the active tab, navigate to the new active tab
-    const activeTab = this.tabs.find(t => t.active);
-    if (activeTab) {
-      this.router.navigateByUrl(activeTab.url);
-    }
-  }
-
-  private subscribeToTabs(): void {
-    this.tabService.tabs$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(tabs => {
-        this.tabs = tabs;
-      });
-
-    this.tabService.activeTab$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(activeTab => {
-        this.activeTabId = activeTab?.id;
-      });
-  }
-
-  private subscribeToRouter(): void {
-    this.router.events
-      .pipe(
-        takeUntil(this.destroy$),
-        filter(event => event instanceof NavigationEnd)
-      )
-      .subscribe(() => {
-        this.handleRouteChange();
-      });
-  }
-
-  private handleRouteChange(): void {
-    const currentUrl = this.router.url;
-    
-    // Check if a tab already exists for this URL
-    const existingTab = this.tabs.find(tab => tab.url === currentUrl);
-    
-    if (existingTab) {
-      // Activate existing tab
-      this.tabService.activateTab(existingTab.id);
-    } else {
-      // Create new tab based on route
-      const routeData = this.tabService.getRouteData(currentUrl);
-      if (routeData) {
-        this.tabService.createTab(
-          routeData.title,
-          currentUrl,
-          routeData.icon,
-          routeData.closable
-        );
-      }
-    }
   }
 }
