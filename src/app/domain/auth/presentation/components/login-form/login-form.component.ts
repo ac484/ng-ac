@@ -72,7 +72,6 @@ import { LoginCommand } from 'src/app/domain/auth/application/dto/commands/login
       align-items: center;
       justify-content: center;
       height: 100vh;
-      background-color: #f0f2f5;
     }
     .wrap {
       width: 368px;
@@ -92,7 +91,6 @@ import { LoginCommand } from 'src/app/domain/auth/application/dto/commands/login
     }
     .title {
       font-size: 33px;
-      color: rgba(0, 0, 0, .85);
       font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
       font-weight: 600;
       position: relative;
@@ -100,7 +98,6 @@ import { LoginCommand } from 'src/app/domain/auth/application/dto/commands/login
     }
     .desc {
       font-size: 14px;
-      color: rgba(0, 0, 0, .45);
       margin-top: 12px;
       margin-bottom: 40px;
     }
@@ -114,7 +111,6 @@ import { LoginCommand } from 'src/app/domain/auth/application/dto/commands/login
     }
     .icon {
         font-size: 24px;
-        color: rgba(0, 0, 0, .2);
         margin-left: 16px;
         vertical-align: middle;
         cursor: pointer;

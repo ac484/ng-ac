@@ -12,24 +12,21 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
                     <nz-statistic
                         nzTitle="總銷售額"
                         [nzValue]="112893"
-                        nzPrefix="¥"
-                        [nzValueStyle]="{ color: '#3f8600' }">
+                        nzPrefix="¥">
                     </nz-statistic>
                 </nz-card>
                 
                 <nz-card class="stat-card">
                     <nz-statistic
                         nzTitle="訪問量"
-                        [nzValue]="8846"
-                        [nzValueStyle]="{ color: '#cf1322' }">
+                        [nzValue]="8846">
                     </nz-statistic>
                 </nz-card>
                 
                 <nz-card class="stat-card">
                     <nz-statistic
                         nzTitle="支付筆數"
-                        [nzValue]="11280"
-                        [nzValueStyle]="{ color: '#1890ff' }">
+                        [nzValue]="11280">
                     </nz-statistic>
                 </nz-card>
                 
@@ -37,8 +34,7 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
                     <nz-statistic
                         nzTitle="運營活動效果"
                         [nzValue]="93"
-                        nzSuffix="%"
-                        [nzValueStyle]="{ color: '#722ed1' }">
+                        nzSuffix="%">
                     </nz-statistic>
                 </nz-card>
             </div>

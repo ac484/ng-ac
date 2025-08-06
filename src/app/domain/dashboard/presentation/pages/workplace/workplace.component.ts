@@ -4,6 +4,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @Component({
     selector: 'app-workplace',
@@ -20,8 +21,8 @@ import { NzListModule } from 'ng-zorro-antd/list';
                         </div>
                     </div>
                     <div class="quick-actions">
-                        <button class="btn btn-primary">開始工作</button>
-                        <button class="btn btn-default">查看報告</button>
+                        <button nz-button nzType="primary">開始工作</button>
+                        <button nz-button nzType="default">查看報告</button>
                     </div>
                 </div>
             </nz-card>
@@ -35,9 +36,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
                                 <nz-list-item-meta>
                                     <nz-list-item-meta-title>
                                         {{ item.title }}
-                                        <nz-tag [nzColor]="item.priority === 'high' ? 'red' : item.priority === 'medium' ? 'orange' : 'green'">
-                                            {{ item.priority }}
-                                        </nz-tag>
+                                        <nz-tag>{{ item.priority }}</nz-tag>
                                     </nz-list-item-meta-title>
                                     <nz-list-item-meta-description>
                                         {{ item.description }}
@@ -89,41 +88,13 @@ import { NzListModule } from 'ng-zorro-antd/list';
         }
         .user-details h3 {
             margin: 0 0 8px 0;
-            color: #1890ff;
         }
         .user-details p {
             margin: 0;
-            color: #666;
         }
         .quick-actions {
             display: flex;
             gap: 8px;
-        }
-        .btn {
-            padding: 8px 16px;
-            border: 1px solid #d9d9d9;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background-color: #1890ff;
-            color: white;
-            border-color: #1890ff;
-        }
-        .btn-primary:hover {
-            background-color: #40a9ff;
-            border-color: #40a9ff;
-        }
-        .btn-default {
-            background-color: white;
-            color: #666;
-        }
-        .btn-default:hover {
-            background-color: #f5f5f5;
-            border-color: #40a9ff;
-            color: #40a9ff;
         }
         .workplace-grid {
             display: grid;
@@ -133,7 +104,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
         }
     `],
     standalone: true,
-    imports: [CommonModule, NzCardModule, NzAvatarModule, NzTagModule, NzListModule]
+    imports: [CommonModule, NzCardModule, NzAvatarModule, NzTagModule, NzListModule, NzButtonModule]
 })
 export class WorkplaceComponent {
     currentTime = new Date();

@@ -54,19 +54,19 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
                 <div class="status-grid">
                     <div class="status-item">
                         <span>資料庫連接</span>
-                        <nz-tag [nzColor]="'green'">正常</nz-tag>
+                        <nz-tag>正常</nz-tag>
                     </div>
                     <div class="status-item">
                         <span>快取服務</span>
-                        <nz-tag [nzColor]="'green'">正常</nz-tag>
+                        <nz-tag>正常</nz-tag>
                     </div>
                     <div class="status-item">
                         <span>檔案服務</span>
-                        <nz-tag [nzColor]="'orange'">警告</nz-tag>
+                        <nz-tag>警告</nz-tag>
                     </div>
                     <div class="status-item">
                         <span>郵件服務</span>
-                        <nz-tag [nzColor]="'red'">異常</nz-tag>
+                        <nz-tag>異常</nz-tag>
                     </div>
                 </div>
                 <p style="margin-top: 16px;">當前時間：{{ currentTime | date:'yyyy-MM-dd HH:mm:ss' }}</p>
@@ -85,12 +85,11 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
         }
         .monitor-item {
             padding: 16px;
-            border: 1px solid #f0f0f0;
+            border: 1px solid var(--border-color-base);
             border-radius: 6px;
         }
         .monitor-item h3 {
             margin-bottom: 8px;
-            color: #1890ff;
         }
         .status-grid {
             display: grid;
@@ -102,7 +101,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
             justify-content: space-between;
             align-items: center;
             padding: 8px;
-            border: 1px solid #f0f0f0;
+            border: 1px solid var(--border-color-base);
             border-radius: 4px;
         }
     `],

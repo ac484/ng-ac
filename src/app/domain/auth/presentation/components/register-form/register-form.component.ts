@@ -84,7 +84,6 @@ import { AuthFirebaseRepository } from 'src/app/domain/auth/infrastructure/repos
       align-items: center;
       justify-content: center;
       height: 100vh;
-      background-color: #f0f2f5;
     }
     .wrap {
       width: 368px;
@@ -104,7 +103,6 @@ import { AuthFirebaseRepository } from 'src/app/domain/auth/infrastructure/repos
     }
     .title {
       font-size: 33px;
-      color: rgba(0, 0, 0, .85);
       font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
       font-weight: 600;
       position: relative;
@@ -112,7 +110,6 @@ import { AuthFirebaseRepository } from 'src/app/domain/auth/infrastructure/repos
     }
     .desc {
       font-size: 14px;
-      color: rgba(0, 0, 0, .45);
       margin-top: 12px;
       margin-bottom: 40px;
     }
@@ -125,7 +122,6 @@ import { AuthFirebaseRepository } from 'src/app/domain/auth/infrastructure/repos
         text-align: right;
     }
     .login {
-        color: #1890ff;
     }
     `
   ],
