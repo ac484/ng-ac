@@ -1,0 +1,22 @@
+<ul nz-menu [nzMode]="'inline'" [nzTheme]="'dark'" [nzInlineCollapsed]="isCollapsed">
+    <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+        <ul>
+            <li nz-menu-item nzMatchRouter>
+                <a routerLink="/dashboard/analysis">分析頁</a>
+            </li>
+            <li nz-menu-item nzMatchRouter>
+                <a routerLink="/dashboard/monitor">監控頁</a>
+            </li>
+            <li nz-menu-item nzMatchRouter>
+                <a routerLink="/dashboard/workplace">工作臺</a>
+            </li>
+        </ul>
+    </li>
+    <li nz-submenu nzOpen nzTitle="表單頁" nzIcon="form">
+        <ul>
+            <li nz-menu-item nzMatchRouter>
+                <a>基礎表單</a>
+            </li>
+        </ul>
+    </li>
+</ul>

@@ -1,20 +1,18 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { FooterComponent } from '../footer/footer.component';
-import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-main-layout',
-  template: `
-    <app-header></app-header>
-    <app-sidebar></app-sidebar>
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-    <app-footer></app-footer>
-  `,
-  standalone: true,
-  imports: [HeaderComponent, SidebarComponent, FooterComponent, RouterModule],
+    selector: 'app-main-layout',
+    templateUrl: './main-layout.component.html',
+    styleUrls: ['./main-layout.component.less'],
+    standalone: true,
+    imports: [CommonModule, RouterModule, NzLayoutModule, HeaderComponent, SidebarComponent]
 })
-export class MainLayoutComponent {}
+export class MainLayoutComponent {
+    isCollapsed = false;
+}
+
