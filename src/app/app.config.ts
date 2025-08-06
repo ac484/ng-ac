@@ -37,6 +37,7 @@ import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
+import { CONTRACT_MANAGEMENT_PROVIDERS } from './domains/contract-management';
 
 const defaultLang: AlainProvideLang = {
   abbr: 'zh-CN',
@@ -76,6 +77,7 @@ const providers: Array<Provider | EnvironmentProviders> = [
   provideSTWidgets(...ST_WIDGETS),
   provideSFConfig({ widgets: SF_WIDGETS }),
   provideStartup(),
+  ...CONTRACT_MANAGEMENT_PROVIDERS,
   ...(environment.providers || [])
 ];
 

@@ -4,7 +4,7 @@ import { DashboardAnalysisComponent } from './analysis/analysis.component';
 import { DashboardMonitorComponent } from './monitor/monitor.component';
 import { DashboardV1Component } from './v1/v1.component';
 import { DashboardWorkplaceComponent } from './workplace/workplace.component';
-import { ContractListComponent } from '../../domains/contract-management';
+import { ContractListComponent, ContractCreateComponent } from '../../domains/contract-management';
 import { TaskListComponent } from '../../domains/task-management';
 import { BudgetListComponent } from '../../domains/budget-management';
 
@@ -14,7 +14,13 @@ export const routes: Routes = [
   { path: 'analysis', component: DashboardAnalysisComponent },
   { path: 'monitor', component: DashboardMonitorComponent },
   { path: 'workplace', component: DashboardWorkplaceComponent },
-  { path: 'contract-management', component: ContractListComponent },
+  { 
+    path: 'contract-management', 
+    children: [
+      { path: '', component: ContractListComponent },
+      { path: 'create', component: ContractCreateComponent }
+    ]
+  },
   { path: 'task-management', component: TaskListComponent },
   { path: 'budget-management', component: BudgetListComponent }
 ];
