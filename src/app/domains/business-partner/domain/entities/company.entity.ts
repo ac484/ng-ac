@@ -8,6 +8,13 @@ import { Contact } from './contact.entity';
  * 公司創建屬性
  * 極簡設計，只包含必要欄位
  */
+// 極簡的請款工作流程狀態
+export interface PaymentWorkflowState {
+    currentState: string;
+    availableTransitions: string[];
+    stateHistory: string[];
+}
+
 export interface CreateCompanyProps {
     companyName: string;
     businessRegistrationNumber: string;
@@ -18,6 +25,8 @@ export interface CreateCompanyProps {
     fax?: string;
     website?: string;
     contacts?: Contact[];
+    // 簡化的請款工作流程狀態
+    paymentWorkflow?: PaymentWorkflowState;
 }
 
 /**
@@ -36,6 +45,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
         public readonly fax: string,
         public readonly website: string,
         public readonly contacts: readonly Contact[],
+        public readonly paymentWorkflow: PaymentWorkflowState | null,
         public readonly createdAt: Date,
         public readonly updatedAt: Date
     ) {
@@ -61,6 +71,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
             props.fax?.trim() || '',
             props.website?.trim() || '',
             props.contacts || [],
+            props.paymentWorkflow || null,
             now,
             now
         );
@@ -84,6 +95,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
             props.fax?.trim() ?? this.fax,
             props.website?.trim() ?? this.website,
             this.contacts,
+            props.paymentWorkflow ?? this.paymentWorkflow,
             this.createdAt,
             new Date()
         );
@@ -101,6 +113,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
             this.fax,
             this.website,
             this.contacts,
+            this.paymentWorkflow,
             this.createdAt,
             new Date()
         );
@@ -127,6 +140,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
             this.fax,
             this.website,
             updatedContacts,
+            this.paymentWorkflow,
             this.createdAt,
             new Date()
         );
