@@ -111,7 +111,8 @@ import { finalize } from 'rxjs/operators';
                 </td>
                 <td>{{ company.businessPhone }}</td>
                 <td>
-                  <div class="action-buttons">
+                  
+                <div class="action-buttons">
                     <button nz-button nzSize="small" nzType="default" (click)="editCompany(company)">
                       <span nz-icon nzType="edit"></span>
                       編輯
@@ -663,9 +664,7 @@ import { finalize } from 'rxjs/operators';
     .empty-contacts {
       text-align: center;
       padding: 60px 40px;
-      background: #fafafa;
       border-radius: 8px;
-      border: 2px dashed #d9d9d9;
     }
 
     .empty-contacts .empty-icon {
@@ -696,7 +695,6 @@ import { finalize } from 'rxjs/operators';
       align-items: center;
       margin-bottom: 16px;
       padding: 12px 16px;
-      background: #f5f5f5;
       border-radius: 6px;
     }
 
@@ -716,11 +714,9 @@ import { finalize } from 'rxjs/operators';
     }
 
     .contact-card {
-      border: 1px solid #d9d9d9;
       border-radius: 6px;
       padding: 16px;
       margin-bottom: 16px;
-      background: #fafafa;
     }
 
     .contact-card .contact-header {
@@ -762,7 +758,6 @@ import { finalize } from 'rxjs/operators';
 
     .contact-section {
       padding: 16px;
-      background: #fafafa;
       border-radius: 6px;
     }
 
@@ -776,11 +771,6 @@ import { finalize } from 'rxjs/operators';
     .inline-add-contact-btn:hover {
       color: #40a9ff;
       border-color: #40a9ff;
-    }
-
-    .adding-contact-row {
-      background-color: #f6ffed;
-      border: 1px solid #b7eb8f;
     }
 
     .adding-contact-row td {

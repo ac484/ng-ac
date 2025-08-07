@@ -28,8 +28,8 @@ describe('CompanyListComponent - Contact Management', () => {
         fax: '',
         website: '',
         contractCount: 1,
-        latestContractDate: new Date(),
-        partnerSince: new Date(),
+        latestContractDate: new Date().toISOString(),
+        partnerSince: new Date().toISOString(),
         cooperationScope: '',
         businessModel: '',
         creditScore: 85,
@@ -44,7 +44,9 @@ describe('CompanyListComponent - Contact Management', () => {
                 phone: '123-456-7890',
                 isPrimary: true
             }
-        ]
+        ],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
     };
 
     beforeEach(async () => {
