@@ -205,6 +205,12 @@ export class CompanyApplicationService {
 
     // 重新載入資料
     refreshCompanies(): void {
+        // 防止重複調用
+        if (this.loadingSignal()) {
+            console.log('Already loading, skipping refresh');
+            return;
+        }
+
         this.loadingSignal.set(true);
         this.errorSignal.set(null);
 

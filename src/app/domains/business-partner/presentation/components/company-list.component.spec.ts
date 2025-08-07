@@ -11,7 +11,7 @@ import { CompanyResponseDto } from '../../application/dto/create-company.dto';
 import { CompanyStatusEnum } from '../../domain/value-objects/company-status.vo';
 import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
 
-describe('CompanyListComponent - Contact Management', () => {
+describe('CompanyListComponent', () => {
     let component: CompanyListComponent;
     let fixture: ComponentFixture<CompanyListComponent>;
     let mockCompanyService: jasmine.SpyObj<CompanyApplicationService>;
@@ -91,122 +91,52 @@ describe('CompanyListComponent - Contact Management', () => {
         expect(component).toBeTruthy();
     });
 
-    describe('Contact Management', () => {
-        beforeEach(() => {
-            component.manageContacts(mockCompany);
+    describe('Company Management', () => {
+        it('should open edit modal when editCompany is called', () => {
+            component.editCompany(mockCompany);
+            expect(component.isModalVisible()).toBe(true);
+            expect(component.isEditMode()).toBe(true);
         });
 
-        it('should open contact modal when manageContacts is called', () => {
-            expect(component.isContactModalVisible()).toBe(true);
-            expect(component.currentCompanyId()).toBe('1');
+        it('should open create modal when showCreateModal is called', () => {
+            component.showCreateModal();
+            expect(component.isModalVisible()).toBe(true);
+            expect(component.isEditMode()).toBe(false);
         });
 
-        it('should initialize contact form with existing contacts', () => {
-            expect(component.contactsFormArray.length).toBe(1);
-            expect(component.contactsFormArray.at(0).get('name')?.value).toBe('John Doe');
-            expect(component.contactsFormArray.at(0).get('email')?.value).toBe('john@test.com');
-        });
+        it('should close modal when handleCancel is called', () => {
+            component.showCreateModal();
+            expect(component.isModalVisible()).toBe(true);
 
-        it('should add new contact when addContact is called', () => {
-            const initialLength = component.contactsFormArray.length;
-
-            component.addContact();
-
-            expect(component.contactsFormArray.length).toBe(initialLength + 1);
-        });
-
-        it('should remove contact when removeContact is called', () => {
-            // Add another contact first
-            component.addContact();
-            expect(component.contactsFormArray.length).toBe(2);
-
-            component.removeContact(1);
-
-            expect(component.contactsFormArray.length).toBe(1);
-        });
-
-        it('should not remove the last contact but reset it instead', () => {
-            component.removeContact(0);
-
-            expect(component.contactsFormArray.length).toBe(1);
-            expect(component.contactsFormArray.at(0).get('name')?.value).toBe('');
-            expect(mockMessageService.info).toHaveBeenCalledWith('已重置聯絡人表單');
-        });
-
-        it('should save contacts when handleContactSave is called', () => {
-            mockCompanyService.updateCompany.and.returnValue(of(mockCompany));
-
-            component.contactsFormArray.at(0).patchValue({
-                name: 'Jane Doe',
-                title: 'Director',
-                email: 'jane@test.com',
-                phone: '098-765-4321',
-                isPrimary: false
-            });
-
-            component.handleContactSave();
-
-            expect(mockCompanyService.updateCompany).toHaveBeenCalledWith('1', {
-                contacts: jasmine.any(Array)
-            });
-        });
-
-        it('should close contact modal when handleContactCancel is called', () => {
-            component.handleContactCancel();
-
-            expect(component.isContactModalVisible()).toBe(false);
-            expect(component.currentCompanyId()).toBe(null);
+            component.handleCancel();
+            expect(component.isModalVisible()).toBe(false);
         });
     });
 
-    describe('Contact Form Validation', () => {
+    describe('Inline Contact Management', () => {
         beforeEach(() => {
-            component.manageContacts(mockCompany);
+            // Expand the company row to show contacts
+            component.onExpandChange(mockCompany.id, true);
         });
 
-        it('should show error when trying to save invalid contact form', () => {
-            // Clear the form to make it invalid
-            component.contactsFormArray.at(0).patchValue({
-                name: '',
-                title: '',
-                email: 'invalid-email',
-                phone: '',
-                isPrimary: false
-            });
-
-            component.handleContactSave();
-
-            expect(mockMessageService.error).toHaveBeenCalledWith('請檢查聯絡人資料');
+        it('should add new contact when addInlineContact is called', () => {
+            component.addInlineContact(mockCompany.id);
+            expect(component.editingContactIndex()).toBe(-2);
+            expect(component.currentEditingCompanyId()).toBe(mockCompany.id);
         });
 
-        it('should filter out empty contacts when saving', () => {
-            mockCompanyService.updateCompany.and.returnValue(of(mockCompany));
+        it('should edit contact when editInlineContact is called', () => {
+            component.editInlineContact(mockCompany.id, 0, mockCompany.contacts[0]);
+            expect(component.editingContactIndex()).toBe(0);
+            expect(component.currentEditingCompanyId()).toBe(mockCompany.id);
+        });
 
-            // Add an empty contact
-            component.addContact();
+        it('should cancel inline edit when cancelInlineEdit is called', () => {
+            component.editInlineContact(mockCompany.id, 0, mockCompany.contacts[0]);
+            expect(component.editingContactIndex()).toBe(0);
 
-            // Keep first contact valid, leave second empty
-            component.contactsFormArray.at(0).patchValue({
-                name: 'Valid Contact',
-                title: 'Manager',
-                email: 'valid@test.com',
-                phone: '123-456-7890',
-                isPrimary: true
-            });
-
-            component.handleContactSave();
-
-            expect(mockCompanyService.updateCompany).toHaveBeenCalledWith('1', {
-                contacts: [
-                    {
-                        name: 'Valid Contact',
-                        title: 'Manager',
-                        email: 'valid@test.com',
-                        phone: '123-456-7890',
-                        isPrimary: true
-                    }
-                ]
-            });
+            component.cancelInlineEdit();
+            expect(component.editingContactIndex()).toBe(-1);
         });
     });
 });
