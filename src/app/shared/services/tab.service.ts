@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Tab } from '../domain/entities/tab.entity';
-
 export interface TabData {
   id: string;
   title: string;

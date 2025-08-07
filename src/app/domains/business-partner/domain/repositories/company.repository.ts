@@ -1,3 +1,4 @@
+import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Company } from '../entities/company.entity';
@@ -14,8 +15,6 @@ export abstract class CompanyRepository {
   abstract delete(id: string): Observable<void>;
   abstract search(query: string): Observable<Company[]>;
 }
-
-import { InjectionToken } from '@angular/core';
 
 // 注入令牌
 export const COMPANY_REPOSITORY = new InjectionToken<CompanyRepository>('COMPANY_REPOSITORY');

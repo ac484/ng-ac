@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { CompanyRepository, COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
+import { COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
 
 /**
  * 刪除公司用例

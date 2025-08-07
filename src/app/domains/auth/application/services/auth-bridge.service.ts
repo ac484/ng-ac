@@ -9,7 +9,7 @@ import {
   signInAnonymously
 } from '@angular/fire/auth';
 import { DA_SERVICE_TOKEN } from '@delon/auth';
-import { Observable, from, map, switchMap, of } from 'rxjs';
+import { Observable, from, map, of } from 'rxjs';
 
 import { User } from '../../domain/entities/user.entity';
 import { Email } from '../../domain/value-objects/email.vo';

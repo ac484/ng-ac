@@ -20,7 +20,6 @@ import {
   CreateContractProps,
   ContractEntity
 } from '../../../../domain/entities/contract.entity';
-import { generateContractNumber, formatContractNumber } from '../../../../domain/utils/contract-number.utils';
 import { ContractTypeSelectComponent } from '../../../../presentation/shared/components/contract-type-select';
 
 @Component({
@@ -190,7 +189,7 @@ export class ContractFormComponent implements OnInit {
 
   contractForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.initForm();

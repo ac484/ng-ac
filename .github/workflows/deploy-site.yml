@@ -28,7 +28,7 @@ jobs:
         with:
           login: ${{ secrets.SURGE_LOGIN }}
           token: ${{ secrets.SURGE_TOKEN }}
-          domain: https://ng-alain.surge.sh
+          domain: https://ng-ac.surge.sh
           project: ./dist/ng-alain/browser
 
       - name: Replace base href for gh-pages

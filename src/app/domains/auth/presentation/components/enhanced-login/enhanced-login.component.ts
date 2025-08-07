@@ -13,9 +13,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { finalize } from 'rxjs';
 
-import { LoginCommand } from '../../../application/dto/commands/login.command';
 import { AuthBridgeService } from '../../../application/services/auth-bridge.service';
 
 /**
@@ -32,25 +30,14 @@ import { AuthBridgeService } from '../../../application/services/auth-bridge.ser
       </div>
 
       <!-- 錯誤提示 -->
-      <nz-alert
-        *ngIf="error"
-        [nzMessage]="error"
-        nzType="error"
-        nzShowIcon
-        class="mb-3"
-      ></nz-alert>
+      <nz-alert *ngIf="error" [nzMessage]="error" nzType="error" nzShowIcon class="mb-3"></nz-alert>
 
       <!-- 登入表單 -->
       <nz-form [formGroup]="form" (ngSubmit)="onSubmit()">
         <nz-form-item>
           <nz-form-control nzErrorTip="Please enter your email">
             <nz-input-group nzPrefixIcon="user">
-              <input
-                nz-input
-                formControlName="email"
-                type="email"
-                placeholder="Email (admin@company.com for admin)"
-              />
+              <input nz-input formControlName="email" type="email" placeholder="Email (admin@company.com for admin)" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -58,12 +45,7 @@ import { AuthBridgeService } from '../../../application/services/auth-bridge.ser
         <nz-form-item>
           <nz-form-control nzErrorTip="Please enter your password">
             <nz-input-group nzPrefixIcon="lock">
-              <input
-                nz-input
-                formControlName="password"
-                type="password"
-                placeholder="Password (123456 for admin)"
-              />
+              <input nz-input formControlName="password" type="password" placeholder="Password (123456 for admin)" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -78,14 +60,7 @@ import { AuthBridgeService } from '../../../application/services/auth-bridge.ser
 
         <nz-form-item>
           <nz-form-control>
-            <button
-              nz-button
-              nzType="primary"
-              nzSize="large"
-              [nzLoading]="loading"
-              [disabled]="form.invalid"
-              class="login-btn"
-            >
+            <button nz-button nzType="primary" nzSize="large" [nzLoading]="loading" [disabled]="form.invalid" class="login-btn">
               {{ 'login.signin' | i18n }}
             </button>
           </nz-form-control>
@@ -96,13 +71,7 @@ import { AuthBridgeService } from '../../../application/services/auth-bridge.ser
       <nz-divider nzText="OR"></nz-divider>
 
       <!-- Google 登入 -->
-      <button
-        nz-button
-        nzSize="large"
-        [nzLoading]="googleLoading"
-        (click)="signInWithGoogle()"
-        class="google-btn"
-      >
+      <button nz-button nzSize="large" [nzLoading]="googleLoading" (click)="signInWithGoogle()" class="google-btn">
         <nz-icon nzType="google" nzTheme="outline"></nz-icon>
         Sign in with Google
       </button>
@@ -110,7 +79,7 @@ import { AuthBridgeService } from '../../../application/services/auth-bridge.ser
       <!-- 快速登入提示 -->
       <div class="quick-login-hint">
         <p><strong>Quick Login:</strong></p>
-        <p>Admin: admin@company.com / 123456</p>
+        <p>Admin: admin&#64;company.com / 123456</p>
         <p>Or use your Google account</p>
       </div>
     </div>
@@ -222,7 +191,6 @@ export class EnhancedLoginComponent {
 
     try {
       const { email, password } = this.form.value;
-      const command = LoginCommand.createEmailLogin(email!, password!);
 
       const result = await this.authBridge.signInWithEmailPassword(email!, password!).toPromise();
 

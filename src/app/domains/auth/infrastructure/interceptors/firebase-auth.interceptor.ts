@@ -2,7 +2,6 @@ import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { of, from, catchError } from 'rxjs';
 
-import { LoginCommand } from '../../application/dto/commands/login.command';
 import { AuthBridgeService } from '../../application/services/auth-bridge.service';
 
 /**
@@ -16,9 +15,6 @@ export const firebaseAuthInterceptor: HttpInterceptorFn = (req, next) => {
     const body = req.body as any;
 
     try {
-      // 創建登入命令
-      const command = LoginCommand.createEmailLogin(body.userName, body.password);
-
       // 執行登入
       return from(authBridge.signInWithEmailPassword(body.userName, body.password)).pipe(
         catchError(error => {

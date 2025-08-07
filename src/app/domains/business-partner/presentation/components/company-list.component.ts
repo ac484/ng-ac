@@ -806,7 +806,7 @@ export class CompanyListComponent {
         }
 
         this.cancelEditContact();
-      } catch (error) {
+      } catch {
         this.message.error('操作失敗');
       } finally {
         this.isSubmittingContactSignal.set(false);

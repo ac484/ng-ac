@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 
 import { CONTRACT_REPOSITORY } from '../../contract-management.providers';
 import { Contract, ContractId, ContractEntity, CreateContractProps } from '../../domain/entities/contract.entity';
-import { ContractRepository } from '../../domain/repositories/contract.repository';
 
 @Injectable({
   providedIn: 'root'

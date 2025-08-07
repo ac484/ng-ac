@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
 import { Company } from '../../domain/entities/company.entity';
-import { CompanyRepository, COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
+import { COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
 import { CompanyResponseDto } from '../dto/company.dto';
 
 /**

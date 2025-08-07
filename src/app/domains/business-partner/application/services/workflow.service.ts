@@ -81,7 +81,7 @@ export class WorkflowService {
 
       // 更新公司資料
       return this.updateCompanyWorkflow(companyId, updatedWorkflow).pipe(finalize(() => this.loadingSignal.set(false)));
-    } catch (error) {
+    } catch {
       this.loadingSignal.set(false);
       this.message.error('添加狀態失敗');
       return of();
@@ -106,7 +106,7 @@ export class WorkflowService {
       this.currentWorkflowSignal.set(updatedWorkflow);
 
       return this.updateCompanyWorkflow(companyId, updatedWorkflow).pipe(finalize(() => this.loadingSignal.set(false)));
-    } catch (error) {
+    } catch {
       this.loadingSignal.set(false);
       this.message.error('更新狀態失敗');
       return of();
@@ -131,7 +131,7 @@ export class WorkflowService {
       this.currentWorkflowSignal.set(updatedWorkflow);
 
       return this.updateCompanyWorkflow(companyId, updatedWorkflow).pipe(finalize(() => this.loadingSignal.set(false)));
-    } catch (error) {
+    } catch {
       this.loadingSignal.set(false);
       this.message.error('刪除狀態失敗');
       return of();
@@ -156,7 +156,7 @@ export class WorkflowService {
       this.currentWorkflowSignal.set(updatedWorkflow);
 
       return this.updateCompanyWorkflow(companyId, updatedWorkflow).pipe(finalize(() => this.loadingSignal.set(false)));
-    } catch (error) {
+    } catch {
       this.loadingSignal.set(false);
       this.message.error('添加轉換失敗');
       return of();
@@ -181,7 +181,7 @@ export class WorkflowService {
       this.currentWorkflowSignal.set(updatedWorkflow);
 
       return this.updateCompanyWorkflow(companyId, updatedWorkflow).pipe(finalize(() => this.loadingSignal.set(false)));
-    } catch (error) {
+    } catch {
       this.loadingSignal.set(false);
       this.message.error('刪除轉換失敗');
       return of();
@@ -206,7 +206,7 @@ export class WorkflowService {
       this.currentWorkflowSignal.set(updatedWorkflow);
 
       return this.updateCompanyWorkflow(companyId, updatedWorkflow).pipe(finalize(() => this.loadingSignal.set(false)));
-    } catch (error) {
+    } catch {
       this.loadingSignal.set(false);
       this.message.error('設置初始狀態失敗');
       return of();
@@ -231,7 +231,7 @@ export class WorkflowService {
       this.currentWorkflowSignal.set(updatedWorkflow);
 
       return this.updateCompanyWorkflow(companyId, updatedWorkflow).pipe(finalize(() => this.loadingSignal.set(false)));
-    } catch (error) {
+    } catch {
       this.loadingSignal.set(false);
       this.message.error('狀態轉換失敗');
       return of();

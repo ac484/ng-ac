@@ -1,16 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import {
-  Firestore,
-  collection,
-  collectionData,
-  doc,
-  docData,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  DocumentReference
-} from '@angular/fire/firestore';
-import { Observable, map } from 'rxjs';
+import { Firestore, collection, collectionData, doc, docData, setDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 import { Contract, ContractId } from '../../domain/entities/contract.entity';
 import { ContractRepository } from '../../domain/repositories/contract.repository';

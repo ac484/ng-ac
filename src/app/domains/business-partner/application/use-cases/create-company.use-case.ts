@@ -3,7 +3,7 @@ import { Observable, map } from 'rxjs';
 
 import { Company } from '../../domain/entities/company.entity';
 import { Contact } from '../../domain/entities/contact.entity';
-import { CompanyRepository, COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
+import { COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
 import { CreateCompanyDto, CompanyResponseDto } from '../dto/company.dto';
 
 /**
