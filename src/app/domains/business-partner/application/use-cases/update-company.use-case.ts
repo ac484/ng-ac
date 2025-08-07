@@ -4,6 +4,7 @@ import { Company } from '../../domain/entities/company.entity';
 import { COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
 import { UpdateCompanyDto, CompanyResponseDto } from '../dto/company.dto';
 import { CompanyStatus } from '../../domain/value-objects/company-status.vo';
+import { DynamicWorkflowStateVO } from '../../domain/value-objects/dynamic-workflow-state.vo';
 
 /**
  * 更新公司用例
@@ -22,6 +23,16 @@ export class UpdateCompanyUseCase {
                     throw new Error(`Company with id ${id} not found`);
                 }
 
+                // 處理動態工作流程數據
+                let dynamicWorkflow: DynamicWorkflowStateVO | undefined = undefined;
+                if (dto.dynamicWorkflow) {
+                    try {
+                        dynamicWorkflow = DynamicWorkflowStateVO.fromPlainObject(dto.dynamicWorkflow);
+                    } catch (error) {
+                        console.warn('Failed to parse dynamic workflow data:', error);
+                    }
+                }
+
                 // 更新公司基本資訊
                 const updatedCompany = existingCompany.updateBasicInfo({
                     companyName: dto.companyName,
@@ -29,7 +40,8 @@ export class UpdateCompanyUseCase {
                     address: dto.address,
                     businessPhone: dto.businessPhone,
                     fax: dto.fax,
-                    website: dto.website
+                    website: dto.website,
+                    dynamicWorkflow
                 });
 
                 // 更新狀態和風險等級（如果提供）
@@ -63,6 +75,7 @@ export class UpdateCompanyUseCase {
                 phone: contact.phone,
                 isPrimary: contact.isPrimary
             })),
+            dynamicWorkflow: company.dynamicWorkflow?.toPlainObject(),
             createdAt: company.createdAt.toISOString(),
             updatedAt: company.updatedAt.toISOString()
         };

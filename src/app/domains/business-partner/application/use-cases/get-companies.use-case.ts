@@ -38,6 +38,7 @@ export class GetCompaniesUseCase {
                 phone: c.phone,
                 isPrimary: c.isPrimary
             })),
+            dynamicWorkflow: company.dynamicWorkflow?.toPlainObject(),
             createdAt: company.createdAt.toISOString(),
             updatedAt: company.updatedAt.toISOString()
         };

@@ -4,9 +4,10 @@ import { Observable, from, map, catchError, of } from 'rxjs';
 import { Company } from '../../domain/entities/company.entity';
 import { Contact } from '../../domain/entities/contact.entity';
 import { CompanyId } from '../../domain/value-objects/company-id.vo';
-import { CompanyStatus, CompanyStatusEnum } from '../../domain/value-objects/company-status.vo';
-import { RiskLevel, RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
+import { CompanyStatusEnum } from '../../domain/value-objects/company-status.vo';
+import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
 import { CompanyRepository } from '../../domain/repositories/company.repository';
+import { DynamicWorkflowStateVO } from '../../domain/value-objects/dynamic-workflow-state.vo';
 
 /**
  * Firebase 公司儲存庫實現
@@ -138,6 +139,7 @@ export class CompanyFirebaseRepository extends CompanyRepository {
                 phone: c.phone,
                 isPrimary: c.isPrimary
             })),
+            dynamicWorkflow: company.dynamicWorkflow ? company.dynamicWorkflow.toPlainObject() : null,
             createdAt: company.createdAt,
             updatedAt: company.updatedAt
         };
@@ -155,6 +157,17 @@ export class CompanyFirebaseRepository extends CompanyRepository {
             isPrimary: c.isPrimary || false
         }));
 
+        // 處理動態工作流程數據
+        let dynamicWorkflow: DynamicWorkflowStateVO | null = null;
+        if (data.dynamicWorkflow) {
+            try {
+                dynamicWorkflow = DynamicWorkflowStateVO.fromPlainObject(data.dynamicWorkflow);
+            } catch (error) {
+                console.warn('Failed to parse dynamic workflow data:', error);
+                dynamicWorkflow = null;
+            }
+        }
+
         const company = Company.create({
             companyName: data.companyName || '',
             businessRegistrationNumber: data.businessRegistrationNumber || '',
@@ -164,7 +177,8 @@ export class CompanyFirebaseRepository extends CompanyRepository {
             riskLevel: data.riskLevel || RiskLevelEnum.Low,
             fax: data.fax || '',
             website: data.website || '',
-            contacts
+            contacts,
+            dynamicWorkflow: dynamicWorkflow || undefined
         });
 
         // 設置正確的 ID 和時間戳

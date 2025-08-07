@@ -51,6 +51,7 @@ export interface CompanyResponseDto {
     fax: string;
     website: string;
     contacts: ContactDto[];
+    dynamicWorkflow?: any; // 動態工作流程數據
     createdAt: string;
     updatedAt: string;
 }

@@ -255,20 +255,28 @@ export class WorkflowService {
      * 更新公司的工作流程數據
      */
     private updateCompanyWorkflow(companyId: string, workflow: DynamicWorkflowStateVO): Observable<void> {
-        // 這裡需要調用公司服務來更新工作流程數據
-        // 由於當前的 UpdateCompanyDto 可能不包含 dynamicWorkflow，我們需要擴展它
-        const updateData = {
+        // 獲取當前公司數據
+        const companies = this.companyService.companies();
+        const currentCompany = companies.find(c => c.id === companyId);
+
+        if (!currentCompany) {
+            this.message.error('找不到指定的公司');
+            return of();
+        }
+
+        // 創建更新數據，包含動態工作流程
+        const updateData: any = {
             dynamicWorkflow: workflow.toPlainObject()
         };
 
-        return this.companyService.updateCompany(companyId, updateData as any).pipe(
+        return this.companyService.updateCompany(companyId, updateData).pipe(
             map(() => {
-                this.message.success('工作流程已保存');
+                // 成功後不顯示消息，讓調用者決定
             }),
             catchError(error => {
                 console.error('更新工作流程失敗:', error);
                 this.message.error('保存工作流程失敗');
-                return of();
+                throw error;
             })
         );
     }
