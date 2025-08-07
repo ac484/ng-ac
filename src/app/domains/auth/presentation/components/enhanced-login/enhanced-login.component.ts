@@ -13,6 +13,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { firstValueFrom } from 'rxjs';
 
 import { AuthBridgeService } from '../../../application/services/auth-bridge.service';
 
@@ -192,7 +193,7 @@ export class EnhancedLoginComponent {
     try {
       const { email, password } = this.form.value;
 
-      const result = await this.authBridge.signInWithEmailPassword(email!, password!).toPromise();
+      const result = await firstValueFrom(this.authBridge.signInWithEmailPassword(email!, password!));
 
       if (result.msg === 'ok') {
         await this.handleLoginSuccess();
@@ -217,7 +218,7 @@ export class EnhancedLoginComponent {
     this.cdr.detectChanges();
 
     try {
-      const result = await this.authBridge.signInWithGoogle().toPromise();
+      const result = await firstValueFrom(this.authBridge.signInWithGoogle());
 
       if (result.msg === 'ok') {
         await this.handleLoginSuccess();
@@ -241,7 +242,7 @@ export class EnhancedLoginComponent {
     this.reuseTabService?.clear();
 
     // 重新獲取 StartupService 內容
-    await this.startupSrv.load().toPromise();
+    await firstValueFrom(this.startupSrv.load());
 
     // 導航到主頁
     let url = this.tokenService.referrer!.url || '/';

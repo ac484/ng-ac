@@ -19,7 +19,7 @@ export class ContractTypeSelectComponent {
   @Input() value?: ContractType;
   @Input() placeholder = '請選擇合約類型';
   @Input() allowClear = true;
-  @Output() valueChange = new EventEmitter<ContractType>();
+  @Output() readonly valueChange = new EventEmitter<ContractType>();
 
   contractTypes = [
     { value: ContractType.PURE_LABOR, label: '純工' },

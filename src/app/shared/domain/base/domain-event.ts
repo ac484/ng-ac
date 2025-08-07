@@ -8,7 +8,7 @@ export abstract class DomainEvent {
   }
 
   private generateEventId(): string {
-    return `${this.constructor.name}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `${this.constructor.name}-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
   }
 
   abstract getEventName(): string;

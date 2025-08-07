@@ -17,7 +17,7 @@ export class TabId extends ValueObject<TabIdProps> {
   }
 
   static generate(): TabId {
-    return new TabId({ value: `tab_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` });
+    return new TabId({ value: `tab_${Date.now()}_${Math.random().toString(36).substring(2, 11)}` });
   }
 
   get value(): string {

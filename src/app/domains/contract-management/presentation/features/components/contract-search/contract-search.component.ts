@@ -127,8 +127,8 @@ export interface ContractSearchCriteria {
   `
 })
 export class ContractSearchComponent {
-  @Output() search = new EventEmitter<ContractSearchCriteria>();
-  @Output() reset = new EventEmitter<void>();
+  @Output() readonly search = new EventEmitter<ContractSearchCriteria>();
+  @Output() readonly reset = new EventEmitter<void>();
 
   searchForm!: FormGroup;
   showAdvanced = false;

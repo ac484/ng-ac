@@ -184,12 +184,12 @@ export class ContractFormComponent implements OnInit {
   @Input() contract?: Contract;
   @Input() loading = false;
   @Input() isEdit = false;
-  @Output() submit = new EventEmitter<Contract>();
-  @Output() cancel = new EventEmitter<void>();
+  @Output() readonly submit = new EventEmitter<Contract>();
+  @Output() readonly cancel = new EventEmitter<void>();
 
   contractForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.initForm();

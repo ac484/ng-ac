@@ -250,8 +250,8 @@ export class PaymentWorkflowComponent {
   @Input() workflowState: PaymentWorkflowState | null = null;
   @Input() visible = false;
 
-  @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() stateTransition = new EventEmitter<PaymentWorkflowTransition>();
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
+  @Output() readonly stateTransition = new EventEmitter<PaymentWorkflowTransition>();
 
   // 組件狀態
   private readonly selectedTransitionSignal = signal<PaymentWorkflowStateEnum | null>(null);
@@ -260,7 +260,7 @@ export class PaymentWorkflowComponent {
   transitionOperator = '';
   transitionComment = '';
 
-  constructor(private readonly message: NzMessageService) {}
+  constructor(private readonly message: NzMessageService) { }
 
   // Computed
   readonly selectedTransition = this.selectedTransitionSignal.asReadonly();
