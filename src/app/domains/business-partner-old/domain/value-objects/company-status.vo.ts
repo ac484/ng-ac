@@ -12,7 +12,6 @@ export interface CompanyStatusProps {
 
 /**
  * 公司狀態值對象
- * 極簡設計，包含基本業務邏輯和顯示方法
  */
 export class CompanyStatus extends ValueObject<CompanyStatusProps> {
     private constructor(props: CompanyStatusProps) {
@@ -30,27 +29,14 @@ export class CompanyStatus extends ValueObject<CompanyStatusProps> {
         return this.props.value;
     }
 
-    // 核心業務邏輯
-    isActive(): boolean {
-        return this.props.value === CompanyStatusEnum.Active;
-    }
-
-    isBlacklisted(): boolean {
-        return this.props.value === CompanyStatusEnum.Blacklisted;
-    }
-
-    // ng-zorro-antd 顯示方法
-    getTagColor(): string {
-        switch (this.props.value) {
-            case CompanyStatusEnum.Active:
-                return 'green';
-            case CompanyStatusEnum.Inactive:
-                return 'orange';
-            case CompanyStatusEnum.Blacklisted:
-                return 'red';
-            default:
-                return 'default';
+    override equals(vo?: CompanyStatus): boolean {
+        if (vo === null || vo === undefined) {
+            return false;
         }
+        if (this === vo) {
+            return true;
+        }
+        return this.props.value === vo.props.value;
     }
 
     override toString(): string {

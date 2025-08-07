@@ -1,10 +1,15 @@
 import { Provider } from '@angular/core';
-import { CompanyRepositoryImpl } from './infrastructure/repositories/company.repository.impl';
-import { COMPANY_REPOSITORY } from './domain/repositories/company.repository.interface';
+import { CompanyRepository, COMPANY_REPOSITORY } from './domain/repositories/company.repository';
+import { CompanyFirebaseRepository } from './infrastructure/repositories/company-firebase.repository';
 
 /**
- * Business Partner Domain Providers
+ * Business Partner 模組提供者
+ * 極簡設計，只配置必要的依賴注入
  */
 export const BUSINESS_PARTNER_PROVIDERS: Provider[] = [
-  { provide: COMPANY_REPOSITORY, useClass: CompanyRepositoryImpl }
+    // Repository 實現
+    {
+        provide: COMPANY_REPOSITORY,
+        useClass: CompanyFirebaseRepository
+    }
 ];

@@ -1,11 +1,14 @@
-// Domain Layer
+// Domain
 export * from './domain';
 
-// Infrastructure Layer
-export * from './infrastructure';
-
-// Application Layer
+// Application
 export * from './application';
 
-// Presentation Layer
+// Infrastructure
+export * from './infrastructure';
+
+// Presentation
 export * from './presentation';
+
+// Configuration
+export * from './business-partner.providers';

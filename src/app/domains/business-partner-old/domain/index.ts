@@ -8,4 +8,6 @@ export * from './value-objects/company-status.vo';
 export * from './value-objects/risk-level.vo';
 
 // Repositories
-export * from './repositories/company.repository';
+export * from './repositories/company.repository.interface';
+
+

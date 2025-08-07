@@ -7,7 +7,6 @@ export interface CompanyIdProps {
 
 /**
  * 公司 ID 值對象
- * 極簡設計，只包含必要功能
  */
 export class CompanyId extends ValueObject<CompanyIdProps> {
     private constructor(props: CompanyIdProps) {
@@ -15,7 +14,7 @@ export class CompanyId extends ValueObject<CompanyIdProps> {
     }
 
     static create(value: string): CompanyId {
-        if (!value?.trim()) {
+        if (!value || value.trim().length === 0) {
             throw new Error('Company ID cannot be empty');
         }
         return new CompanyId({ value: value.trim() });
@@ -27,6 +26,16 @@ export class CompanyId extends ValueObject<CompanyIdProps> {
 
     get value(): string {
         return this.props.value;
+    }
+
+    override equals(vo?: CompanyId): boolean {
+        if (vo === null || vo === undefined) {
+            return false;
+        }
+        if (this === vo) {
+            return true;
+        }
+        return this.props.value === vo.props.value;
     }
 
     override toString(): string {

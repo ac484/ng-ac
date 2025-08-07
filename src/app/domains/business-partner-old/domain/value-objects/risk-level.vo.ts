@@ -12,7 +12,6 @@ export interface RiskLevelProps {
 
 /**
  * 風險等級值對象
- * 極簡設計，包含基本業務邏輯和顯示方法
  */
 export class RiskLevel extends ValueObject<RiskLevelProps> {
     private constructor(props: RiskLevelProps) {
@@ -30,30 +29,19 @@ export class RiskLevel extends ValueObject<RiskLevelProps> {
         return this.props.value;
     }
 
-    // 核心業務邏輯
-    isHigh(): boolean {
-        return this.props.value === RiskLevelEnum.High;
-    }
-
-    requiresApproval(): boolean {
-        return this.isHigh();
-    }
-
-    // ng-zorro-antd 顯示方法
-    getTagColor(): string {
-        switch (this.props.value) {
-            case RiskLevelEnum.Low:
-                return 'green';
-            case RiskLevelEnum.Medium:
-                return 'orange';
-            case RiskLevelEnum.High:
-                return 'red';
-            default:
-                return 'default';
+    override equals(vo?: RiskLevel): boolean {
+        if (vo === null || vo === undefined) {
+            return false;
         }
+        if (this === vo) {
+            return true;
+        }
+        return this.props.value === vo.props.value;
     }
 
     override toString(): string {
         return this.props.value;
     }
 }
+
+

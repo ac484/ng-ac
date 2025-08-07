@@ -1,4 +1,2 @@
 // Repositories
-export * from './repositories/company.repository.impl';
-
-
+export * from './repositories/company-firebase.repository';
