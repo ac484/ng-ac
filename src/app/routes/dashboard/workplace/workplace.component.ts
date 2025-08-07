@@ -86,7 +86,6 @@ export class DashboardWorkplaceComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     zip(this.http.get('/chart'), this.http.get('/api/notice'), this.http.get('/api/activities')).subscribe(
       ([chart, notice, activities]: [any, any, any]) => {
         this.radarData = chart.radarData;

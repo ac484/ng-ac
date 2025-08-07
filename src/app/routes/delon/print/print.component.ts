@@ -47,7 +47,6 @@ export class PrintComponent {
 
   printing = false;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reload(options: { url: string } | null = { url: 'https://localhost:8443/CLodopfuncs.js' }): void {
     this.pinters = [];
     this.papers = [];

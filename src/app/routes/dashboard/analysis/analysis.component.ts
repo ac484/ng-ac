@@ -120,7 +120,6 @@ export class DashboardAnalysisComponent implements OnInit {
           ? this.data.salesTypeDataOnline
           : this.data.salesTypeDataOffline;
     if (this.salesPieData) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.salesTotal = this.salesPieData.reduce((pre: number, now: { y: number }) => now.y + pre, 0);
     }
     this.cdr.detectChanges();

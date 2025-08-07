@@ -29,6 +29,7 @@ export class ExtrasSettingsComponent implements OnInit {
   // Email
   primary_email = 'cipchk@qq.com';
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   profileSave(value: any): void {
     console.log('profile value', value);
   }
