@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -12,10 +12,13 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { CompanyService } from '../../application/services/company.service';
 import { CompanyStatusEnum } from '../../domain/value-objects/company-status.vo';
 import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
-import { CreateCompanyDto } from '../../application/dto/company.dto';
+import { CreateCompanyDto, CompanyResponseDto, ContactDto } from '../../application/dto/company.dto';
 
 /**
  * 公司列表組件
@@ -37,7 +40,10 @@ import { CreateCompanyDto } from '../../application/dto/company.dto';
     NzSelectModule,
     NzSpinModule,
     NzEmptyModule,
-    NzIconModule
+    NzIconModule,
+    NzDividerModule,
+    NzPopconfirmModule,
+    NzSwitchModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -93,6 +99,7 @@ import { CreateCompanyDto } from '../../application/dto/company.dto';
         [nzShowQuickJumper]="true">
         <thead>
           <tr>
+            <th nzWidth="50px"></th>
             <th>公司名稱</th>
             <th>統一編號</th>
             <th>地址</th>
@@ -104,31 +111,204 @@ import { CreateCompanyDto } from '../../application/dto/company.dto';
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let company of filteredCompanies(); trackBy: trackByCompanyId">
-            <td>{{ company.companyName }}</td>
-            <td>{{ company.businessRegistrationNumber }}</td>
-            <td>{{ company.address }}</td>
-            <td>{{ company.businessPhone }}</td>
-            <td>
-              <nz-tag [nzColor]="getStatusColor(company.status)">
-                {{ company.status }}
-              </nz-tag>
-            </td>
-            <td>
-              <nz-tag [nzColor]="getRiskColor(company.riskLevel)">
-                {{ company.riskLevel }}
-              </nz-tag>
-            </td>
-            <td>{{ company.contacts.length }}</td>
-            <td>
-              <button nz-button nzType="link" nzSize="small">
-                <span nz-icon nzType="edit"></span>
-              </button>
-              <button nz-button nzType="link" nzSize="small" nzDanger>
-                <span nz-icon nzType="delete"></span>
-              </button>
-            </td>
-          </tr>
+          @for (company of filteredCompanies(); track trackByCompanyId($index, company)) {
+            <tr>
+              <td [nzExpand]="expandSet().has(company.id)" (nzExpandChange)="onExpandChange(company.id, $event)"></td>
+              <td>{{ company.companyName }}</td>
+              <td>{{ company.businessRegistrationNumber }}</td>
+              <td>{{ company.address }}</td>
+              <td>{{ company.businessPhone }}</td>
+              <td>
+                <nz-tag [nzColor]="getStatusColor(company.status)">
+                  {{ company.status }}
+                </nz-tag>
+              </td>
+              <td>
+                <nz-tag [nzColor]="getRiskColor(company.riskLevel)">
+                  {{ company.riskLevel }}
+                </nz-tag>
+              </td>
+              <td>{{ company.contacts.length }}</td>
+              <td>
+                <button nz-button nzType="link" nzSize="small">
+                  <span nz-icon nzType="edit"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" nzDanger>
+                  <span nz-icon nzType="delete"></span>
+                </button>
+              </td>
+            </tr>
+            
+            <!-- 展開的聯絡人子表 -->
+            @if (expandSet().has(company.id)) {
+              <tr>
+                <td colspan="9" class="contact-table-container">
+                  <div class="contact-section">
+                    <h4>聯絡人管理</h4>
+                    
+                    <!-- 聯絡人子表 -->
+                    <nz-table 
+                      [nzData]="getContactsForCompany(company.id)" 
+                      [nzShowPagination]="false"
+                      nzSize="small">
+                      <thead>
+                        <tr>
+                          <th>姓名</th>
+                          <th>職稱</th>
+                          <th>Email</th>
+                          <th>電話</th>
+                          <th>主要聯絡人</th>
+                          <th nzWidth="120px">操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (contact of getContactsForCompany(company.id); track trackByContactIndex($index, contact); let i = $index) {
+                          @let isEditing = editingContactIndex() === i && currentEditingCompanyId() === company.id;
+                          
+                          <tr>
+                            <td>
+                              @if (isEditing) {
+                                <nz-form-item>
+                                  <nz-form-control nzErrorTip="請輸入姓名">
+                                    <input nz-input [(ngModel)]="editingContact().name" placeholder="請輸入姓名" />
+                                  </nz-form-control>
+                                </nz-form-item>
+                              } @else {
+                                {{ contact.name }}
+                              }
+                            </td>
+                            
+                            <td>
+                              @if (isEditing) {
+                                <nz-form-item>
+                                  <nz-form-control nzErrorTip="請輸入職稱">
+                                    <input nz-input [(ngModel)]="editingContact().title" placeholder="請輸入職稱" />
+                                  </nz-form-control>
+                                </nz-form-item>
+                              } @else {
+                                {{ contact.title }}
+                              }
+                            </td>
+                            
+                            <td>
+                              @if (isEditing) {
+                                <nz-form-item>
+                                  <nz-form-control nzErrorTip="請輸入有效的Email">
+                                    <input nz-input [(ngModel)]="editingContact().email" placeholder="請輸入Email" type="email" />
+                                  </nz-form-control>
+                                </nz-form-item>
+                              } @else {
+                                {{ contact.email }}
+                              }
+                            </td>
+                            
+                            <td>
+                              @if (isEditing) {
+                                <nz-form-item>
+                                  <nz-form-control nzErrorTip="請輸入電話">
+                                    <input nz-input [(ngModel)]="editingContact().phone" placeholder="請輸入電話" />
+                                  </nz-form-control>
+                                </nz-form-item>
+                              } @else {
+                                {{ contact.phone }}
+                              }
+                            </td>
+                            
+                            <td>
+                              @if (isEditing) {
+                                <nz-switch [(ngModel)]="editingContact().isPrimary"></nz-switch>
+                              } @else {
+                                <nz-tag [nzColor]="contact.isPrimary ? 'green' : 'default'">
+                                  {{ contact.isPrimary ? '是' : '否' }}
+                                </nz-tag>
+                              }
+                            </td>
+                            
+                            <td>
+                              @if (isEditing) {
+                                <a (click)="saveContact(company.id, i)" [class.disabled]="isSubmittingContact()">
+                                  @if (isSubmittingContact()) {
+                                    <span nz-icon nzType="loading"></span>
+                                  }
+                                  保存
+                                </a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <a (click)="cancelEditContact()">取消</a>
+                              } @else {
+                                <a (click)="editContact(company.id, i, contact)">編輯</a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <a nz-popconfirm nzPopconfirmTitle="是否要刪除此聯絡人？" (nzOnConfirm)="deleteContact(company.id, i)">刪除</a>
+                              }
+                            </td>
+                          </tr>
+                        }
+                        
+                        <!-- 新增聯絡人行 -->
+                        @if (editingContactIndex() === -2 && currentEditingCompanyId() === company.id) {
+                          <tr class="adding-contact-row">
+                            <td>
+                              <nz-form-item>
+                                <nz-form-control nzErrorTip="請輸入姓名">
+                                  <input nz-input [(ngModel)]="editingContact().name" placeholder="請輸入姓名" />
+                                </nz-form-control>
+                              </nz-form-item>
+                            </td>
+                            <td>
+                              <nz-form-item>
+                                <nz-form-control nzErrorTip="請輸入職稱">
+                                  <input nz-input [(ngModel)]="editingContact().title" placeholder="請輸入職稱" />
+                                </nz-form-control>
+                              </nz-form-item>
+                            </td>
+                            <td>
+                              <nz-form-item>
+                                <nz-form-control nzErrorTip="請輸入有效的Email">
+                                  <input nz-input [(ngModel)]="editingContact().email" placeholder="請輸入Email" type="email" />
+                                </nz-form-control>
+                              </nz-form-item>
+                            </td>
+                            <td>
+                              <nz-form-item>
+                                <nz-form-control nzErrorTip="請輸入電話">
+                                  <input nz-input [(ngModel)]="editingContact().phone" placeholder="請輸入電話" />
+                                </nz-form-control>
+                              </nz-form-item>
+                            </td>
+                            <td>
+                              <nz-switch [(ngModel)]="editingContact().isPrimary"></nz-switch>
+                            </td>
+                            <td>
+                              <a (click)="saveContact(company.id, -1)" [class.disabled]="isSubmittingContact()">
+                                @if (isSubmittingContact()) {
+                                  <span nz-icon nzType="loading"></span>
+                                }
+                                保存
+                              </a>
+                              <nz-divider nzType="vertical"></nz-divider>
+                              <a (click)="cancelEditContact()">取消</a>
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </nz-table>
+                    
+                    <!-- 新增聯絡人按鈕 -->
+                    @if (editingContactIndex() === -1 || currentEditingCompanyId() !== company.id) {
+                      <button 
+                        nz-button 
+                        nzType="dashed" 
+                        nzBlock 
+                        class="add-contact-btn"
+                        (click)="addContact(company.id)">
+                        <span nz-icon nzType="plus"></span>
+                        新增聯絡人
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          }
         </tbody>
       </nz-table>
 
@@ -257,6 +437,44 @@ import { CreateCompanyDto } from '../../application/dto/company.dto';
       align-items: center;
       height: 200px;
     }
+
+    .contact-table-container {
+      padding: 0 !important;
+    }
+
+    .contact-section {
+      padding: 16px;
+    }
+
+    .contact-section h4 {
+      margin: 0 0 16px 0;
+      font-weight: 600;
+    }
+
+    .add-contact-btn {
+      margin-top: 12px;
+      border-style: dashed;
+    }
+
+    .add-contact-btn:hover {
+    }
+
+    .adding-contact-row td {
+      padding: 8px;
+    }
+
+    .adding-contact-row nz-form-item {
+      margin-bottom: 0;
+    }
+
+    .disabled {
+      pointer-events: none;
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    ::ng-deep .ant-table-expanded-row > td {
+    }
   `]
 })
 export class CompanyListComponent {
@@ -269,6 +487,22 @@ export class CompanyListComponent {
   searchQuery = '';
   isCreateModalVisible = false;
   private readonly isSubmittingSignal = signal(false);
+
+  // 展開狀態
+  private readonly expandSetSignal = signal(new Set<string>());
+
+  // 聯絡人編輯狀態
+  private readonly editingContactIndexSignal = signal(-1);
+  private readonly currentEditingCompanyIdSignal = signal<string | null>(null);
+  private readonly isSubmittingContactSignal = signal(false);
+  private readonly editingContactSignal = signal<ContactDto>({
+    name: '',
+    title: '',
+    email: '',
+    phone: '',
+    isPrimary: false
+  });
+  private readonly originalContactSignal = signal<ContactDto | null>(null);
 
   // 表單
   createForm = this.fb.group({
@@ -289,6 +523,11 @@ export class CompanyListComponent {
   // Computed
   readonly isSubmitting = this.isSubmittingSignal.asReadonly();
   readonly filteredCompanies = signal(this.companyService.companies());
+  readonly expandSet = this.expandSetSignal.asReadonly();
+  readonly editingContactIndex = this.editingContactIndexSignal.asReadonly();
+  readonly currentEditingCompanyId = this.currentEditingCompanyIdSignal.asReadonly();
+  readonly isSubmittingContact = this.isSubmittingContactSignal.asReadonly();
+  readonly editingContact = this.editingContactSignal.asReadonly();
 
   /**
    * 搜尋公司
@@ -380,10 +619,152 @@ export class CompanyListComponent {
   }
 
   /**
+   * 展開/收合公司行
+   */
+  onExpandChange(companyId: string, expanded: boolean): void {
+    const currentSet = new Set(this.expandSetSignal());
+    if (expanded) {
+      currentSet.add(companyId);
+    } else {
+      currentSet.delete(companyId);
+      // 如果收合時正在編輯該公司的聯絡人，取消編輯
+      if (this.currentEditingCompanyIdSignal() === companyId) {
+        this.cancelEditContact();
+      }
+    }
+    this.expandSetSignal.set(currentSet);
+  }
+
+  /**
+   * 獲取公司的聯絡人列表
+   */
+  getContactsForCompany(companyId: string): ContactDto[] {
+    const company = this.filteredCompanies().find(c => c.id === companyId);
+    return company?.contacts || [];
+  }
+
+  /**
+   * 新增聯絡人
+   */
+  addContact(companyId: string): void {
+    this.editingContactIndexSignal.set(-2); // -2 表示新增模式
+    this.currentEditingCompanyIdSignal.set(companyId);
+    this.editingContactSignal.set({
+      name: '',
+      title: '',
+      email: '',
+      phone: '',
+      isPrimary: false
+    });
+    this.originalContactSignal.set(null);
+  }
+
+  /**
+   * 編輯聯絡人
+   */
+  editContact(companyId: string, contactIndex: number, contact: ContactDto): void {
+    this.editingContactIndexSignal.set(contactIndex);
+    this.currentEditingCompanyIdSignal.set(companyId);
+    this.editingContactSignal.set({ ...contact });
+    this.originalContactSignal.set({ ...contact });
+  }
+
+  /**
+   * 保存聯絡人
+   */
+  saveContact(companyId: string, contactIndex: number): void {
+    const contact = this.editingContactSignal();
+
+    // 基本驗證
+    if (!contact.name.trim() || !contact.email.trim()) {
+      this.message.error('請填寫必要欄位');
+      return;
+    }
+
+    this.isSubmittingContactSignal.set(true);
+
+    // 這裡應該調用後端 API 更新聯絡人
+    // 暫時模擬更新本地數據
+    setTimeout(() => {
+      try {
+        const companies = this.filteredCompanies();
+        const companyIndex = companies.findIndex(c => c.id === companyId);
+
+        if (companyIndex !== -1) {
+          const updatedCompanies = [...companies];
+          const company = { ...updatedCompanies[companyIndex] };
+          const contacts = [...company.contacts];
+
+          if (contactIndex === -1) {
+            // 新增聯絡人
+            contacts.push({ ...contact });
+            this.message.success('新增聯絡人成功');
+          } else {
+            // 更新聯絡人
+            contacts[contactIndex] = { ...contact };
+            this.message.success('更新聯絡人成功');
+          }
+
+          company.contacts = contacts;
+          updatedCompanies[companyIndex] = company;
+          this.filteredCompanies.set(updatedCompanies);
+        }
+
+        this.cancelEditContact();
+      } catch (error) {
+        this.message.error('操作失敗');
+      } finally {
+        this.isSubmittingContactSignal.set(false);
+      }
+    }, 500);
+  }
+
+  /**
+   * 刪除聯絡人
+   */
+  deleteContact(companyId: string, contactIndex: number): void {
+    const companies = this.filteredCompanies();
+    const companyIndex = companies.findIndex(c => c.id === companyId);
+
+    if (companyIndex !== -1) {
+      const updatedCompanies = [...companies];
+      const company = { ...updatedCompanies[companyIndex] };
+      const contacts = [...company.contacts];
+
+      contacts.splice(contactIndex, 1);
+      company.contacts = contacts;
+      updatedCompanies[companyIndex] = company;
+
+      this.filteredCompanies.set(updatedCompanies);
+      this.message.success('刪除聯絡人成功');
+    }
+  }
+
+  /**
+   * 取消編輯聯絡人
+   */
+  cancelEditContact(): void {
+    this.editingContactIndexSignal.set(-1);
+    this.currentEditingCompanyIdSignal.set(null);
+    this.editingContactSignal.set({
+      name: '',
+      title: '',
+      email: '',
+      phone: '',
+      isPrimary: false
+    });
+    this.originalContactSignal.set(null);
+  }
+
+  /**
    * TrackBy 函數
    */
   trackByCompanyId(index: number, company: any): string {
     return company.id;
+  }
+
+  trackByContactIndex(index: number, contact: ContactDto): string {
+    return `${contact.name}-${contact.email}-${index}`;
   }
 
   /**
