@@ -6,7 +6,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ContractService } from '../../../application/services/contract.service';
-import { Contract } from '../../../domain/entities/contract.entity';
+import { Contract, CreateContractProps } from '../../../domain/entities/contract.entity';
 import { ContractFormComponent } from '../../business/components/contract-form';
 
 @Component({
@@ -57,12 +57,34 @@ export class ContractCreateComponent {
   async onSubmit(contract: Contract): Promise<void> {
     this.loading = true;
     try {
-      await this.contractService.createContract(contract);
-      this.message.success('合約新增成功');
+      // 提取 CreateContractProps
+      const createProps: CreateContractProps = {
+        contractName: contract.contractName,
+        contractType: contract.contractType,
+        riskLevel: contract.riskLevel,
+        clientCompany: contract.clientCompany,
+        clientRepresentative: contract.clientRepresentative,
+        clientContact: contract.clientContact,
+        clientEmail: contract.clientEmail,
+        startDate: contract.startDate,
+        endDate: contract.endDate,
+        totalAmount: contract.totalAmount,
+        currency: contract.currency,
+        paymentStatus: contract.paymentStatus,
+        paidAmount: contract.paidAmount,
+        paymentSchedule: contract.paymentSchedule,
+        approvalStatus: contract.approvalStatus,
+        approvers: contract.approvers,
+        documents: contract.documents,
+        risks: contract.risks
+      };
+
+      const contractNumber = await this.contractService.createContract(createProps);
+      this.message.success(`合約新增成功，合約編號：${contractNumber}`);
       this.router.navigate(['/dashboard/contract-management']);
     } catch (error) {
       console.error('Error creating contract:', error);
-      this.message.error('合約新增失敗');
+      this.message.error('合約新增失敗：' + (error as Error).message);
     } finally {
       this.loading = false;
     }

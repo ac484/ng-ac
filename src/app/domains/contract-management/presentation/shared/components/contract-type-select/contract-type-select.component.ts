@@ -29,11 +29,10 @@ export class ContractTypeSelectComponent {
   @Output() valueChange = new EventEmitter<ContractType>();
 
   contractTypes = [
-    { value: ContractType.SERVICE, label: '服務合約' },
-    { value: ContractType.PRODUCT, label: '產品合約' },
-    { value: ContractType.LICENSING, label: '授權合約' },
-    { value: ContractType.PARTNERSHIP, label: '合作合約' },
-    { value: ContractType.EMPLOYMENT, label: '僱傭合約' }
+    { value: ContractType.PURE_LABOR, label: '純工' },
+    { value: ContractType.MATERIAL_INCLUDED, label: '帶料' },
+    { value: ContractType.SUBCONTRACT, label: '分包' },
+    { value: ContractType.OUTSOURCING, label: '外包' }
   ];
 
   onChange(value: ContractType): void {

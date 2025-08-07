@@ -8,10 +8,13 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import { ContractService } from '../../../application/services/contract.service';
-import { ContractId } from '../../../domain/entities/contract.entity';
+import { ContractId, ContractType } from '../../../domain/entities/contract.entity';
 import { ContractStatusBadgeComponent } from '../../shared/components/contract-status-badge';
 import { ContractSearchComponent, ContractSearchCriteria } from '../../features/components/contract-search';
+import { formatContractNumber } from '../../../domain/utils/contract-number.utils';
 
 @Component({
   selector: 'app-contract-list',
@@ -24,6 +27,8 @@ import { ContractSearchComponent, ContractSearchCriteria } from '../../features/
     NzCardModule,
     NzTypographyModule,
     NzGridModule,
+    NzToolTipModule,
+    NzTagModule,
     ContractStatusBadgeComponent,
     ContractSearchComponent
   ],
@@ -57,8 +62,9 @@ import { ContractSearchComponent, ContractSearchCriteria } from '../../features/
         
         <thead>
           <tr>
-            <th>編號</th>
+            <th>合約編號</th>
             <th>合約名稱</th>
+            <th>合約類型</th>
             <th>客戶公司</th>
             <th>客戶代表</th>
             <th>總金額</th>
@@ -69,8 +75,17 @@ import { ContractSearchComponent, ContractSearchCriteria } from '../../features/
         
         <tbody>
           <tr *ngFor="let contract of basicTable.data">
-            <td>{{ contract.contractNumber }}</td>
+            <td>
+              <nz-tooltip [nzTitle]="contract.contractNumber">
+                <span>{{ formatContractNumber(contract.contractNumber) }}</span>
+              </nz-tooltip>
+            </td>
             <td>{{ contract.contractName }}</td>
+            <td>
+              <nz-tag [nzColor]="getContractTypeColor(contract.contractType)">
+                {{ getContractTypeText(contract.contractType) }}
+              </nz-tag>
+            </td>
             <td>{{ contract.clientCompany }}</td>
             <td>{{ contract.clientRepresentative }}</td>
             <td>{{ contract.totalAmount | currency:'TWD':'symbol':'1.0-0' }}</td>
@@ -111,7 +126,7 @@ export class ContractListComponent implements OnInit {
     private contractService: ContractService,
     private router: Router,
     private message: NzMessageService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadContracts();
@@ -156,11 +171,35 @@ export class ContractListComponent implements OnInit {
     }
   }
 
+  formatContractNumber(contractNumber: string): string {
+    return formatContractNumber(contractNumber);
+  }
+
+  getContractTypeText(contractType: ContractType): string {
+    const typeMap: Record<ContractType, string> = {
+      [ContractType.PURE_LABOR]: '純工',
+      [ContractType.MATERIAL_INCLUDED]: '帶料',
+      [ContractType.SUBCONTRACT]: '分包',
+      [ContractType.OUTSOURCING]: '外包'
+    };
+    return typeMap[contractType] || '未知';
+  }
+
+  getContractTypeColor(contractType: ContractType): string {
+    const colorMap: Record<ContractType, string> = {
+      [ContractType.PURE_LABOR]: 'blue',
+      [ContractType.MATERIAL_INCLUDED]: 'green',
+      [ContractType.SUBCONTRACT]: 'orange',
+      [ContractType.OUTSOURCING]: 'purple'
+    };
+    return colorMap[contractType] || 'default';
+  }
+
   onSearch(criteria: ContractSearchCriteria): void {
     this.displayContracts = this.allContracts.filter(contract => {
       if (criteria.keyword) {
         const keyword = criteria.keyword.toLowerCase();
-        const matchesKeyword = 
+        const matchesKeyword =
           contract.contractNumber.toLowerCase().includes(keyword) ||
           contract.contractName.toLowerCase().includes(keyword) ||
           contract.clientCompany.toLowerCase().includes(keyword);
@@ -172,8 +211,8 @@ export class ContractListComponent implements OnInit {
       if (criteria.riskLevel && contract.riskLevel !== criteria.riskLevel) return false;
       if (criteria.startDate && contract.startDate < criteria.startDate) return false;
       if (criteria.endDate && contract.endDate > criteria.endDate) return false;
-      if (criteria.clientCompany && 
-          !contract.clientCompany.toLowerCase().includes(criteria.clientCompany.toLowerCase())) return false;
+      if (criteria.clientCompany &&
+        !contract.clientCompany.toLowerCase().includes(criteria.clientCompany.toLowerCase())) return false;
 
       return true;
     });

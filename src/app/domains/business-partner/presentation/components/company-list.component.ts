@@ -18,7 +18,9 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { CompanyService } from '../../application/services/company.service';
 import { CompanyStatusEnum } from '../../domain/value-objects/company-status.vo';
 import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
+import { PaymentWorkflowState } from '../../domain/value-objects/payment-workflow-state.vo';
 import { CreateCompanyDto, CompanyResponseDto, ContactDto } from '../../application/dto/company.dto';
+import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-workflow.component';
 
 /**
  * 公司列表組件
@@ -43,7 +45,8 @@ import { CreateCompanyDto, CompanyResponseDto, ContactDto } from '../../applicat
     NzIconModule,
     NzDividerModule,
     NzPopconfirmModule,
-    NzSwitchModule
+    NzSwitchModule,
+    PaymentWorkflowComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -107,7 +110,7 @@ import { CreateCompanyDto, CompanyResponseDto, ContactDto } from '../../applicat
             <th>狀態</th>
             <th>風險等級</th>
             <th>聯絡人數</th>
-            <th nzWidth="120px">操作</th>
+            <th nzWidth="160px">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -130,6 +133,10 @@ import { CreateCompanyDto, CompanyResponseDto, ContactDto } from '../../applicat
               </td>
               <td>{{ company.contacts.length }}</td>
               <td>
+                <button nz-button nzType="link" nzSize="small" (click)="showWorkflowModal(company.id)">
+                  <span nz-icon nzType="deployment-unit"></span>
+                  狀態
+                </button>
                 <button nz-button nzType="link" nzSize="small">
                   <span nz-icon nzType="edit"></span>
                 </button>
@@ -403,6 +410,15 @@ import { CreateCompanyDto, CompanyResponseDto, ContactDto } from '../../applicat
           </form>
         </ng-container>
       </nz-modal>
+
+      <!-- 狀態機模態框 -->
+      <app-payment-workflow
+        [companyId]="currentWorkflowCompanyId()"
+        [workflowState]="currentWorkflowState()"
+        [visible]="isWorkflowModalVisible()"
+        (visibleChange)="onWorkflowModalVisibleChange($event)"
+        (stateTransition)="onStateTransition($event)">
+      </app-payment-workflow>
     </div>
   `,
   styles: [`
@@ -504,6 +520,11 @@ export class CompanyListComponent {
   });
   private readonly originalContactSignal = signal<ContactDto | null>(null);
 
+  // 狀態機相關狀態
+  private readonly isWorkflowModalVisibleSignal = signal(false);
+  private readonly currentWorkflowCompanyIdSignal = signal('');
+  private readonly currentWorkflowStateSignal = signal<PaymentWorkflowState | null>(null);
+
   // 表單
   createForm = this.fb.group({
     companyName: ['', [Validators.required]],
@@ -528,6 +549,9 @@ export class CompanyListComponent {
   readonly currentEditingCompanyId = this.currentEditingCompanyIdSignal.asReadonly();
   readonly isSubmittingContact = this.isSubmittingContactSignal.asReadonly();
   readonly editingContact = this.editingContactSignal.asReadonly();
+  readonly isWorkflowModalVisible = this.isWorkflowModalVisibleSignal.asReadonly();
+  readonly currentWorkflowCompanyId = this.currentWorkflowCompanyIdSignal.asReadonly();
+  readonly currentWorkflowState = this.currentWorkflowStateSignal.asReadonly();
 
   /**
    * 搜尋公司
@@ -765,6 +789,55 @@ export class CompanyListComponent {
 
   trackByContactIndex(index: number, contact: ContactDto): string {
     return `${contact.name}-${contact.email}-${index}`;
+  }
+
+  /**
+   * 顯示狀態機模態框
+   */
+  showWorkflowModal(companyId: string): void {
+    const company = this.filteredCompanies().find(c => c.id === companyId);
+    if (company) {
+      this.currentWorkflowCompanyIdSignal.set(companyId);
+      // 這裡應該從公司實體獲取狀態機狀態，暫時創建一個默認狀態
+      this.currentWorkflowStateSignal.set(PaymentWorkflowState.create());
+      this.isWorkflowModalVisibleSignal.set(true);
+    }
+  }
+
+  /**
+   * 狀態機模態框可見性變更
+   */
+  onWorkflowModalVisibleChange(visible: boolean): void {
+    this.isWorkflowModalVisibleSignal.set(visible);
+    if (!visible) {
+      this.currentWorkflowCompanyIdSignal.set('');
+      this.currentWorkflowStateSignal.set(null);
+    }
+  }
+
+  /**
+   * 處理狀態轉換
+   */
+  onStateTransition(transition: PaymentWorkflowTransition): void {
+    console.log('狀態轉換:', transition);
+
+    // 這裡應該調用後端 API 更新狀態
+    // 暫時更新本地狀態
+    const currentState = this.currentWorkflowStateSignal();
+    if (currentState) {
+      try {
+        const newState = currentState.transitionTo(
+          transition.newState,
+          transition.operator,
+          transition.comment
+        );
+        this.currentWorkflowStateSignal.set(newState);
+        this.message.success('狀態轉換成功');
+      } catch (error) {
+        console.error('狀態轉換失敗:', error);
+        this.message.error('狀態轉換失敗');
+      }
+    }
   }
 
   /**

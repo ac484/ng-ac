@@ -67,11 +67,10 @@ export interface ContractSearchCriteria {
               <nz-form-label>合約類型</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="contractType" placeholder="請選擇類型" nzAllowClear>
-                  <nz-option nzValue="service" nzLabel="服務合約"></nz-option>
-                  <nz-option nzValue="product" nzLabel="產品合約"></nz-option>
-                  <nz-option nzValue="licensing" nzLabel="授權合約"></nz-option>
-                  <nz-option nzValue="partnership" nzLabel="合作合約"></nz-option>
-                  <nz-option nzValue="employment" nzLabel="僱傭合約"></nz-option>
+                  <nz-option nzValue="pure_labor" nzLabel="純工"></nz-option>
+                  <nz-option nzValue="material_included" nzLabel="帶料"></nz-option>
+                  <nz-option nzValue="subcontract" nzLabel="分包"></nz-option>
+                  <nz-option nzValue="outsourcing" nzLabel="外包"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>

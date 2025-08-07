@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, doc, docData, addDoc, updateDoc, deleteDoc, DocumentReference } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, docData, setDoc, updateDoc, deleteDoc, DocumentReference } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { Contract, ContractId } from '../../domain/entities/contract.entity';
 import { ContractRepository } from '../../domain/repositories/contract.repository';
@@ -22,15 +22,18 @@ export class FirestoreContractRepository implements ContractRepository {
   }
 
   async create(contract: Contract): Promise<string> {
-    const contractsCollection = collection(this.firestore, this.collectionName);
+    // 使用合約編號作為文檔 ID
+    const contractDoc = doc(this.firestore, this.collectionName, contract.contractNumber);
+    
     const contractWithTimestamps = {
       ...contract,
+      id: contract.contractNumber, // 確保 ID 字段存在
       createdAt: new Date(),
       updatedAt: new Date()
     };
     
-    const docRef = await addDoc(contractsCollection, contractWithTimestamps);
-    return docRef.id;
+    await setDoc(contractDoc, contractWithTimestamps);
+    return contract.contractNumber;
   }
 
   async update(id: string, contract: Partial<Contract>): Promise<void> {

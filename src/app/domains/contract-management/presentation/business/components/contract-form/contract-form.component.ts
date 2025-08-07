@@ -9,8 +9,11 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { Contract, ContractType, ContractStatus, RiskLevel, PaymentStatus } from '../../../../domain/entities/contract.entity';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { Contract, ContractType, ContractStatus, RiskLevel, PaymentStatus, CreateContractProps } from '../../../../domain/entities/contract.entity';
 import { ContractTypeSelectComponent } from '../../../../presentation/shared/components/contract-type-select';
+import { generateContractNumber, formatContractNumber } from '../../../../domain/utils/contract-number.utils';
+import { ContractEntity } from '../../../../domain/entities/contract.entity';
 
 @Component({
   selector: 'app-contract-form',
@@ -26,22 +29,25 @@ import { ContractTypeSelectComponent } from '../../../../presentation/shared/com
     NzButtonModule,
     NzCardModule,
     NzGridModule,
+    NzAlertModule,
     ContractTypeSelectComponent
   ],
   template: `
     <form nz-form [formGroup]="contractForm" (ngSubmit)="onSubmit()">
       <nz-card [nzTitle]="isEdit ? '編輯合約' : '新增合約'">
         
+        <!-- 合約編號顯示 -->
+        @if (!isEdit) {
+        <nz-alert
+          nzType="info"
+          nzMessage="合約編號將自動生成"
+          nzDescription="格式：YYYYMMDDHHMM (年+月+日+時分)"
+          class="mb-4">
+        </nz-alert>
+        }
+        
         <!-- 基本信息 -->
         <div nz-row [nzGutter]="16">
-          <nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label [nzSpan]="6" nzRequired>合約編號</nz-form-label>
-              <nz-form-control [nzSpan]="18" nzErrorTip="請輸入合約編號">
-                <input nz-input formControlName="contractNumber" placeholder="請輸入合約編號" />
-              </nz-form-control>
-            </nz-form-item>
-          </nz-col>
           <nz-col [nzSpan]="12">
             <nz-form-item>
               <nz-form-label [nzSpan]="6" nzRequired>合約名稱</nz-form-label>
@@ -50,9 +56,6 @@ import { ContractTypeSelectComponent } from '../../../../presentation/shared/com
               </nz-form-control>
             </nz-form-item>
           </nz-col>
-        </div>
-
-        <div nz-row [nzGutter]="16">
           <nz-col [nzSpan]="12">
             <nz-form-item>
               <nz-form-label [nzSpan]="6" nzRequired>合約類型</nz-form-label>
@@ -64,6 +67,9 @@ import { ContractTypeSelectComponent } from '../../../../presentation/shared/com
               </nz-form-control>
             </nz-form-item>
           </nz-col>
+        </div>
+
+        <div nz-row [nzGutter]="16">
           <nz-col [nzSpan]="12">
             <nz-form-item>
               <nz-form-label [nzSpan]="6" nzRequired>風險等級</nz-form-label>
@@ -122,23 +128,12 @@ import { ContractTypeSelectComponent } from '../../../../presentation/shared/com
         <div nz-row [nzGutter]="16">
           <nz-col [nzSpan]="12">
             <nz-form-item>
-              <nz-form-label [nzSpan]="6" nzRequired>開始日期</nz-form-label>
-              <nz-form-control [nzSpan]="18" nzErrorTip="請選擇開始日期">
-                <nz-date-picker formControlName="startDate" style="width: 100%"></nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-          </nz-col>
-          <nz-col [nzSpan]="12">
-            <nz-form-item>
               <nz-form-label [nzSpan]="6" nzRequired>結束日期</nz-form-label>
               <nz-form-control [nzSpan]="18" nzErrorTip="請選擇結束日期">
                 <nz-date-picker formControlName="endDate" style="width: 100%"></nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </nz-col>
-        </div>
-
-        <div nz-row [nzGutter]="16">
           <nz-col [nzSpan]="12">
             <nz-form-item>
               <nz-form-label [nzSpan]="6" nzRequired>總金額</nz-form-label>
@@ -153,6 +148,9 @@ import { ContractTypeSelectComponent } from '../../../../presentation/shared/com
               </nz-form-control>
             </nz-form-item>
           </nz-col>
+        </div>
+
+        <div nz-row [nzGutter]="16">
           <nz-col [nzSpan]="12">
             <nz-form-item>
               <nz-form-label [nzSpan]="6" nzRequired>幣種</nz-form-label>
@@ -182,7 +180,12 @@ import { ContractTypeSelectComponent } from '../../../../presentation/shared/com
 
       </nz-card>
     </form>
-  `
+  `,
+  styles: [`
+    .mb-4 {
+      margin-bottom: 16px;
+    }
+  `]
 })
 export class ContractFormComponent implements OnInit {
   @Input() contract?: Contract;
@@ -193,7 +196,7 @@ export class ContractFormComponent implements OnInit {
 
   contractForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -201,15 +204,13 @@ export class ContractFormComponent implements OnInit {
 
   initForm(): void {
     this.contractForm = this.fb.group({
-      contractNumber: ['', [Validators.required]],
       contractName: ['', [Validators.required]],
-      contractType: [ContractType.SERVICE, [Validators.required]],
+      contractType: [ContractType.PURE_LABOR, [Validators.required]],
       riskLevel: [RiskLevel.LOW, [Validators.required]],
       clientCompany: ['', [Validators.required]],
       clientRepresentative: ['', [Validators.required]],
       clientContact: [''],
       clientEmail: [''],
-      startDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
       totalAmount: [null, [Validators.required, Validators.min(0)]],
       currency: ['TWD', [Validators.required]],
@@ -234,8 +235,41 @@ export class ContractFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.contractForm.valid) {
-      const contract: Contract = this.contractForm.value;
-      this.submit.emit(contract);
+      const formValue = this.contractForm.value;
+
+      if (this.isEdit && this.contract) {
+        // 編輯模式：保留原有的合約編號
+        const contract: Contract = {
+          ...this.contract,
+          ...formValue
+        };
+        this.submit.emit(contract);
+      } else {
+        // 新增模式：使用 CreateContractProps
+        const createProps: CreateContractProps = {
+          contractName: formValue.contractName,
+          contractType: formValue.contractType,
+          riskLevel: formValue.riskLevel,
+          clientCompany: formValue.clientCompany,
+          clientRepresentative: formValue.clientRepresentative,
+          clientContact: formValue.clientContact,
+          clientEmail: formValue.clientEmail,
+          endDate: formValue.endDate,
+          totalAmount: formValue.totalAmount,
+          currency: formValue.currency,
+          paymentStatus: formValue.paymentStatus,
+          paidAmount: formValue.paidAmount,
+          paymentSchedule: formValue.paymentSchedule,
+          approvalStatus: formValue.approvalStatus,
+          approvers: formValue.approvers,
+          documents: formValue.documents,
+          risks: formValue.risks
+        };
+
+        // 使用 ContractEntity.create 來創建合約
+        const contract = ContractEntity.create(createProps);
+        this.submit.emit(contract);
+      }
     } else {
       Object.values(this.contractForm.controls).forEach(control => {
         if (control.invalid) {

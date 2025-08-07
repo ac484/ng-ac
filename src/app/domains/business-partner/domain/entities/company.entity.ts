@@ -2,19 +2,13 @@ import { BaseAggregateRoot } from '@shared';
 import { CompanyId } from '../value-objects/company-id.vo';
 import { CompanyStatus, CompanyStatusEnum } from '../value-objects/company-status.vo';
 import { RiskLevel, RiskLevelEnum } from '../value-objects/risk-level.vo';
+import { PaymentWorkflowState } from '../value-objects/payment-workflow-state.vo';
 import { Contact } from './contact.entity';
 
 /**
  * 公司創建屬性
  * 極簡設計，只包含必要欄位
  */
-// 極簡的請款工作流程狀態
-export interface PaymentWorkflowState {
-    currentState: string;
-    availableTransitions: string[];
-    stateHistory: string[];
-}
-
 export interface CreateCompanyProps {
     companyName: string;
     businessRegistrationNumber: string;
@@ -25,7 +19,6 @@ export interface CreateCompanyProps {
     fax?: string;
     website?: string;
     contacts?: Contact[];
-    // 簡化的請款工作流程狀態
     paymentWorkflow?: PaymentWorkflowState;
 }
 
@@ -71,7 +64,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
             props.fax?.trim() || '',
             props.website?.trim() || '',
             props.contacts || [],
-            props.paymentWorkflow || null,
+            props.paymentWorkflow || PaymentWorkflowState.create(),
             now,
             now
         );
