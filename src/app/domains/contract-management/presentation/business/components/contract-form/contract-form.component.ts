@@ -189,7 +189,7 @@ export class ContractFormComponent implements OnInit {
 
   contractForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initForm();
