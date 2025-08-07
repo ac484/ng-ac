@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -59,7 +59,7 @@ import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-w
             <input 
               nz-input 
               placeholder="搜尋公司名稱或統編..." 
-              [(ngModel)]="searchQuery"
+              [ngModel]="searchQuery()"
               (ngModelChange)="onSearch($event)"
             />
           </nz-input-group>
@@ -500,7 +500,7 @@ export class CompanyListComponent {
   private readonly message = inject(NzMessageService);
 
   // 組件狀態
-  searchQuery = '';
+  private readonly searchQuerySignal = signal('');
   isCreateModalVisible = false;
   private readonly isSubmittingSignal = signal(false);
 
@@ -543,7 +543,20 @@ export class CompanyListComponent {
 
   // Computed
   readonly isSubmitting = this.isSubmittingSignal.asReadonly();
-  readonly filteredCompanies = signal(this.companyService.companies());
+  readonly searchQuery = this.searchQuerySignal.asReadonly();
+  readonly filteredCompanies = computed(() => {
+    const query = this.searchQuerySignal().toLowerCase().trim();
+    const companies = this.companyService.companies();
+
+    if (!query) {
+      return companies;
+    }
+
+    return companies.filter(company =>
+      company.companyName.toLowerCase().includes(query) ||
+      company.businessRegistrationNumber.includes(query)
+    );
+  });
   readonly expandSet = this.expandSetSignal.asReadonly();
   readonly editingContactIndex = this.editingContactIndexSignal.asReadonly();
   readonly currentEditingCompanyId = this.currentEditingCompanyIdSignal.asReadonly();
@@ -557,9 +570,7 @@ export class CompanyListComponent {
    * 搜尋公司
    */
   onSearch(query: string): void {
-    this.companyService.searchCompanies(query).subscribe(companies => {
-      this.filteredCompanies.set(companies);
-    });
+    this.searchQuerySignal.set(query);
   }
 
   /**
@@ -590,7 +601,6 @@ export class CompanyListComponent {
         this.message.success('新增合作夥伴成功');
         this.isCreateModalVisible = false;
         this.createForm.reset();
-        this.filteredCompanies.set(this.companyService.companies());
       },
       error: (error) => {
         console.error('創建公司失敗:', error);
@@ -701,7 +711,9 @@ export class CompanyListComponent {
 
           company.contacts = contacts;
           updatedCompanies[companyIndex] = company;
-          this.filteredCompanies.set(updatedCompanies);
+
+          // 更新服務中的數據
+          this.companyService.updateCompanies(updatedCompanies);
         }
 
         this.cancelEditContact();
@@ -717,7 +729,7 @@ export class CompanyListComponent {
    * 刪除聯絡人
    */
   deleteContact(companyId: string, contactIndex: number): void {
-    const companies = this.filteredCompanies();
+    const companies = this.companyService.companies();
     const companyIndex = companies.findIndex(c => c.id === companyId);
 
     if (companyIndex !== -1) {
@@ -729,7 +741,8 @@ export class CompanyListComponent {
       company.contacts = contacts;
       updatedCompanies[companyIndex] = company;
 
-      this.filteredCompanies.set(updatedCompanies);
+      // 更新服務中的數據
+      this.companyService.updateCompanies(updatedCompanies);
       this.message.success('刪除聯絡人成功');
     }
   }

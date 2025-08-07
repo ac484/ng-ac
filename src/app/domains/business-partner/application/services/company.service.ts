@@ -103,4 +103,11 @@ export class CompanyService {
     refresh(): void {
         this.loadCompanies();
     }
+
+    /**
+     * 更新公司列表（用於本地狀態更新）
+     */
+    updateCompanies(companies: CompanyResponseDto[]): void {
+        this.companiesSignal.set(companies);
+    }
 }
