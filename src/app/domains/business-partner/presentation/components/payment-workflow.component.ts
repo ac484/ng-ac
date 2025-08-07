@@ -320,29 +320,41 @@ export class PaymentWorkflowComponent {
    */
   executeTransition(): void {
     const selectedState = this.selectedTransition();
-    if (!selectedState) return;
+    if (!selectedState || !this.workflowState) return;
 
     if (!this.transitionOperator.trim()) {
       this.message.error('請輸入操作人員');
       return;
     }
 
+    // 檢查是否可以轉換到目標狀態
+    if (!this.workflowState.canTransitionTo(selectedState)) {
+      this.message.error('無法轉換到此狀態');
+      return;
+    }
+
     this.isSubmittingSignal.set(true);
 
-    // 模擬 API 調用
-    setTimeout(() => {
-      this.stateTransition.emit({
-        companyId: this.companyId,
-        newState: selectedState,
-        operator: this.transitionOperator.trim(),
-        comment: this.transitionComment.trim() || undefined
-      });
+    try {
+      // 模擬 API 調用
+      setTimeout(() => {
+        this.stateTransition.emit({
+          companyId: this.companyId,
+          newState: selectedState,
+          operator: this.transitionOperator.trim(),
+          comment: this.transitionComment.trim() || undefined
+        });
 
-      this.message.success('狀態轉換成功');
-      this.cancelTransition();
-      this.onCancel();
+        this.message.success('狀態轉換成功');
+        this.cancelTransition();
+        this.onCancel();
+        this.isSubmittingSignal.set(false);
+      }, 1000);
+    } catch (error) {
+      console.error('狀態轉換失敗:', error);
+      this.message.error('狀態轉換失敗');
       this.isSubmittingSignal.set(false);
-    }, 1000);
+    }
   }
 
   /**

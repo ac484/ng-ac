@@ -1,8 +1,10 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Observable, map, catchError, finalize, of } from 'rxjs';
 import { CreateCompanyUseCase } from '../use-cases/create-company.use-case';
+import { UpdateCompanyUseCase } from '../use-cases/update-company.use-case';
+import { DeleteCompanyUseCase } from '../use-cases/delete-company.use-case';
 import { GetCompaniesUseCase } from '../use-cases/get-companies.use-case';
-import { CreateCompanyDto, CompanyResponseDto } from '../dto/company.dto';
+import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto } from '../dto/company.dto';
 
 /**
  * 公司應用服務
@@ -14,6 +16,8 @@ import { CreateCompanyDto, CompanyResponseDto } from '../dto/company.dto';
 })
 export class CompanyService {
     private readonly createCompanyUseCase = inject(CreateCompanyUseCase);
+    private readonly updateCompanyUseCase = inject(UpdateCompanyUseCase);
+    private readonly deleteCompanyUseCase = inject(DeleteCompanyUseCase);
     private readonly getCompaniesUseCase = inject(GetCompaniesUseCase);
 
     // Signals 狀態管理
@@ -102,6 +106,55 @@ export class CompanyService {
      */
     refresh(): void {
         this.loadCompanies();
+    }
+
+    /**
+     * 更新公司
+     */
+    updateCompany(id: string, dto: UpdateCompanyDto): Observable<CompanyResponseDto> {
+        this.loadingSignal.set(true);
+        this.errorSignal.set(null);
+
+        return this.updateCompanyUseCase.execute(id, dto).pipe(
+            map(updatedCompany => {
+                // 更新本地狀態
+                const currentCompanies = this.companiesSignal();
+                const updatedCompanies = currentCompanies.map(company =>
+                    company.id === id ? updatedCompany : company
+                );
+                this.companiesSignal.set(updatedCompanies);
+                return updatedCompany;
+            }),
+            finalize(() => this.loadingSignal.set(false)),
+            catchError(error => {
+                console.error('更新公司失敗:', error);
+                this.errorSignal.set('更新公司失敗');
+                throw error;
+            })
+        );
+    }
+
+    /**
+     * 刪除公司
+     */
+    deleteCompany(id: string): Observable<void> {
+        this.loadingSignal.set(true);
+        this.errorSignal.set(null);
+
+        return this.deleteCompanyUseCase.execute(id).pipe(
+            map(() => {
+                // 更新本地狀態
+                const currentCompanies = this.companiesSignal();
+                const filteredCompanies = currentCompanies.filter(company => company.id !== id);
+                this.companiesSignal.set(filteredCompanies);
+            }),
+            finalize(() => this.loadingSignal.set(false)),
+            catchError(error => {
+                console.error('刪除公司失敗:', error);
+                this.errorSignal.set('刪除公司失敗');
+                throw error;
+            })
+        );
     }
 
     /**

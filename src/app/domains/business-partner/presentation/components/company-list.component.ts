@@ -19,7 +19,7 @@ import { CompanyService } from '../../application/services/company.service';
 import { CompanyStatusEnum } from '../../domain/value-objects/company-status.vo';
 import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
 import { PaymentWorkflowState } from '../../domain/value-objects/payment-workflow-state.vo';
-import { CreateCompanyDto, CompanyResponseDto, ContactDto } from '../../application/dto/company.dto';
+import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto, ContactDto } from '../../application/dto/company.dto';
 import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-workflow.component';
 
 /**
@@ -137,10 +137,18 @@ import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-w
                   <span nz-icon nzType="deployment-unit"></span>
                   狀態
                 </button>
-                <button nz-button nzType="link" nzSize="small">
+                <button nz-button nzType="link" nzSize="small" (click)="showEditModal(company)">
                   <span nz-icon nzType="edit"></span>
                 </button>
-                <button nz-button nzType="link" nzSize="small" nzDanger>
+                <button 
+                  nz-button 
+                  nzType="link" 
+                  nzSize="small" 
+                  nzDanger
+                  nz-popconfirm
+                  nzPopconfirmTitle="確定要刪除此合作夥伴嗎？"
+                  nzPopconfirmPlacement="topRight"
+                  (nzOnConfirm)="deleteCompany(company.id)">
                   <span nz-icon nzType="delete"></span>
                 </button>
               </td>
@@ -411,6 +419,190 @@ import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-w
         </ng-container>
       </nz-modal>
 
+      <!-- 編輯公司模態框 -->
+      <nz-modal
+        [(nzVisible)]="isEditModalVisible"
+        nzTitle="編輯合作夥伴"
+        nzWidth="600px"
+        [nzOkLoading]="isSubmitting()"
+        (nzOnOk)="handleUpdateCompany()"
+        (nzOnCancel)="handleCancelEdit()">
+        
+        <ng-container *nzModalContent>
+          <form nz-form [formGroup]="createForm" nzLayout="vertical">
+            <nz-form-item>
+              <nz-form-label nzRequired>公司名稱</nz-form-label>
+              <nz-form-control nzErrorTip="請輸入公司名稱">
+                <input nz-input formControlName="companyName" placeholder="請輸入公司名稱" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>統一編號</nz-form-label>
+              <nz-form-control nzErrorTip="請輸入統一編號">
+                <input nz-input formControlName="businessRegistrationNumber" placeholder="請輸入統一編號" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>公司地址</nz-form-label>
+              <nz-form-control nzErrorTip="請輸入公司地址">
+                <input nz-input formControlName="address" placeholder="請輸入公司地址" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>聯絡電話</nz-form-label>
+              <nz-form-control nzErrorTip="請輸入聯絡電話">
+                <input nz-input formControlName="businessPhone" placeholder="請輸入聯絡電話" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <div nz-row [nzGutter]="16">
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label>狀態</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="status" placeholder="請選擇狀態">
+                      <nz-option 
+                        *ngFor="let status of statusOptions" 
+                        [nzLabel]="status" 
+                        [nzValue]="status">
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label>風險等級</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="riskLevel" placeholder="請選擇風險等級">
+                      <nz-option 
+                        *ngFor="let risk of riskOptions" 
+                        [nzLabel]="risk" 
+                        [nzValue]="risk">
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+
+            <div nz-row [nzGutter]="16">
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label>傳真</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input formControlName="fax" placeholder="請輸入傳真" />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label>網站</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input formControlName="website" placeholder="請輸入網站" />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </form>
+        </ng-container>
+      </nz-modal>
+
+      <!-- 編輯公司模態框 -->
+      <nz-modal
+        [(nzVisible)]="isEditModalVisible"
+        nzTitle="編輯合作夥伴"
+        nzWidth="600px"
+        [nzOkLoading]="isSubmitting()"
+        (nzOnOk)="handleUpdateCompany()"
+        (nzOnCancel)="handleCancelEdit()">
+        
+        <ng-container *nzModalContent>
+          <form nz-form [formGroup]="editForm" nzLayout="vertical">
+            <nz-form-item>
+              <nz-form-label nzRequired>公司名稱</nz-form-label>
+              <nz-form-control nzErrorTip="請輸入公司名稱">
+                <input nz-input formControlName="companyName" placeholder="請輸入公司名稱" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>統一編號</nz-form-label>
+              <nz-form-control nzErrorTip="請輸入統一編號">
+                <input nz-input formControlName="businessRegistrationNumber" placeholder="請輸入統一編號" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>公司地址</nz-form-label>
+              <nz-form-control nzErrorTip="請輸入公司地址">
+                <input nz-input formControlName="address" placeholder="請輸入公司地址" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired>聯絡電話</nz-form-label>
+              <nz-form-control nzErrorTip="請輸入聯絡電話">
+                <input nz-input formControlName="businessPhone" placeholder="請輸入聯絡電話" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <div nz-row [nzGutter]="16">
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label>狀態</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="status" placeholder="請選擇狀態">
+                      <nz-option 
+                        *ngFor="let status of statusOptions" 
+                        [nzLabel]="status" 
+                        [nzValue]="status">
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label>風險等級</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="riskLevel" placeholder="請選擇風險等級">
+                      <nz-option 
+                        *ngFor="let risk of riskOptions" 
+                        [nzLabel]="risk" 
+                        [nzValue]="risk">
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+
+            <div nz-row [nzGutter]="16">
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label>傳真</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input formControlName="fax" placeholder="請輸入傳真" />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label>網站</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input formControlName="website" placeholder="請輸入網站" />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </form>
+        </ng-container>
+      </nz-modal>
+
       <!-- 狀態機模態框 -->
       <app-payment-workflow
         [companyId]="currentWorkflowCompanyId()"
@@ -502,7 +694,9 @@ export class CompanyListComponent {
   // 組件狀態
   private readonly searchQuerySignal = signal('');
   isCreateModalVisible = false;
+  isEditModalVisible = false;
   private readonly isSubmittingSignal = signal(false);
+  private readonly editingCompanyIdSignal = signal<string | null>(null);
 
   // 展開狀態
   private readonly expandSetSignal = signal(new Set<string>());
@@ -527,6 +721,17 @@ export class CompanyListComponent {
 
   // 表單
   createForm = this.fb.group({
+    companyName: ['', [Validators.required]],
+    businessRegistrationNumber: ['', [Validators.required]],
+    address: ['', [Validators.required]],
+    businessPhone: ['', [Validators.required]],
+    status: [CompanyStatusEnum.Active],
+    riskLevel: [RiskLevelEnum.Low],
+    fax: [''],
+    website: ['']
+  });
+
+  editForm = this.fb.group({
     companyName: ['', [Validators.required]],
     businessRegistrationNumber: ['', [Validators.required]],
     address: ['', [Validators.required]],
@@ -565,6 +770,7 @@ export class CompanyListComponent {
   readonly isWorkflowModalVisible = this.isWorkflowModalVisibleSignal.asReadonly();
   readonly currentWorkflowCompanyId = this.currentWorkflowCompanyIdSignal.asReadonly();
   readonly currentWorkflowState = this.currentWorkflowStateSignal.asReadonly();
+  readonly editingCompanyId = this.editingCompanyIdSignal.asReadonly();
 
   /**
    * 搜尋公司
@@ -809,6 +1015,12 @@ export class CompanyListComponent {
     const currentState = this.currentWorkflowStateSignal();
     if (currentState) {
       try {
+        // 檢查是否可以轉換
+        if (!currentState.canTransitionTo(transition.newState)) {
+          this.message.error('無法轉換到此狀態');
+          return;
+        }
+
         const newState = currentState.transitionTo(
           transition.newState,
           transition.operator,
@@ -816,19 +1028,97 @@ export class CompanyListComponent {
         );
         this.currentWorkflowStateSignal.set(newState);
         this.message.success('狀態轉換成功');
+
+        // 關閉模態框
+        this.onWorkflowModalVisibleChange(false);
       } catch (error) {
         console.error('狀態轉換失敗:', error);
-        this.message.error('狀態轉換失敗');
+        const errorMessage = error instanceof Error ? error.message : '未知錯誤';
+        this.message.error(`狀態轉換失敗: ${errorMessage}`);
       }
     }
   }
 
   /**
+   * 顯示編輯模態框
+   */
+  showEditModal(company: CompanyResponseDto): void {
+    this.editingCompanyIdSignal.set(company.id);
+    this.isEditModalVisible = true;
+    this.editForm.patchValue({
+      companyName: company.companyName,
+      businessRegistrationNumber: company.businessRegistrationNumber,
+      address: company.address,
+      businessPhone: company.businessPhone,
+      status: company.status,
+      riskLevel: company.riskLevel,
+      fax: company.fax,
+      website: company.website
+    });
+  }
+
+  /**
+   * 處理更新公司
+   */
+  handleUpdateCompany(): void {
+    if (this.editForm.invalid) {
+      this.markFormGroupTouched(this.editForm);
+      return;
+    }
+
+    const companyId = this.editingCompanyIdSignal();
+    if (!companyId) return;
+
+    this.isSubmittingSignal.set(true);
+    const formValue = this.editForm.value as UpdateCompanyDto;
+
+    this.companyService.updateCompany(companyId, formValue).subscribe({
+      next: () => {
+        this.message.success('更新合作夥伴成功');
+        this.isEditModalVisible = false;
+        this.editForm.reset();
+        this.editingCompanyIdSignal.set(null);
+      },
+      error: (error) => {
+        console.error('更新公司失敗:', error);
+        this.message.error('更新合作夥伴失敗');
+      },
+      complete: () => {
+        this.isSubmittingSignal.set(false);
+      }
+    });
+  }
+
+  /**
+   * 取消編輯
+   */
+  handleCancelEdit(): void {
+    this.isEditModalVisible = false;
+    this.editForm.reset();
+    this.editingCompanyIdSignal.set(null);
+  }
+
+  /**
+   * 刪除公司
+   */
+  deleteCompany(companyId: string): void {
+    this.companyService.deleteCompany(companyId).subscribe({
+      next: () => {
+        this.message.success('刪除合作夥伴成功');
+      },
+      error: (error) => {
+        console.error('刪除公司失敗:', error);
+        this.message.error('刪除合作夥伴失敗');
+      }
+    });
+  }
+
+  /**
    * 標記表單為已觸碰
    */
-  private markFormGroupTouched(): void {
-    Object.keys(this.createForm.controls).forEach(key => {
-      const control = this.createForm.get(key);
+  private markFormGroupTouched(form = this.createForm): void {
+    Object.keys(form.controls).forEach(key => {
+      const control = form.get(key);
       if (control) {
         control.markAsTouched();
         control.updateValueAndValidity();
