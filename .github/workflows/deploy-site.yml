@@ -5,6 +5,7 @@ name: Deploy website
 on:
   push:
     branches:
+      - 'master'
       - 'publish-**'
 
 jobs:
