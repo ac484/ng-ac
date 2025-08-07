@@ -971,7 +971,7 @@ export class CompanyListComponent {
   /**
    * TrackBy 函數
    */
-  trackByCompanyId(index: number, company: any): string {
+  trackByCompanyId(_index: number, company: any): string {
     return company.id;
   }
 
