@@ -1,25 +1,26 @@
-import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+
+import { WorkflowDesignerComponent } from './workflow-designer.component';
+import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto, ContactDto } from '../../application/dto/company.dto';
 import { CompanyService } from '../../application/services/company.service';
 import { CompanyStatusEnum } from '../../domain/value-objects/company-status.vo';
 import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
-import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto, ContactDto } from '../../application/dto/company.dto';
-import { WorkflowDesignerComponent } from './workflow-designer.component';
 
 /**
  * 公司列表組件
@@ -55,19 +56,14 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
         <h2>合作夥伴管理</h2>
         <div class="actions">
           <nz-input-group nzSearch [nzAddOnAfter]="searchButton" class="search-input">
-            <input 
-              nz-input 
-              placeholder="搜尋公司名稱或統編..." 
-              [ngModel]="searchQuery()"
-              (ngModelChange)="onSearch($event)"
-            />
+            <input nz-input placeholder="搜尋公司名稱或統編..." [ngModel]="searchQuery()" (ngModelChange)="onSearch($event)" />
           </nz-input-group>
           <ng-template #searchButton>
             <button nz-button nzType="primary" nzSearch>
               <span nz-icon nzType="search"></span>
             </button>
           </ng-template>
-          
+
           <button nz-button nzType="primary" (click)="showCreateModal()">
             <span nz-icon nzType="plus"></span>
             新增合作夥伴
@@ -81,24 +77,24 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
       </div>
 
       <!-- 空狀態 -->
-      <nz-empty 
+      <nz-empty
         *ngIf="!companyService.loading() && !companyService.hasCompanies()"
         nzNotFoundImage="simple"
-        nzNotFoundContent="尚無合作夥伴資料">
+        nzNotFoundContent="尚無合作夥伴資料"
+      >
         <div nz-empty-footer>
-          <button nz-button nzType="primary" (click)="showCreateModal()">
-            立即新增
-          </button>
+          <button nz-button nzType="primary" (click)="showCreateModal()"> 立即新增 </button>
         </div>
       </nz-empty>
 
       <!-- 公司列表 -->
-      <nz-table 
+      <nz-table
         *ngIf="!companyService.loading() && companyService.hasCompanies()"
-        [nzData]="filteredCompanies()" 
+        [nzData]="filteredCompanies()"
         [nzPageSize]="10"
         [nzShowSizeChanger]="true"
-        [nzShowQuickJumper]="true">
+        [nzShowQuickJumper]="true"
+      >
         <thead>
           <tr>
             <th nzWidth="50px"></th>
@@ -139,32 +135,30 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                 <button nz-button nzType="link" nzSize="small" (click)="showEditModal(company)">
                   <span nz-icon nzType="edit"></span>
                 </button>
-                <button 
-                  nz-button 
-                  nzType="link" 
-                  nzSize="small" 
+                <button
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
                   nzDanger
                   nz-popconfirm
                   nzPopconfirmTitle="確定要刪除此合作夥伴嗎？"
                   nzPopconfirmPlacement="topRight"
-                  (nzOnConfirm)="deleteCompany(company.id)">
+                  (nzOnConfirm)="deleteCompany(company.id)"
+                >
                   <span nz-icon nzType="delete"></span>
                 </button>
               </td>
             </tr>
-            
+
             <!-- 展開的聯絡人子表 -->
             @if (expandSet().has(company.id)) {
               <tr>
                 <td colspan="9" class="contact-table-container">
                   <div class="contact-section">
                     <h4>聯絡人管理</h4>
-                    
+
                     <!-- 聯絡人子表 -->
-                    <nz-table 
-                      [nzData]="getContactsForCompany(company.id)" 
-                      [nzShowPagination]="false"
-                      nzSize="small">
+                    <nz-table [nzData]="getContactsForCompany(company.id)" [nzShowPagination]="false" nzSize="small">
                       <thead>
                         <tr>
                           <th>姓名</th>
@@ -178,7 +172,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                       <tbody>
                         @for (contact of getContactsForCompany(company.id); track trackByContactIndex($index, contact); let i = $index) {
                           @let isEditing = editingContactIndex() === i && currentEditingCompanyId() === company.id;
-                          
+
                           <tr>
                             <td>
                               @if (isEditing) {
@@ -191,7 +185,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                                 {{ contact.name }}
                               }
                             </td>
-                            
+
                             <td>
                               @if (isEditing) {
                                 <nz-form-item>
@@ -203,7 +197,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                                 {{ contact.title }}
                               }
                             </td>
-                            
+
                             <td>
                               @if (isEditing) {
                                 <nz-form-item>
@@ -215,7 +209,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                                 {{ contact.email }}
                               }
                             </td>
-                            
+
                             <td>
                               @if (isEditing) {
                                 <nz-form-item>
@@ -227,7 +221,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                                 {{ contact.phone }}
                               }
                             </td>
-                            
+
                             <td>
                               @if (isEditing) {
                                 <nz-switch [(ngModel)]="editingContact().isPrimary"></nz-switch>
@@ -237,7 +231,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                                 </nz-tag>
                               }
                             </td>
-                            
+
                             <td>
                               @if (isEditing) {
                                 <a (click)="saveContact(company.id, i)" [class.disabled]="isSubmittingContact()">
@@ -251,12 +245,14 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                               } @else {
                                 <a (click)="editContact(company.id, i, contact)">編輯</a>
                                 <nz-divider nzType="vertical"></nz-divider>
-                                <a nz-popconfirm nzPopconfirmTitle="是否要刪除此聯絡人？" (nzOnConfirm)="deleteContact(company.id, i)">刪除</a>
+                                <a nz-popconfirm nzPopconfirmTitle="是否要刪除此聯絡人？" (nzOnConfirm)="deleteContact(company.id, i)"
+                                  >刪除</a
+                                >
                               }
                             </td>
                           </tr>
                         }
-                        
+
                         <!-- 新增聯絡人行 -->
                         @if (editingContactIndex() === -2 && currentEditingCompanyId() === company.id) {
                           <tr class="adding-contact-row">
@@ -305,15 +301,10 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                         }
                       </tbody>
                     </nz-table>
-                    
+
                     <!-- 新增聯絡人按鈕 -->
                     @if (editingContactIndex() === -1 || currentEditingCompanyId() !== company.id) {
-                      <button 
-                        nz-button 
-                        nzType="dashed" 
-                        nzBlock 
-                        class="add-contact-btn"
-                        (click)="addContact(company.id)">
+                      <button nz-button nzType="dashed" nzBlock class="add-contact-btn" (click)="addContact(company.id)">
                         <span nz-icon nzType="plus"></span>
                         新增聯絡人
                       </button>
@@ -333,8 +324,8 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
         nzWidth="600px"
         [nzOkLoading]="isSubmitting()"
         (nzOnOk)="handleCreateCompany()"
-        (nzOnCancel)="handleCancelCreate()">
-        
+        (nzOnCancel)="handleCancelCreate()"
+      >
         <ng-container *nzModalContent>
           <form nz-form [formGroup]="createForm" nzLayout="vertical">
             <nz-form-item>
@@ -371,11 +362,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                   <nz-form-label>狀態</nz-form-label>
                   <nz-form-control>
                     <nz-select formControlName="status" placeholder="請選擇狀態">
-                      <nz-option 
-                        *ngFor="let status of statusOptions" 
-                        [nzLabel]="status" 
-                        [nzValue]="status">
-                      </nz-option>
+                      <nz-option *ngFor="let status of statusOptions" [nzLabel]="status" [nzValue]="status"> </nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -385,11 +372,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                   <nz-form-label>風險等級</nz-form-label>
                   <nz-form-control>
                     <nz-select formControlName="riskLevel" placeholder="請選擇風險等級">
-                      <nz-option 
-                        *ngFor="let risk of riskOptions" 
-                        [nzLabel]="risk" 
-                        [nzValue]="risk">
-                      </nz-option>
+                      <nz-option *ngFor="let risk of riskOptions" [nzLabel]="risk" [nzValue]="risk"> </nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -425,8 +408,8 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
         nzWidth="600px"
         [nzOkLoading]="isSubmitting()"
         (nzOnOk)="handleUpdateCompany()"
-        (nzOnCancel)="handleCancelEdit()">
-        
+        (nzOnCancel)="handleCancelEdit()"
+      >
         <ng-container *nzModalContent>
           <form nz-form [formGroup]="createForm" nzLayout="vertical">
             <nz-form-item>
@@ -463,11 +446,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                   <nz-form-label>狀態</nz-form-label>
                   <nz-form-control>
                     <nz-select formControlName="status" placeholder="請選擇狀態">
-                      <nz-option 
-                        *ngFor="let status of statusOptions" 
-                        [nzLabel]="status" 
-                        [nzValue]="status">
-                      </nz-option>
+                      <nz-option *ngFor="let status of statusOptions" [nzLabel]="status" [nzValue]="status"> </nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -477,11 +456,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
                   <nz-form-label>風險等級</nz-form-label>
                   <nz-form-control>
                     <nz-select formControlName="riskLevel" placeholder="請選擇風險等級">
-                      <nz-option 
-                        *ngFor="let risk of riskOptions" 
-                        [nzLabel]="risk" 
-                        [nzValue]="risk">
-                      </nz-option>
+                      <nz-option *ngFor="let risk of riskOptions" [nzLabel]="risk" [nzValue]="risk"> </nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -517,84 +492,87 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
         nzWidth="90%"
         [nzFooter]="null"
         (nzOnCancel)="closeWorkflowDesigner()"
-        (nzVisibleChange)="onWorkflowDesignerVisibleChange($event)">
+        (nzVisibleChange)="onWorkflowDesignerVisibleChange($event)"
+      >
         <ng-container *nzModalContent>
           <app-workflow-designer [companyId]="currentWorkflowCompanyId()"></app-workflow-designer>
         </ng-container>
       </nz-modal>
     </div>
   `,
-  styles: [`
-    .company-list-container {
-      padding: 24px;
-    }
+  styles: [
+    `
+      .company-list-container {
+        padding: 24px;
+      }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .header h2 {
-      margin: 0;
-    }
+      .header h2 {
+        margin: 0;
+      }
 
-    .actions {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
+      .actions {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
 
-    .search-input {
-      width: 300px;
-    }
+      .search-input {
+        width: 300px;
+      }
 
-    .loading-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 200px;
-    }
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+      }
 
-    .contact-table-container {
-      padding: 0 !important;
-    }
+      .contact-table-container {
+        padding: 0 !important;
+      }
 
-    .contact-section {
-      padding: 16px;
-    }
+      .contact-section {
+        padding: 16px;
+      }
 
-    .contact-section h4 {
-      margin: 0 0 16px 0;
-      font-weight: 600;
-    }
+      .contact-section h4 {
+        margin: 0 0 16px 0;
+        font-weight: 600;
+      }
 
-    .add-contact-btn {
-      margin-top: 12px;
-      border-style: dashed;
-    }
+      .add-contact-btn {
+        margin-top: 12px;
+        border-style: dashed;
+      }
 
-    .add-contact-btn:hover {
-    }
+      .add-contact-btn:hover {
+      }
 
-    .adding-contact-row td {
-      padding: 8px;
-    }
+      .adding-contact-row td {
+        padding: 8px;
+      }
 
-    .adding-contact-row nz-form-item {
-      margin-bottom: 0;
-    }
+      .adding-contact-row nz-form-item {
+        margin-bottom: 0;
+      }
 
-    .disabled {
-      pointer-events: none;
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+      .disabled {
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
 
-    ::ng-deep .ant-table-expanded-row > td {
-    }
-  `]
+      ::ng-deep .ant-table-expanded-row > td {
+      }
+    `
+  ]
 })
 export class CompanyListComponent {
   protected readonly companyService = inject(CompanyService);
@@ -623,8 +601,6 @@ export class CompanyListComponent {
     isPrimary: false
   });
   private readonly originalContactSignal = signal<ContactDto | null>(null);
-
-
 
   // 工作流程設計器狀態
   private readonly isWorkflowDesignerVisibleSignal = signal(false);
@@ -668,9 +644,8 @@ export class CompanyListComponent {
       return companies;
     }
 
-    return companies.filter(company =>
-      company.companyName.toLowerCase().includes(query) ||
-      company.businessRegistrationNumber.includes(query)
+    return companies.filter(
+      company => company.companyName.toLowerCase().includes(query) || company.businessRegistrationNumber.includes(query)
     );
   });
   readonly expandSet = this.expandSetSignal.asReadonly();
@@ -718,7 +693,7 @@ export class CompanyListComponent {
         this.isCreateModalVisible = false;
         this.createForm.reset();
       },
-      error: (error) => {
+      error: error => {
         console.error('創建公司失敗:', error);
         this.message.error('新增合作夥伴失敗');
       },
@@ -735,8 +710,6 @@ export class CompanyListComponent {
     this.isCreateModalVisible = false;
     this.createForm.reset();
   }
-
-
 
   /**
    * 展開/收合公司行
@@ -890,8 +863,6 @@ export class CompanyListComponent {
     return `${contact.name}-${contact.email}-${index}`;
   }
 
-
-
   /**
    * 顯示編輯模態框
    */
@@ -932,7 +903,7 @@ export class CompanyListComponent {
         this.editForm.reset();
         this.editingCompanyIdSignal.set(null);
       },
-      error: (error) => {
+      error: error => {
         console.error('更新公司失敗:', error);
         this.message.error('更新合作夥伴失敗');
       },
@@ -959,7 +930,7 @@ export class CompanyListComponent {
       next: () => {
         this.message.success('刪除合作夥伴成功');
       },
-      error: (error) => {
+      error: error => {
         console.error('刪除公司失敗:', error);
         this.message.error('刪除合作夥伴失敗');
       }

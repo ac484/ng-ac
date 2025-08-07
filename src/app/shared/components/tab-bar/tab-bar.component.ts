@@ -1,21 +1,17 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { Subject, takeUntil, filter } from 'rxjs';
+
 import { TabService, TabData } from '../../services/tab.service';
 
 @Component({
   selector: 'app-tab-bar',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzTabsModule,
-    NzIconModule,
-    NzButtonModule
-  ],
+  imports: [CommonModule, NzTabsModule, NzIconModule, NzButtonModule],
   template: `
     <div class="tab-bar">
       <nz-tabset
@@ -23,112 +19,110 @@ import { TabService, TabData } from '../../services/tab.service';
         (nzSelectedIndexChange)="onTabChange($event)"
         [nzType]="'card'"
         [nzAnimated]="false"
-        [nzTabBarGutter]="0">
-        
-        <nz-tab
-          *ngFor="let tab of tabs; trackBy: trackByTabId"
-          [nzTitle]="tabTitle"
-          [nzClosable]="false">
-          
+        [nzTabBarGutter]="0"
+      >
+        <nz-tab *ngFor="let tab of tabs; trackBy: trackByTabId" [nzTitle]="tabTitle" [nzClosable]="false">
           <ng-template #tabTitle>
             <div class="tab-title">
               <i *ngIf="tab.icon" nz-icon [nzType]="tab.icon"></i>
               <span>{{ tab.title }}</span>
               <!-- 自定義關閉按鈕 -->
-              <button 
+              <button
                 *ngIf="tab.closable"
                 class="custom-close-btn"
                 (click)="onCustomTabClose($event, tab)"
                 nz-button
                 nzType="text"
                 nzSize="small"
-                title="關閉標籤">
+                title="關閉標籤"
+              >
                 <i nz-icon nzType="close" nzTheme="outline"></i>
               </button>
             </div>
           </ng-template>
-          
         </nz-tab>
       </nz-tabset>
     </div>
   `,
-  styles: [`
-    .tab-title {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      min-width: 0;
-      max-width: 200px; /* 限制最大寬度，確保關閉按鈕有空間 */
-    }
-    
-    .tab-title span {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1; /* 讓文字部分佔用剩餘空間 */
-      min-width: 0; /* 允許收縮 */
-    }
-    
-    :host ::ng-deep .ant-tabs-content-holder {
-      display: none;
-    }
+  styles: [
+    `
+      .tab-title {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-width: 0;
+        max-width: 200px; /* 限制最大寬度，確保關閉按鈕有空間 */
+      }
 
-    /* 自定義關閉按鈕樣式 */
-    :host ::ng-deep .ant-tabs-tab-remove {
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
-      width: 16px;
-      height: 16px;
-      margin-left: 8px;
-      border-radius: 2px;
-      transition: all 0.2s;
-    }
+      .tab-title span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1; /* 讓文字部分佔用剩餘空間 */
+        min-width: 0; /* 允許收縮 */
+      }
 
-    :host ::ng-deep .ant-tabs-tab-remove:hover {
-      background-color: rgba(0, 0, 0, 0.06);
-      color: #ff4d4f;
-    }
+      :host ::ng-deep .ant-tabs-content-holder {
+        display: none;
+      }
 
-    :host ::ng-deep .ant-tabs-tab-remove .anticon {
-      font-size: 12px;
-    }
+      /* 自定義關閉按鈕樣式 */
+      :host ::ng-deep .ant-tabs-tab-remove {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        margin-left: 8px;
+        border-radius: 2px;
+        transition: all 0.2s;
+      }
 
-    /* 確保關閉按鈕在所有可關閉標籤上顯示 */
-    :host ::ng-deep .ant-tabs-tab[data-node-key] .ant-tabs-tab-remove {
-      opacity: 1;
-      visibility: visible;
-    }
+      :host ::ng-deep .ant-tabs-tab-remove:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+        color: #ff4d4f;
+      }
 
-    /* 自定義關閉按鈕樣式 */
-    .custom-close-btn {
-      display: flex !important; /* 強制顯示 */
-      align-items: center;
-      justify-content: center;
-      width: 16px;
-      height: 16px;
-      min-width: 16px;
-      max-width: 16px;
-      padding: 0;
-      margin-left: 8px;
-      border: none;
-      border-radius: 2px;
-      background: transparent;
-      color: rgba(0, 0, 0, 0.45);
-      transition: all 0.2s;
-      flex-shrink: 0; /* 防止被壓縮 */
-      z-index: 10; /* 確保在最上層 */
-    }
+      :host ::ng-deep .ant-tabs-tab-remove .anticon {
+        font-size: 12px;
+      }
 
-    .custom-close-btn:hover {
-      background-color: rgba(0, 0, 0, 0.06);
-      color: #ff4d4f;
-    }
+      /* 確保關閉按鈕在所有可關閉標籤上顯示 */
+      :host ::ng-deep .ant-tabs-tab[data-node-key] .ant-tabs-tab-remove {
+        opacity: 1;
+        visibility: visible;
+      }
 
-    .custom-close-btn .anticon {
-      font-size: 10px;
-    }
-  `],
+      /* 自定義關閉按鈕樣式 */
+      .custom-close-btn {
+        display: flex !important; /* 強制顯示 */
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        min-width: 16px;
+        max-width: 16px;
+        padding: 0;
+        margin-left: 8px;
+        border: none;
+        border-radius: 2px;
+        background: transparent;
+        color: rgba(0, 0, 0, 0.45);
+        transition: all 0.2s;
+        flex-shrink: 0; /* 防止被壓縮 */
+        z-index: 10; /* 確保在最上層 */
+      }
+
+      .custom-close-btn:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+        color: #ff4d4f;
+      }
+
+      .custom-close-btn .anticon {
+        font-size: 10px;
+      }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TabBarComponent implements OnInit, OnDestroy {
@@ -140,7 +134,7 @@ export class TabBarComponent implements OnInit, OnDestroy {
     private tabService: TabService,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // 更新所有現有標籤的 closable 屬性
@@ -189,19 +183,15 @@ export class TabBarComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToTabs(): void {
-    this.tabService.tabs$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(tabs => {
-        this.tabs = tabs;
-        this.cdr.markForCheck(); // 觸發變更檢測
-      });
+    this.tabService.tabs$.pipe(takeUntil(this.destroy$)).subscribe(tabs => {
+      this.tabs = tabs;
+      this.cdr.markForCheck(); // 觸發變更檢測
+    });
 
-    this.tabService.activeTab$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(activeTab => {
-        this.activeTabId = activeTab?.id;
-        this.cdr.markForCheck(); // 觸發變更檢測
-      });
+    this.tabService.activeTab$.pipe(takeUntil(this.destroy$)).subscribe(activeTab => {
+      this.activeTabId = activeTab?.id;
+      this.cdr.markForCheck(); // 觸發變更檢測
+    });
   }
 
   private subscribeToRouter(): void {
@@ -228,12 +218,7 @@ export class TabBarComponent implements OnInit, OnDestroy {
       // Create new tab based on route
       const routeData = this.tabService.getRouteData(currentUrl);
       if (routeData) {
-        this.tabService.createTab(
-          routeData.title,
-          currentUrl,
-          routeData.icon,
-          routeData.closable
-        );
+        this.tabService.createTab(routeData.title, currentUrl, routeData.icon, routeData.closable);
       }
     }
   }

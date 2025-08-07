@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import { Tab } from '../domain/entities/tab.entity';
 
 export interface TabData {
@@ -38,7 +39,7 @@ export class TabService {
     return this.activeTabSubject.value;
   }
 
-  createTab(title: string, url: string, icon?: string, closable: boolean = true): TabData {
+  createTab(title: string, url: string, icon?: string, closable = true): TabData {
     const existingTab = this.tabs.find(tab => tab.url === url);
     if (existingTab) {
       this.activateTab(existingTab.id);

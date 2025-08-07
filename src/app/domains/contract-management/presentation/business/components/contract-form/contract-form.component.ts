@@ -1,19 +1,27 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzAlertModule } from 'ng-zorro-antd/alert';
-import { Contract, ContractType, ContractStatus, RiskLevel, PaymentStatus, CreateContractProps } from '../../../../domain/entities/contract.entity';
-import { ContractTypeSelectComponent } from '../../../../presentation/shared/components/contract-type-select';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+
+import {
+  Contract,
+  ContractType,
+  ContractStatus,
+  RiskLevel,
+  PaymentStatus,
+  CreateContractProps,
+  ContractEntity
+} from '../../../../domain/entities/contract.entity';
 import { generateContractNumber, formatContractNumber } from '../../../../domain/utils/contract-number.utils';
-import { ContractEntity } from '../../../../domain/entities/contract.entity';
+import { ContractTypeSelectComponent } from '../../../../presentation/shared/components/contract-type-select';
 
 @Component({
   selector: 'app-contract-form',
@@ -35,17 +43,12 @@ import { ContractEntity } from '../../../../domain/entities/contract.entity';
   template: `
     <form nz-form [formGroup]="contractForm" (ngSubmit)="onSubmit()">
       <nz-card [nzTitle]="isEdit ? '編輯合約' : '新增合約'">
-        
         <!-- 合約編號顯示 -->
         @if (!isEdit) {
-        <nz-alert
-          nzType="info"
-          nzMessage="合約編號將自動生成"
-          nzDescription="格式：YYYYMMDDHHMM (年+月+日+時分)"
-          class="mb-4">
-        </nz-alert>
+          <nz-alert nzType="info" nzMessage="合約編號將自動生成" nzDescription="格式：YYYYMMDDHHMM (年+月+日+時分)" class="mb-4">
+          </nz-alert>
         }
-        
+
         <!-- 基本信息 -->
         <div nz-row [nzGutter]="16">
           <nz-col [nzSpan]="12">
@@ -60,10 +63,7 @@ import { ContractEntity } from '../../../../domain/entities/contract.entity';
             <nz-form-item>
               <nz-form-label [nzSpan]="6" nzRequired>合約類型</nz-form-label>
               <nz-form-control [nzSpan]="18" nzErrorTip="請選擇合約類型">
-                <app-contract-type-select
-                  formControlName="contractType"
-                  placeholder="請選擇合約類型">
-                </app-contract-type-select>
+                <app-contract-type-select formControlName="contractType" placeholder="請選擇合約類型"> </app-contract-type-select>
               </nz-form-control>
             </nz-form-item>
           </nz-col>
@@ -138,12 +138,7 @@ import { ContractEntity } from '../../../../domain/entities/contract.entity';
             <nz-form-item>
               <nz-form-label [nzSpan]="6" nzRequired>總金額</nz-form-label>
               <nz-form-control [nzSpan]="18" nzErrorTip="請輸入總金額">
-                <nz-input-number
-                  formControlName="totalAmount"
-                  [nzMin]="0"
-                  [nzStep]="1000"
-                  placeholder="請輸入總金額"
-                  style="width: 100%">
+                <nz-input-number formControlName="totalAmount" [nzMin]="0" [nzStep]="1000" placeholder="請輸入總金額" style="width: 100%">
                 </nz-input-number>
               </nz-form-control>
             </nz-form-item>
@@ -172,20 +167,19 @@ import { ContractEntity } from '../../../../domain/entities/contract.entity';
             <button nz-button nzType="primary" [nzLoading]="loading" type="submit">
               {{ isEdit ? '更新合約' : '新增合約' }}
             </button>
-            <button nz-button type="button" (click)="onCancel()" style="margin-left: 8px;">
-              取消
-            </button>
+            <button nz-button type="button" (click)="onCancel()" style="margin-left: 8px;"> 取消 </button>
           </nz-col>
         </div>
-
       </nz-card>
     </form>
   `,
-  styles: [`
-    .mb-4 {
-      margin-bottom: 16px;
-    }
-  `]
+  styles: [
+    `
+      .mb-4 {
+        margin-bottom: 16px;
+      }
+    `
+  ]
 })
 export class ContractFormComponent implements OnInit {
   @Input() contract?: Contract;
@@ -196,7 +190,7 @@ export class ContractFormComponent implements OnInit {
 
   contractForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -218,11 +212,13 @@ export class ContractFormComponent implements OnInit {
       paymentStatus: [PaymentStatus.PENDING],
       paidAmount: [0],
       paymentSchedule: [[]],
-      approvalStatus: [{
-        status: 'pending',
-        currentStep: 1,
-        totalSteps: 3
-      }],
+      approvalStatus: [
+        {
+          status: 'pending',
+          currentStep: 1,
+          totalSteps: 3
+        }
+      ],
       approvers: [[]],
       documents: [[]],
       risks: [[]]

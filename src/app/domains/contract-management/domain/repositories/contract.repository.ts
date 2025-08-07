@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+
 import { Contract, ContractId } from '../entities/contract.entity';
 
 export interface ContractRepository {

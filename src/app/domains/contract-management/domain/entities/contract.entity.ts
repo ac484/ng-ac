@@ -11,10 +11,10 @@ export enum ContractStatus {
 
 // 合約類型枚舉 - 更新為新的業務類型
 export enum ContractType {
-  PURE_LABOR = 'pure_labor',      // 純工
+  PURE_LABOR = 'pure_labor', // 純工
   MATERIAL_INCLUDED = 'material_included', // 帶料
-  SUBCONTRACT = 'subcontract',    // 分包
-  OUTSOURCING = 'outsourcing'     // 外包
+  SUBCONTRACT = 'subcontract', // 分包
+  OUTSOURCING = 'outsourcing' // 外包
 }
 
 // 風險等級枚舉
@@ -158,6 +158,7 @@ export interface ContractRisk {
 export class ContractEntity {
   /**
    * 創建新合約
+   *
    * @param props 合約創建屬性
    * @returns 合約實體
    */
@@ -210,6 +211,7 @@ export class ContractEntity {
 
   /**
    * 生成合約編號
+   *
    * @param date 日期
    * @returns 合約編號
    */

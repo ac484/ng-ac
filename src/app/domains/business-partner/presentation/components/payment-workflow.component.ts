@@ -1,17 +1,18 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzStepsModule } from 'ng-zorro-antd/steps';
-import { NzTimelineModule } from 'ng-zorro-antd/timeline';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzTimelineModule } from 'ng-zorro-antd/timeline';
+
 import { PaymentWorkflowState, PaymentWorkflowStateEnum } from '../../domain/value-objects/payment-workflow-state.vo';
 
 export interface PaymentWorkflowTransition {
@@ -44,22 +45,14 @@ export interface PaymentWorkflowTransition {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <nz-modal
-      [(nzVisible)]="visible"
-      nzTitle="請款工作流程狀態"
-      nzWidth="700px"
-      [nzFooter]="null"
-      (nzOnCancel)="onCancel()">
-      
+    <nz-modal [(nzVisible)]="visible" nzTitle="請款工作流程狀態" nzWidth="700px" [nzFooter]="null" (nzOnCancel)="onCancel()">
       <ng-container *nzModalContent>
         <div class="workflow-container">
           <!-- 當前狀態顯示 -->
           <div class="current-state-section">
             <h4>當前狀態</h4>
             <div class="current-state">
-              <nz-tag 
-                [nzColor]="workflowState?.getStateColor() || 'default'" 
-                class="state-tag">
+              <nz-tag [nzColor]="workflowState?.getStateColor() || 'default'" class="state-tag">
                 <span nz-icon [nzType]="getStateIcon()"></span>
                 {{ workflowState?.getStateDisplayName() || 'Unknown' }}
               </nz-tag>
@@ -72,11 +65,12 @@ export interface PaymentWorkflowTransition {
           <div class="transitions-section" *ngIf="workflowState && !workflowState.isFinalState()">
             <h4>可執行操作</h4>
             <div class="transition-options">
-              <div 
-                *ngFor="let transition of workflowState.availableTransitions" 
+              <div
+                *ngFor="let transition of workflowState.availableTransitions"
                 class="transition-option"
                 [class.selected]="selectedTransition() === transition"
-                (click)="selectTransition(transition)">
+                (click)="selectTransition(transition)"
+              >
                 <nz-tag [nzColor]="workflowState.getStateColor(transition)">
                   {{ workflowState.getStateDisplayName(transition) }}
                 </nz-tag>
@@ -89,41 +83,21 @@ export interface PaymentWorkflowTransition {
                 <nz-form-item>
                   <nz-form-label>操作人員</nz-form-label>
                   <nz-form-control>
-                    <input 
-                      nz-input 
-                      [(ngModel)]="transitionOperator"
-                      placeholder="請輸入操作人員姓名" />
+                    <input nz-input [(ngModel)]="transitionOperator" placeholder="請輸入操作人員姓名" />
                   </nz-form-control>
                 </nz-form-item>
 
                 <nz-form-item>
                   <nz-form-label>備註</nz-form-label>
                   <nz-form-control>
-                    <textarea 
-                      nz-input 
-                      [(ngModel)]="transitionComment"
-                      placeholder="請輸入操作備註（選填）"
-                      rows="3">
-                    </textarea>
+                    <textarea nz-input [(ngModel)]="transitionComment" placeholder="請輸入操作備註（選填）" rows="3"> </textarea>
                   </nz-form-control>
                 </nz-form-item>
 
                 <nz-form-item>
                   <nz-form-control>
-                    <button 
-                      nz-button 
-                      nzType="primary" 
-                      [nzLoading]="isSubmitting()"
-                      (click)="executeTransition()">
-                      執行狀態轉換
-                    </button>
-                    <button 
-                      nz-button 
-                      nzType="default" 
-                      class="ml-2"
-                      (click)="cancelTransition()">
-                      取消
-                    </button>
+                    <button nz-button nzType="primary" [nzLoading]="isSubmitting()" (click)="executeTransition()"> 執行狀態轉換 </button>
+                    <button nz-button nzType="default" class="ml-2" (click)="cancelTransition()"> 取消 </button>
                   </nz-form-control>
                 </nz-form-item>
               </form>
@@ -144,25 +118,22 @@ export interface PaymentWorkflowTransition {
           <div class="history-section">
             <h4>狀態歷史</h4>
             <nz-timeline>
-              <nz-timeline-item 
+              <nz-timeline-item
                 *ngFor="let history of workflowState?.stateHistory; let i = index"
-                [nzColor]="workflowState?.getStateColor(history.state) || 'default'">
+                [nzColor]="workflowState?.getStateColor(history.state) || 'default'"
+              >
                 <div class="history-item">
                   <div class="history-header">
                     <nz-tag [nzColor]="workflowState?.getStateColor(history.state) || 'default'">
                       {{ workflowState?.getStateDisplayName(history.state) || history.state }}
                     </nz-tag>
                     <span class="history-time">
-                      {{ history.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
+                      {{ history.timestamp | date: 'yyyy-MM-dd HH:mm:ss' }}
                     </span>
                   </div>
                   <div class="history-details" *ngIf="history.operator || history.comment">
-                    <div *ngIf="history.operator" class="history-operator">
-                      操作人員: {{ history.operator }}
-                    </div>
-                    <div *ngIf="history.comment" class="history-comment">
-                      備註: {{ history.comment }}
-                    </div>
+                    <div *ngIf="history.operator" class="history-operator"> 操作人員: {{ history.operator }} </div>
+                    <div *ngIf="history.comment" class="history-comment"> 備註: {{ history.comment }} </div>
                   </div>
                 </div>
               </nz-timeline-item>
@@ -172,105 +143,107 @@ export interface PaymentWorkflowTransition {
       </ng-container>
     </nz-modal>
   `,
-  styles: [`
-    .workflow-container {
-      padding: 16px 0;
-    }
+  styles: [
+    `
+      .workflow-container {
+        padding: 16px 0;
+      }
 
-    .current-state-section h4,
-    .transitions-section h4,
-    .history-section h4 {
-      margin: 0 0 16px 0;
-      font-weight: 600;
-      color: #262626;
-    }
+      .current-state-section h4,
+      .transitions-section h4,
+      .history-section h4 {
+        margin: 0 0 16px 0;
+        font-weight: 600;
+        color: #262626;
+      }
 
-    .current-state {
-      display: flex;
-      align-items: center;
-    }
+      .current-state {
+        display: flex;
+        align-items: center;
+      }
 
-    .state-tag {
-      font-size: 14px;
-      padding: 4px 12px;
-      border-radius: 6px;
-    }
+      .state-tag {
+        font-size: 14px;
+        padding: 4px 12px;
+        border-radius: 6px;
+      }
 
-    .state-tag .anticon {
-      margin-right: 6px;
-    }
+      .state-tag .anticon {
+        margin-right: 6px;
+      }
 
-    .transition-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
+      .transition-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
 
-    .transition-option {
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
+      .transition-option {
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
 
-    .transition-option:hover {
-    }
+      .transition-option:hover {
+      }
 
-    .transition-option.selected {
-      border: 1px solid #1890ff;
-    }
+      .transition-option.selected {
+        border: 1px solid #1890ff;
+      }
 
-    .transition-form {
-      padding: 16px;
-      border-radius: 6px;
-      margin-top: 16px;
-    }
+      .transition-form {
+        padding: 16px;
+        border-radius: 6px;
+        margin-top: 16px;
+      }
 
-    .final-state-notice {
-      text-align: center;
-      padding: 16px;
-      border-radius: 6px;
-    }
+      .final-state-notice {
+        text-align: center;
+        padding: 16px;
+        border-radius: 6px;
+      }
 
-    .history-item {
-      margin-bottom: 8px;
-    }
+      .history-item {
+        margin-bottom: 8px;
+      }
 
-    .history-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 4px;
-    }
+      .history-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
 
-    .history-time {
-      font-size: 12px;
-      color: #8c8c8c;
-    }
+      .history-time {
+        font-size: 12px;
+        color: #8c8c8c;
+      }
 
-    .history-details {
-      font-size: 12px;
-      color: #595959;
-      margin-left: 8px;
-    }
+      .history-details {
+        font-size: 12px;
+        color: #595959;
+        margin-left: 8px;
+      }
 
-    .history-operator {
-      margin-bottom: 2px;
-    }
+      .history-operator {
+        margin-bottom: 2px;
+      }
 
-    .history-comment {
-      font-style: italic;
-    }
+      .history-comment {
+        font-style: italic;
+      }
 
-    .ml-2 {
-      margin-left: 8px;
-    }
+      .ml-2 {
+        margin-left: 8px;
+      }
 
-    ::ng-deep .ant-timeline-item-content {
-      margin-left: 20px;
-    }
-  `]
+      ::ng-deep .ant-timeline-item-content {
+        margin-left: 20px;
+      }
+    `
+  ]
 })
 export class PaymentWorkflowComponent {
   @Input() companyId!: string;
@@ -287,7 +260,7 @@ export class PaymentWorkflowComponent {
   transitionOperator = '';
   transitionComment = '';
 
-  constructor(private readonly message: NzMessageService) { }
+  constructor(private readonly message: NzMessageService) {}
 
   // Computed
   readonly selectedTransition = this.selectedTransitionSignal.asReadonly();

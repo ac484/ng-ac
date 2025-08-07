@@ -1,4 +1,5 @@
 import { Provider, InjectionToken } from '@angular/core';
+
 import { ContractRepository } from './domain/repositories/contract.repository';
 import { FirestoreContractRepository } from './infrastructure/repositories/firestore-contract.repository';
 

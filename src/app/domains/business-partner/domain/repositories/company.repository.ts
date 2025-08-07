@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+
 import { Company } from '../entities/company.entity';
 
 /**
@@ -6,12 +7,12 @@ import { Company } from '../entities/company.entity';
  * 極簡設計，只包含必要的 CRUD 操作
  */
 export abstract class CompanyRepository {
-    abstract getAll(): Observable<Company[]>;
-    abstract getById(id: string): Observable<Company | null>;
-    abstract create(company: Company): Observable<Company>;
-    abstract update(id: string, company: Company): Observable<Company>;
-    abstract delete(id: string): Observable<void>;
-    abstract search(query: string): Observable<Company[]>;
+  abstract getAll(): Observable<Company[]>;
+  abstract getById(id: string): Observable<Company | null>;
+  abstract create(company: Company): Observable<Company>;
+  abstract update(id: string, company: Company): Observable<Company>;
+  abstract delete(id: string): Observable<void>;
+  abstract search(query: string): Observable<Company[]>;
 }
 
 import { InjectionToken } from '@angular/core';

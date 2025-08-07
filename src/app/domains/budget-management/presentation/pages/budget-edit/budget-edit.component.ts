@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-budget-edit',
@@ -14,14 +14,16 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styles: [`
-    .budget-edit-container {
-      padding: 24px;
-    }
-    .budget-edit-content {
-      margin-top: 16px;
-    }
-  `]
+  styles: [
+    `
+      .budget-edit-container {
+        padding: 24px;
+      }
+      .budget-edit-content {
+        margin-top: 16px;
+      }
+    `
+  ]
 })
 export class BudgetEditComponent {
   constructor() {}

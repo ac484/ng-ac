@@ -4,10 +4,10 @@ import { DashboardAnalysisComponent } from './analysis/analysis.component';
 import { DashboardMonitorComponent } from './monitor/monitor.component';
 import { DashboardV1Component } from './v1/v1.component';
 import { DashboardWorkplaceComponent } from './workplace/workplace.component';
-import { ContractListComponent, ContractCreateComponent } from '../../domains/contract-management';
-import { TaskListComponent } from '../../domains/task-management';
 import { BudgetListComponent } from '../../domains/budget-management';
 import { CompanyListComponent } from '../../domains/business-partner';
+import { ContractListComponent, ContractCreateComponent } from '../../domains/contract-management';
+import { TaskListComponent } from '../../domains/task-management';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'v1', pathMatch: 'full' },

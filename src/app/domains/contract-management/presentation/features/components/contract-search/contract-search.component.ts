@@ -1,13 +1,14 @@
-import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+
 import { ContractStatus, ContractType, RiskLevel } from '../../../../domain/entities/contract.entity';
 
 export interface ContractSearchCriteria {
@@ -111,12 +112,8 @@ export interface ContractSearchCriteria {
 
         <div nz-row>
           <nz-col [nzSpan]="24" style="text-align: center;">
-            <button nz-button nzType="primary" (click)="onSearch()">
-              搜索
-            </button>
-            <button nz-button (click)="onReset()" style="margin-left: 8px;">
-              重置
-            </button>
+            <button nz-button nzType="primary" (click)="onSearch()"> 搜索 </button>
+            <button nz-button (click)="onReset()" style="margin-left: 8px;"> 重置 </button>
           </nz-col>
         </div>
       </form>

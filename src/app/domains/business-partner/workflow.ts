@@ -1,6 +1,6 @@
 // workflow-designer.component.ts
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface WorkflowState {
@@ -35,14 +35,10 @@ interface StateTransition {
         <div class="space-y-6">
           <!-- 添加狀態 -->
           <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-semibold mb-4 flex items-center">
-              ⚙️ {{ editingState ? '編輯狀態' : '新增狀態' }}
-            </h2>
+            <h2 class="text-xl font-semibold mb-4 flex items-center"> ⚙️ {{ editingState ? '編輯狀態' : '新增狀態' }} </h2>
             <div class="space-y-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                  狀態名稱
-                </label>
+                <label class="block text-sm font-medium text-gray-700 mb-1"> 狀態名稱 </label>
                 <input
                   type="text"
                   [(ngModel)]="newStateName"
@@ -51,9 +47,7 @@ interface StateTransition {
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                  狀態說明
-                </label>
+                <label class="block text-sm font-medium text-gray-700 mb-1"> 狀態說明 </label>
                 <textarea
                   [(ngModel)]="newStateDescription"
                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -69,12 +63,7 @@ interface StateTransition {
                   >
                     💾 更新
                   </button>
-                  <button
-                    (click)="cancelEdit()"
-                    class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                  >
-                    取消
-                  </button>
+                  <button (click)="cancelEdit()" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"> 取消 </button>
                 </ng-container>
                 <ng-template #addStateButton>
                   <button
@@ -95,28 +84,17 @@ interface StateTransition {
             <div class="space-y-2 max-h-60 overflow-y-auto">
               <div
                 *ngFor="let state of states"
-                [class]="'p-3 rounded-lg border-2 ' + (currentWorkflowState === state.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200')"
+                [class]="
+                  'p-3 rounded-lg border-2 ' + (currentWorkflowState === state.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200')
+                "
               >
                 <div class="flex justify-between items-start">
                   <div class="flex-1">
                     <div class="flex items-center space-x-2">
                       <h3 class="font-medium">{{ state.name }}</h3>
-                      <span
-                        *ngIf="state.isInitial"
-                        class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded"
-                      >
-                        初始
-                      </span>
-                      <span
-                        *ngIf="state.isFinal"
-                        class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
-                      >
-                        結束
-                      </span>
-                      <span
-                        *ngIf="currentWorkflowState === state.id"
-                        class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
-                      >
+                      <span *ngIf="state.isInitial" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded"> 初始 </span>
+                      <span *ngIf="state.isFinal" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"> 結束 </span>
+                      <span *ngIf="currentWorkflowState === state.id" class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
                         當前
                       </span>
                     </div>
@@ -125,33 +103,15 @@ interface StateTransition {
                     </p>
                   </div>
                   <div class="flex space-x-1">
-                    <button
-                      (click)="setAsInitialState(state.id)"
-                      class="text-green-600 hover:text-green-800 p-1"
-                      title="設為初始狀態"
-                    >
+                    <button (click)="setAsInitialState(state.id)" class="text-green-600 hover:text-green-800 p-1" title="設為初始狀態">
                       ▶️
                     </button>
-                    <button
-                      (click)="editState(state)"
-                      class="text-blue-600 hover:text-blue-800 p-1"
-                      title="編輯"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      (click)="deleteState(state.id)"
-                      class="text-red-600 hover:text-red-800 p-1"
-                      title="刪除"
-                    >
-                      🗑️
-                    </button>
+                    <button (click)="editState(state)" class="text-blue-600 hover:text-blue-800 p-1" title="編輯"> ✏️ </button>
+                    <button (click)="deleteState(state.id)" class="text-red-600 hover:text-red-800 p-1" title="刪除"> 🗑️ </button>
                   </div>
                 </div>
               </div>
-              <p *ngIf="states.length === 0" class="text-gray-500 text-center py-4">
-                尚未新增任何狀態
-              </p>
+              <p *ngIf="states.length === 0" class="text-gray-500 text-center py-4"> 尚未新增任何狀態 </p>
             </div>
           </div>
 
@@ -161,9 +121,7 @@ interface StateTransition {
             <div class="space-y-4">
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">
-                    從狀態
-                  </label>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"> 從狀態 </label>
                   <select
                     [(ngModel)]="selectedFromState"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -175,27 +133,20 @@ interface StateTransition {
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">
-                    到狀態
-                  </label>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"> 到狀態 </label>
                   <select
                     [(ngModel)]="selectedToState"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">選擇狀態</option>
-                    <option
-                      *ngFor="let state of getAvailableToStates()"
-                      [value]="state.id"
-                    >
+                    <option *ngFor="let state of getAvailableToStates()" [value]="state.id">
                       {{ state.name }}
                     </option>
                   </select>
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                  轉換條件 / 動作
-                </label>
+                <label class="block text-sm font-medium text-gray-700 mb-1"> 轉換條件 / 動作 </label>
                 <input
                   type="text"
                   [(ngModel)]="transitionCondition"
@@ -220,26 +171,16 @@ interface StateTransition {
           <div class="bg-white rounded-lg shadow p-6">
             <h2 class="text-xl font-semibold mb-4">狀態轉換規則</h2>
             <div class="space-y-2 max-h-60 overflow-y-auto">
-              <div
-                *ngFor="let transition of transitions"
-                class="flex items-center justify-between p-3 bg-gray-50 rounded"
-              >
+              <div *ngFor="let transition of transitions" class="flex items-center justify-between p-3 bg-gray-50 rounded">
                 <div class="flex items-center space-x-2">
                   <span class="font-medium">{{ getStateName(transition.from) }}</span>
                   <span>➡️</span>
                   <span class="font-medium">{{ getStateName(transition.to) }}</span>
                   <span class="text-sm text-gray-600">({{ transition.condition }})</span>
                 </div>
-                <button
-                  (click)="deleteTransition(transition.id)"
-                  class="text-red-600 hover:text-red-800"
-                >
-                  🗑️
-                </button>
+                <button (click)="deleteTransition(transition.id)" class="text-red-600 hover:text-red-800"> 🗑️ </button>
               </div>
-              <p *ngIf="transitions.length === 0" class="text-gray-500 text-center py-4">
-                尚未設定任何轉換規則
-              </p>
+              <p *ngIf="transitions.length === 0" class="text-gray-500 text-center py-4"> 尚未設定任何轉換規則 </p>
             </div>
           </div>
 
@@ -248,9 +189,7 @@ interface StateTransition {
             <h2 class="text-xl font-semibold mb-4">流程執行模擬</h2>
             <div *ngIf="currentWorkflowState; else noCurrentState" class="space-y-4">
               <div class="p-4 bg-blue-50 rounded-lg">
-                <h3 class="font-medium text-blue-800">
-                  當前狀態：{{ getCurrentStateName() }}
-                </h3>
+                <h3 class="font-medium text-blue-800"> 當前狀態：{{ getCurrentStateName() }} </h3>
                 <p class="text-sm text-blue-600 mt-1">
                   {{ getCurrentStateDescription() }}
                 </p>
@@ -267,12 +206,7 @@ interface StateTransition {
                     <div class="font-medium">{{ transition.condition }}</div>
                     <div class="text-sm text-gray-600">→ {{ getStateName(transition.to) }}</div>
                   </button>
-                  <p
-                    *ngIf="getAvailableTransitions().length === 0"
-                    class="text-gray-500 text-center py-4"
-                  >
-                    此狀態無可執行的轉換操作
-                  </p>
+                  <p *ngIf="getAvailableTransitions().length === 0" class="text-gray-500 text-center py-4"> 此狀態無可執行的轉換操作 </p>
                 </div>
               </div>
             </div>
@@ -290,17 +224,14 @@ interface StateTransition {
               <div *ngIf="states.length > 0; else noStatesPreview" class="flex flex-wrap gap-4 justify-center items-start">
                 <div
                   *ngFor="let state of states"
-                  [class]="'relative p-3 rounded-lg border-2 text-center min-w-[120px] ' + (currentWorkflowState === state.id ? 'border-blue-500 shadow-lg' : 'border-gray-300')"
+                  [class]="
+                    'relative p-3 rounded-lg border-2 text-center min-w-[120px] ' +
+                    (currentWorkflowState === state.id ? 'border-blue-500 shadow-lg' : 'border-gray-300')
+                  "
                 >
                   <div class="font-medium text-sm">{{ state.name }}</div>
-                  <div
-                    *ngIf="state.isInitial"
-                    class="absolute -top-2 -left-2 w-4 h-4 bg-green-500 rounded-full"
-                  ></div>
-                  <div
-                    *ngIf="state.isFinal"
-                    class="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full"
-                  ></div>
+                  <div *ngIf="state.isInitial" class="absolute -top-2 -left-2 w-4 h-4 bg-green-500 rounded-full"></div>
+                  <div *ngIf="state.isFinal" class="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full"></div>
                 </div>
               </div>
               <ng-template #noStatesPreview>
@@ -314,19 +245,18 @@ interface StateTransition {
       </div>
     </div>
   `,
-  styles: [`
-  `]
+  styles: [``]
 })
 export class WorkflowDesignerComponent {
   states: WorkflowState[] = [];
   transitions: StateTransition[] = [];
   editingState: WorkflowState | null = null;
-  newStateName: string = '';
-  newStateDescription: string = '';
-  selectedFromState: string = '';
-  selectedToState: string = '';
-  transitionCondition: string = '';
-  currentWorkflowState: string = '';
+  newStateName = '';
+  newStateDescription = '';
+  selectedFromState = '';
+  selectedToState = '';
+  transitionCondition = '';
+  currentWorkflowState = '';
 
   // 添加新狀態
   addState(): void {
@@ -336,8 +266,7 @@ export class WorkflowDesignerComponent {
         name: this.newStateName.trim(),
         description: this.newStateDescription.trim(),
         isInitial: this.states.length === 0,
-        isFinal: false,
-
+        isFinal: false
       };
       this.states.push(newState);
       this.newStateName = '';

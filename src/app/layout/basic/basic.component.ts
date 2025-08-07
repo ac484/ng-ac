@@ -105,18 +105,20 @@ import { TabBarComponent } from '../../shared/components/tab-bar/tab-bar.compone
     }
     <theme-btn />
   `,
-  styles: [`
-    .tab-container {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .content-area {
-      flex: 1;
-      overflow: auto;
-    }
-  `],
+  styles: [
+    `
+      .tab-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .content-area {
+        flex: 1;
+        overflow: auto;
+      }
+    `
+  ],
   imports: [
     RouterOutlet,
     RouterLink,

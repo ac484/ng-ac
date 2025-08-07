@@ -16,6 +16,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabChangeEvent, NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { finalize } from 'rxjs';
+
 import { AuthBridgeService } from '../../../domains/auth/application/services/auth-bridge.service';
 
 @Component({
@@ -197,7 +198,8 @@ export class UserLoginComponent implements OnDestroy {
     this.loading = true;
     this.cdr.detectChanges();
 
-    this.authBridgeService.signInAnonymously()
+    this.authBridgeService
+      .signInAnonymously()
       .pipe(
         finalize(() => {
           this.loading = false;
@@ -205,7 +207,7 @@ export class UserLoginComponent implements OnDestroy {
         })
       )
       .subscribe({
-        next: (res) => {
+        next: res => {
           if (res.msg !== 'ok') {
             this.error = res.msg || '匿名登入失敗';
             this.cdr.detectChanges();
@@ -228,8 +230,8 @@ export class UserLoginComponent implements OnDestroy {
             this.router.navigateByUrl(url);
           });
         },
-        error: (err) => {
-          this.error = '匿名登入失敗: ' + (err.message || '未知錯誤');
+        error: err => {
+          this.error = `匿名登入失敗: ${err.message || '未知錯誤'}`;
           this.cdr.detectChanges();
         }
       });

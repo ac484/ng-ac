@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-task-edit',
@@ -14,14 +14,16 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styles: [`
-    .task-edit-container {
-      padding: 24px;
-    }
-    .task-edit-content {
-      margin-top: 16px;
-    }
-  `]
+  styles: [
+    `
+      .task-edit-container {
+        padding: 24px;
+      }
+      .task-edit-content {
+        margin-top: 16px;
+      }
+    `
+  ]
 })
 export class TaskEditComponent {
   constructor() {}

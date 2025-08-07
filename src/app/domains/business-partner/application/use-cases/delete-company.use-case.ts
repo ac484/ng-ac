@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import { CompanyRepository, COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
 
 /**
@@ -7,12 +8,12 @@ import { CompanyRepository, COMPANY_REPOSITORY } from '../../domain/repositories
  * 極簡設計，專注核心業務邏輯
  */
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class DeleteCompanyUseCase {
-    private readonly companyRepository = inject(COMPANY_REPOSITORY);
+  private readonly companyRepository = inject(COMPANY_REPOSITORY);
 
-    execute(id: string): Observable<void> {
-        return this.companyRepository.delete(id);
-    }
+  execute(id: string): Observable<void> {
+    return this.companyRepository.delete(id);
+  }
 }

@@ -8,22 +8,23 @@ import { I18nPipe, SettingsService } from '@delon/theme';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { finalize } from 'rxjs';
-import { AuthBridgeService } from '../../../application/services/auth-bridge.service';
+
 import { LoginCommand } from '../../../application/dto/commands/login.command';
+import { AuthBridgeService } from '../../../application/services/auth-bridge.service';
 
 /**
  * 增強版登入組件
  * 支援多種認證方式：郵箱密碼、Google、管理員帳號
  */
 @Component({
-    selector: 'app-enhanced-login',
-    template: `
+  selector: 'app-enhanced-login',
+  template: `
     <div class="login-container">
       <div class="login-header">
         <h2>{{ 'login.title' | i18n }}</h2>
@@ -114,169 +115,171 @@ import { LoginCommand } from '../../../application/dto/commands/login.command';
       </div>
     </div>
   `,
-    styles: [`
-    .login-container {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
+  styles: [
+    `
+      .login-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
 
-    .login-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+      .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
 
-    .login-header h2 {
-      margin-bottom: 0.5rem;
-      color: #1890ff;
-    }
+      .login-header h2 {
+        margin-bottom: 0.5rem;
+        color: #1890ff;
+      }
 
-    .login-header p {
-      color: #666;
-      margin-bottom: 0;
-    }
+      .login-header p {
+        color: #666;
+        margin-bottom: 0;
+      }
 
-    .login-btn {
-      width: 100%;
-    }
+      .login-btn {
+        width: 100%;
+      }
 
-    .google-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border: 1px solid #d9d9d9;
-      background: white;
-      color: #333;
-    }
+      .google-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid #d9d9d9;
+        background: white;
+        color: #333;
+      }
 
-    .google-btn:hover {
-      border-color: #1890ff;
-      color: #1890ff;
-    }
+      .google-btn:hover {
+        border-color: #1890ff;
+        color: #1890ff;
+      }
 
-    .quick-login-hint {
-      margin-top: 2rem;
-      padding: 1rem;
-      background: #f6f8fa;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      color: #666;
-    }
+      .quick-login-hint {
+        margin-top: 2rem;
+        padding: 1rem;
+        background: #f6f8fa;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        color: #666;
+      }
 
-    .quick-login-hint p {
-      margin: 0.25rem 0;
-    }
+      .quick-login-hint p {
+        margin: 0.25rem 0;
+      }
 
-    .quick-login-hint strong {
-      color: #333;
-    }
-  `],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        I18nPipe,
-        NzCheckboxModule,
-        NzAlertModule,
-        NzFormModule,
-        NzInputModule,
-        NzButtonModule,
-        NzIconModule,
-        NzTabsModule,
-        NzDividerModule
-    ]
+      .quick-login-hint strong {
+        color: #333;
+      }
+    `
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    I18nPipe,
+    NzCheckboxModule,
+    NzAlertModule,
+    NzFormModule,
+    NzInputModule,
+    NzButtonModule,
+    NzIconModule,
+    NzTabsModule,
+    NzDividerModule
+  ]
 })
 export class EnhancedLoginComponent {
-    private readonly router = inject(Router);
-    private readonly settingsService = inject(SettingsService);
-    private readonly reuseTabService = inject(ReuseTabService, { optional: true });
-    private readonly tokenService = inject(DA_SERVICE_TOKEN);
-    private readonly startupSrv = inject(StartupService);
-    private readonly cdr = inject(ChangeDetectorRef);
-    private readonly authBridge = inject(AuthBridgeService);
+  private readonly router = inject(Router);
+  private readonly settingsService = inject(SettingsService);
+  private readonly reuseTabService = inject(ReuseTabService, { optional: true });
+  private readonly tokenService = inject(DA_SERVICE_TOKEN);
+  private readonly startupSrv = inject(StartupService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly authBridge = inject(AuthBridgeService);
 
-    form = inject(FormBuilder).nonNullable.group({
-        email: ['admin@company.com', [Validators.required, Validators.email]],
-        password: ['123456', [Validators.required]],
-        remember: [true]
-    });
+  form = inject(FormBuilder).nonNullable.group({
+    email: ['admin@company.com', [Validators.required, Validators.email]],
+    password: ['123456', [Validators.required]],
+    remember: [true]
+  });
 
-    error = '';
-    loading = false;
-    googleLoading = false;
+  error = '';
+  loading = false;
+  googleLoading = false;
 
-    /**
-     * 郵箱密碼登入
-     */
-    async onSubmit(): Promise<void> {
-        if (this.form.invalid) return;
+  /**
+   * 郵箱密碼登入
+   */
+  async onSubmit(): Promise<void> {
+    if (this.form.invalid) return;
 
-        this.error = '';
-        this.loading = true;
-        this.cdr.detectChanges();
+    this.error = '';
+    this.loading = true;
+    this.cdr.detectChanges();
 
-        try {
-            const { email, password } = this.form.value;
-            const command = LoginCommand.createEmailLogin(email!, password!);
+    try {
+      const { email, password } = this.form.value;
+      const command = LoginCommand.createEmailLogin(email!, password!);
 
-            const result = await this.authBridge.signInWithEmailPassword(email!, password!).toPromise();
+      const result = await this.authBridge.signInWithEmailPassword(email!, password!).toPromise();
 
-            if (result.msg === 'ok') {
-                await this.handleLoginSuccess();
-            } else {
-                this.error = result.msg;
-            }
-        } catch (error: any) {
-            console.error('Login error:', error);
-            this.error = error.message || 'Login failed';
-        } finally {
-            this.loading = false;
-            this.cdr.detectChanges();
-        }
+      if (result.msg === 'ok') {
+        await this.handleLoginSuccess();
+      } else {
+        this.error = result.msg;
+      }
+    } catch (error: any) {
+      console.error('Login error:', error);
+      this.error = error.message || 'Login failed';
+    } finally {
+      this.loading = false;
+      this.cdr.detectChanges();
     }
+  }
 
-    /**
-     * Google 登入
-     */
-    async signInWithGoogle(): Promise<void> {
-        this.error = '';
-        this.googleLoading = true;
-        this.cdr.detectChanges();
+  /**
+   * Google 登入
+   */
+  async signInWithGoogle(): Promise<void> {
+    this.error = '';
+    this.googleLoading = true;
+    this.cdr.detectChanges();
 
-        try {
-            const result = await this.authBridge.signInWithGoogle().toPromise();
+    try {
+      const result = await this.authBridge.signInWithGoogle().toPromise();
 
-            if (result.msg === 'ok') {
-                await this.handleLoginSuccess();
-            } else {
-                this.error = result.msg;
-            }
-        } catch (error: any) {
-            console.error('Google login error:', error);
-            this.error = error.message || 'Google login failed';
-        } finally {
-            this.googleLoading = false;
-            this.cdr.detectChanges();
-        }
+      if (result.msg === 'ok') {
+        await this.handleLoginSuccess();
+      } else {
+        this.error = result.msg;
+      }
+    } catch (error: any) {
+      console.error('Google login error:', error);
+      this.error = error.message || 'Google login failed';
+    } finally {
+      this.googleLoading = false;
+      this.cdr.detectChanges();
     }
+  }
 
-    /**
-     * 處理登入成功
-     */
-    private async handleLoginSuccess(): Promise<void> {
-        // 清空路由復用信息
-        this.reuseTabService?.clear();
+  /**
+   * 處理登入成功
+   */
+  private async handleLoginSuccess(): Promise<void> {
+    // 清空路由復用信息
+    this.reuseTabService?.clear();
 
-        // 重新獲取 StartupService 內容
-        await this.startupSrv.load().toPromise();
+    // 重新獲取 StartupService 內容
+    await this.startupSrv.load().toPromise();
 
-        // 導航到主頁
-        let url = this.tokenService.referrer!.url || '/';
-        if (url.includes('/passport')) {
-            url = '/';
-        }
-        this.router.navigateByUrl(url);
+    // 導航到主頁
+    let url = this.tokenService.referrer!.url || '/';
+    if (url.includes('/passport')) {
+      url = '/';
     }
+    this.router.navigateByUrl(url);
+  }
 }

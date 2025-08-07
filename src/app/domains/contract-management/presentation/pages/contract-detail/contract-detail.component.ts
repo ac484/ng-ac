@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-contract-detail',
@@ -14,14 +14,16 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styles: [`
-    .contract-detail-container {
-      padding: 24px;
-    }
-    .contract-detail-content {
-      margin-top: 16px;
-    }
-  `]
+  styles: [
+    `
+      .contract-detail-container {
+        padding: 24px;
+      }
+      .contract-detail-content {
+        margin-top: 16px;
+      }
+    `
+  ]
 })
 export class ContractDetailComponent {
   constructor() {}

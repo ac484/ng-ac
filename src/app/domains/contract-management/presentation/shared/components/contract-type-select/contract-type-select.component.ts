@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+
 import { ContractType } from '../../../../domain/entities/contract.entity';
 
 @Component({
@@ -9,16 +10,8 @@ import { ContractType } from '../../../../domain/entities/contract.entity';
   standalone: true,
   imports: [CommonModule, FormsModule, NzSelectModule],
   template: `
-    <nz-select
-      [ngModel]="value"
-      (ngModelChange)="onChange($event)"
-      [nzPlaceHolder]="placeholder"
-      [nzAllowClear]="allowClear">
-      <nz-option
-        *ngFor="let type of contractTypes"
-        [nzValue]="type.value"
-        [nzLabel]="type.label">
-      </nz-option>
+    <nz-select [ngModel]="value" (ngModelChange)="onChange($event)" [nzPlaceHolder]="placeholder" [nzAllowClear]="allowClear">
+      <nz-option *ngFor="let type of contractTypes" [nzValue]="type.value" [nzLabel]="type.label"> </nz-option>
     </nz-select>
   `
 })

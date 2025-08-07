@@ -19,12 +19,7 @@ export class Tab {
     this.props = props;
   }
 
-  static create(
-    title: string,
-    url: string,
-    icon?: string,
-    closable: boolean = true
-  ): Tab {
+  static create(title: string, url: string, icon?: string, closable = true): Tab {
     if (!title || title.trim().length === 0) {
       throw new Error('Tab title cannot be empty');
     }

@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+
 import { ContractStatus } from '../../../../domain/entities/contract.entity';
 
 @Component({

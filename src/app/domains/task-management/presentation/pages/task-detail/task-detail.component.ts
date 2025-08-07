@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-task-detail',
@@ -14,14 +14,16 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styles: [`
-    .task-detail-container {
-      padding: 24px;
-    }
-    .task-detail-content {
-      margin-top: 16px;
-    }
-  `]
+  styles: [
+    `
+      .task-detail-container {
+        padding: 24px;
+      }
+      .task-detail-content {
+        margin-top: 16px;
+      }
+    `
+  ]
 })
 export class TaskDetailComponent {
   constructor() {}
