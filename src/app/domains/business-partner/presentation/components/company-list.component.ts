@@ -18,9 +18,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { CompanyService } from '../../application/services/company.service';
 import { CompanyStatusEnum } from '../../domain/value-objects/company-status.vo';
 import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
-import { PaymentWorkflowState } from '../../domain/value-objects/payment-workflow-state.vo';
 import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto, ContactDto } from '../../application/dto/company.dto';
-import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-workflow.component';
 import { WorkflowDesignerComponent } from './workflow-designer.component';
 
 /**
@@ -47,7 +45,6 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
     NzDividerModule,
     NzPopconfirmModule,
     NzSwitchModule,
-    PaymentWorkflowComponent,
     WorkflowDesignerComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -135,13 +132,9 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
               </td>
               <td>{{ company.contacts.length }}</td>
               <td>
-                <button nz-button nzType="link" nzSize="small" (click)="showWorkflowModal(company.id)">
-                  <span nz-icon nzType="deployment-unit"></span>
-                  狀態
-                </button>
                 <button nz-button nzType="link" nzSize="small" (click)="showWorkflowDesigner()">
                   <span nz-icon nzType="setting"></span>
-                  設計
+                  工作流程
                 </button>
                 <button nz-button nzType="link" nzSize="small" (click)="showEditModal(company)">
                   <span nz-icon nzType="edit"></span>
@@ -516,15 +509,6 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
           </form>
         </ng-container>
       </nz-modal>
-
-      <!-- 狀態機模態框 -->
-      <app-payment-workflow
-        [companyId]="currentWorkflowCompanyId()"
-        [workflowState]="currentWorkflowState()"
-        [visible]="isWorkflowModalVisible()"
-        (visibleChange)="onWorkflowModalVisibleChange($event)"
-        (stateTransition)="onStateTransition($event)">
-      </app-payment-workflow>
 
       <!-- 工作流程設計器模態框 -->
       <nz-modal
