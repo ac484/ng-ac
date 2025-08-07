@@ -13,7 +13,6 @@ import { CompanyListComponent } from '../components/company-list.component';
   styles: [`
     .company-manager {
       height: 100%;
-      background: #f5f5f5;
     }
   `]
 })

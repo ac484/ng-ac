@@ -66,7 +66,7 @@ import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
               <td>{{ company.companyName }}</td>
               <td>{{ company.businessRegistrationNumber }}</td>
               <td>
-                <nz-tag [nzColor]="getStatusColor(company.status)">{{ company.status }}</nz-tag>
+                <nz-tag>{{ company.status }}</nz-tag>
               </td>
               <td>{{ company.businessPhone }}</td>
               <td>
@@ -93,7 +93,7 @@ import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
                       <td>{{ contact.email }}</td>
                       <td>{{ contact.phone }}</td>
                       <td>
-                        <nz-tag [nzColor]="contact.isPrimary ? 'green' : 'default'">
+                        <nz-tag>
                           {{ contact.isPrimary ? '是' : '否' }}
                         </nz-tag>
                       </td>
@@ -194,15 +194,6 @@ export class CompanyListComponent implements OnInit {
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
-    }
-  }
-
-  getStatusColor(status: string): string {
-    switch (status) {
-      case '啟用中': return 'green';
-      case '停用': return 'orange';
-      case '黑名單': return 'red';
-      default: return 'default';
     }
   }
 
