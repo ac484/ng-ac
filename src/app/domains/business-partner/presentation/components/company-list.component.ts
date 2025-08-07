@@ -132,7 +132,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
               </td>
               <td>{{ company.contacts.length }}</td>
               <td>
-                <button nz-button nzType="link" nzSize="small" (click)="showWorkflowDesigner()">
+                <button nz-button nzType="link" nzSize="small" (click)="showWorkflowDesigner(company.id)">
                   <span nz-icon nzType="setting"></span>
                   工作流程
                 </button>
@@ -519,7 +519,7 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
         (nzOnCancel)="closeWorkflowDesigner()"
         (nzVisibleChange)="onWorkflowDesignerVisibleChange($event)">
         <ng-container *nzModalContent>
-          <app-workflow-designer></app-workflow-designer>
+          <app-workflow-designer [companyId]="currentWorkflowCompanyId()"></app-workflow-designer>
         </ng-container>
       </nz-modal>
     </div>
@@ -628,6 +628,7 @@ export class CompanyListComponent {
 
   // 工作流程設計器狀態
   private readonly isWorkflowDesignerVisibleSignal = signal(false);
+  private readonly currentWorkflowCompanyIdSignal = signal<string>('');
 
   // 表單
   createForm = this.fb.group({
@@ -679,6 +680,7 @@ export class CompanyListComponent {
   readonly editingContact = this.editingContactSignal.asReadonly();
   readonly editingCompanyId = this.editingCompanyIdSignal.asReadonly();
   readonly isWorkflowDesignerVisible = this.isWorkflowDesignerVisibleSignal.asReadonly();
+  readonly currentWorkflowCompanyId = this.currentWorkflowCompanyIdSignal.asReadonly();
 
   /**
    * 搜尋公司
@@ -967,7 +969,8 @@ export class CompanyListComponent {
   /**
    * 顯示工作流程設計器
    */
-  showWorkflowDesigner(): void {
+  showWorkflowDesigner(companyId: string): void {
+    this.currentWorkflowCompanyIdSignal.set(companyId);
     this.isWorkflowDesignerVisibleSignal.set(true);
   }
 
@@ -976,6 +979,7 @@ export class CompanyListComponent {
    */
   closeWorkflowDesigner(): void {
     this.isWorkflowDesignerVisibleSignal.set(false);
+    this.currentWorkflowCompanyIdSignal.set('');
   }
 
   /**
@@ -983,6 +987,9 @@ export class CompanyListComponent {
    */
   onWorkflowDesignerVisibleChange(visible: boolean): void {
     this.isWorkflowDesignerVisibleSignal.set(visible);
+    if (!visible) {
+      this.currentWorkflowCompanyIdSignal.set('');
+    }
   }
 
   /**
