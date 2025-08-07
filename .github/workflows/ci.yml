@@ -25,7 +25,7 @@ jobs:
       - name: Install node modules
         run: yarn install
       - name: Build
-        run: ./scripts/_ci/deploy-pipelines.sh
+        run: chmod +x ./scripts/_ci/deploy-pipelines.sh && ./scripts/_ci/deploy-pipelines.sh
       - name: 'Deploy Site'
         if: github.event.number
         run: |
@@ -72,7 +72,7 @@ jobs:
       - name: Install node modules
         run: yarn install
       - name: Build
-        run: ./scripts/_ci/deploy-pipelines.sh -day
+        run: chmod +x ./scripts/_ci/deploy-pipelines.sh && ./scripts/_ci/deploy-pipelines.sh -day
       - name: 'Deploy Site'
         if: github.event.number
         run: |
