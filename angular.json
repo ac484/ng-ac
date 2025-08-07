@@ -34,7 +34,8 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.less",
+              "node_modules/ng-zorro-antd/ng-zorro-antd.dark.less"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
