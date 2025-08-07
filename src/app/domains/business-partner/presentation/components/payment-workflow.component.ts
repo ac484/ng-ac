@@ -215,16 +215,13 @@ export interface PaymentWorkflowTransition {
     }
 
     .transition-option:hover {
-      background-color: #f5f5f5;
     }
 
     .transition-option.selected {
-      background-color: #e6f7ff;
       border: 1px solid #1890ff;
     }
 
     .transition-form {
-      background: #fafafa;
       padding: 16px;
       border-radius: 6px;
       margin-top: 16px;
@@ -233,7 +230,6 @@ export interface PaymentWorkflowTransition {
     .final-state-notice {
       text-align: center;
       padding: 16px;
-      background: #f6ffed;
       border-radius: 6px;
     }
 
