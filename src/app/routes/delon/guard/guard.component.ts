@@ -14,6 +14,7 @@ export class GuardComponent {
   private readonly menuSrv = inject(MenuService);
   private readonly router = inject(Router);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get data(): any {
     return this.aclSrv.data;
   }

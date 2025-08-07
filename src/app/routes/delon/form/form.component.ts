@@ -9,6 +9,7 @@ import { SHARED_IMPORTS } from '@shared';
   imports: SHARED_IMPORTS
 })
 export class DelonFormComponent {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params: any = {};
   url = `/user`;
   searchSchema: SFSchema = {
