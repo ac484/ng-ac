@@ -17,7 +17,7 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Comment on github
         if: github.event.number
-        run: node ./scripts/_ci/github-comment.js "RELEASE" "[Using release @delon, Preview Preparing...](https://github.com/ng-alain/ng-alain/actions/runs/${{ github.run_id }})"
+        run: node ./scripts/_ci/github-comment.js "RELEASE" "[Using release @delon, Preview Preparing...](https://github.com/ac484/ng-ac/actions/runs/${{ github.run_id }})"
         env:
           ACCESS_REPO: ${{ github.repository }}
           ACCESS_TOKEN: ${{ secrets.CI_TOKEN }}
@@ -49,7 +49,7 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
       - name: 'When failed'
         if: github.event.number && failure()
-        run: node ./scripts/_ci/github-comment.js "RELEASE" "[Using release @delon, Preview Failed](https://github.com/ng-alain/ng-alain/actions/runs/${{ github.run_id }})"
+        run: node ./scripts/_ci/github-comment.js "RELEASE" "[Using release @delon, Preview Failed](https://github.com/ac484/ng-ac/actions/runs/${{ github.run_id }})"
         env:
           ACCESS_REPO: ${{ github.repository }}
           ACCESS_TOKEN: ${{ secrets.CI_TOKEN }}
@@ -64,7 +64,7 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Comment on github
         if: github.event.number
-        run: node ./scripts/_ci/github-comment.js "RELEASE_DAY" "[Using day release @delon, Preview Preparing...](https://github.com/ng-alain/ng-alain/actions/runs/${{ github.run_id }})"
+        run: node ./scripts/_ci/github-comment.js "RELEASE_DAY" "[Using day release @delon, Preview Preparing...](https://github.com/ac484/ng-ac/actions/runs/${{ github.run_id }})"
         env:
           ACCESS_REPO: ${{ github.repository }}
           ACCESS_TOKEN: ${{ secrets.CI_TOKEN }}
@@ -96,7 +96,7 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
       - name: 'When failed'
         if: github.event.number && failure()
-        run: node ./scripts/_ci/github-comment.js "RELEASE" "[Using day release @delon, Preview Failed](https://github.com/ng-alain/ng-alain/actions/runs/${{ github.run_id }})"
+        run: node ./scripts/_ci/github-comment.js "RELEASE" "[Using day release @delon, Preview Failed](https://github.com/ac484/ng-ac/actions/runs/${{ github.run_id }})"
         env:
           ACCESS_REPO: ${{ github.repository }}
           ACCESS_TOKEN: ${{ secrets.CI_TOKEN }}
