@@ -40,6 +40,7 @@ export class User extends BaseAggregateRoot<UserId> {
   /**
    * 從 Firebase 用戶創建
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromFirebaseUser(firebaseUser: any): User {
     const email = Email.create(firebaseUser.email);
     const profile = UserProfile.create(firebaseUser.displayName || 'User', firebaseUser.displayName || 'User');
@@ -50,6 +51,7 @@ export class User extends BaseAggregateRoot<UserId> {
   /**
    * 從匿名 Firebase 用戶創建
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromAnonymousUser(firebaseUser: any): User {
     // 匿名用戶沒有 email，使用 uid 生成一個虛擬 email
     const anonymousEmail = `anonymous-${firebaseUser.uid}@anonymous.com`;
@@ -102,6 +104,7 @@ export class User extends BaseAggregateRoot<UserId> {
   /**
    * 轉換為 @delon/auth 格式
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toDelonAuthUser(): any {
     return {
       token: this.generateToken(),

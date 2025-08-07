@@ -29,6 +29,7 @@ export class AuthBridgeService {
   /**
    * 使用郵箱密碼登入
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signInWithEmailPassword(email: string, password: string): Observable<any> {
     // 檢查是否為管理員帳號
     if (email === 'admin@company.com' && password === '123456') {
@@ -48,6 +49,7 @@ export class AuthBridgeService {
   /**
    * 使用 Google 登入
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signInWithGoogle(): Observable<any> {
     const provider = new GoogleAuthProvider();
     return from(signInWithPopup(this.firebaseAuth, provider)).pipe(
@@ -62,6 +64,7 @@ export class AuthBridgeService {
   /**
    * 匿名登入
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signInAnonymously(): Observable<any> {
     return from(signInAnonymously(this.firebaseAuth)).pipe(
       map(credential => {
@@ -134,6 +137,7 @@ export class AuthBridgeService {
   /**
    * 處理管理員登入
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleAdminLogin(): Observable<any> {
     const email = Email.create('admin@company.com');
     const profile = UserProfile.create('Admin', 'User');
@@ -145,6 +149,7 @@ export class AuthBridgeService {
   /**
    * 設置 @delon/auth token
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private setDelonAuthToken(user: User): any {
     const delonUser = user.toDelonAuthUser();
     this.delonTokenService.set(delonUser);
