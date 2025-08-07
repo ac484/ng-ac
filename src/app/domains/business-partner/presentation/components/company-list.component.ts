@@ -517,98 +517,6 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
         </ng-container>
       </nz-modal>
 
-      <!-- 編輯公司模態框 -->
-      <nz-modal
-        [(nzVisible)]="isEditModalVisible"
-        nzTitle="編輯合作夥伴"
-        nzWidth="600px"
-        [nzOkLoading]="isSubmitting()"
-        (nzOnOk)="handleUpdateCompany()"
-        (nzOnCancel)="handleCancelEdit()">
-        
-        <ng-container *nzModalContent>
-          <form nz-form [formGroup]="editForm" nzLayout="vertical">
-            <nz-form-item>
-              <nz-form-label nzRequired>公司名稱</nz-form-label>
-              <nz-form-control nzErrorTip="請輸入公司名稱">
-                <input nz-input formControlName="companyName" placeholder="請輸入公司名稱" />
-              </nz-form-control>
-            </nz-form-item>
-
-            <nz-form-item>
-              <nz-form-label nzRequired>統一編號</nz-form-label>
-              <nz-form-control nzErrorTip="請輸入統一編號">
-                <input nz-input formControlName="businessRegistrationNumber" placeholder="請輸入統一編號" />
-              </nz-form-control>
-            </nz-form-item>
-
-            <nz-form-item>
-              <nz-form-label nzRequired>公司地址</nz-form-label>
-              <nz-form-control nzErrorTip="請輸入公司地址">
-                <input nz-input formControlName="address" placeholder="請輸入公司地址" />
-              </nz-form-control>
-            </nz-form-item>
-
-            <nz-form-item>
-              <nz-form-label nzRequired>聯絡電話</nz-form-label>
-              <nz-form-control nzErrorTip="請輸入聯絡電話">
-                <input nz-input formControlName="businessPhone" placeholder="請輸入聯絡電話" />
-              </nz-form-control>
-            </nz-form-item>
-
-            <div nz-row [nzGutter]="16">
-              <div nz-col nzSpan="12">
-                <nz-form-item>
-                  <nz-form-label>狀態</nz-form-label>
-                  <nz-form-control>
-                    <nz-select formControlName="status" placeholder="請選擇狀態">
-                      <nz-option 
-                        *ngFor="let status of statusOptions" 
-                        [nzLabel]="status" 
-                        [nzValue]="status">
-                      </nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="12">
-                <nz-form-item>
-                  <nz-form-label>風險等級</nz-form-label>
-                  <nz-form-control>
-                    <nz-select formControlName="riskLevel" placeholder="請選擇風險等級">
-                      <nz-option 
-                        *ngFor="let risk of riskOptions" 
-                        [nzLabel]="risk" 
-                        [nzValue]="risk">
-                      </nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-
-            <div nz-row [nzGutter]="16">
-              <div nz-col nzSpan="12">
-                <nz-form-item>
-                  <nz-form-label>傳真</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="fax" placeholder="請輸入傳真" />
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="12">
-                <nz-form-item>
-                  <nz-form-label>網站</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="website" placeholder="請輸入網站" />
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-          </form>
-        </ng-container>
-      </nz-modal>
-
       <!-- 狀態機模態框 -->
       <app-payment-workflow
         [companyId]="currentWorkflowCompanyId()"
@@ -620,11 +528,12 @@ import { WorkflowDesignerComponent } from './workflow-designer.component';
 
       <!-- 工作流程設計器模態框 -->
       <nz-modal
-        [(nzVisible)]="isWorkflowDesignerVisible"
+        [nzVisible]="isWorkflowDesignerVisible()"
         nzTitle="工作流程設計器"
         nzWidth="90%"
         [nzFooter]="null"
-        (nzOnCancel)="closeWorkflowDesigner()">
+        (nzOnCancel)="closeWorkflowDesigner()"
+        (nzVisibleChange)="onWorkflowDesignerVisibleChange($event)">
         <ng-container *nzModalContent>
           <app-workflow-designer></app-workflow-designer>
         </ng-container>
@@ -1146,6 +1055,13 @@ export class CompanyListComponent {
    */
   closeWorkflowDesigner(): void {
     this.isWorkflowDesignerVisibleSignal.set(false);
+  }
+
+  /**
+   * 工作流程設計器可見性變更
+   */
+  onWorkflowDesignerVisibleChange(visible: boolean): void {
+    this.isWorkflowDesignerVisibleSignal.set(visible);
   }
 
   /**
