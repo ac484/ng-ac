@@ -1,2 +1,3 @@
 // Repositories
-export * from './repositories/contact.repository.impl';
+export * from './repositories/company.repository.impl';
+

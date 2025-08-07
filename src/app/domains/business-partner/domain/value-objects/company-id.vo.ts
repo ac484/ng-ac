@@ -1,34 +1,34 @@
 import { ValueObject } from '@shared';
 import { v4 as uuidv4 } from 'uuid';
 
-export interface ContactIdProps {
+export interface CompanyIdProps {
     value: string;
 }
 
 /**
- * 聯絡人 ID 值對象
+ * 公司 ID 值對象
  */
-export class ContactId extends ValueObject<ContactIdProps> {
-    private constructor(props: ContactIdProps) {
+export class CompanyId extends ValueObject<CompanyIdProps> {
+    private constructor(props: CompanyIdProps) {
         super(props);
     }
 
-    static create(value: string): ContactId {
+    static create(value: string): CompanyId {
         if (!value || value.trim().length === 0) {
-            throw new Error('Contact ID cannot be empty');
+            throw new Error('Company ID cannot be empty');
         }
-        return new ContactId({ value: value.trim() });
+        return new CompanyId({ value: value.trim() });
     }
 
-    static generate(): ContactId {
-        return new ContactId({ value: uuidv4() });
+    static generate(): CompanyId {
+        return new CompanyId({ value: uuidv4() });
     }
 
     get value(): string {
         return this.props.value;
     }
 
-    override equals(vo?: ContactId): boolean {
+    override equals(vo?: CompanyId): boolean {
         if (vo === null || vo === undefined) {
             return false;
         }

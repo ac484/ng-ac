@@ -1,5 +1,6 @@
 // DTOs
-export * from './dto/create-contact.dto';
+export * from './dto/create-company.dto';
 
 // Services
-export * from './services/contact.application.service';
+export * from './services/company.application.service';
+
