@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ChangeDetectionStrategy, computed, effect } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -14,6 +14,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CompanyApplicationService } from '../../application/services/company.application.service';
 import { CompanyResponseDto, CreateCompanyDto } from '../../application/dto/create-company.dto';
@@ -40,7 +42,9 @@ import { finalize } from 'rxjs/operators';
     NzDatePickerModule,
     NzSwitchModule,
     NzSpinModule,
-    ScrollingModule
+    ScrollingModule,
+    NzDividerModule,
+    NzPopconfirmModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -107,44 +111,170 @@ import { finalize } from 'rxjs/operators';
                 </td>
                 <td>{{ company.businessPhone }}</td>
                 <td>
-                  <button nz-button nzType="link" (click)="editCompany(company)">編輯</button>
-                  <button nz-button nzType="link" nzDanger (click)="deleteCompany(company)">刪除</button>
+                  <div class="action-buttons">
+                    <button nz-button nzSize="small" nzType="default" (click)="editCompany(company)">
+                      <span nz-icon nzType="edit"></span>
+                      編輯
+                    </button>
+                    <button nz-button nzSize="small" nzType="primary" (click)="manageContacts(company)">
+                      <span nz-icon nzType="team"></span>
+                      聯絡人 ({{ company.contacts.length }})
+                    </button>
+                    <button nz-button nzSize="small" nzType="default" nzDanger (click)="deleteCompany(company)">
+                      <span nz-icon nzType="delete"></span>
+                      刪除
+                    </button>
+                  </div>
                 </td>
               </tr>
               @if (expandSet().has(company.id)) {
                 <tr>
                   <td colspan="6">
-                    <nz-table 
-                      #contactTable 
-                      [nzData]="company.contacts" 
-                      nzSize="small" 
-                      [nzShowPagination]="false"
-                      [nzVirtualItemSize]="40">
-                      <thead>
-                        <tr>
-                          <th>姓名</th>
-                          <th>職稱</th>
-                          <th>Email</th>
-                          <th>電話</th>
-                          <th>主要聯絡人</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (contact of contactTable.data; track contact.name) {
+                    <div class="contact-section">
+                      <nz-table 
+                        #contactTable 
+                        [nzData]="company.contacts" 
+                        nzSize="small" 
+                        [nzShowPagination]="false"
+                        [nzVirtualItemSize]="40">
+                        <thead>
                           <tr>
-                            <td>{{ contact.name }}</td>
-                            <td>{{ contact.title }}</td>
-                            <td>{{ contact.email }}</td>
-                            <td>{{ contact.phone }}</td>
-                            <td>
-                              <nz-tag [nzColor]="contact.isPrimary ? 'green' : 'default'">
-                                {{ contact.isPrimary ? '是' : '否' }}
-                              </nz-tag>
-                            </td>
+                            <th>姓名</th>
+                            <th>職稱</th>
+                            <th>Email</th>
+                            <th>電話</th>
+                            <th>主要聯絡人</th>
+                            <th width="120px">操作</th>
                           </tr>
-                        }
-                      </tbody>
-                    </nz-table>
+                        </thead>
+                        <tbody>
+                          @for (contact of contactTable.data; track contact.name; let i = $index) {
+                            @let isEditing = editingContactIndex() === i && currentEditingCompanyId() === company.id;
+                            <tr>
+                              <td>
+                                @if (isEditing) {
+                                  <nz-form-item>
+                                    <nz-form-control nzErrorTip="請輸入姓名">
+                                      <input nz-input [(ngModel)]="editingContact().name" placeholder="請輸入姓名" />
+                                    </nz-form-control>
+                                  </nz-form-item>
+                                } @else {
+                                  {{ contact.name }}
+                                }
+                              </td>
+                              <td>
+                                @if (isEditing) {
+                                  <nz-form-item>
+                                    <nz-form-control nzErrorTip="請輸入職稱">
+                                      <input nz-input [(ngModel)]="editingContact().title" placeholder="請輸入職稱" />
+                                    </nz-form-control>
+                                  </nz-form-item>
+                                } @else {
+                                  {{ contact.title }}
+                                }
+                              </td>
+                              <td>
+                                @if (isEditing) {
+                                  <nz-form-item>
+                                    <nz-form-control nzErrorTip="請輸入有效的Email">
+                                      <input nz-input [(ngModel)]="editingContact().email" placeholder="請輸入Email" type="email" />
+                                    </nz-form-control>
+                                  </nz-form-item>
+                                } @else {
+                                  {{ contact.email }}
+                                }
+                              </td>
+                              <td>
+                                @if (isEditing) {
+                                  <nz-form-item>
+                                    <nz-form-control nzErrorTip="請輸入電話">
+                                      <input nz-input [(ngModel)]="editingContact().phone" placeholder="請輸入電話" />
+                                    </nz-form-control>
+                                  </nz-form-item>
+                                } @else {
+                                  {{ contact.phone }}
+                                }
+                              </td>
+                              <td>
+                                @if (isEditing) {
+                                  <nz-switch [(ngModel)]="editingContact().isPrimary"></nz-switch>
+                                } @else {
+                                  <nz-tag [nzColor]="contact.isPrimary ? 'green' : 'default'">
+                                    {{ contact.isPrimary ? '是' : '否' }}
+                                  </nz-tag>
+                                }
+                              </td>
+                              <td>
+                                @if (isEditing) {
+                                  <a (click)="saveInlineContact(company.id, i)">保存</a>
+                                  <nz-divider nzType="vertical"></nz-divider>
+                                  <a (click)="cancelInlineEdit()">取消</a>
+                                } @else {
+                                  <a (click)="editInlineContact(company.id, i, contact)">編輯</a>
+                                  <nz-divider nzType="vertical"></nz-divider>
+                                  <a nz-popconfirm nzPopconfirmTitle="是否要刪除此聯絡人？" (nzOnConfirm)="deleteInlineContact(company.id, i)">刪除</a>
+                                }
+                              </td>
+                            </tr>
+                          }
+                          
+                          <!-- 新增聯絡人行 -->
+                          @if (editingContactIndex() === -2 && currentEditingCompanyId() === company.id) {
+                            <tr class="adding-contact-row">
+                              <td>
+                                <nz-form-item>
+                                  <nz-form-control nzErrorTip="請輸入姓名">
+                                    <input nz-input [(ngModel)]="editingContact().name" placeholder="請輸入姓名" />
+                                  </nz-form-control>
+                                </nz-form-item>
+                              </td>
+                              <td>
+                                <nz-form-item>
+                                  <nz-form-control nzErrorTip="請輸入職稱">
+                                    <input nz-input [(ngModel)]="editingContact().title" placeholder="請輸入職稱" />
+                                  </nz-form-control>
+                                </nz-form-item>
+                              </td>
+                              <td>
+                                <nz-form-item>
+                                  <nz-form-control nzErrorTip="請輸入有效的Email">
+                                    <input nz-input [(ngModel)]="editingContact().email" placeholder="請輸入Email" type="email" />
+                                  </nz-form-control>
+                                </nz-form-item>
+                              </td>
+                              <td>
+                                <nz-form-item>
+                                  <nz-form-control nzErrorTip="請輸入電話">
+                                    <input nz-input [(ngModel)]="editingContact().phone" placeholder="請輸入電話" />
+                                  </nz-form-control>
+                                </nz-form-item>
+                              </td>
+                              <td>
+                                <nz-switch [(ngModel)]="editingContact().isPrimary"></nz-switch>
+                              </td>
+                              <td>
+                                <a (click)="saveInlineContact(company.id, -1)">保存</a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <a (click)="cancelInlineEdit()">取消</a>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </nz-table>
+                      
+                      <!-- 內聯新增聯絡人按鈕 -->
+                      @if (editingContactIndex() === -1 || currentEditingCompanyId() !== company.id) {
+                        <button 
+                          nz-button 
+                          nzType="dashed" 
+                          nzBlock 
+                          class="inline-add-contact-btn"
+                          (click)="addInlineContact(company.id)">
+                          <span nz-icon nzType="plus"></span>
+                          新增聯絡人
+                        </button>
+                      }
+                    </div>
                   </td>
                 </tr>
               }
@@ -153,19 +283,19 @@ import { finalize } from 'rxjs/operators';
         </nz-table>
       }
 
-      <!-- 新增/編輯合作夥伴模態框 -->
+      <!-- 新增/編輯公司模態框 -->
       <nz-modal
         [nzVisible]="isModalVisible()"
         [nzTitle]="modalTitle()"
-        [nzWidth]="1200"
+        [nzWidth]="800"
         [nzOkLoading]="submitLoading()"
-        nzOkText="確認"
+        nzOkText="建立"
         nzCancelText="取消"
         (nzOnCancel)="handleCancel()"
-        (nzOnOk)="handleOk()">
+        (nzOnOk)="handleCompanySave()">
         
         <ng-container *nzModalContent>
-          <form nz-form [formGroup]="companyForm" nzLayout="vertical">
+          <form nz-form [formGroup]="companyBasicForm" nzLayout="vertical">
             
             <!-- 基本資訊區塊 -->
             <div class="form-section">
@@ -343,39 +473,64 @@ import { finalize } from 'rxjs/operators';
               </div>
             </div>
 
-            <!-- 聯絡人清單區塊 -->
-            <div class="form-section">
-              <h3 class="section-title">
+          </form>
+        </ng-container>
+      </nz-modal>
+
+      <!-- 聯絡人管理模態框 -->
+      <nz-modal
+        [nzVisible]="isContactModalVisible()"
+        [nzTitle]="contactModalTitle()"
+        [nzWidth]="900"
+        [nzOkLoading]="contactSubmitLoading()"
+        nzOkText="儲存聯絡人"
+        nzCancelText="取消"
+        (nzOnCancel)="handleContactCancel()"
+        (nzOnOk)="handleContactSave()">
+        
+        <ng-container *nzModalContent>
+          <div class="contact-management">
+            <div class="contact-header">
+              <h4>
                 <span nz-icon nzType="team"></span>
-                聯絡人清單
-                <button 
-                  nz-button 
-                  nzType="dashed" 
-                  nzSize="small"
-                  (click)="addContact()" 
-                  class="add-contact-btn">
-                  <span nz-icon nzType="plus"></span>
-                  新增聯絡人
-                </button>
-              </h3>
-              
-              <div formArrayName="contacts">
-                @if (contactsFormArray.length > 0) {
-                  <div class="contacts-container">
-                    @for (contactControl of contactsFormArray.controls; track $index) {
-                      <div class="contact-card" [formGroupName]="$index">
-                        <div class="contact-header">
-                          <span class="contact-index">聯絡人 {{ $index + 1 }}</span>
-                          <button 
-                            nz-button 
-                            nzType="text" 
-                            nzDanger 
-                            nzSize="small"
-                            (click)="removeContact($index)"
-                            [disabled]="contactsFormArray.length === 1">
-                            <span nz-icon nzType="close"></span>
-                          </button>
-                        </div>
+                聯絡人管理
+              </h4>
+              <button 
+                nz-button 
+                nzType="primary" 
+                nzSize="default"
+                (click)="addContact()" 
+                class="add-contact-btn">
+                <span nz-icon nzType="plus"></span>
+                新增聯絡人
+              </button>
+            </div>
+            
+            <!-- 聯絡人數量提示 -->
+            <div class="contact-info">
+              <nz-tag [nzColor]="contactsFormArray.length > 0 ? 'blue' : 'default'">
+                目前共有 {{ contactsFormArray.length }} 位聯絡人
+              </nz-tag>
+            </div>
+            
+            <div formArrayName="contacts">
+              @if (contactsFormArray.length > 0) {
+                <div class="contacts-container">
+                  @for (contactControl of contactsFormArray.controls; track $index) {
+                    <div class="contact-card" [formGroupName]="$index">
+                      <div class="contact-header">
+                        <span class="contact-index">聯絡人 {{ $index + 1 }}</span>
+                        <button 
+                          nz-button 
+                          nzType="text" 
+                          nzDanger 
+                          nzSize="small"
+                          (click)="removeContact($index)"
+                          [disabled]="contactsFormArray.length === 1">
+                          <span nz-icon nzType="close"></span>
+                        </button>
+                      </div>
+                      <form nz-form [formGroup]="contactControl" nzLayout="vertical">
                         <div nz-row [nzGutter]="16">
                           <div nz-col nzSpan="12">
                             <nz-form-item>
@@ -418,23 +573,25 @@ import { finalize } from 'rxjs/operators';
                             </nz-form-item>
                           </div>
                         </div>
-                      </div>
-                    }
+                      </form>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <div class="empty-contacts">
+                  <div class="empty-icon">
+                    <span nz-icon nzType="user-add" style="font-size: 64px; color: #1890ff;"></span>
                   </div>
-                } @else {
-                  <div class="empty-contacts">
-                    <span nz-icon nzType="user-add" style="font-size: 48px;"></span>
-                    <p>尚未新增任何聯絡人</p>
-                    <button nz-button nzType="dashed" (click)="addContact()">
-                      <span nz-icon nzType="plus"></span>
-                      新增第一個聯絡人
-                    </button>
-                  </div>
-                }
-              </div>
+                  <h4>尚未新增任何聯絡人</h4>
+                  <p>請點擊上方的「新增聯絡人」按鈕來新增第一位聯絡人</p>
+                  <button nz-button nzType="primary" nzSize="large" (click)="addContact()">
+                    <span nz-icon nzType="plus"></span>
+                    新增第一個聯絡人
+                  </button>
+                </div>
+              }
             </div>
-
-          </form>
+          </div>
         </ng-container>
       </nz-modal>
     </div>
@@ -505,13 +662,133 @@ import { finalize } from 'rxjs/operators';
     
     .empty-contacts {
       text-align: center;
-      padding: 40px;
-      color: #999;
+      padding: 60px 40px;
+      background: #fafafa;
+      border-radius: 8px;
+      border: 2px dashed #d9d9d9;
+    }
+
+    .empty-contacts .empty-icon {
+      margin-bottom: 20px;
+    }
+    
+    .empty-contacts h4 {
+      margin: 16px 0 8px 0;
+      color: #262626;
+      font-size: 18px;
+      font-weight: 500;
     }
     
     .empty-contacts p {
-      margin: 16px 0;
-      font-size: 16px;
+      margin: 8px 0 24px 0;
+      font-size: 14px;
+      color: #8c8c8c;
+      line-height: 1.5;
+    }
+
+    .contact-management {
+      padding: 16px 0;
+    }
+
+    .contact-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      background: #f5f5f5;
+      border-radius: 6px;
+    }
+
+    .contact-header h4 {
+      margin: 0;
+      color: #262626;
+      font-weight: 600;
+    }
+
+    .contact-info {
+      margin-bottom: 16px;
+      padding: 0 16px;
+    }
+
+    .add-contact-btn {
+      box-shadow: 0 2px 4px rgba(24, 144, 255, 0.2);
+    }
+
+    .contact-card {
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 16px;
+      background: #fafafa;
+    }
+
+    .contact-card .contact-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .contact-index {
+      font-weight: 500;
+      color: #262626;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .action-buttons button {
+      border-radius: 4px;
+    }
+
+    .action-buttons button:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .action-buttons button:not(:first-child):not(:last-child) {
+      border-radius: 0;
+      margin-left: -1px;
+    }
+
+    .action-buttons button:last-child {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: -1px;
+    }
+
+    .contact-section {
+      padding: 16px;
+      background: #fafafa;
+      border-radius: 6px;
+    }
+
+    .inline-add-contact-btn {
+      margin-top: 12px;
+      border-style: dashed;
+      color: #1890ff;
+      border-color: #1890ff;
+    }
+
+    .inline-add-contact-btn:hover {
+      color: #40a9ff;
+      border-color: #40a9ff;
+    }
+
+    .adding-contact-row {
+      background-color: #f6ffed;
+      border: 1px solid #b7eb8f;
+    }
+
+    .adding-contact-row td {
+      padding: 8px;
+    }
+
+    .adding-contact-row nz-form-item {
+      margin-bottom: 0;
     }
   `]
 })
@@ -530,26 +807,47 @@ export class CompanyListComponent implements OnInit {
   searchQuery = signal('');
   expandSet = signal(new Set<string>());
 
-  // Modal 狀態
+  // 公司模態框狀態
   isModalVisible = signal(false);
   submitLoading = signal(false);
   isEditMode = signal(false);
   editingCompany = signal<CompanyResponseDto | null>(null);
 
+  // 聯絡人模態框狀態
+  isContactModalVisible = signal(false);
+  contactSubmitLoading = signal(false);
+  isContactEditMode = signal(false);
+  currentCompanyId = signal<string | null>(null);
+
+  // 內聯編輯聯絡人狀態
+  editingContactIndex = signal(-1);
+  currentEditingCompanyId = signal<string | null>(null);
+  editingContact = signal<any>({
+    name: '',
+    title: '',
+    email: '',
+    phone: '',
+    isPrimary: false
+  });
+  originalContact = signal<any>(null);
+
   // 表單
+  companyBasicForm!: FormGroup;
   companyForm!: FormGroup;
 
   // Computed values
   statusOptions = computed(() => Object.values(CompanyStatusEnum));
   riskOptions = computed(() => Object.values(RiskLevelEnum));
   modalTitle = computed(() => this.isEditMode() ? '編輯合作夥伴' : '新增合作夥伴');
+  contactModalTitle = computed(() => this.isContactEditMode() ? '編輯聯絡人' : '管理聯絡人');
 
   ngOnInit(): void {
-    this.initForm();
+    this.initForms();
   }
 
-  private initForm(): void {
-    this.companyForm = this.fb.group({
+  private initForms(): void {
+    // 公司基本信息表單
+    this.companyBasicForm = this.fb.group({
       companyName: ['', [Validators.required]],
       businessRegistrationNumber: ['', [Validators.required]],
       status: [CompanyStatusEnum.Active, [Validators.required]],
@@ -565,7 +863,11 @@ export class CompanyListComponent implements OnInit {
       creditScore: [0, [Validators.required, Validators.min(0)]],
       riskLevel: [RiskLevelEnum.Low, [Validators.required]],
       reviewHistory: [''],
-      blacklistReason: [''],
+      blacklistReason: ['']
+    });
+
+    // 聯絡人表單
+    this.companyForm = this.fb.group({
       contacts: this.fb.array([])
     });
   }
@@ -629,17 +931,16 @@ export class CompanyListComponent implements OnInit {
   showCreateModal(): void {
     this.isEditMode.set(false);
     this.editingCompany.set(null);
-    this.initForm();
-    this.addContact();
+    this.initForms();
     this.isModalVisible.set(true);
   }
 
   editCompany(company: CompanyResponseDto): void {
     this.isEditMode.set(true);
     this.editingCompany.set(company);
-    this.initForm();
+    this.initForms();
 
-    this.companyForm.patchValue({
+    this.companyBasicForm.patchValue({
       companyName: company.companyName,
       businessRegistrationNumber: company.businessRegistrationNumber,
       status: company.status,
@@ -658,6 +959,23 @@ export class CompanyListComponent implements OnInit {
       blacklistReason: company.blacklistReason
     });
 
+    this.isModalVisible.set(true);
+  }
+
+  manageContacts(company: CompanyResponseDto): void {
+    this.currentCompanyId.set(company.id);
+    this.isContactEditMode.set(true);
+    this.initContactForm(company);
+    this.isContactModalVisible.set(true);
+  }
+
+  private initContactForm(company: CompanyResponseDto): void {
+    // 清空現有聯絡人
+    while (this.contactsFormArray.length !== 0) {
+      this.contactsFormArray.removeAt(0);
+    }
+
+    // 添加現有聯絡人
     if (company.contacts && company.contacts.length > 0) {
       company.contacts.forEach(contact => {
         this.contactsFormArray.push(this.fb.group({
@@ -669,28 +987,37 @@ export class CompanyListComponent implements OnInit {
         }));
       });
     } else {
+      // 如果沒有聯絡人，添加一個空的聯絡人表單
       this.addContact();
     }
-
-    this.isModalVisible.set(true);
   }
 
   handleCancel(): void {
     this.isModalVisible.set(false);
     this.isEditMode.set(false);
     this.editingCompany.set(null);
-    this.initForm();
+    this.initForms();
   }
 
-  handleOk(): void {
-    if (!this.companyForm.valid) {
+  handleContactCancel(): void {
+    this.isContactModalVisible.set(false);
+    this.isContactEditMode.set(false);
+    this.currentCompanyId.set(null);
+    this.initForms();
+  }
+
+  handleCompanySave(): void {
+    if (!this.companyBasicForm.valid) {
       this.message.error('請填寫所有必填欄位');
-      this.markFormGroupTouched(this.companyForm);
+      this.markFormGroupTouched(this.companyBasicForm);
       return;
     }
 
     this.submitLoading.set(true);
-    const formData = this.companyForm.value as CreateCompanyDto;
+    const formData = {
+      ...this.companyBasicForm.value,
+      contacts: [] // 確保包含空的聯絡人數組
+    } as CreateCompanyDto;
 
     if (this.isEditMode()) {
       const companyId = this.editingCompany()?.id;
@@ -710,17 +1037,73 @@ export class CompanyListComponent implements OnInit {
         });
       }
     } else {
+      // 新增模式：直接建立公司
       this.companyService.createCompany(formData).pipe(
         finalize(() => this.submitLoading.set(false))
       ).subscribe({
-        next: () => {
+        next: (createdCompany) => {
           this.message.success('新增合作夥伴成功');
           this.handleCancel();
           this.companyService.refreshCompanies();
+
+          // 詢問是否要新增聯絡人
+          this.modalService.confirm({
+            nzTitle: '新增聯絡人',
+            nzContent: `是否要為 ${createdCompany.companyName} 新增聯絡人？`,
+            nzOkText: '是',
+            nzCancelText: '否',
+            nzOnOk: () => {
+              this.currentCompanyId.set(createdCompany.id);
+              this.isContactEditMode.set(false);
+              this.initContactForm(createdCompany);
+              this.isContactModalVisible.set(true);
+            },
+            nzOnCancel: () => {
+              // 用戶選擇不新增聯絡人，不做任何操作
+            }
+          });
         },
         error: (err) => {
           console.error('Create company error:', err);
           this.message.error('新增合作夥伴失敗');
+        }
+      });
+    }
+  }
+
+  handleContactSave(): void {
+    if (!this.companyForm.valid) {
+      this.message.error('請檢查聯絡人資料');
+      this.markFormGroupTouched(this.companyForm);
+      return;
+    }
+
+    this.contactSubmitLoading.set(true);
+    const contacts = this.contactsFormArray.value;
+
+    // 過濾掉空的聯絡人（所有字段都為空的聯絡人）
+    const validContacts = contacts.filter(contact =>
+      contact.name?.trim() ||
+      contact.title?.trim() ||
+      contact.email?.trim() ||
+      contact.phone?.trim()
+    );
+
+    // 更新公司的聯絡人信息
+    const companyId = this.currentCompanyId();
+    if (companyId) {
+      const updateData = { contacts: validContacts };
+      this.companyService.updateCompany(companyId, updateData).pipe(
+        finalize(() => this.contactSubmitLoading.set(false))
+      ).subscribe({
+        next: () => {
+          this.message.success('聯絡人更新成功');
+          this.handleContactCancel();
+          this.companyService.refreshCompanies();
+        },
+        error: (err) => {
+          console.error('Update contacts error:', err);
+          this.message.error('聯絡人更新失敗');
         }
       });
     }
@@ -734,7 +1117,10 @@ export class CompanyListComponent implements OnInit {
     if (this.contactsFormArray.length > 1) {
       this.contactsFormArray.removeAt(index);
     } else {
-      this.message.warning('至少需要保留一個聯絡人');
+      // 如果是最後一個聯絡人，清空表單並添加一個新的空聯絡人
+      this.contactsFormArray.clear();
+      this.addContact();
+      this.message.info('已重置聯絡人表單');
     }
   }
 
@@ -783,5 +1169,120 @@ export class CompanyListComponent implements OnInit {
         }
       }
     });
+  }
+
+  // 內聯編輯聯絡人方法
+  addInlineContact(companyId: string): void {
+    // 如果正在編輯其他聯絡人，先取消
+    if (this.editingContactIndex() !== -1) {
+      this.cancelInlineEdit();
+    }
+
+    // 設置為新增模式
+    this.currentEditingCompanyId.set(companyId);
+    this.editingContactIndex.set(-2); // -2 表示新增模式
+    this.editingContact.set({
+      name: '',
+      title: '',
+      email: '',
+      phone: '',
+      isPrimary: false
+    });
+    this.originalContact.set(null);
+  }
+
+  editInlineContact(companyId: string, index: number, contact: any): void {
+    // 如果正在編輯其他聯絡人，先取消
+    if (this.editingContactIndex() !== -1) {
+      this.cancelInlineEdit();
+    }
+
+    this.currentEditingCompanyId.set(companyId);
+    this.editingContactIndex.set(index);
+    this.editingContact.set({ ...contact });
+    this.originalContact.set({ ...contact });
+  }
+
+  saveInlineContact(companyId: string, index: number): void {
+    const contact = this.editingContact();
+
+    // 驗證必填欄位
+    if (!contact.name?.trim() || !contact.title?.trim() || !contact.email?.trim() || !contact.phone?.trim()) {
+      this.message.error('請填寫所有必填欄位');
+      return;
+    }
+
+    // 驗證 Email 格式
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contact.email)) {
+      this.message.error('請輸入有效的 Email 格式');
+      return;
+    }
+
+    // 獲取當前公司的聯絡人列表
+    const company = this.companies().find(c => c.id === companyId);
+    if (!company) {
+      this.message.error('找不到公司資料');
+      return;
+    }
+
+    let updatedContacts = [...company.contacts];
+
+    if (this.editingContactIndex() === -2) {
+      // 新增模式
+      updatedContacts.push(contact);
+    } else {
+      // 編輯模式
+      updatedContacts[index] = contact;
+    }
+
+    // 更新公司資料
+    const updateData = { contacts: updatedContacts };
+    this.companyService.updateCompany(companyId, updateData).subscribe({
+      next: () => {
+        this.message.success(this.editingContactIndex() === -2 ? '新增聯絡人成功' : '更新聯絡人成功');
+        this.cancelInlineEdit();
+        this.companyService.refreshCompanies();
+      },
+      error: (err) => {
+        console.error('Update contact error:', err);
+        this.message.error(this.editingContactIndex() === -2 ? '新增聯絡人失敗' : '更新聯絡人失敗');
+      }
+    });
+  }
+
+  deleteInlineContact(companyId: string, index: number): void {
+    const company = this.companies().find(c => c.id === companyId);
+    if (!company) {
+      this.message.error('找不到公司資料');
+      return;
+    }
+
+    const updatedContacts = company.contacts.filter((_, i) => i !== index);
+    const updateData = { contacts: updatedContacts };
+
+    this.companyService.updateCompany(companyId, updateData).subscribe({
+      next: () => {
+        this.message.success('刪除聯絡人成功');
+        this.companyService.refreshCompanies();
+      },
+      error: (err) => {
+        console.error('Delete contact error:', err);
+        this.message.error('刪除聯絡人失敗');
+      }
+    });
+  }
+
+  cancelInlineEdit(): void {
+    this.editingContactIndex.set(-1);
+    this.currentEditingCompanyId.set(null);
+    this.editingContact.set({
+      name: '',
+      title: '',
+      email: '',
+      phone: '',
+      isPrimary: false
+    });
+    this.originalContact.set(null);
   }
 }

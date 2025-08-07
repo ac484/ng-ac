@@ -89,8 +89,8 @@ export class CompanyApplicationService {
         this.errorSignal.set(null);
 
         try {
-            // 確保聯絡人數據正確格式化
-            const contacts = dto.contacts.map(contact => ({
+            // 確保聯絡人數據正確格式化，處理可能為空的情況
+            const contacts = (dto.contacts || []).map(contact => ({
                 name: contact.name || '',
                 title: contact.title || '',
                 email: contact.email || '',
@@ -134,21 +134,33 @@ export class CompanyApplicationService {
 
                 // 使用最現代化的不可變更新方式
                 // 創建新的 Company 實例而不是修改現有實例
-                const updatedCompany = company.updateStatus(
-                    dto.status ? CompanyStatus.create(dto.status) : company.status
-                ).updateRiskLevel(
-                    dto.riskLevel ? RiskLevel.create(dto.riskLevel) : company.riskLevel
-                );
+                let updatedCompany = company;
 
-                // 如果需要更新聯絡人，使用不可變方法
-                let finalCompany = updatedCompany;
-                if (dto.contacts) {
-                    const newContacts = dto.contacts.map(c => Contact.create(c));
-                    // 移除所有現有聯絡人並添加新的
-                    finalCompany = newContacts.reduce((acc, contact) => acc.addContact(contact), finalCompany);
+                // 更新狀態
+                if (dto.status) {
+                    updatedCompany = updatedCompany.updateStatus(CompanyStatus.create(dto.status));
                 }
 
-                return this.companyRepository.update(id, finalCompany);
+                // 更新風險等級
+                if (dto.riskLevel) {
+                    updatedCompany = updatedCompany.updateRiskLevel(RiskLevel.create(dto.riskLevel));
+                }
+
+                // 如果需要更新聯絡人，使用 addContact 方法逐步添加
+                if (dto.contacts !== undefined) {
+                    // 先清除所有現有聯絡人
+                    for (let i = updatedCompany.contacts.length - 1; i >= 0; i--) {
+                        updatedCompany = updatedCompany.removeContact(i);
+                    }
+
+                    // 添加新的聯絡人
+                    const newContacts = dto.contacts.map(c => Contact.create(c));
+                    newContacts.forEach(contact => {
+                        updatedCompany = updatedCompany.addContact(contact);
+                    });
+                }
+
+                return this.companyRepository.update(id, updatedCompany);
             }),
             map(updatedCompany => this.toResponseDto(updatedCompany)),
             finalize(() => this.loadingSignal.set(false)),
