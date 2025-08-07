@@ -21,6 +21,7 @@ import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
 import { PaymentWorkflowState } from '../../domain/value-objects/payment-workflow-state.vo';
 import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto, ContactDto } from '../../application/dto/company.dto';
 import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-workflow.component';
+import { WorkflowDesignerComponent } from './workflow-designer.component';
 
 /**
  * 公司列表組件
@@ -46,7 +47,8 @@ import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-w
     NzDividerModule,
     NzPopconfirmModule,
     NzSwitchModule,
-    PaymentWorkflowComponent
+    PaymentWorkflowComponent,
+    WorkflowDesignerComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -136,6 +138,10 @@ import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-w
                 <button nz-button nzType="link" nzSize="small" (click)="showWorkflowModal(company.id)">
                   <span nz-icon nzType="deployment-unit"></span>
                   狀態
+                </button>
+                <button nz-button nzType="link" nzSize="small" (click)="showWorkflowDesigner()">
+                  <span nz-icon nzType="setting"></span>
+                  設計
                 </button>
                 <button nz-button nzType="link" nzSize="small" (click)="showEditModal(company)">
                   <span nz-icon nzType="edit"></span>
@@ -611,6 +617,18 @@ import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-w
         (visibleChange)="onWorkflowModalVisibleChange($event)"
         (stateTransition)="onStateTransition($event)">
       </app-payment-workflow>
+
+      <!-- 工作流程設計器模態框 -->
+      <nz-modal
+        [(nzVisible)]="isWorkflowDesignerVisible"
+        nzTitle="工作流程設計器"
+        nzWidth="90%"
+        [nzFooter]="null"
+        (nzOnCancel)="closeWorkflowDesigner()">
+        <ng-container *nzModalContent>
+          <app-workflow-designer></app-workflow-designer>
+        </ng-container>
+      </nz-modal>
     </div>
   `,
   styles: [`
@@ -718,6 +736,9 @@ export class CompanyListComponent {
   private readonly currentWorkflowCompanyIdSignal = signal('');
   private readonly currentWorkflowStateSignal = signal<PaymentWorkflowState | null>(null);
 
+  // 工作流程設計器狀態
+  private readonly isWorkflowDesignerVisibleSignal = signal(false);
+
   // 表單
   createForm = this.fb.group({
     companyName: ['', [Validators.required]],
@@ -770,6 +791,7 @@ export class CompanyListComponent {
   readonly currentWorkflowCompanyId = this.currentWorkflowCompanyIdSignal.asReadonly();
   readonly currentWorkflowState = this.currentWorkflowStateSignal.asReadonly();
   readonly editingCompanyId = this.editingCompanyIdSignal.asReadonly();
+  readonly isWorkflowDesignerVisible = this.isWorkflowDesignerVisibleSignal.asReadonly();
 
   /**
    * 搜尋公司
@@ -1110,6 +1132,20 @@ export class CompanyListComponent {
         this.message.error('刪除合作夥伴失敗');
       }
     });
+  }
+
+  /**
+   * 顯示工作流程設計器
+   */
+  showWorkflowDesigner(): void {
+    this.isWorkflowDesignerVisibleSignal.set(true);
+  }
+
+  /**
+   * 關閉工作流程設計器
+   */
+  closeWorkflowDesigner(): void {
+    this.isWorkflowDesignerVisibleSignal.set(false);
   }
 
   /**

@@ -3,6 +3,7 @@ import { CompanyId } from '../value-objects/company-id.vo';
 import { CompanyStatus, CompanyStatusEnum } from '../value-objects/company-status.vo';
 import { RiskLevel, RiskLevelEnum } from '../value-objects/risk-level.vo';
 import { PaymentWorkflowState } from '../value-objects/payment-workflow-state.vo';
+import { DynamicWorkflowStateVO } from '../value-objects/dynamic-workflow-state.vo';
 import { Contact } from './contact.entity';
 
 /**
@@ -20,6 +21,7 @@ export interface CreateCompanyProps {
     website?: string;
     contacts?: Contact[];
     paymentWorkflow?: PaymentWorkflowState;
+    dynamicWorkflow?: DynamicWorkflowStateVO;
 }
 
 /**
@@ -39,6 +41,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
         public readonly website: string,
         public readonly contacts: readonly Contact[],
         public readonly paymentWorkflow: PaymentWorkflowState | null,
+        public readonly dynamicWorkflow: DynamicWorkflowStateVO | null,
         public readonly createdAt: Date,
         public readonly updatedAt: Date
     ) {
@@ -65,6 +68,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
             props.website?.trim() || '',
             props.contacts || [],
             props.paymentWorkflow || PaymentWorkflowState.create(),
+            props.dynamicWorkflow || null,
             now,
             now
         );
@@ -89,6 +93,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
             props.website?.trim() ?? this.website,
             this.contacts,
             props.paymentWorkflow ?? this.paymentWorkflow,
+            props.dynamicWorkflow ?? this.dynamicWorkflow,
             this.createdAt,
             new Date()
         );
@@ -107,6 +112,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
             this.website,
             this.contacts,
             this.paymentWorkflow,
+            this.dynamicWorkflow,
             this.createdAt,
             new Date()
         );
@@ -134,6 +140,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
             this.website,
             updatedContacts,
             this.paymentWorkflow,
+            this.dynamicWorkflow,
             this.createdAt,
             new Date()
         );
@@ -162,6 +169,38 @@ export class Company extends BaseAggregateRoot<CompanyId> {
         );
     }
 
+    // 動態工作流程管理方法
+    updateDynamicWorkflow(workflow: DynamicWorkflowStateVO): Company {
+        return new Company(
+            this.id,
+            this.companyName,
+            this.businessRegistrationNumber,
+            this.address,
+            this.businessPhone,
+            this.status,
+            this.riskLevel,
+            this.fax,
+            this.website,
+            this.contacts,
+            this.paymentWorkflow,
+            workflow,
+            this.createdAt,
+            new Date()
+        );
+    }
+
+    // 獲取當前工作流程狀態
+    getCurrentWorkflowState(): string {
+        return this.dynamicWorkflow?.getCurrentState()?.name ||
+            this.paymentWorkflow?.getStateDisplayName() ||
+            '無狀態';
+    }
+
+    // 檢查是否可以執行工作流程轉換
+    canExecuteWorkflowTransition(targetStateId: string): boolean {
+        return this.dynamicWorkflow?.canTransitionTo(targetStateId) || false;
+    }
+
     // 序列化方法（用於 Firebase）
     toPlainObject(): any {
         return {
@@ -181,6 +220,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
                 phone: c.phone,
                 isPrimary: c.isPrimary
             })),
+            dynamicWorkflow: this.dynamicWorkflow?.toPlainObject(),
             createdAt: this.createdAt.toISOString(),
             updatedAt: this.updatedAt.toISOString()
         };
