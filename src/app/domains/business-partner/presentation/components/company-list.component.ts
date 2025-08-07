@@ -1,11 +1,11 @@
 import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -688,7 +688,6 @@ import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-w
 export class CompanyListComponent {
   protected readonly companyService = inject(CompanyService);
   private readonly fb = inject(FormBuilder);
-  private readonly modal = inject(NzModalService);
   private readonly message = inject(NzMessageService);
 
   // 組件狀態

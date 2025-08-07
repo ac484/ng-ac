@@ -1,11 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, map, switchMap } from 'rxjs';
 import { Company } from '../../domain/entities/company.entity';
-import { CompanyRepository, COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
+import { COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
 import { UpdateCompanyDto, CompanyResponseDto } from '../dto/company.dto';
 import { CompanyStatus } from '../../domain/value-objects/company-status.vo';
-import { RiskLevel } from '../../domain/value-objects/risk-level.vo';
-import { Contact } from '../../domain/entities/contact.entity';
 
 /**
  * 更新公司用例
