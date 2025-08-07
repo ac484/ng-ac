@@ -260,7 +260,7 @@ export class PaymentWorkflowComponent {
   transitionOperator = '';
   transitionComment = '';
 
-  constructor(private readonly message: NzMessageService) { }
+  constructor(private readonly message: NzMessageService) {}
 
   // Computed
   readonly selectedTransition = this.selectedTransitionSignal.asReadonly();
