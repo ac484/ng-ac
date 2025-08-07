@@ -123,7 +123,7 @@ export class CompanyFirebaseRepository extends CompanyRepository {
      * 轉換為 Firestore 格式
      */
     private toFirestore(company: Company): any {
-        return {
+        const firestoreData = {
             companyName: company.companyName,
             businessRegistrationNumber: company.businessRegistrationNumber,
             address: company.address,
@@ -143,6 +143,13 @@ export class CompanyFirebaseRepository extends CompanyRepository {
             createdAt: company.createdAt,
             updatedAt: company.updatedAt
         };
+
+        console.log('準備保存到 Firestore 的數據:', {
+            companyId: company.companyId.value,
+            dynamicWorkflow: firestoreData.dynamicWorkflow
+        });
+
+        return firestoreData;
     }
 
     /**

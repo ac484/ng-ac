@@ -269,9 +269,14 @@ export class WorkflowService {
             dynamicWorkflow: workflow.toPlainObject()
         };
 
+        console.log('正在保存工作流程到數據庫:', {
+            companyId,
+            workflowData: workflow.toPlainObject()
+        });
+
         return this.companyService.updateCompany(companyId, updateData).pipe(
             map(() => {
-                // 成功後不顯示消息，讓調用者決定
+                console.log('工作流程已成功保存到數據庫');
             }),
             catchError(error => {
                 console.error('更新工作流程失敗:', error);
