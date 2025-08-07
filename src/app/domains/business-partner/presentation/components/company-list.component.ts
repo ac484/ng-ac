@@ -21,14 +21,6 @@ import { CompanyStatusEnum } from '../../domain/value-objects/company-status.vo'
 import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
 import { finalize } from 'rxjs/operators';
 
-interface ContactForm {
-  name: string;
-  title: string;
-  email: string;
-  phone: string;
-  isPrimary: boolean;
-}
-
 @Component({
   selector: 'app-company-list',
   standalone: true,
@@ -502,12 +494,6 @@ interface ContactForm {
       line-height: 1.5;
     }
     
-    .text-center {
-      text-align: center;
-      padding: 20px;
-      color: #999;
-    }
-    
     .add-contact-btn {
       margin-left: auto;
     }
@@ -527,7 +513,6 @@ interface ContactForm {
       margin: 16px 0;
       font-size: 16px;
     }
-
   `]
 })
 export class CompanyListComponent implements OnInit {
@@ -559,24 +544,8 @@ export class CompanyListComponent implements OnInit {
   riskOptions = computed(() => Object.values(RiskLevelEnum));
   modalTitle = computed(() => this.isEditMode() ? '編輯合作夥伴' : '新增合作夥伴');
 
-  // 在類的頂層定義 effect，符合 Angular 20+ 最佳實踐
-  private readonly debugEffect = effect(() => {
-    console.log('Companies data changed:', this.companies().length, 'companies');
-    console.log('Companies data:', this.companies());
-  });
-
-  private readonly loadingEffect = effect(() => {
-    console.log('Loading state changed:', this.loading());
-  });
-
-  private readonly errorEffect = effect(() => {
-    console.log('Error state changed:', this.error());
-  });
-
   ngOnInit(): void {
     this.initForm();
-    // 不需要手動調用 loadCompanies，因為 Application Service 會自動載入
-    console.log('CompanyListComponent initialized');
   }
 
   private initForm(): void {
@@ -615,23 +584,16 @@ export class CompanyListComponent implements OnInit {
     return this.companyForm.get('contacts') as FormArray<FormGroup>;
   }
 
-  loadCompanies(): void {
-    // 使用 Application Service 的刷新方法
-    this.companyService.refreshCompanies();
-  }
-
   onSearch(query: string): void {
     this.searchQuery.set(query);
 
     if (!query.trim()) {
-      this.loadCompanies();
+      this.companyService.refreshCompanies();
       return;
     }
 
-    // 使用 Application Service 的搜索方法
     this.companyService.searchCompanies(query).subscribe({
       next: (data) => {
-        // 直接更新 Application Service 的數據
         (this.companyService as any).companiesSignal.set(data);
       },
       error: (err) => {
@@ -668,7 +630,7 @@ export class CompanyListComponent implements OnInit {
     this.isEditMode.set(false);
     this.editingCompany.set(null);
     this.initForm();
-    this.addContact(); // 預設新增一個聯絡人
+    this.addContact();
     this.isModalVisible.set(true);
   }
 
@@ -677,7 +639,6 @@ export class CompanyListComponent implements OnInit {
     this.editingCompany.set(company);
     this.initForm();
 
-    // 填充表單資料
     this.companyForm.patchValue({
       companyName: company.companyName,
       businessRegistrationNumber: company.businessRegistrationNumber,
@@ -697,7 +658,6 @@ export class CompanyListComponent implements OnInit {
       blacklistReason: company.blacklistReason
     });
 
-    // 填充聯絡人資料
     if (company.contacts && company.contacts.length > 0) {
       company.contacts.forEach(contact => {
         this.contactsFormArray.push(this.fb.group({
@@ -709,7 +669,7 @@ export class CompanyListComponent implements OnInit {
         }));
       });
     } else {
-      this.addContact(); // 如果沒有聯絡人，新增一個
+      this.addContact();
     }
 
     this.isModalVisible.set(true);
@@ -733,7 +693,6 @@ export class CompanyListComponent implements OnInit {
     const formData = this.companyForm.value as CreateCompanyDto;
 
     if (this.isEditMode()) {
-      // 編輯模式
       const companyId = this.editingCompany()?.id;
       if (companyId) {
         this.companyService.updateCompany(companyId, formData).pipe(
@@ -751,7 +710,6 @@ export class CompanyListComponent implements OnInit {
         });
       }
     } else {
-      // 新增模式
       this.companyService.createCompany(formData).pipe(
         finalize(() => this.submitLoading.set(false))
       ).subscribe({
