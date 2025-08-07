@@ -776,9 +776,10 @@ export class CompanyListComponent {
 
     this.isSubmittingContactSignal.set(true);
 
-    const operation = contactIndex === -1
-      ? this.companyService.addContact(companyId, contact)
-      : this.companyService.updateContact(companyId, contactIndex, contact);
+    const operation =
+      contactIndex === -1
+        ? this.companyService.addContact(companyId, contact)
+        : this.companyService.updateContact(companyId, contactIndex, contact);
 
     operation.subscribe({
       next: () => {
@@ -804,8 +805,7 @@ export class CompanyListComponent {
       next: () => {
         this.message.success('刪除聯絡人成功');
         // 如果正在編輯被刪除的聯絡人，取消編輯
-        if (this.currentEditingCompanyIdSignal() === companyId &&
-          this.editingContactIndexSignal() === contactIndex) {
+        if (this.currentEditingCompanyIdSignal() === companyId && this.editingContactIndexSignal() === contactIndex) {
           this.cancelEditContact();
         }
       },

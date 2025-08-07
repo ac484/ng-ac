@@ -5,8 +5,8 @@ import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto, ContactDto } fr
 import { CreateCompanyUseCase } from '../use-cases/create-company.use-case';
 import { DeleteCompanyUseCase } from '../use-cases/delete-company.use-case';
 import { GetCompaniesUseCase } from '../use-cases/get-companies.use-case';
-import { UpdateCompanyUseCase } from '../use-cases/update-company.use-case';
 import { UpdateCompanyContactUseCase } from '../use-cases/update-company-contact.use-case';
+import { UpdateCompanyUseCase } from '../use-cases/update-company.use-case';
 
 /**
  * 公司應用服務
@@ -178,9 +178,7 @@ export class CompanyService {
       map(updatedCompany => {
         // 更新本地狀態
         const currentCompanies = this.companiesSignal();
-        const updatedCompanies = currentCompanies.map(company =>
-          company.id === companyId ? updatedCompany : company
-        );
+        const updatedCompanies = currentCompanies.map(company => (company.id === companyId ? updatedCompany : company));
         this.companiesSignal.set(updatedCompanies);
         return updatedCompany;
       }),
@@ -204,9 +202,7 @@ export class CompanyService {
       map(updatedCompany => {
         // 更新本地狀態
         const currentCompanies = this.companiesSignal();
-        const updatedCompanies = currentCompanies.map(company =>
-          company.id === companyId ? updatedCompany : company
-        );
+        const updatedCompanies = currentCompanies.map(company => (company.id === companyId ? updatedCompany : company));
         this.companiesSignal.set(updatedCompanies);
         return updatedCompany;
       }),
@@ -230,9 +226,7 @@ export class CompanyService {
       map(updatedCompany => {
         // 更新本地狀態
         const currentCompanies = this.companiesSignal();
-        const updatedCompanies = currentCompanies.map(company =>
-          company.id === companyId ? updatedCompany : company
-        );
+        const updatedCompanies = currentCompanies.map(company => (company.id === companyId ? updatedCompany : company));
         this.companiesSignal.set(updatedCompanies);
         return updatedCompany;
       }),

@@ -272,8 +272,8 @@ export class Company extends BaseAggregateRoot<CompanyId> {
   // 動態工作流程管理方法
   updateDynamicWorkflow(workflow: DynamicWorkflowStateVO): Company {
     // 檢查工作流程是否有實際變化
-    const hasWorkflowChange = !this.dynamicWorkflow ||
-      JSON.stringify(this.dynamicWorkflow.toPlainObject()) !== JSON.stringify(workflow.toPlainObject());
+    const hasWorkflowChange =
+      !this.dynamicWorkflow || JSON.stringify(this.dynamicWorkflow.toPlainObject()) !== JSON.stringify(workflow.toPlainObject());
 
     return new Company(
       this.id,

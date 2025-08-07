@@ -17,8 +17,6 @@ export class GetCompaniesUseCase {
   private readonly companyMapper = inject(CompanyMapper);
 
   execute(): Observable<CompanyResponseDto[]> {
-    return this.companyRepository.getAll().pipe(
-      map(companies => this.companyMapper.toResponseDtoList(companies))
-    );
+    return this.companyRepository.getAll().pipe(map(companies => this.companyMapper.toResponseDtoList(companies)));
   }
 }

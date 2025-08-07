@@ -28,8 +28,6 @@ export class CreateCompanyUseCase {
     });
 
     // 保存並返回
-    return this.companyRepository.create(company).pipe(
-      map(savedCompany => this.companyMapper.toResponseDto(savedCompany))
-    );
+    return this.companyRepository.create(company).pipe(map(savedCompany => this.companyMapper.toResponseDto(savedCompany)));
   }
 }
