@@ -12,6 +12,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { WorkflowService } from '../../application/services/workflow.service';
+import { DynamicWorkflowState, DynamicStateTransition } from '../../domain/value-objects/dynamic-workflow-state.vo';
 
 export interface WorkflowState {
     id: string;
@@ -569,14 +571,14 @@ export interface StateTransition {
     }
   `]
 })
-export class WorkflowDesignerComponent {
+export class WorkflowDesignerComponent implements OnInit, OnDestroy {
     private readonly message = inject(NzMessageService);
+    private readonly workflowService = inject(WorkflowService);
 
-    // Signals 狀態管理
-    private readonly statesSignal = signal<WorkflowState[]>([]);
-    private readonly transitionsSignal = signal<StateTransition[]>([]);
+    @Input() companyId: string = '';
+
+    // 本地編輯狀態
     private readonly editingStateSignal = signal<WorkflowState | null>(null);
-    private readonly currentWorkflowStateSignal = signal<string>('');
 
     // 表單狀態
     newStateName = '';
@@ -585,11 +587,38 @@ export class WorkflowDesignerComponent {
     selectedToState = '';
     transitionCondition = '';
 
-    // Computed
-    readonly states = this.statesSignal.asReadonly();
-    readonly transitions = this.transitionsSignal.asReadonly();
+    // Computed - 從工作流程服務獲取數據
+    readonly states = computed(() => {
+        const workflow = this.workflowService.currentWorkflow();
+        return workflow ? workflow.states.map(s => ({
+            id: s.id,
+            name: s.name,
+            description: s.description,
+            isInitial: s.isInitial,
+            isFinal: s.isFinal,
+            color: s.color
+        } as WorkflowState)) : [];
+    });
+
+    readonly transitions = computed(() => {
+        const workflow = this.workflowService.currentWorkflow();
+        return workflow ? workflow.transitions.map(t => ({
+            id: t.id,
+            from: t.from,
+            to: t.to,
+            condition: t.condition,
+            action: t.action
+        } as StateTransition)) : [];
+    });
+
     readonly editingState = this.editingStateSignal.asReadonly();
-    readonly currentWorkflowState = this.currentWorkflowStateSignal.asReadonly();
+
+    readonly currentWorkflowState = computed(() => {
+        const workflow = this.workflowService.currentWorkflow();
+        return workflow ? workflow.currentStateId : '';
+    });
+
+    readonly loading = this.workflowService.loading;
 
     readonly availableToStates = computed(() => {
         return this.states().filter(s => s.id !== this.selectedFromState);
@@ -599,10 +628,20 @@ export class WorkflowDesignerComponent {
         return this.transitions().filter(t => t.from === this.currentWorkflowState());
     });
 
+    ngOnInit(): void {
+        if (this.companyId) {
+            this.workflowService.setCurrentCompany(this.companyId);
+        }
+    }
+
+    ngOnDestroy(): void {
+        this.workflowService.clearCurrentWorkflow();
+    }
+
     // 添加新狀態
     addState(): void {
         if (this.newStateName.trim()) {
-            const newState: WorkflowState = {
+            const newState: DynamicWorkflowState = {
                 id: Date.now().toString(),
                 name: this.newStateName.trim(),
                 description: this.newStateDescription.trim(),
@@ -611,16 +650,11 @@ export class WorkflowDesignerComponent {
                 color: `hsl(${Math.random() * 360}, 70%, 85%)`
             };
 
-            this.statesSignal.update(states => [...states, newState]);
-            this.newStateName = '';
-            this.newStateDescription = '';
-
-            // 如果是第一個狀態，設為當前狀態
-            if (this.states().length === 1) {
-                this.currentWorkflowStateSignal.set(newState.id);
-            }
-
-            this.message.success('狀態新增成功');
+            this.workflowService.addState(newState).subscribe(() => {
+                this.newStateName = '';
+                this.newStateDescription = '';
+                this.message.success('狀態新增成功');
+            });
         }
     }
 
@@ -635,19 +669,15 @@ export class WorkflowDesignerComponent {
     updateState(): void {
         const editingState = this.editingState();
         if (editingState && this.newStateName.trim()) {
-            this.statesSignal.update(states =>
-                states.map(s =>
-                    s.id === editingState.id
-                        ? {
-                            ...s,
-                            name: this.newStateName.trim(),
-                            description: this.newStateDescription.trim()
-                        }
-                        : s
-                )
-            );
-            this.cancelEdit();
-            this.message.success('狀態更新成功');
+            const updates = {
+                name: this.newStateName.trim(),
+                description: this.newStateDescription.trim()
+            };
+
+            this.workflowService.updateState(editingState.id, updates).subscribe(() => {
+                this.cancelEdit();
+                this.message.success('狀態更新成功');
+            });
         }
     }
 
@@ -660,22 +690,15 @@ export class WorkflowDesignerComponent {
 
     // 刪除狀態
     deleteState(stateId: string): void {
-        this.statesSignal.update(states => states.filter(s => s.id !== stateId));
-        this.transitionsSignal.update(transitions =>
-            transitions.filter(t => t.from !== stateId && t.to !== stateId)
-        );
-
-        if (this.currentWorkflowState() === stateId) {
-            this.currentWorkflowStateSignal.set('');
-        }
-
-        this.message.success('狀態刪除成功');
+        this.workflowService.removeState(stateId).subscribe(() => {
+            this.message.success('狀態刪除成功');
+        });
     }
 
     // 添加轉換
     addTransition(): void {
         if (this.selectedFromState && this.selectedToState && this.transitionCondition.trim()) {
-            const newTransition: StateTransition = {
+            const newTransition: DynamicStateTransition = {
                 id: Date.now().toString(),
                 from: this.selectedFromState,
                 to: this.selectedToState,
@@ -683,54 +706,47 @@ export class WorkflowDesignerComponent {
                 action: ''
             };
 
-            this.transitionsSignal.update(transitions => [...transitions, newTransition]);
-            this.selectedFromState = '';
-            this.selectedToState = '';
-            this.transitionCondition = '';
-
-            this.message.success('轉換規則新增成功');
+            this.workflowService.addTransition(newTransition).subscribe(() => {
+                this.selectedFromState = '';
+                this.selectedToState = '';
+                this.transitionCondition = '';
+                this.message.success('轉換規則新增成功');
+            });
         }
     }
 
     // 刪除轉換
     deleteTransition(transitionId: string): void {
-        this.transitionsSignal.update(transitions =>
-            transitions.filter(t => t.id !== transitionId)
-        );
-        this.message.success('轉換規則刪除成功');
+        this.workflowService.removeTransition(transitionId).subscribe(() => {
+            this.message.success('轉換規則刪除成功');
+        });
     }
 
     // 執行狀態轉換
     executeTransition(transitionId: string): void {
         const transition = this.transitions().find(t => t.id === transitionId);
         if (transition) {
-            this.currentWorkflowStateSignal.set(transition.to);
-            this.message.success(`狀態已轉換至：${this.getStateName(transition.to)}`);
+            this.workflowService.executeTransition(transition.to, 'System', `執行轉換: ${transition.condition}`).subscribe(() => {
+                this.message.success(`狀態已轉換至：${this.getStateName(transition.to)}`);
+            });
         }
     }
 
     // 設置為初始狀態
     setAsInitialState(stateId: string): void {
-        this.statesSignal.update(states =>
-            states.map(s => ({
-                ...s,
-                isInitial: s.id === stateId
-            }))
-        );
-        this.currentWorkflowStateSignal.set(stateId);
-        this.message.success('初始狀態設定成功');
+        this.workflowService.setInitialState(stateId).subscribe(() => {
+            this.message.success('初始狀態設定成功');
+        });
     }
 
     // 切換終止狀態
     toggleFinalState(stateId: string): void {
-        this.statesSignal.update(states =>
-            states.map(s =>
-                s.id === stateId
-                    ? { ...s, isFinal: !s.isFinal }
-                    : s
-            )
-        );
-        this.message.success('終止狀態設定已更新');
+        const state = this.states().find(s => s.id === stateId);
+        if (state) {
+            this.workflowService.updateState(stateId, { isFinal: !state.isFinal }).subscribe(() => {
+                this.message.success('終止狀態設定已更新');
+            });
+        }
     }
 
     // 獲取狀態名稱
