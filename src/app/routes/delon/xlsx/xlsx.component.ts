@@ -12,6 +12,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 export class XlsxComponent {
   private readonly xlsx = inject(XlsxService);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   users: Array<{ id: number; name: string; age: number }> = Array(100)
     .fill(0)

@@ -14,6 +14,7 @@ export class ExtrasPoiEditComponent implements OnInit {
   private readonly modal = inject(NzModalRef);
   readonly http = inject(_HttpClient);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   i: any;
   cat: string[] = ['美食', '美食,粤菜', '美食,粤菜,湛江菜'];
 

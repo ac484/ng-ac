@@ -11,10 +11,10 @@ graph TD
     Old --- OldFeatures["• Single file structure<br>• All rules loaded at once<br>• Fixed workflow"]
     New --- NewFeatures["• Mode-specific rules<br>• Just-in-time loading<br>• Visual process maps<br>• Cursor custom modes integration"]
     
-    style Old fill:#f8d486,stroke:#e8b84d
+    style Old fill:#f8d486,stroke:#e8b84d,color:black
     style New fill:#4da6ff,stroke:#0066cc,color:white
-    style OldFeatures fill:#ffe6cc,stroke:#ffa64d
-    style NewFeatures fill:#cce6ff,stroke:#80bfff
+    style OldFeatures fill:#ffe6cc,stroke:#ffa64d,color:black
+    style NewFeatures fill:#cce6ff,stroke:#80bfff,color:black
 ```
 
 ## Why I'm Upgrading
@@ -41,7 +41,7 @@ graph TD
     ExecuteProcess --> UpdateMemory["Update<br>Memory Bank"]
     UpdateMemory --> NextMode["Transition to<br>Next Mode"]
     
-    style Command fill:#f8d486,stroke:#e8b84d
+    style Command fill:#f8d486,stroke:#e8b84d,color:black
     style ModeSwitch fill:#d971ff,stroke:#a33bc2,color:white
     style LoadRules fill:#4da6ff,stroke:#0066cc,color:white
     style ExecuteProcess fill:#4dbb5f,stroke:#36873f,color:white
@@ -76,11 +76,11 @@ graph TD
     B --> D[Next Step]
     C --> D
     
-    style Start fill:#f9d77e,stroke:#d9b95c
-    style A fill:#a8d5ff,stroke:#88b5e0
-    style B fill:#c5e8b7,stroke:#a5c897
-    style C fill:#ffcccc,stroke:#ff9999
-    style D fill:#d9b3ff,stroke:#b366ff
+    style Start fill:#f9d77e,stroke:#d9b95c,color:black
+    style A fill:#a8d5ff,stroke:#88b5e0,color:black
+    style B fill:#c5e8b7,stroke:#a5c897,color:black
+    style C fill:#ffcccc,stroke:#ff9999,color:black
+    style D fill:#d9b3ff,stroke:#b366ff,color:black
 ```
 
 **Before**: Linear execution paths with redundant rule evaluations.
@@ -124,11 +124,11 @@ graph LR
     CREATIVE --> IMPLEMENT
     IMPLEMENT --> QA
     
-    style VAN fill:#80bfff,stroke:#4da6ff
-    style PLAN fill:#80ffaa,stroke:#4dbb5f
-    style CREATIVE fill:#d9b3ff,stroke:#b366ff
-    style IMPLEMENT fill:#ffcc80,stroke:#ffaa33
-    style QA fill:#ff8080,stroke:#ff5555
+    style VAN fill:#80bfff,stroke:#4da6ff,color:black
+    style PLAN fill:#80ffaa,stroke:#4dbb5f,color:black
+    style CREATIVE fill:#d9b3ff,stroke:#b366ff,color:black
+    style IMPLEMENT fill:#ffcc80,stroke:#ffaa33,color:black
+    style QA fill:#ff8080,stroke:#ff5555,color:black
 ```
 
 Each mode loads only its required rule set, optimizing context usage and providing specialized guidance:
@@ -184,16 +184,16 @@ graph TD
         MB5 <-->|"Read/Write"| MemBank
     end
     
-    style M1 fill:#f8d486,stroke:#e8b84d
-    style M2 fill:#f8d486,stroke:#e8b84d
-    style M3 fill:#f8d486,stroke:#e8b84d
+    style M1 fill:#f8d486,stroke:#e8b84d,color:black
+    style M2 fill:#f8d486,stroke:#e8b84d,color:black
+    style M3 fill:#f8d486,stroke:#e8b84d,color:black
     
-    style MB1 fill:#80bfff,stroke:#4da6ff
-    style MB2 fill:#80ffaa,stroke:#4dbb5f
-    style MB3 fill:#d9b3ff,stroke:#b366ff
-    style MB4 fill:#ffcc80,stroke:#ffaa33
-    style MB5 fill:#ff8080,stroke:#ff5555
-    style MemBank fill:#f9d77e,stroke:#d9b95c,stroke-width:3px
+    style MB1 fill:#80bfff,stroke:#4da6ff,color:black
+    style MB2 fill:#80ffaa,stroke:#4dbb5f,color:black
+    style MB3 fill:#d9b3ff,stroke:#b366ff,color:black
+    style MB4 fill:#ffcc80,stroke:#ffaa33,color:black
+    style MB5 fill:#ff8080,stroke:#ff5555,color:black
+    style MemBank fill:#f9d77e,stroke:#d9b95c,stroke-width:3px,color:black
 ```
 
 Memory Bank transforms custom modes into a comprehensive, interconnected system:
@@ -294,7 +294,7 @@ graph TD
     style Question fill:#4da6ff,stroke:#0066cc,color:white
     style Old fill:#4dbb5f,stroke:#36873f,color:white
     style New fill:#ffa64d,stroke:#cc7a30,color:white
-    style Progress fill:#d9b3ff,stroke:#b366ff
+    style Progress fill:#d9b3ff,stroke:#b366ff,color:black
 ```
 
 ### Guidelines for Trying the New System
@@ -357,12 +357,12 @@ graph TD
     ImplementMap --> ImplementFiles["Command Execution<br>Implementation Guide<br>Testing Strategy"]
     QAMap --> QAFiles["Dependency Verification<br>Configuration Validation<br>Build Testing"]
     
-    style Main fill:#f8d486,stroke:#e8b84d,stroke-width:2px
-    style VanMap fill:#80bfff,stroke:#4da6ff,stroke-width:2px
-    style PlanMap fill:#80ffaa,stroke:#4dbb5f,stroke-width:2px
-    style CreativeMap fill:#d9b3ff,stroke:#b366ff,stroke-width:2px
-    style ImplementMap fill:#ffcc80,stroke:#ffaa33,stroke-width:2px
-    style QAMap fill:#ff8080,stroke:#ff5555,stroke-width:2px
+    style Main fill:#f8d486,stroke:#e8b84d,stroke-width:2px,color:black
+    style VanMap fill:#80bfff,stroke:#4da6ff,stroke-width:2px,color:black
+    style PlanMap fill:#80ffaa,stroke:#4dbb5f,stroke-width:2px,color:black
+    style CreativeMap fill:#d9b3ff,stroke:#b366ff,stroke-width:2px,color:black
+    style ImplementMap fill:#ffcc80,stroke:#ffaa33,stroke-width:2px,color:black
+    style QAMap fill:#ff8080,stroke:#ff5555,stroke-width:2px,color:black
 ```
 
 ### Memory Bank Continuity
@@ -384,16 +384,16 @@ graph LR
     IMPLEMENT["IMPLEMENT MODE"] -.-> Tasks & Progress
     QA["QA MODE"] -.-> Tasks & Progress
     
-    style Tasks fill:#f9d77e,stroke:#d9b95c,stroke-width:3px
-    style Active fill:#a8d5ff,stroke:#88b5e0
+    style Tasks fill:#f9d77e,stroke:#d9b95c,stroke-width:3px,color:black
+    style Active fill:#a8d5ff,stroke:#88b5e0,color:black
     style Progress fill:#c5e8b7,stroke:#a5c897
-    style Creative fill:#f4b8c4,stroke:#d498a4
+    style Creative fill:#f4b8c4,stroke:#d498a4,color:black
     
-    style VAN fill:#80bfff,stroke:#4da6ff
-    style PLAN fill:#80ffaa,stroke:#4dbb5f
-    style CREATIVE fill:#d9b3ff,stroke:#b366ff
-    style IMPLEMENT fill:#ffcc80,stroke:#ffaa33
-    style QA fill:#ff8080,stroke:#ff5555
+    style VAN fill:#80bfff,stroke:#4da6ff,color:black
+    style PLAN fill:#80ffaa,stroke:#4dbb5f,color:black
+    style CREATIVE fill:#d9b3ff,stroke:#b366ff,color:black
+    style IMPLEMENT fill:#ffcc80,stroke:#ffaa33,color:black
+    style QA fill:#ff8080,stroke:#ff5555,color:black
 ```
 
 ## Practical Example: Todo App Development
@@ -499,12 +499,12 @@ graph TD
         Core --> Phase3
     end
     
-    style OldMain fill:#ffcccc,stroke:#ff9999
-    style Entry fill:#ccffcc,stroke:#99ff99
-    style Core fill:#ccffcc,stroke:#99ff99
-    style Phase1 fill:#ccffcc,stroke:#99ff99
-    style Phase2 fill:#ccffcc,stroke:#99ff99
-    style Phase3 fill:#ccffcc,stroke:#99ff99
+    style OldMain fill:#ffcccc,stroke:#ff9999,color:black
+    style Entry fill:#ccffcc,stroke:#99ff99,color:black
+    style Core fill:#ccffcc,stroke:#99ff99,color:black
+    style Phase1 fill:#ccffcc,stroke:#99ff99,color:black
+    style Phase2 fill:#ccffcc,stroke:#99ff99,color:black
+    style Phase3 fill:#ccffcc,stroke:#99ff99,color:black
 ```
 
 **Before**: All 25+ rules were loaded at initialization, consuming approximately 70% of the available context.
@@ -528,11 +528,11 @@ graph TD
     B --> D[Next Step]
     C --> D
     
-    style Start fill:#f9d77e,stroke:#d9b95c
-    style A fill:#a8d5ff,stroke:#88b5e0
-    style B fill:#c5e8b7,stroke:#a5c897
-    style C fill:#ffcccc,stroke:#ff9999
-    style D fill:#d9b3ff,stroke:#b366ff
+    style Start fill:#f9d77e,stroke:#d9b95c,color:black
+    style A fill:#a8d5ff,stroke:#88b5e0,color:black
+    style B fill:#c5e8b7,stroke:#a5c897,color:black
+    style C fill:#ffcccc,stroke:#ff9999,color:black
+    style D fill:#d9b3ff,stroke:#b366ff,color:black
 ```
 
 **Before**: Linear execution paths with redundant rule evaluations.
@@ -555,11 +555,11 @@ graph TD
     Complexity -->|Simple| SimplePath[Simple Path]
     Complexity -->|Complex| ComplexPath[Complex Path]
     
-    style Start fill:#c5e8b7,stroke:#a5c897
-    style Assess fill:#a8d5ff,stroke:#88b5e0
-    style Complexity fill:#f9d77e,stroke:#d9b95c
-    style SimplePath fill:#f4b8c4,stroke:#d498a4
-    style ComplexPath fill:#f4b8c4,stroke:#d498a4
+    style Start fill:#c5e8b7,stroke:#a5c897,color:black
+    style Assess fill:#a8d5ff,stroke:#88b5e0,color:black
+    style Complexity fill:#f9d77e,stroke:#d9b95c,color:black
+    style SimplePath fill:#f4b8c4,stroke:#d498a4,color:black
+    style ComplexPath fill:#f4b8c4,stroke:#d498a4,color:black
 ```
 
 ### 4. Technical Validation and Platform Awareness

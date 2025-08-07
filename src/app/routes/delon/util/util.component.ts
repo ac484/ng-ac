@@ -17,6 +17,7 @@ export class UtilComponent {
   format_obj = JSON.stringify({ name: 'asdf' });
 
   // yuan
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   yuan_str: any;
   yuan_res!: string;
 

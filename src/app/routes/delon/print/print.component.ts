@@ -25,6 +25,7 @@ export class PrintComponent {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cog: any = {
     url: 'https://localhost:8443/CLodopfuncs.js',
     printer: '',
@@ -40,11 +41,13 @@ export class PrintComponent {
   };
   error = false;
   lodop: Lodop | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pinters: any[] = [];
   papers: string[] = [];
 
   printing = false;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reload(options: { url: string } | null = { url: 'https://localhost:8443/CLodopfuncs.js' }): void {
     this.pinters = [];
     this.papers = [];

@@ -17,10 +17,10 @@ graph TD
     Modes --> ARCHIVE["ARCHIVE: Documentation"]
     
     style Main fill:#4da6ff,stroke:#0066cc,color:white
-    style Modes fill:#f8d486,stroke:#e8b84d
-    style Rules fill:#80ffaa,stroke:#4dbb5f
-    style Visual fill:#d9b3ff,stroke:#b366ff
-    style Token fill:#ff9980,stroke:#ff5533
+    style Modes fill:#f8d486,stroke:#e8b84d,color:black
+    style Rules fill:#80ffaa,stroke:#4dbb5f,color:black
+    style Visual fill:#d9b3ff,stroke:#b366ff,color:black
+    style Token fill:#ff9980,stroke:#ff5533,color:black
 ```
 
 > **Personal Note**: Memory Bank is my personal hobby project that I develop for my own use in coding projects. As this is a personal project, I don't maintain an issues tracker or actively collect feedback. However, if you're using these rules and encounter issues, one of the great advantages is that you can ask the Cursor AI directly to modify or update the rules to better suit your specific workflow. The system is designed to be adaptable by the AI, allowing you to customize it for your own needs without requiring external support.
@@ -78,7 +78,9 @@ For a detailed explanation of how Memory Bank implements these principles, see t
 
 - **Cursor Editor**: Version 0.48 or higher is required.
 - **Custom Modes**: Feature must be enabled in Cursor (Settings → Features → Chat → Custom modes).
-- **AI Model**: Claude 3.7 Sonnet is recommended for best results, especially for CREATIVE mode's "Think" tool methodology.
+<img src="assets/open_custom_modes.png" alt="Opening Custom Modes Menu"/>
+
+- **AI Model**: Claude 4 Sonnet or Claude 4 Opus is recommended for best results, especially for CREATIVE mode's "Think" tool methodology.
 
 ### Step 1: Get the Files
 
@@ -88,12 +90,13 @@ Simply clone this repository into your project directory:
 git clone https://github.com/vanzan01/cursor-memory-bank.git
 ```
 
-Alternatively, you can download the ZIP file from GitHub and extract it to your project folder.
+#### Alternative (Manual)
 
-This provides you with all the necessary files, including:
-- Rule files in `.cursor/rules/isolation_rules/`
-- Mode instruction files in `custom_modes/` directory
-- Template Memory Bank files in `memory-bank/`
+After extracting it from the ZIP file, follow the steps below.
+
+- Copy the `.cursor` and `custom_modes` folders to the project directory
+
+Note: other documents are not necessary for memory bank operation, they are explanatory documents. You can copy them to a folder like `memory_bank_documents`.
 
 ### Step 2: Setting Up Custom Modes in Cursor
 
@@ -103,6 +106,8 @@ This provides you with all the necessary files, including:
 
 1. Open Cursor and click on the mode selector in the chat panel
 2. Select "Add custom mode"
+<img src="assets/add_custom_mode.png" alt="Add Custom Mode"/>
+
 3. In the configuration screen:
    - Enter the mode name (you can include emoji icons like 🔍, 📋, 🎨, ⚒️ by copy-pasting them at the beginning of the name)
    - Select an icon from Cursor's limited predefined options
@@ -111,54 +116,48 @@ This provides you with all the necessary files, including:
    - Click on **Advanced options**
    - In the empty text box that appears at the bottom, paste the custom instruction content from the corresponding file
 
-<table>
-  <tr>
-    <td align="center"><em>Example configuration screen:</em></td>
-    <td align="center"><em>Result in mode selection menu:</em></td>
-  </tr>
-  <tr>
-    <td valign="top">
-      <img src="assets/custom_mode_setup_1.png" alt="Custom Mode Configuration Screen" width="300"/>
-    </td>
-    <td valign="top">
-      <img src="assets/custom_mode_setup_2.png" alt="Custom Modes in Menu" width="300"/>
-    </td>
-  </tr>
-</table>
-
 #### Mode Configuration
 
-For each mode, configure as follows:
+For each mode, configure as follows (If MCPs are showing, you can keep them on, they probably won't work):
 
 1. **VAN MODE** (Initialization)
    - **Name**: 🔍 VAN
-   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
+   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory", "Fetch Rules"
    - **Advanced options**: Paste from `custom_modes/van_instructions.md`
+
+
+<img src="assets/van_mode_1.png" height="300" style="display: inline-block;"/> <img src="assets/van_mode_2.png" height="300" style="display: inline-block;"/>
 
 2. **PLAN MODE** (Task Planning)
    - **Name**: 📋 PLAN
    - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
    - **Advanced options**: Paste from `custom_modes/plan_instructions.md`
 
+<img src="assets/plan_mode_1.png" height="300"/> <img src="assets/plan_mode_2.png" height="300" style="display: inline-block;"/>
+
 3. **CREATIVE MODE** (Design Decisions)
    - **Name**: 🎨 CREATIVE
-   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory", "Edit File"
+   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory", "Edit File", "Fetch Rules"
    - **Advanced options**: Paste from `custom_modes/creative_instructions.md`
+
+<img src="assets/creative_mode_1.png" height="300"/> <img src="assets/creative_mode_2.png" height="300" style="display: inline-block;"/>
 
 4. **IMPLEMENT MODE** (Code Implementation)
    - **Name**: ⚒️ IMPLEMENT
    - **Tools**: Enable all tools
    - **Advanced options**: Paste from `custom_modes/implement_instructions.md`
 
-5. **REFLECT MODE** (Review)
-   - **Name**: 🔍 REFLECT
-   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
-   - **Advanced options**: Paste from `custom_modes/reflect_instructions.md`
+<img src="assets/implement_mode_1.png" height="300"/> <img src="assets/implement_mode_2.png" height="300" style="display: inline-block;"/>
 
-6. **ARCHIVE MODE** (Documentation)
-   - **Name**: 📚 ARCHIVE
-   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory", "Edit File"
-   - **Advanced options**: Paste from `custom_modes/archive_instructions.md`
+5. **REFLECT & ARHIVE MODE** (Review)
+   - **Name**: 🔍 REFLECT or ARCHIVE
+   - **Tools**: Enable "Codebase Search", "Read File", "Terminal", "List Directory"
+   - **Advanced options**: Paste from `custom_modes/reflect_archive_instructions.md`
+
+<img src="assets/reflect_mode_1.png" height="300"/> <img src="assets/reflect_mode_2.png" height="300" style="display: inline-block;"/>
+   
+
+> **Note**: REFLECT and ARCHIVE instructions are combined in a single file and mode to optimize for Cursor's character and custom mode limits  while maintaining functionality. Thanks to GitHub user @joshmac007 for implementing this optimization.
 
 For additional help on setting up custom modes in Cursor, refer to the [official Cursor documentation on custom modes](https://docs.cursor.com/chat/custom-modes).
 
@@ -179,6 +178,9 @@ QA is not a separate custom mode but rather a set of validation functions that c
    - **Level 3-4 tasks**: Full workflow (VAN → PLAN → CREATIVE → IMPLEMENT → REFLECT → ARCHIVE)
    - **At any point**: Type "QA" to perform technical validation
 
+
+<img src="assets/chat_van.png" height="50"/> <img src="assets/chat_plan.png" height="50" style="display: inline-block;"/> <img src="assets/chat_implement.png" height="50" style="display: inline-block;"/> <img src="assets/chat_creative.png" height="50" style="display: inline-block;"/> <img src="assets/chat_implement.png" height="50" style="display: inline-block;"/> <img src="assets/chat_reflect.png" height="50" style="display: inline-block;"/> <img src="assets/chat_archive.png" height="50" style="display: inline-block;"/>
+
 3. **Mode-Specific Commands**:
    ```
    VAN - Initialize project and determine complexity
@@ -189,6 +191,10 @@ QA is not a separate custom mode but rather a set of validation functions that c
    ARCHIVE - Create comprehensive documentation
    QA - Validate technical implementation (can be called from any mode)
    ```
+
+4. **Starting to work with your project**:
+   
+After successfully installing Memory Bank...
 
 ## Core Files and Their Purposes
 
@@ -202,11 +208,11 @@ graph LR
         Reflect["reflect-*.md<br>Review Documents"]
     end
     
-    style Tasks fill:#f9d77e,stroke:#d9b95c,stroke-width:3px
-    style Active fill:#a8d5ff,stroke:#88b5e0
-    style Progress fill:#c5e8b7,stroke:#a5c897
-    style Creative fill:#f4b8c4,stroke:#d498a4
-    style Reflect fill:#b3e6cc,stroke:#66c999
+    style Tasks fill:#f9d77e,stroke:#d9b95c,stroke-width:3px,color:black
+    style Active fill:#a8d5ff,stroke:#88b5e0,color:black
+    style Progress fill:#c5e8b7,stroke:#a5c897,color:black
+    style Creative fill:#f4b8c4,stroke:#d498a4,color:black
+    style Reflect fill:#b3e6cc,stroke:#66c999,color:black
 ```
 
 - **tasks.md**: Central source of truth for task tracking

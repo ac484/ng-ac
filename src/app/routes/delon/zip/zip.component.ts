@@ -15,6 +15,7 @@ export class ZipComponent implements OnInit {
   private readonly msg = inject(NzMessageService);
   private readonly cdr = inject(ChangeDetectorRef);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   list: any;
   instance: jsZipType | null = null;
   data: Array<{ path?: string; url?: string }> = [
@@ -32,6 +33,7 @@ export class ZipComponent implements OnInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private format(data: any): void {
     const files = data.files;
     this.list = Object.keys(files).map(key => {
