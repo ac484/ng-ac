@@ -5,52 +5,53 @@ import { RiskLevel, RiskLevelEnum } from '../value-objects/risk-level.vo';
 import { Contact } from './contact.entity';
 
 export interface CompanyProps {
-    companyName: string;
-    businessRegistrationNumber: string;
-    status: CompanyStatus;
-    address: string;
-    businessPhone: string;
-    fax: string;
-    website: string;
-    contractCount: number;
-    latestContractDate: Date | null;
-    partnerSince: Date;
-    cooperationScope: string;
-    businessModel: string;
-    creditScore: number;
-    riskLevel: RiskLevel;
-    reviewHistory: string;
-    blacklistReason: string | null;
-    contacts: Contact[];
-    createdAt: Date;
-    updatedAt: Date;
+    readonly companyName: string;
+    readonly businessRegistrationNumber: string;
+    readonly status: CompanyStatus;
+    readonly address: string;
+    readonly businessPhone: string;
+    readonly fax: string;
+    readonly website: string;
+    readonly contractCount: number;
+    readonly latestContractDate: Date | null;
+    readonly partnerSince: Date;
+    readonly cooperationScope: string;
+    readonly businessModel: string;
+    readonly creditScore: number;
+    readonly riskLevel: RiskLevel;
+    readonly reviewHistory: string;
+    readonly blacklistReason: string | null;
+    readonly contacts: readonly Contact[];
+    readonly createdAt: Date;
+    readonly updatedAt: Date;
 }
 
 /**
  * 公司聚合根
+ * 使用不可變性設計，提高效能和可預測性
  */
 export class Company extends BaseAggregateRoot<CompanyId> {
     private constructor(
         id: CompanyId,
-        public companyName: string,
-        public businessRegistrationNumber: string,
-        public status: CompanyStatus,
-        public address: string,
-        public businessPhone: string,
-        public fax: string,
-        public website: string,
-        public contractCount: number,
-        public latestContractDate: Date | null,
-        public partnerSince: Date,
-        public cooperationScope: string,
-        public businessModel: string,
-        public creditScore: number,
-        public riskLevel: RiskLevel,
-        public reviewHistory: string,
-        public blacklistReason: string | null,
-        public contacts: Contact[],
+        public readonly companyName: string,
+        public readonly businessRegistrationNumber: string,
+        public readonly status: CompanyStatus,
+        public readonly address: string,
+        public readonly businessPhone: string,
+        public readonly fax: string,
+        public readonly website: string,
+        public readonly contractCount: number,
+        public readonly latestContractDate: Date | null,
+        public readonly partnerSince: Date,
+        public readonly cooperationScope: string,
+        public readonly businessModel: string,
+        public readonly creditScore: number,
+        public readonly riskLevel: RiskLevel,
+        public readonly reviewHistory: string,
+        public readonly blacklistReason: string | null,
+        public readonly contacts: readonly Contact[],
         public readonly createdAt: Date,
-        public updatedAt: Date
+        public readonly updatedAt: Date
     ) {
         super(id);
     }
@@ -83,5 +84,169 @@ export class Company extends BaseAggregateRoot<CompanyId> {
 
     get companyId(): CompanyId {
         return this.id;
+    }
+
+    // 不可變更新方法，返回新的實例
+    updateStatus(newStatus: CompanyStatus): Company {
+        return new Company(
+            this.id,
+            this.companyName,
+            this.businessRegistrationNumber,
+            newStatus,
+            this.address,
+            this.businessPhone,
+            this.fax,
+            this.website,
+            this.contractCount,
+            this.latestContractDate,
+            this.partnerSince,
+            this.cooperationScope,
+            this.businessModel,
+            this.creditScore,
+            this.riskLevel,
+            this.reviewHistory,
+            this.blacklistReason,
+            this.contacts,
+            this.createdAt,
+            new Date()
+        );
+    }
+
+    updateRiskLevel(newRiskLevel: RiskLevel): Company {
+        return new Company(
+            this.id,
+            this.companyName,
+            this.businessRegistrationNumber,
+            this.status,
+            this.address,
+            this.businessPhone,
+            this.fax,
+            this.website,
+            this.contractCount,
+            this.latestContractDate,
+            this.partnerSince,
+            this.cooperationScope,
+            this.businessModel,
+            this.creditScore,
+            newRiskLevel,
+            this.reviewHistory,
+            this.blacklistReason,
+            this.contacts,
+            this.createdAt,
+            new Date()
+        );
+    }
+
+    addContact(contact: Contact): Company {
+        const newContacts = [...this.contacts, contact];
+        return new Company(
+            this.id,
+            this.companyName,
+            this.businessRegistrationNumber,
+            this.status,
+            this.address,
+            this.businessPhone,
+            this.fax,
+            this.website,
+            this.contractCount,
+            this.latestContractDate,
+            this.partnerSince,
+            this.cooperationScope,
+            this.businessModel,
+            this.creditScore,
+            this.riskLevel,
+            this.reviewHistory,
+            this.blacklistReason,
+            newContacts,
+            this.createdAt,
+            new Date()
+        );
+    }
+
+    removeContact(contactIndex: number): Company {
+        if (contactIndex < 0 || contactIndex >= this.contacts.length) {
+            throw new Error('Invalid contact index');
+        }
+        const newContacts = this.contacts.filter((_, index) => index !== contactIndex);
+        return new Company(
+            this.id,
+            this.companyName,
+            this.businessRegistrationNumber,
+            this.status,
+            this.address,
+            this.businessPhone,
+            this.fax,
+            this.website,
+            this.contractCount,
+            this.latestContractDate,
+            this.partnerSince,
+            this.cooperationScope,
+            this.businessModel,
+            this.creditScore,
+            this.riskLevel,
+            this.reviewHistory,
+            this.blacklistReason,
+            newContacts,
+            this.createdAt,
+            new Date()
+        );
+    }
+
+    updateContractCount(newCount: number): Company {
+        return new Company(
+            this.id,
+            this.companyName,
+            this.businessRegistrationNumber,
+            this.status,
+            this.address,
+            this.businessPhone,
+            this.fax,
+            this.website,
+            newCount,
+            this.latestContractDate,
+            this.partnerSince,
+            this.cooperationScope,
+            this.businessModel,
+            this.creditScore,
+            this.riskLevel,
+            this.reviewHistory,
+            this.blacklistReason,
+            this.contacts,
+            this.createdAt,
+            new Date()
+        );
+    }
+
+    // 業務邏輯方法
+    isActive(): boolean {
+        return this.status.value === CompanyStatusEnum.Active;
+    }
+
+    isBlacklisted(): boolean {
+        return this.status.value === CompanyStatusEnum.Blacklisted;
+    }
+
+    hasHighRisk(): boolean {
+        return this.riskLevel.value === RiskLevelEnum.High;
+    }
+
+    getPrimaryContact(): Contact | null {
+        return this.contacts.find(contact => contact.isPrimary) || null;
+    }
+
+    getContactCount(): number {
+        return this.contacts.length;
+    }
+
+    // 驗證方法
+    isValid(): boolean {
+        return (
+            this.companyName.trim().length > 0 &&
+            this.businessRegistrationNumber.trim().length > 0 &&
+            this.address.trim().length > 0 &&
+            this.businessPhone.trim().length > 0 &&
+            this.creditScore >= 0 &&
+            this.contractCount >= 0
+        );
     }
 }

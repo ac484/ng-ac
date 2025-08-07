@@ -1,11 +1,12 @@
-import { Injectable, inject } from '@angular/core';
-import { Observable, map, switchMap } from 'rxjs';
+import { Injectable, inject, signal, computed } from '@angular/core';
+import { Observable, map, switchMap, catchError, finalize, shareReplay, of } from 'rxjs';
 import { Company } from '../../domain/entities/company.entity';
 import { COMPANY_REPOSITORY, CompanyRepository } from '../../domain/repositories/company.repository.interface';
 import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto } from '../dto/create-company.dto';
 import { CompanyStatus } from '../../domain/value-objects/company-status.vo';
 import { RiskLevel } from '../../domain/value-objects/risk-level.vo';
-import { Contact } from '../../domain/entities/contact.entity';
+import { Contact, ContactProps } from '../../domain/entities/contact.entity';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
     providedIn: 'root'
@@ -13,62 +14,225 @@ import { Contact } from '../../domain/entities/contact.entity';
 export class CompanyApplicationService {
     private readonly companyRepository = inject(COMPANY_REPOSITORY);
 
+    // 使用 Signals 進行狀態管理
+    private readonly companiesSignal = signal<CompanyResponseDto[]>([]);
+    private readonly loadingSignal = signal(false);
+    private readonly errorSignal = signal<string | null>(null);
+
+    // 使用 computed 進行派生狀態
+    readonly companies = computed(() => this.companiesSignal());
+    readonly loading = computed(() => this.loadingSignal());
+    readonly error = computed(() => this.errorSignal());
+
+    constructor() {
+        // 在服務初始化時自動載入數據
+        this.loadInitialData();
+    }
+
+    private loadInitialData(): void {
+        this.loadingSignal.set(true);
+        this.errorSignal.set(null);
+
+        this.companyRepository.getAll().pipe(
+            map(companies => companies.map(company => this.toResponseDto(company))),
+            finalize(() => {
+                this.loadingSignal.set(false);
+                console.log('Initial data loading completed');
+            }),
+            catchError(error => {
+                console.error('Load initial data error:', error);
+                this.errorSignal.set('無法載入合作夥伴清單');
+                this.loadingSignal.set(false);
+                // 返回空數組而不是提前結束 Observable
+                return of([]);
+            })
+        ).subscribe({
+            next: (companies) => {
+                console.log('Initial data loaded:', companies.length, 'companies');
+                this.companiesSignal.set(companies);
+            },
+            error: (error) => {
+                console.error('Load initial data error:', error);
+                this.errorSignal.set('無法載入合作夥伴清單');
+                this.loadingSignal.set(false);
+                this.companiesSignal.set([]);
+            }
+        });
+    }
+
     getAllCompanies(): Observable<CompanyResponseDto[]> {
+        this.loadingSignal.set(true);
+        this.errorSignal.set(null);
+
         return this.companyRepository.getAll().pipe(
-            map(companies => companies.map(company => this.toResponseDto(company)))
+            map(companies => companies.map(company => this.toResponseDto(company))),
+            finalize(() => this.loadingSignal.set(false)),
+            catchError(error => {
+                this.errorSignal.set('無法載入合作夥伴清單');
+                throw error;
+            })
         );
     }
 
     getCompanyById(id: string): Observable<CompanyResponseDto | null> {
         return this.companyRepository.getById(id).pipe(
-            map(company => company ? this.toResponseDto(company) : null)
+            map(company => company ? this.toResponseDto(company) : null),
+            catchError(error => {
+                this.errorSignal.set('無法載入公司詳細資料');
+                throw error;
+            })
         );
     }
 
     createCompany(dto: CreateCompanyDto): Observable<CompanyResponseDto> {
-        const company = Company.create({
-            ...dto,
-            status: CompanyStatus.create(dto.status),
-            riskLevel: RiskLevel.create(dto.riskLevel),
-            contacts: dto.contacts.map(c => Contact.create(c))
-        });
-        return this.companyRepository.create(company).pipe(
-            map(createdCompany => this.toResponseDto(createdCompany))
-        );
+        this.loadingSignal.set(true);
+        this.errorSignal.set(null);
+
+        try {
+            // 確保聯絡人數據正確格式化
+            const contacts = dto.contacts.map(contact => ({
+                name: contact.name || '',
+                title: contact.title || '',
+                email: contact.email || '',
+                phone: contact.phone || '',
+                isPrimary: contact.isPrimary || false
+            }));
+
+            const company = Company.create({
+                ...dto,
+                status: CompanyStatus.create(dto.status),
+                riskLevel: RiskLevel.create(dto.riskLevel),
+                contacts: contacts.map(c => Contact.create(c))
+            });
+
+            return this.companyRepository.create(company).pipe(
+                map(createdCompany => this.toResponseDto(createdCompany)),
+                finalize(() => this.loadingSignal.set(false)),
+                catchError(error => {
+                    console.error('Create company error:', error);
+                    this.errorSignal.set('新增合作夥伴失敗');
+                    throw error;
+                })
+            );
+        } catch (error) {
+            console.error('Error creating company:', error);
+            this.loadingSignal.set(false);
+            this.errorSignal.set('新增合作夥伴失敗');
+            throw error;
+        }
     }
 
     updateCompany(id: string, dto: UpdateCompanyDto): Observable<CompanyResponseDto> {
+        this.loadingSignal.set(true);
+        this.errorSignal.set(null);
+
         return this.companyRepository.getById(id).pipe(
             switchMap(company => {
                 if (!company) {
                     throw new Error('Company not found');
                 }
 
-                Object.assign(company, {
-                    ...dto,
-                    status: dto.status ? CompanyStatus.create(dto.status) : company.status,
-                    riskLevel: dto.riskLevel ? RiskLevel.create(dto.riskLevel) : company.riskLevel,
-                    contacts: dto.contacts ? dto.contacts.map(c => Contact.create(c)) : company.contacts,
-                    updatedAt: new Date()
-                });
+                // 使用最現代化的不可變更新方式
+                // 創建新的 Company 實例而不是修改現有實例
+                const updatedCompany = company.updateStatus(
+                    dto.status ? CompanyStatus.create(dto.status) : company.status
+                ).updateRiskLevel(
+                    dto.riskLevel ? RiskLevel.create(dto.riskLevel) : company.riskLevel
+                );
 
-                return this.companyRepository.update(id, company);
+                // 如果需要更新聯絡人，使用不可變方法
+                let finalCompany = updatedCompany;
+                if (dto.contacts) {
+                    const newContacts = dto.contacts.map(c => Contact.create(c));
+                    // 移除所有現有聯絡人並添加新的
+                    finalCompany = newContacts.reduce((acc, contact) => acc.addContact(contact), finalCompany);
+                }
+
+                return this.companyRepository.update(id, finalCompany);
             }),
-            map(updatedCompany => this.toResponseDto(updatedCompany))
+            map(updatedCompany => this.toResponseDto(updatedCompany)),
+            finalize(() => this.loadingSignal.set(false)),
+            catchError(error => {
+                this.errorSignal.set('更新合作夥伴失敗');
+                throw error;
+            })
         );
     }
 
     deleteCompany(id: string): Observable<void> {
-        return this.companyRepository.delete(id);
-    }
+        this.loadingSignal.set(true);
+        this.errorSignal.set(null);
 
-    searchCompanies(query: string): Observable<CompanyResponseDto[]> {
-        return this.companyRepository.search(query).pipe(
-            map(companies => companies.map(company => this.toResponseDto(company)))
+        return this.companyRepository.delete(id).pipe(
+            finalize(() => this.loadingSignal.set(false)),
+            catchError(error => {
+                this.errorSignal.set('刪除合作夥伴失敗');
+                throw error;
+            })
         );
     }
 
+    searchCompanies(query: string): Observable<CompanyResponseDto[]> {
+        this.loadingSignal.set(true);
+        this.errorSignal.set(null);
+
+        return this.companyRepository.search(query).pipe(
+            map(companies => companies.map(company => this.toResponseDto(company))),
+            finalize(() => this.loadingSignal.set(false)),
+            catchError(error => {
+                this.errorSignal.set('搜尋失敗');
+                throw error;
+            })
+        );
+    }
+
+    // 清除錯誤狀態
+    clearError(): void {
+        this.errorSignal.set(null);
+    }
+
+    // 重新載入資料
+    refreshCompanies(): void {
+        this.loadingSignal.set(true);
+        this.errorSignal.set(null);
+
+        this.companyRepository.getAll().pipe(
+            map(companies => companies.map(company => this.toResponseDto(company))),
+            finalize(() => {
+                this.loadingSignal.set(false);
+                console.log('Refresh data loading completed');
+            }),
+            catchError(error => {
+                console.error('Refresh companies error:', error);
+                this.errorSignal.set('無法載入合作夥伴清單');
+                this.loadingSignal.set(false);
+                return of([]);
+            })
+        ).subscribe({
+            next: (companies) => {
+                console.log('Refresh data loaded:', companies.length, 'companies');
+                this.companiesSignal.set(companies);
+            },
+            error: (error) => {
+                console.error('Refresh companies error:', error);
+                this.errorSignal.set('無法載入合作夥伴清單');
+                this.loadingSignal.set(false);
+                this.companiesSignal.set([]);
+            }
+        });
+    }
+
     private toResponseDto(company: Company): CompanyResponseDto {
+        // 使用最現代化的方式處理不可變性
+        // 將 readonly Contact[] 轉換為 readonly ContactProps[]
+        const contactProps: readonly ContactProps[] = company.contacts.map(contact => ({
+            name: contact.name,
+            title: contact.title,
+            email: contact.email,
+            phone: contact.phone,
+            isPrimary: contact.isPrimary
+        }));
+
         return {
             id: company.companyId.value,
             companyName: company.companyName,
@@ -87,9 +251,9 @@ export class CompanyApplicationService {
             riskLevel: company.riskLevel.value,
             reviewHistory: company.reviewHistory,
             blacklistReason: company.blacklistReason,
-            contacts: company.contacts,
+            contacts: contactProps,
             createdAt: company.createdAt.toISOString(),
             updatedAt: company.updatedAt.toISOString()
-        };
+        } as const;
     }
 }

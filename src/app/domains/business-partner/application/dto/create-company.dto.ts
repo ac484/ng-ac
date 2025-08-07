@@ -3,48 +3,48 @@ import { RiskLevelEnum } from '../../domain/value-objects/risk-level.vo';
 import { ContactProps } from '../../domain/entities/contact.entity';
 
 export interface CreateCompanyDto {
-    companyName: string;
-    businessRegistrationNumber: string;
-    status: CompanyStatusEnum;
-    address: string;
-    businessPhone: string;
-    fax: string;
-    website: string;
-    contractCount: number;
-    latestContractDate: Date | null;
-    partnerSince: Date;
-    cooperationScope: string;
-    businessModel: string;
-    creditScore: number;
-    riskLevel: RiskLevelEnum;
-    reviewHistory: string;
-    blacklistReason: string | null;
-    contacts: ContactProps[];
+    readonly companyName: string;
+    readonly businessRegistrationNumber: string;
+    readonly status: CompanyStatusEnum;
+    readonly address: string;
+    readonly businessPhone: string;
+    readonly fax: string;
+    readonly website: string;
+    readonly contractCount: number;
+    readonly latestContractDate: Date | null;
+    readonly partnerSince: Date;
+    readonly cooperationScope: string;
+    readonly businessModel: string;
+    readonly creditScore: number;
+    readonly riskLevel: RiskLevelEnum;
+    readonly reviewHistory: string;
+    readonly blacklistReason: string | null;
+    readonly contacts: readonly ContactProps[];
 }
 
 export interface UpdateCompanyDto extends Partial<CreateCompanyDto> { }
 
 export interface CompanyResponseDto {
-    id: string;
-    companyName: string;
-    businessRegistrationNumber: string;
-    status: CompanyStatusEnum;
-    address: string;
-    businessPhone: string;
-    fax: string;
-    website: string;
-    contractCount: number;
-    latestContractDate: string | null;
-    partnerSince: string;
-    cooperationScope: string;
-    businessModel: string;
-    creditScore: number;
-    riskLevel: RiskLevelEnum;
-    reviewHistory: string;
-    blacklistReason: string | null;
-    contacts: ContactProps[];
-    createdAt: string;
-    updatedAt: string;
+    readonly id: string;
+    readonly companyName: string;
+    readonly businessRegistrationNumber: string;
+    readonly status: CompanyStatusEnum;
+    readonly address: string;
+    readonly businessPhone: string;
+    readonly fax: string;
+    readonly website: string;
+    readonly contractCount: number;
+    readonly latestContractDate: string | null;
+    readonly partnerSince: string;
+    readonly cooperationScope: string;
+    readonly businessModel: string;
+    readonly creditScore: number;
+    readonly riskLevel: RiskLevelEnum;
+    readonly reviewHistory: string;
+    readonly blacklistReason: string | null;
+    readonly contacts: readonly ContactProps[];
+    readonly createdAt: string;
+    readonly updatedAt: string;
 }
 
 
