@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import { CompanyRepository, COMPANY_REPOSITORY } from './domain/repositories/company.repository';
+import { COMPANY_REPOSITORY } from './domain/repositories/company.repository';
 import { CompanyFirebaseRepository } from './infrastructure/repositories/company-firebase.repository';
 
 /**
