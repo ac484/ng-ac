@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -109,16 +109,14 @@ import { ContractStatusBadgeComponent } from '../../shared/components/contract-s
   ]
 })
 export class ContractListComponent implements OnInit {
+  private readonly contractService = inject(ContractService);
+  private readonly router = inject(Router);
+  private readonly message = inject(NzMessageService);
+
   contracts$ = this.contractService.getContracts();
   loading = false;
   displayContracts: ContractId[] = [];
   allContracts: ContractId[] = [];
-
-  constructor(
-    private contractService: ContractService,
-    private router: Router,
-    private message: NzMessageService
-  ) {}
 
   ngOnInit(): void {
     this.loadContracts();

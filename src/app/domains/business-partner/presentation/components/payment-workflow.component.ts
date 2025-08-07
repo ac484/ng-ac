@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -257,10 +257,12 @@ export class PaymentWorkflowComponent {
   private readonly selectedTransitionSignal = signal<PaymentWorkflowStateEnum | null>(null);
   private readonly isSubmittingSignal = signal(false);
 
+  private readonly message = inject(NzMessageService);
+
   transitionOperator = '';
   transitionComment = '';
 
-  constructor(private readonly message: NzMessageService) {}
+  constructor() {}
 
   // Computed
   readonly selectedTransition = this.selectedTransitionSignal.asReadonly();

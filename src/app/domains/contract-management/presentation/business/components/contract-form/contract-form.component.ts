@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -187,9 +187,9 @@ export class ContractFormComponent implements OnInit {
   @Output() readonly submit = new EventEmitter<Contract>();
   @Output() readonly cancel = new EventEmitter<void>();
 
-  contractForm!: FormGroup;
+  private readonly fb = inject(FormBuilder);
 
-  constructor(private fb: FormBuilder) {}
+  contractForm!: FormGroup;
 
   ngOnInit(): void {
     this.initForm();

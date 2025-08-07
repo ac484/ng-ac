@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -130,10 +130,12 @@ export class ContractSearchComponent {
   @Output() readonly search = new EventEmitter<ContractSearchCriteria>();
   @Output() readonly reset = new EventEmitter<void>();
 
+  private readonly fb = inject(FormBuilder);
+
   searchForm!: FormGroup;
   showAdvanced = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor() {
     this.initForm();
   }
 

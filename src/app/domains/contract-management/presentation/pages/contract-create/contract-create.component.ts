@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzGridModule } from 'ng-zorro-antd/grid';
@@ -39,11 +39,9 @@ import { ContractFormComponent } from '../../business/components/contract-form';
 export class ContractCreateComponent {
   loading = false;
 
-  constructor(
-    private contractService: ContractService,
-    private router: Router,
-    private message: NzMessageService
-  ) {}
+  private readonly contractService = inject(ContractService);
+  private readonly router = inject(Router);
+  private readonly message = inject(NzMessageService);
 
   async onSubmit(contract: Contract): Promise<void> {
     this.loading = true;

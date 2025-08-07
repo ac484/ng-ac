@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -130,11 +130,11 @@ export class TabBarComponent implements OnInit, OnDestroy {
   activeTabId?: string;
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private tabService: TabService,
-    private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
+  private readonly tabService = inject(TabService);
+  private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  constructor() {}
 
   ngOnInit(): void {
     // 更新所有現有標籤的 closable 屬性
