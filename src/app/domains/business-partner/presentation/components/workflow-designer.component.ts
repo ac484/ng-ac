@@ -235,6 +235,7 @@ export interface StateTransition {
                   <input 
                     nz-input 
                     [(ngModel)]="transitionCondition"
+                    name="transitionCondition"
                     placeholder="例：提交、審核通過、退回..."
                   />
                 </nz-form-control>
