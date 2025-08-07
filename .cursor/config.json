@@ -10,7 +10,6 @@
         "tool": "fetch"
       },
       {
-      {
         "match": ".*",
         "tool": "memory"
       },
