@@ -17,6 +17,7 @@ export class ProAccountCenterProjectsComponent {
   private readonly cdr = inject(ChangeDetectorRef);
 
   listLoading = true;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   list: any[] = [];
 
   constructor() {

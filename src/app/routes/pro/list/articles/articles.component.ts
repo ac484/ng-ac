@@ -21,6 +21,7 @@ export class ProListArticlesComponent implements OnInit {
     rate: ''
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   list: any[] = [];
   loading = false;
 

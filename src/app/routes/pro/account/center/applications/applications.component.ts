@@ -16,6 +16,7 @@ export class ProAccountCenterApplicationsComponent {
   private readonly cdr = inject(ChangeDetectorRef);
 
   listLoading = true;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   list: any[] = [];
   constructor() {
     this.http.get('/api/list', { count: 8 }).subscribe((res: NzSafeAny[]) => {

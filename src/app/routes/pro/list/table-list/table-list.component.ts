@@ -34,6 +34,7 @@ export class ProTableListComponent implements OnInit {
     status: null,
     statusList: []
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[] = [];
   loading = false;
   status = [

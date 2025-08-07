@@ -23,6 +23,7 @@ export class ProListProjectsComponent implements OnInit {
     user: null,
     rate: null
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   list: any[] = [];
   loading = true;
 

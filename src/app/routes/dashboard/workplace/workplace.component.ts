@@ -87,6 +87,7 @@ export class DashboardWorkplaceComponent implements OnInit {
 
   ngOnInit(): void {
     zip(this.http.get('/chart'), this.http.get('/api/notice'), this.http.get('/api/activities')).subscribe(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ([chart, notice, activities]: [any, any, any]) => {
         this.radarData = chart.radarData;
         this.notice = notice;

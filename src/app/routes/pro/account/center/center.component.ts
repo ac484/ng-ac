@@ -18,7 +18,9 @@ export class ProAccountCenterComponent implements OnInit, OnDestroy {
 
   private router$!: Subscription;
   @ViewChild('tagInput', { static: false }) private tagInput!: ElementRef<HTMLInputElement>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   notice: any;
   tabs = [
     {

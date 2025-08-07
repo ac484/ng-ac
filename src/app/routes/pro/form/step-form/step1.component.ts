@@ -29,6 +29,7 @@ export class Step1Component implements OnInit {
   }
 
   ngOnInit(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.form.patchValue(this.item as any);
   }
 

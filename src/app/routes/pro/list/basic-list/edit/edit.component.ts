@@ -13,6 +13,7 @@ export class ProBasicListEditComponent {
   private readonly modal = inject(NzModalRef);
   private readonly msgSrv = inject(NzMessageService);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   record: any = {};
   schema: SFSchema = {
     properties: {
@@ -43,6 +44,7 @@ export class ProBasicListEditComponent {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   save(value: any): void {
     this.msgSrv.success('保存成功');
     this.modal.close(value);

@@ -6,6 +6,7 @@ import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 export interface ReThrowHttpError {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: any;
   _throw: true;
 }

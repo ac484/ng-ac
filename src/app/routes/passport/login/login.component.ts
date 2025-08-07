@@ -62,6 +62,7 @@ export class UserLoginComponent implements OnDestroy {
   loading = false;
 
   count = 0;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   interval$: any;
 
   switch({ index }: NzTabChangeEvent): void {
