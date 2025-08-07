@@ -7,6 +7,7 @@ import { CompanyStatus } from '../../domain/value-objects/company-status.vo';
 import { DynamicWorkflowStateVO } from '../../domain/value-objects/dynamic-workflow-state.vo';
 import { UpdateCompanyDto, CompanyResponseDto } from '../dto/company.dto';
 import { CompanyMapper } from '../mappers/company.mapper';
+import { CompanyValidationHelper } from '../exceptions/company.exceptions';
 
 /**
  * 更新公司用例
@@ -22,9 +23,7 @@ export class UpdateCompanyUseCase {
   execute(id: string, dto: UpdateCompanyDto): Observable<CompanyResponseDto> {
     return this.companyRepository.getById(id).pipe(
       map(existingCompany => {
-        if (!existingCompany) {
-          throw new Error(`Company with id ${id} not found`);
-        }
+        CompanyValidationHelper.validateCompanyExists(existingCompany, id);
 
         // 處理動態工作流程數據
         let dynamicWorkflow: DynamicWorkflowStateVO | undefined = undefined;

@@ -6,6 +6,7 @@ import { Contact } from '../../domain/entities/contact.entity';
 import { COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
 import { CompanyResponseDto, ContactDto } from '../dto/company.dto';
 import { CompanyMapper } from '../mappers/company.mapper';
+import { CompanyValidationHelper } from '../exceptions/company.exceptions';
 
 /**
  * 更新公司聯絡人用例
@@ -24,9 +25,7 @@ export class UpdateCompanyContactUseCase {
     addContact(companyId: string, contactDto: ContactDto): Observable<CompanyResponseDto> {
         return this.companyRepository.getById(companyId).pipe(
             map(existingCompany => {
-                if (!existingCompany) {
-                    throw new Error(`Company with id ${companyId} not found`);
-                }
+                CompanyValidationHelper.validateCompanyExists(existingCompany, companyId);
 
                 const newContact = Contact.create({
                     name: contactDto.name,
@@ -49,9 +48,7 @@ export class UpdateCompanyContactUseCase {
     updateContact(companyId: string, contactIndex: number, contactDto: ContactDto): Observable<CompanyResponseDto> {
         return this.companyRepository.getById(companyId).pipe(
             map(existingCompany => {
-                if (!existingCompany) {
-                    throw new Error(`Company with id ${companyId} not found`);
-                }
+                CompanyValidationHelper.validateCompanyExists(existingCompany, companyId);
 
                 const updatedContact = Contact.create({
                     name: contactDto.name,
@@ -64,7 +61,7 @@ export class UpdateCompanyContactUseCase {
                 return existingCompany.updateContact(contactIndex, updatedContact);
             }),
             switchMap(company => this.companyRepository.update(companyId, company)),
-            map(updatedCompany => this.toResponseDto(updatedCompany))
+            map(updatedCompany => this.companyMapper.toResponseDto(updatedCompany))
         );
     }
 
@@ -74,14 +71,12 @@ export class UpdateCompanyContactUseCase {
     removeContact(companyId: string, contactIndex: number): Observable<CompanyResponseDto> {
         return this.companyRepository.getById(companyId).pipe(
             map(existingCompany => {
-                if (!existingCompany) {
-                    throw new Error(`Company with id ${companyId} not found`);
-                }
+                CompanyValidationHelper.validateCompanyExists(existingCompany, companyId);
 
                 return existingCompany.removeContact(contactIndex);
             }),
             switchMap(company => this.companyRepository.update(companyId, company)),
-            map(updatedCompany => this.toResponseDto(updatedCompany))
+            map(updatedCompany => this.companyMapper.toResponseDto(updatedCompany))
         );
     }
 

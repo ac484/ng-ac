@@ -171,7 +171,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
   // 更新聯絡人方法
   updateContact(contactIndex: number, updatedContact: Contact): Company {
     if (contactIndex < 0 || contactIndex >= this.contacts.length) {
-      throw new Error('Invalid contact index');
+      throw new Error(`Invalid contact index: ${contactIndex}`);
     }
 
     const updatedContacts = [...this.contacts];
@@ -227,7 +227,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
   // 刪除聯絡人方法
   removeContact(contactIndex: number): Company {
     if (contactIndex < 0 || contactIndex >= this.contacts.length) {
-      throw new Error('Invalid contact index');
+      throw new Error(`Invalid contact index: ${contactIndex}`);
     }
 
     const updatedContacts = [...this.contacts];
