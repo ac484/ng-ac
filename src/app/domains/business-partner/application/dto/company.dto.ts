@@ -32,7 +32,9 @@ export interface CreateCompanyDto {
 /**
  * 更新公司 DTO
  */
-export interface UpdateCompanyDto extends Partial<CreateCompanyDto> { }
+export interface UpdateCompanyDto extends Partial<CreateCompanyDto> {
+    dynamicWorkflow?: any; // 動態工作流程數據
+}
 
 /**
  * 公司回應 DTO
