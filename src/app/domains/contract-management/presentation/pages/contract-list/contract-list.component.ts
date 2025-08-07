@@ -8,7 +8,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { ContractService } from '../../../application/services/contract.service';
 import { ContractId, ContractType } from '../../../domain/entities/contract.entity';
@@ -27,7 +27,7 @@ import { formatContractNumber } from '../../../domain/utils/contract-number.util
     NzCardModule,
     NzTypographyModule,
     NzGridModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzTagModule,
     ContractStatusBadgeComponent,
     ContractSearchComponent
@@ -76,9 +76,9 @@ import { formatContractNumber } from '../../../domain/utils/contract-number.util
         <tbody>
           <tr *ngFor="let contract of basicTable.data">
             <td>
-              <nz-tooltip [nzTitle]="contract.contractNumber">
-                <span>{{ formatContractNumber(contract.contractNumber) }}</span>
-              </nz-tooltip>
+              <span nz-tooltip [nzTooltipTitle]="contract.contractNumber">
+                {{ formatContractNumber(contract.contractNumber) }}
+              </span>
             </td>
             <td>{{ contract.contractName }}</td>
             <td>

@@ -151,6 +151,8 @@ export class PaymentWorkflowState extends ValueObject<{
         return stateColors[targetState];
     }
 
+
+
     /**
      * 根據當前狀態獲取可用的轉換
      */

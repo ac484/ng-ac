@@ -4,27 +4,26 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface WorkflowState {
-    id: string;
-    name: string;
-    description: string;
-    isInitial: boolean;
-    isFinal: boolean;
-    color: string;
+  id: string;
+  name: string;
+  description: string;
+  isInitial: boolean;
+  isFinal: boolean;
 }
 
 interface StateTransition {
-    id: string;
-    from: string;
-    to: string;
-    condition: string;
-    action: string;
+  id: string;
+  from: string;
+  to: string;
+  condition: string;
+  action: string;
 }
 
 @Component({
-    selector: 'app-workflow-designer',
-    standalone: true,
-    imports: [CommonModule, FormsModule],
-    template: `
+  selector: 'app-workflow-designer',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `
     <div class="max-w-6xl mx-auto p-6 bg-gray-50 min-h-screen">
       <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
         <h1 class="text-3xl font-bold text-gray-800 mb-2">工作流程狀態機設計器</h1>
@@ -97,7 +96,6 @@ interface StateTransition {
               <div
                 *ngFor="let state of states"
                 [class]="'p-3 rounded-lg border-2 ' + (currentWorkflowState === state.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200')"
-                [style.background-color]="state.color"
               >
                 <div class="flex justify-between items-start">
                   <div class="flex-1">
@@ -293,7 +291,6 @@ interface StateTransition {
                 <div
                   *ngFor="let state of states"
                   [class]="'relative p-3 rounded-lg border-2 text-center min-w-[120px] ' + (currentWorkflowState === state.id ? 'border-blue-500 shadow-lg' : 'border-gray-300')"
-                  [style.background-color]="state.color"
                 >
                   <div class="font-medium text-sm">{{ state.name }}</div>
                   <div
@@ -317,158 +314,155 @@ interface StateTransition {
       </div>
     </div>
   `,
-    styles: [`
-    .transition-colors {
-      transition: background-color 0.2s ease;
-    }
+  styles: [`
   `]
 })
 export class WorkflowDesignerComponent {
-    states: WorkflowState[] = [];
-    transitions: StateTransition[] = [];
-    editingState: WorkflowState | null = null;
-    newStateName: string = '';
-    newStateDescription: string = '';
-    selectedFromState: string = '';
-    selectedToState: string = '';
-    transitionCondition: string = '';
-    currentWorkflowState: string = '';
+  states: WorkflowState[] = [];
+  transitions: StateTransition[] = [];
+  editingState: WorkflowState | null = null;
+  newStateName: string = '';
+  newStateDescription: string = '';
+  selectedFromState: string = '';
+  selectedToState: string = '';
+  transitionCondition: string = '';
+  currentWorkflowState: string = '';
 
-    // 添加新狀態
-    addState(): void {
-        if (this.newStateName.trim()) {
-            const newState: WorkflowState = {
-                id: Date.now().toString(),
-                name: this.newStateName.trim(),
-                description: this.newStateDescription.trim(),
-                isInitial: this.states.length === 0,
-                isFinal: false,
-                color: `hsl(${Math.random() * 360}, 70%, 85%)`
-            };
-            this.states.push(newState);
-            this.newStateName = '';
-            this.newStateDescription = '';
+  // 添加新狀態
+  addState(): void {
+    if (this.newStateName.trim()) {
+      const newState: WorkflowState = {
+        id: Date.now().toString(),
+        name: this.newStateName.trim(),
+        description: this.newStateDescription.trim(),
+        isInitial: this.states.length === 0,
+        isFinal: false,
 
-            // 如果是第一個狀態，設為當前狀態
-            if (this.states.length === 1) {
-                this.currentWorkflowState = newState.id;
-            }
-        }
+      };
+      this.states.push(newState);
+      this.newStateName = '';
+      this.newStateDescription = '';
+
+      // 如果是第一個狀態，設為當前狀態
+      if (this.states.length === 1) {
+        this.currentWorkflowState = newState.id;
+      }
     }
+  }
 
-    // 編輯狀態
-    editState(state: WorkflowState): void {
-        this.editingState = state;
-        this.newStateName = state.name;
-        this.newStateDescription = state.description;
-    }
+  // 編輯狀態
+  editState(state: WorkflowState): void {
+    this.editingState = state;
+    this.newStateName = state.name;
+    this.newStateDescription = state.description;
+  }
 
-    // 更新狀態
-    updateState(): void {
-        if (this.editingState && this.newStateName.trim()) {
-            const index = this.states.findIndex(s => s.id === this.editingState!.id);
-            if (index !== -1) {
-                this.states[index] = {
-                    ...this.states[index],
-                    name: this.newStateName.trim(),
-                    description: this.newStateDescription.trim()
-                };
-            }
-            this.cancelEdit();
-        }
+  // 更新狀態
+  updateState(): void {
+    if (this.editingState && this.newStateName.trim()) {
+      const index = this.states.findIndex(s => s.id === this.editingState!.id);
+      if (index !== -1) {
+        this.states[index] = {
+          ...this.states[index],
+          name: this.newStateName.trim(),
+          description: this.newStateDescription.trim()
+        };
+      }
+      this.cancelEdit();
     }
+  }
 
-    // 取消編輯
-    cancelEdit(): void {
-        this.editingState = null;
-        this.newStateName = '';
-        this.newStateDescription = '';
-    }
+  // 取消編輯
+  cancelEdit(): void {
+    this.editingState = null;
+    this.newStateName = '';
+    this.newStateDescription = '';
+  }
 
-    // 刪除狀態
-    deleteState(stateId: string): void {
-        this.states = this.states.filter(s => s.id !== stateId);
-        this.transitions = this.transitions.filter(t => t.from !== stateId && t.to !== stateId);
-        if (this.currentWorkflowState === stateId) {
-            this.currentWorkflowState = '';
-        }
+  // 刪除狀態
+  deleteState(stateId: string): void {
+    this.states = this.states.filter(s => s.id !== stateId);
+    this.transitions = this.transitions.filter(t => t.from !== stateId && t.to !== stateId);
+    if (this.currentWorkflowState === stateId) {
+      this.currentWorkflowState = '';
     }
+  }
 
-    // 獲取可選的目標狀態
-    getAvailableToStates(): WorkflowState[] {
-        return this.states.filter(s => s.id !== this.selectedFromState);
-    }
+  // 獲取可選的目標狀態
+  getAvailableToStates(): WorkflowState[] {
+    return this.states.filter(s => s.id !== this.selectedFromState);
+  }
 
-    // 添加轉換
-    addTransition(): void {
-        if (this.selectedFromState && this.selectedToState && this.transitionCondition.trim()) {
-            const newTransition: StateTransition = {
-                id: Date.now().toString(),
-                from: this.selectedFromState,
-                to: this.selectedToState,
-                condition: this.transitionCondition.trim(),
-                action: ''
-            };
-            this.transitions.push(newTransition);
-            this.selectedFromState = '';
-            this.selectedToState = '';
-            this.transitionCondition = '';
-        }
+  // 添加轉換
+  addTransition(): void {
+    if (this.selectedFromState && this.selectedToState && this.transitionCondition.trim()) {
+      const newTransition: StateTransition = {
+        id: Date.now().toString(),
+        from: this.selectedFromState,
+        to: this.selectedToState,
+        condition: this.transitionCondition.trim(),
+        action: ''
+      };
+      this.transitions.push(newTransition);
+      this.selectedFromState = '';
+      this.selectedToState = '';
+      this.transitionCondition = '';
     }
+  }
 
-    // 刪除轉換
-    deleteTransition(transitionId: string): void {
-        this.transitions = this.transitions.filter(t => t.id !== transitionId);
-    }
+  // 刪除轉換
+  deleteTransition(transitionId: string): void {
+    this.transitions = this.transitions.filter(t => t.id !== transitionId);
+  }
 
-    // 執行狀態轉換
-    executeTransition(transitionId: string): void {
-        const transition = this.transitions.find(t => t.id === transitionId);
-        if (transition) {
-            this.currentWorkflowState = transition.to;
-        }
+  // 執行狀態轉換
+  executeTransition(transitionId: string): void {
+    const transition = this.transitions.find(t => t.id === transitionId);
+    if (transition) {
+      this.currentWorkflowState = transition.to;
     }
+  }
 
-    // 設置為初始狀態
-    setAsInitialState(stateId: string): void {
-        this.states = this.states.map(s => ({
-            ...s,
-            isInitial: s.id === stateId
-        }));
-        this.currentWorkflowState = stateId;
-    }
+  // 設置為初始狀態
+  setAsInitialState(stateId: string): void {
+    this.states = this.states.map(s => ({
+      ...s,
+      isInitial: s.id === stateId
+    }));
+    this.currentWorkflowState = stateId;
+  }
 
-    // 切換終止狀態
-    toggleFinalState(stateId: string): void {
-        const index = this.states.findIndex(s => s.id === stateId);
-        if (index !== -1) {
-            this.states[index] = {
-                ...this.states[index],
-                isFinal: !this.states[index].isFinal
-            };
-        }
+  // 切換終止狀態
+  toggleFinalState(stateId: string): void {
+    const index = this.states.findIndex(s => s.id === stateId);
+    if (index !== -1) {
+      this.states[index] = {
+        ...this.states[index],
+        isFinal: !this.states[index].isFinal
+      };
     }
+  }
 
-    // 獲取可用的轉換
-    getAvailableTransitions(): StateTransition[] {
-        return this.transitions.filter(t => t.from === this.currentWorkflowState);
-    }
+  // 獲取可用的轉換
+  getAvailableTransitions(): StateTransition[] {
+    return this.transitions.filter(t => t.from === this.currentWorkflowState);
+  }
 
-    // 獲取狀態名稱
-    getStateName(stateId: string): string {
-        const state = this.states.find(s => s.id === stateId);
-        return state ? state.name : '未知狀態';
-    }
+  // 獲取狀態名稱
+  getStateName(stateId: string): string {
+    const state = this.states.find(s => s.id === stateId);
+    return state ? state.name : '未知狀態';
+  }
 
-    // 獲取當前狀態名稱
-    getCurrentStateName(): string {
-        const state = this.states.find(s => s.id === this.currentWorkflowState);
-        return state ? state.name : '';
-    }
+  // 獲取當前狀態名稱
+  getCurrentStateName(): string {
+    const state = this.states.find(s => s.id === this.currentWorkflowState);
+    return state ? state.name : '';
+  }
 
-    // 獲取當前狀態描述
-    getCurrentStateDescription(): string {
-        const state = this.states.find(s => s.id === this.currentWorkflowState);
-        return state ? state.description : '';
-    }
+  // 獲取當前狀態描述
+  getCurrentStateDescription(): string {
+    const state = this.states.find(s => s.id === this.currentWorkflowState);
+    return state ? state.description : '';
+  }
 }

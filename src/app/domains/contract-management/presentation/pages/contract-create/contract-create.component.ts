@@ -52,7 +52,7 @@ export class ContractCreateComponent {
     private contractService: ContractService,
     private router: Router,
     private message: NzMessageService
-  ) {}
+  ) { }
 
   async onSubmit(contract: Contract): Promise<void> {
     this.loading = true;
@@ -66,7 +66,7 @@ export class ContractCreateComponent {
         clientRepresentative: contract.clientRepresentative,
         clientContact: contract.clientContact,
         clientEmail: contract.clientEmail,
-        startDate: contract.startDate,
+
         endDate: contract.endDate,
         totalAmount: contract.totalAmount,
         currency: contract.currency,

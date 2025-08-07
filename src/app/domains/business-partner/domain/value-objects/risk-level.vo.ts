@@ -39,19 +39,7 @@ export class RiskLevel extends ValueObject<RiskLevelProps> {
         return this.isHigh();
     }
 
-    // ng-zorro-antd 顯示方法
-    getTagColor(): string {
-        switch (this.props.value) {
-            case RiskLevelEnum.Low:
-                return 'green';
-            case RiskLevelEnum.Medium:
-                return 'orange';
-            case RiskLevelEnum.High:
-                return 'red';
-            default:
-                return 'default';
-        }
-    }
+
 
     override toString(): string {
         return this.props.value;

@@ -58,10 +58,10 @@ export interface PaymentWorkflowTransition {
             <h4>當前狀態</h4>
             <div class="current-state">
               <nz-tag 
-                [nzColor]="workflowState?.getStateColor()" 
+                [nzColor]="workflowState?.getStateColor() || 'default'" 
                 class="state-tag">
                 <span nz-icon [nzType]="getStateIcon()"></span>
-                {{ workflowState?.getStateDisplayName() }}
+                {{ workflowState?.getStateDisplayName() || 'Unknown' }}
               </nz-tag>
             </div>
           </div>
@@ -77,15 +77,15 @@ export interface PaymentWorkflowTransition {
                 class="transition-option"
                 [class.selected]="selectedTransition() === transition"
                 (click)="selectTransition(transition)">
-                <nz-tag [nzColor]="workflowState?.getStateColor(transition) || 'default'">
-                  {{ workflowState?.getStateDisplayName(transition) || transition }}
+                <nz-tag [nzColor]="workflowState.getStateColor(transition)">
+                  {{ workflowState.getStateDisplayName(transition) }}
                 </nz-tag>
               </div>
             </div>
 
             <!-- 轉換表單 -->
             <div class="transition-form" *ngIf="selectedTransition()">
-              <nz-form nzLayout="vertical">
+              <form nz-form nzLayout="vertical">
                 <nz-form-item>
                   <nz-form-label>操作人員</nz-form-label>
                   <nz-form-control>
@@ -126,7 +126,7 @@ export interface PaymentWorkflowTransition {
                     </button>
                   </nz-form-control>
                 </nz-form-item>
-              </nz-form>
+              </form>
             </div>
           </div>
 

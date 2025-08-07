@@ -122,12 +122,12 @@ import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-w
               <td>{{ company.address }}</td>
               <td>{{ company.businessPhone }}</td>
               <td>
-                <nz-tag [nzColor]="getStatusColor(company.status)">
+                <nz-tag>
                   {{ company.status }}
                 </nz-tag>
               </td>
               <td>
-                <nz-tag [nzColor]="getRiskColor(company.riskLevel)">
+                <nz-tag>
                   {{ company.riskLevel }}
                 </nz-tag>
               </td>
@@ -225,7 +225,7 @@ import { PaymentWorkflowComponent, PaymentWorkflowTransition } from './payment-w
                               @if (isEditing) {
                                 <nz-switch [(ngModel)]="editingContact().isPrimary"></nz-switch>
                               } @else {
-                                <nz-tag [nzColor]="contact.isPrimary ? 'green' : 'default'">
+                                <nz-tag>
                                   {{ contact.isPrimary ? '是' : '否' }}
                                 </nz-tag>
                               }
@@ -610,37 +610,7 @@ export class CompanyListComponent {
     this.createForm.reset();
   }
 
-  /**
-   * 獲取狀態顏色
-   */
-  getStatusColor(status: CompanyStatusEnum): string {
-    switch (status) {
-      case CompanyStatusEnum.Active:
-        return 'green';
-      case CompanyStatusEnum.Inactive:
-        return 'orange';
-      case CompanyStatusEnum.Blacklisted:
-        return 'red';
-      default:
-        return 'default';
-    }
-  }
 
-  /**
-   * 獲取風險等級顏色
-   */
-  getRiskColor(riskLevel: RiskLevelEnum): string {
-    switch (riskLevel) {
-      case RiskLevelEnum.Low:
-        return 'green';
-      case RiskLevelEnum.Medium:
-        return 'orange';
-      case RiskLevelEnum.High:
-        return 'red';
-      default:
-        return 'default';
-    }
-  }
 
   /**
    * 展開/收合公司行

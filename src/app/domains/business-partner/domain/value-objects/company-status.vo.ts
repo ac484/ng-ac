@@ -39,19 +39,7 @@ export class CompanyStatus extends ValueObject<CompanyStatusProps> {
         return this.props.value === CompanyStatusEnum.Blacklisted;
     }
 
-    // ng-zorro-antd 顯示方法
-    getTagColor(): string {
-        switch (this.props.value) {
-            case CompanyStatusEnum.Active:
-                return 'green';
-            case CompanyStatusEnum.Inactive:
-                return 'orange';
-            case CompanyStatusEnum.Blacklisted:
-                return 'red';
-            default:
-                return 'default';
-        }
-    }
+
 
     override toString(): string {
         return this.props.value;
