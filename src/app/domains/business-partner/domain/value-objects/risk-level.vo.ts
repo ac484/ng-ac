@@ -44,3 +44,4 @@ export class RiskLevel extends ValueObject<RiskLevelProps> {
     }
 }
 
+
