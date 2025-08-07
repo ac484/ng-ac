@@ -1,1 +1,6 @@
-{}
+{
+    "projects": {
+      "default": "ng-acc"
+    }
+  }
+  

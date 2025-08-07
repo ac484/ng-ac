@@ -26,17 +26,9 @@ export class InvalidContactIndexException extends Error {
 
 /**
  * 公司驗證工具
+ * 現代化設計，使用 TypeScript 類型守衛
  */
 export class CompanyValidationHelper {
-    /**
-     * 驗證公司是否存在
-     */
-    static validateCompanyExists(company: any, companyId: string): void {
-        if (!company) {
-            throw new CompanyNotFoundException(companyId);
-        }
-    }
-
     /**
      * 驗證聯絡人索引
      */
@@ -44,5 +36,12 @@ export class CompanyValidationHelper {
         if (contactIndex < 0 || contactIndex >= contactsLength) {
             throw new InvalidContactIndexException(contactIndex);
         }
+    }
+
+    /**
+     * 類型守衛：檢查公司是否存在
+     */
+    static isCompanyExists(company: any): company is NonNullable<typeof company> {
+        return company !== null && company !== undefined;
     }
 }

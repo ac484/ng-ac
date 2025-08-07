@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, map, switchMap } from 'rxjs';
+import { Observable, map, switchMap, filter, catchError, throwError } from 'rxjs';
 
 import { Company } from '../../domain/entities/company.entity';
 import { COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
 import { CompanyStatus } from '../../domain/value-objects/company-status.vo';
 import { DynamicWorkflowStateVO } from '../../domain/value-objects/dynamic-workflow-state.vo';
 import { UpdateCompanyDto, CompanyResponseDto } from '../dto/company.dto';
+import { CompanyNotFoundException } from '../exceptions/company.exceptions';
 import { CompanyMapper } from '../mappers/company.mapper';
-import { CompanyValidationHelper } from '../exceptions/company.exceptions';
 
 /**
  * 更新公司用例
@@ -22,9 +22,9 @@ export class UpdateCompanyUseCase {
 
   execute(id: string, dto: UpdateCompanyDto): Observable<CompanyResponseDto> {
     return this.companyRepository.getById(id).pipe(
+      // 使用 filter 操作符確保只處理非空值
+      filter((existingCompany): existingCompany is Company => existingCompany !== null),
       map(existingCompany => {
-        CompanyValidationHelper.validateCompanyExists(existingCompany, id);
-
         // 處理動態工作流程數據
         let dynamicWorkflow: DynamicWorkflowStateVO | undefined = undefined;
         if (dto.dynamicWorkflow) {
@@ -55,7 +55,13 @@ export class UpdateCompanyUseCase {
         return finalCompany;
       }),
       switchMap(company => this.companyRepository.update(id, company)),
-      map(updatedCompany => this.companyMapper.toResponseDto(updatedCompany))
+      map(updatedCompany => this.companyMapper.toResponseDto(updatedCompany)),
+      catchError(error => {
+        if (error instanceof CompanyNotFoundException) {
+          return throwError(() => error);
+        }
+        return throwError(() => new CompanyNotFoundException(id));
+      })
     );
   }
 }

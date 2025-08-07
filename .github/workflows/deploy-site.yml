@@ -19,6 +19,9 @@ jobs:
       - name: Install node modules
         run: yarn install
 
+      - name: Set script permissions
+        run: chmod +x ./scripts/_ci/deploy-pipelines.sh
+
       - name: build
         shell: bash
         run: bash ./scripts/_ci/deploy-pipelines.sh
