@@ -5,6 +5,7 @@ import { Company } from '../../domain/entities/company.entity';
 import { Contact } from '../../domain/entities/contact.entity';
 import { COMPANY_REPOSITORY } from '../../domain/repositories/company.repository';
 import { CompanyResponseDto, ContactDto } from '../dto/company.dto';
+import { CompanyMapper } from '../mappers/company.mapper';
 
 /**
  * 更新公司聯絡人用例
@@ -15,6 +16,7 @@ import { CompanyResponseDto, ContactDto } from '../dto/company.dto';
 })
 export class UpdateCompanyContactUseCase {
     private readonly companyRepository = inject(COMPANY_REPOSITORY);
+    private readonly companyMapper = inject(CompanyMapper);
 
     /**
      * 新增聯絡人
@@ -37,7 +39,7 @@ export class UpdateCompanyContactUseCase {
                 return existingCompany.addContact(newContact);
             }),
             switchMap(company => this.companyRepository.update(companyId, company)),
-            map(updatedCompany => this.toResponseDto(updatedCompany))
+            map(updatedCompany => this.companyMapper.toResponseDto(updatedCompany))
         );
     }
 
@@ -83,27 +85,5 @@ export class UpdateCompanyContactUseCase {
         );
     }
 
-    private toResponseDto(company: Company): CompanyResponseDto {
-        return {
-            id: company.companyId.value,
-            companyName: company.companyName,
-            businessRegistrationNumber: company.businessRegistrationNumber,
-            address: company.address,
-            businessPhone: company.businessPhone,
-            status: company.status.value,
-            riskLevel: company.riskLevel.value,
-            fax: company.fax,
-            website: company.website,
-            contacts: company.contacts.map(contact => ({
-                name: contact.name,
-                title: contact.title,
-                email: contact.email,
-                phone: contact.phone,
-                isPrimary: contact.isPrimary
-            })),
-            dynamicWorkflow: company.dynamicWorkflow?.toPlainObject(),
-            createdAt: company.createdAt.toISOString(),
-            updatedAt: company.updatedAt.toISOString()
-        };
-    }
+
 }
