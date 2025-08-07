@@ -32,7 +32,9 @@ const user = ['卡色', 'cipchk', '付小小', '曲丽丽', '林东东', '周星
 
 // endregion
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getFakeList(count = 20): any[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const list: any[] = [];
   for (let i = 0; i < count; i += 1) {
     list.push({
@@ -77,6 +79,7 @@ function getFakeList(count = 20): any[] {
   return list;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getNotice(): any[] {
   return [
     {
@@ -142,6 +145,7 @@ function getNotice(): any[] {
   ];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getActivities(): any[] {
   return [
     {

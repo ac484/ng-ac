@@ -3,6 +3,7 @@ import * as Mock from 'mockjs';
 
 // region: mock data
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const visitData: any[] = [];
 const beginDay = new Date().getTime();
 
@@ -14,6 +15,7 @@ for (let i = 0; i < fakeY.length; i += 1) {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const visitData2: any[] = [];
 const fakeY2 = [1, 6, 4, 8, 3, 7, 2];
 for (let i = 0; i < fakeY2.length; i += 1) {
@@ -23,6 +25,7 @@ for (let i = 0; i < fakeY2.length; i += 1) {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const salesData: any[] = [];
 for (let i = 0; i < 12; i += 1) {
   salesData.push({
@@ -30,6 +33,7 @@ for (let i = 0; i < 12; i += 1) {
     y: Math.floor(Math.random() * 1000) + 200
   });
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const searchData: any[] = [];
 for (let i = 0; i < 50; i += 1) {
   searchData.push({
@@ -117,6 +121,7 @@ const salesTypeDataOffline = [
   }
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const offlineData: any[] = [];
 for (let i = 0; i < 10; i += 1) {
   offlineData.push({
@@ -124,6 +129,7 @@ for (let i = 0; i < 10; i += 1) {
     cvr: Math.ceil(Math.random() * 9) / 10
   });
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const offlineChartData: any[] = [];
 for (let i = 0; i < 20; i += 1) {
   offlineChartData.push({
@@ -161,7 +167,9 @@ const radarOriginData = [
 ];
 
 //
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const radarData: any[] = [];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const radarTitleMap: any = {
   ref: '引用',
   koubei: '口碑',
@@ -169,6 +177,7 @@ const radarTitleMap: any = {
   contribute: '贡献',
   hot: '热度'
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 radarOriginData.forEach((item: any) => {
   Object.keys(item).forEach(key => {
     if (key !== 'name') {

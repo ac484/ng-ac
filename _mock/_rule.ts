@@ -1,5 +1,6 @@
 import { MockRequest } from '@delon/mock';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const list: any[] = [];
 
 for (let i = 0; i < 46; i += 1) {
@@ -23,6 +24,7 @@ for (let i = 0; i < 46; i += 1) {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getRule(params: any): any[] {
   let ret = [...list];
   if (params.sorter) {

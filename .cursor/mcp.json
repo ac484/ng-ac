@@ -41,6 +41,19 @@
       "autoApprove": [
         "sequentialthinking"
       ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "./memory-bank/memory.json",
+        "NODE_OPTIONS": "--max-old-space-size=2048"
+      },
+      "disabled": false,
+      "autoApprove": []
     }
   }
 }

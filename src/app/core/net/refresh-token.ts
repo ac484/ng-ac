@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, catchError, filter, switchMap, take, throw
 import { toLogin } from './helper';
 
 let refreshToking = false;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let refreshToken$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
 /**
@@ -13,6 +14,7 @@ let refreshToken$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
  *
  * > 由于已经发起的请求，不会再走一遍 `@delon/auth` 因此需要结合业务情况重新附加新的 Token
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function reAttachToken(injector: Injector, req: HttpRequest<any>): HttpRequest<any> {
   const token = injector.get(DA_SERVICE_TOKEN).get()?.token;
   return req.clone({
@@ -22,6 +24,7 @@ function reAttachToken(injector: Injector, req: HttpRequest<any>): HttpRequest<a
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function refreshTokenRequest(injector: Injector): Observable<any> {
   const model = injector.get(DA_SERVICE_TOKEN).get();
   return injector.get(HttpClient).post(`/api/auth/refresh`, { headers: { refresh_token: model?.['refresh_token'] || '' } });
@@ -30,6 +33,7 @@ function refreshTokenRequest(injector: Injector): Observable<any> {
 /**
  * 刷新Token方式一：使用 401 重新刷新 Token
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function tryRefreshToken(injector: Injector, ev: HttpResponseBase, req: HttpRequest<any>, next: HttpHandlerFn): Observable<any> {
   // 1、若请求为刷新Token请求，表示来自刷新Token可以直接跳转登录页
   if ([`/api/auth/refresh`].some(url => req.url.includes(url))) {

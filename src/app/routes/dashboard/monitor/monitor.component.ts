@@ -31,6 +31,7 @@ export class DashboardMonitorComponent implements OnInit, OnDestroy {
   private readonly http = inject(_HttpClient);
   private readonly cdr = inject(ChangeDetectorRef);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any = {};
   tags = [];
   loading = true;
@@ -46,8 +47,10 @@ export class DashboardMonitorComponent implements OnInit, OnDestroy {
 
   // region: active chart
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   activeTime$: any;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   activeData!: any[];
 
   activeStat = {
@@ -58,6 +61,7 @@ export class DashboardMonitorComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     zip(this.http.get('/chart'), this.http.get('/chart/tags')).subscribe(([res, tags]: [any, any]) => {
       this.data = res;
       tags.list[Math.floor(Math.random() * tags.list.length) + 1].value = 1000;
@@ -72,6 +76,7 @@ export class DashboardMonitorComponent implements OnInit, OnDestroy {
   }
 
   refData(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const activeData: any[] = [];
     for (let i = 0; i < 24; i += 1) {
       activeData.push({
@@ -92,6 +97,7 @@ export class DashboardMonitorComponent implements OnInit, OnDestroy {
 
   // endregion
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   couponFormat(val: any): string {
     switch (parseInt(val, 10)) {
       case 20:

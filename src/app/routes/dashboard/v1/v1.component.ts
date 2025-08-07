@@ -62,8 +62,11 @@ export class DashboardV1Component implements OnInit {
     }
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   webSite!: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   salesData!: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   offlineChartData!: any[];
 
   constructor() {

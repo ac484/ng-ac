@@ -7,6 +7,7 @@ import { Observable, of, throwError, mergeMap } from 'rxjs';
 import { ReThrowHttpError, checkStatus, getAdditionalHeaders, toLogin } from './helper';
 import { tryRefreshToken } from './refresh-token';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleData(injector: Injector, ev: HttpResponseBase, req: HttpRequest<any>, next: HttpHandlerFn): Observable<any> {
   checkStatus(injector, ev);
   // 业务处理：一些通用操作

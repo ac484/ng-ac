@@ -18,8 +18,11 @@ export class DashboardWorkplaceComponent implements OnInit {
   readonly msg = inject(NzMessageService);
   private readonly cdr = inject(ChangeDetectorRef);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   notice: any[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   activities: any[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   radarData!: any[];
   loading = true;
 
@@ -83,10 +86,12 @@ export class DashboardWorkplaceComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     zip(this.http.get('/chart'), this.http.get('/api/notice'), this.http.get('/api/activities')).subscribe(
       ([chart, notice, activities]: [any, any, any]) => {
         this.radarData = chart.radarData;
         this.notice = notice;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.activities = activities.map((item: any) => {
           item.template = item.template.split(/@\{([^{}]*)\}/gi).map((key: string) => {
             if (item[key]) {

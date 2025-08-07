@@ -1,5 +1,6 @@
 import { MockRequest } from '@delon/mock';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const list: any[] = [];
 const total = 50;
 
@@ -24,6 +25,7 @@ for (let i = 0; i < total; i += 1) {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function genData(params: any): { total: number; list: any[] } {
   let ret = [...list];
   const pi = +params.pi;
@@ -37,6 +39,7 @@ function genData(params: any): { total: number; list: any[] } {
   return { total: ret.length, list: ret.slice(start, ps * pi) };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function saveData(id: number, value: any): { msg: string } {
   const item = list.find(w => w.id === id);
   if (!item) {
