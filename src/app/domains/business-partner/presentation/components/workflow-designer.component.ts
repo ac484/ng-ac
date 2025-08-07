@@ -70,6 +70,7 @@ export interface StateTransition {
                   <input 
                     nz-input 
                     [(ngModel)]="newStateName"
+                    name="newStateName"
                     placeholder="例：草稿、已提交、審核中..."
                   />
                 </nz-form-control>
@@ -81,6 +82,7 @@ export interface StateTransition {
                   <textarea 
                     nz-input 
                     [(ngModel)]="newStateDescription"
+                    name="newStateDescription"
                     rows="2"
                     placeholder="說明此狀態的用途..."
                   ></textarea>
@@ -201,6 +203,7 @@ export interface StateTransition {
                     <nz-form-control>
                       <nz-select 
                         [(ngModel)]="selectedFromState"
+                        name="selectedFromState"
                         nzPlaceHolder="選擇狀態">
                         @for (state of states(); track state.id) {
                           <nz-option [nzLabel]="state.name" [nzValue]="state.id"></nz-option>
@@ -215,6 +218,7 @@ export interface StateTransition {
                     <nz-form-control>
                       <nz-select 
                         [(ngModel)]="selectedToState"
+                        name="selectedToState"
                         nzPlaceHolder="選擇狀態">
                         @for (state of availableToStates(); track state.id) {
                           <nz-option [nzLabel]="state.name" [nzValue]="state.id"></nz-option>
