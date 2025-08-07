@@ -624,10 +624,7 @@ export class CompanyListComponent {
   });
   private readonly originalContactSignal = signal<ContactDto | null>(null);
 
-  // 狀態機相關狀態
-  private readonly isWorkflowModalVisibleSignal = signal(false);
-  private readonly currentWorkflowCompanyIdSignal = signal('');
-  private readonly currentWorkflowStateSignal = signal<PaymentWorkflowState | null>(null);
+
 
   // 工作流程設計器狀態
   private readonly isWorkflowDesignerVisibleSignal = signal(false);
@@ -680,9 +677,6 @@ export class CompanyListComponent {
   readonly currentEditingCompanyId = this.currentEditingCompanyIdSignal.asReadonly();
   readonly isSubmittingContact = this.isSubmittingContactSignal.asReadonly();
   readonly editingContact = this.editingContactSignal.asReadonly();
-  readonly isWorkflowModalVisible = this.isWorkflowModalVisibleSignal.asReadonly();
-  readonly currentWorkflowCompanyId = this.currentWorkflowCompanyIdSignal.asReadonly();
-  readonly currentWorkflowState = this.currentWorkflowStateSignal.asReadonly();
   readonly editingCompanyId = this.editingCompanyIdSignal.asReadonly();
   readonly isWorkflowDesignerVisible = this.isWorkflowDesignerVisibleSignal.asReadonly();
 
@@ -894,64 +888,7 @@ export class CompanyListComponent {
     return `${contact.name}-${contact.email}-${index}`;
   }
 
-  /**
-   * 顯示狀態機模態框
-   */
-  showWorkflowModal(companyId: string): void {
-    const company = this.filteredCompanies().find(c => c.id === companyId);
-    if (company) {
-      this.currentWorkflowCompanyIdSignal.set(companyId);
-      // 這裡應該從公司實體獲取狀態機狀態，暫時創建一個默認狀態
-      this.currentWorkflowStateSignal.set(PaymentWorkflowState.create());
-      this.isWorkflowModalVisibleSignal.set(true);
-    }
-  }
 
-  /**
-   * 狀態機模態框可見性變更
-   */
-  onWorkflowModalVisibleChange(visible: boolean): void {
-    this.isWorkflowModalVisibleSignal.set(visible);
-    if (!visible) {
-      this.currentWorkflowCompanyIdSignal.set('');
-      this.currentWorkflowStateSignal.set(null);
-    }
-  }
-
-  /**
-   * 處理狀態轉換
-   */
-  onStateTransition(transition: PaymentWorkflowTransition): void {
-    console.log('狀態轉換:', transition);
-
-    // 這裡應該調用後端 API 更新狀態
-    // 暫時更新本地狀態
-    const currentState = this.currentWorkflowStateSignal();
-    if (currentState) {
-      try {
-        // 檢查是否可以轉換
-        if (!currentState.canTransitionTo(transition.newState)) {
-          this.message.error('無法轉換到此狀態');
-          return;
-        }
-
-        const newState = currentState.transitionTo(
-          transition.newState,
-          transition.operator,
-          transition.comment
-        );
-        this.currentWorkflowStateSignal.set(newState);
-        this.message.success('狀態轉換成功');
-
-        // 關閉模態框
-        this.onWorkflowModalVisibleChange(false);
-      } catch (error) {
-        console.error('狀態轉換失敗:', error);
-        const errorMessage = error instanceof Error ? error.message : '未知錯誤';
-        this.message.error(`狀態轉換失敗: ${errorMessage}`);
-      }
-    }
-  }
 
   /**
    * 顯示編輯模態框
