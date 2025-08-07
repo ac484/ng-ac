@@ -776,64 +776,44 @@ export class CompanyListComponent {
 
     this.isSubmittingContactSignal.set(true);
 
-    // 這裡應該調用後端 API 更新聯絡人
-    // 暫時模擬更新本地數據
-    setTimeout(() => {
-      try {
-        const companies = this.filteredCompanies();
-        const companyIndex = companies.findIndex(c => c.id === companyId);
+    const operation = contactIndex === -1
+      ? this.companyService.addContact(companyId, contact)
+      : this.companyService.updateContact(companyId, contactIndex, contact);
 
-        if (companyIndex !== -1) {
-          const updatedCompanies = [...companies];
-          const company = { ...updatedCompanies[companyIndex] };
-          const contacts = [...company.contacts];
-
-          if (contactIndex === -1) {
-            // 新增聯絡人
-            contacts.push({ ...contact });
-            this.message.success('新增聯絡人成功');
-          } else {
-            // 更新聯絡人
-            contacts[contactIndex] = { ...contact };
-            this.message.success('更新聯絡人成功');
-          }
-
-          company.contacts = contacts;
-          updatedCompanies[companyIndex] = company;
-
-          // 更新服務中的數據
-          this.companyService.updateCompanies(updatedCompanies);
-        }
-
+    operation.subscribe({
+      next: () => {
+        const successMessage = contactIndex === -1 ? '新增聯絡人成功' : '更新聯絡人成功';
+        this.message.success(successMessage);
         this.cancelEditContact();
-      } catch {
+      },
+      error: error => {
+        console.error('聯絡人操作失敗:', error);
         this.message.error('操作失敗');
-      } finally {
+      },
+      complete: () => {
         this.isSubmittingContactSignal.set(false);
       }
-    }, 500);
+    });
   }
 
   /**
    * 刪除聯絡人
    */
   deleteContact(companyId: string, contactIndex: number): void {
-    const companies = this.companyService.companies();
-    const companyIndex = companies.findIndex(c => c.id === companyId);
-
-    if (companyIndex !== -1) {
-      const updatedCompanies = [...companies];
-      const company = { ...updatedCompanies[companyIndex] };
-      const contacts = [...company.contacts];
-
-      contacts.splice(contactIndex, 1);
-      company.contacts = contacts;
-      updatedCompanies[companyIndex] = company;
-
-      // 更新服務中的數據
-      this.companyService.updateCompanies(updatedCompanies);
-      this.message.success('刪除聯絡人成功');
-    }
+    this.companyService.removeContact(companyId, contactIndex).subscribe({
+      next: () => {
+        this.message.success('刪除聯絡人成功');
+        // 如果正在編輯被刪除的聯絡人，取消編輯
+        if (this.currentEditingCompanyIdSignal() === companyId &&
+          this.editingContactIndexSignal() === contactIndex) {
+          this.cancelEditContact();
+        }
+      },
+      error: error => {
+        console.error('刪除聯絡人失敗:', error);
+        this.message.error('刪除聯絡人失敗');
+      }
+    });
   }
 
   /**

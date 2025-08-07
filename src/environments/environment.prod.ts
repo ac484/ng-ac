@@ -4,7 +4,7 @@ import { firebaseAuthInterceptor } from '../app/domains/auth/infrastructure/inte
 
 export const environment = {
   production: true,
-  useHash: true,
+  useHash: false,
   api: {
     baseUrl: './',
     refreshTokenEnabled: true,

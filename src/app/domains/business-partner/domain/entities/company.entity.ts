@@ -82,25 +82,48 @@ export class Company extends BaseAggregateRoot<CompanyId> {
 
   // 不可變更新方法
   updateBasicInfo(props: Partial<CreateCompanyProps>): Company {
+    const newCompanyName = props.companyName?.trim() || this.companyName;
+    const newBusinessRegistrationNumber = props.businessRegistrationNumber?.trim() || this.businessRegistrationNumber;
+    const newAddress = props.address?.trim() || this.address;
+    const newBusinessPhone = props.businessPhone?.trim() || this.businessPhone;
+    const newFax = props.fax?.trim() ?? this.fax;
+    const newWebsite = props.website?.trim() ?? this.website;
+    const newPaymentWorkflow = props.paymentWorkflow ?? this.paymentWorkflow;
+    const newDynamicWorkflow = props.dynamicWorkflow ?? this.dynamicWorkflow;
+
+    // 檢查是否有實際變化
+    const hasChanges =
+      newCompanyName !== this.companyName ||
+      newBusinessRegistrationNumber !== this.businessRegistrationNumber ||
+      newAddress !== this.address ||
+      newBusinessPhone !== this.businessPhone ||
+      newFax !== this.fax ||
+      newWebsite !== this.website ||
+      newPaymentWorkflow !== this.paymentWorkflow ||
+      newDynamicWorkflow !== this.dynamicWorkflow;
+
     return new Company(
       this.id,
-      props.companyName?.trim() || this.companyName,
-      props.businessRegistrationNumber?.trim() || this.businessRegistrationNumber,
-      props.address?.trim() || this.address,
-      props.businessPhone?.trim() || this.businessPhone,
+      newCompanyName,
+      newBusinessRegistrationNumber,
+      newAddress,
+      newBusinessPhone,
       this.status,
       this.riskLevel,
-      props.fax?.trim() ?? this.fax,
-      props.website?.trim() ?? this.website,
+      newFax,
+      newWebsite,
       this.contacts,
-      props.paymentWorkflow ?? this.paymentWorkflow,
-      props.dynamicWorkflow ?? this.dynamicWorkflow,
+      newPaymentWorkflow,
+      newDynamicWorkflow,
       this.createdAt,
-      new Date()
+      hasChanges ? new Date() : this.updatedAt // ✅ 只有在有變化時才更新時間戳
     );
   }
 
   updateStatus(status: CompanyStatus): Company {
+    // 檢查狀態是否有實際變化
+    const hasStatusChange = !this.status.value || this.status.value !== status.value;
+
     return new Company(
       this.id,
       this.companyName,
@@ -115,7 +138,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
       this.paymentWorkflow,
       this.dynamicWorkflow,
       this.createdAt,
-      new Date()
+      hasStatusChange ? new Date() : this.updatedAt // ✅ 只有在狀態變化時才更新時間戳
     );
   }
 
@@ -141,7 +164,90 @@ export class Company extends BaseAggregateRoot<CompanyId> {
       this.paymentWorkflow,
       this.dynamicWorkflow,
       this.createdAt,
-      new Date()
+      new Date() // ✅ 新增聯絡人總是需要更新時間戳
+    );
+  }
+
+  // 更新聯絡人方法
+  updateContact(contactIndex: number, updatedContact: Contact): Company {
+    if (contactIndex < 0 || contactIndex >= this.contacts.length) {
+      throw new Error('Invalid contact index');
+    }
+
+    const updatedContacts = [...this.contacts];
+    const oldContact = updatedContacts[contactIndex];
+
+    // 檢查聯絡人是否有實際變化
+    const hasContactChange =
+      oldContact.name !== updatedContact.name ||
+      oldContact.title !== updatedContact.title ||
+      oldContact.email !== updatedContact.email ||
+      oldContact.phone !== updatedContact.phone ||
+      oldContact.isPrimary !== updatedContact.isPrimary;
+
+    if (!hasContactChange) {
+      return this; // ✅ 沒有變化時返回原實例
+    }
+
+    // 業務規則：只能有一個主要聯絡人
+    if (updatedContact.isPrimary) {
+      for (let i = 0; i < updatedContacts.length; i++) {
+        if (i !== contactIndex) {
+          updatedContacts[i] = new Contact(
+            updatedContacts[i].name,
+            updatedContacts[i].title,
+            updatedContacts[i].email,
+            updatedContacts[i].phone,
+            false
+          );
+        }
+      }
+    }
+
+    updatedContacts[contactIndex] = updatedContact;
+
+    return new Company(
+      this.id,
+      this.companyName,
+      this.businessRegistrationNumber,
+      this.address,
+      this.businessPhone,
+      this.status,
+      this.riskLevel,
+      this.fax,
+      this.website,
+      updatedContacts,
+      this.paymentWorkflow,
+      this.dynamicWorkflow,
+      this.createdAt,
+      new Date() // ✅ 有變化時更新時間戳
+    );
+  }
+
+  // 刪除聯絡人方法
+  removeContact(contactIndex: number): Company {
+    if (contactIndex < 0 || contactIndex >= this.contacts.length) {
+      throw new Error('Invalid contact index');
+    }
+
+    const updatedContacts = [...this.contacts];
+    updatedContacts.splice(contactIndex, 1);
+
+    return new Company(
+      this.id,
+      this.companyName,
+      this.businessRegistrationNumber,
+      this.address,
+      this.businessPhone,
+      this.status,
+      this.riskLevel,
+      this.fax,
+      this.website,
+      updatedContacts,
+      this.paymentWorkflow,
+      this.dynamicWorkflow,
+      this.createdAt,
+      new Date() // ✅ 刪除聯絡人總是需要更新時間戳
     );
   }
 
@@ -165,6 +271,10 @@ export class Company extends BaseAggregateRoot<CompanyId> {
 
   // 動態工作流程管理方法
   updateDynamicWorkflow(workflow: DynamicWorkflowStateVO): Company {
+    // 檢查工作流程是否有實際變化
+    const hasWorkflowChange = !this.dynamicWorkflow ||
+      JSON.stringify(this.dynamicWorkflow.toPlainObject()) !== JSON.stringify(workflow.toPlainObject());
+
     return new Company(
       this.id,
       this.companyName,
@@ -179,7 +289,7 @@ export class Company extends BaseAggregateRoot<CompanyId> {
       this.paymentWorkflow,
       workflow,
       this.createdAt,
-      new Date()
+      hasWorkflowChange ? new Date() : this.updatedAt // ✅ 只有在工作流程變化時才更新時間戳
     );
   }
 

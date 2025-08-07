@@ -1,11 +1,12 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Observable, map, catchError, finalize, of } from 'rxjs';
 
-import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto } from '../dto/company.dto';
+import { CreateCompanyDto, UpdateCompanyDto, CompanyResponseDto, ContactDto } from '../dto/company.dto';
 import { CreateCompanyUseCase } from '../use-cases/create-company.use-case';
 import { DeleteCompanyUseCase } from '../use-cases/delete-company.use-case';
 import { GetCompaniesUseCase } from '../use-cases/get-companies.use-case';
 import { UpdateCompanyUseCase } from '../use-cases/update-company.use-case';
+import { UpdateCompanyContactUseCase } from '../use-cases/update-company-contact.use-case';
 
 /**
  * 公司應用服務
@@ -20,6 +21,7 @@ export class CompanyService {
   private readonly updateCompanyUseCase = inject(UpdateCompanyUseCase);
   private readonly deleteCompanyUseCase = inject(DeleteCompanyUseCase);
   private readonly getCompaniesUseCase = inject(GetCompaniesUseCase);
+  private readonly updateCompanyContactUseCase = inject(UpdateCompanyContactUseCase);
 
   // Signals 狀態管理
   private readonly companiesSignal = signal<CompanyResponseDto[]>([]);
@@ -163,5 +165,83 @@ export class CompanyService {
    */
   updateCompanies(companies: CompanyResponseDto[]): void {
     this.companiesSignal.set(companies);
+  }
+
+  /**
+   * 新增聯絡人
+   */
+  addContact(companyId: string, contact: ContactDto): Observable<CompanyResponseDto> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    return this.updateCompanyContactUseCase.addContact(companyId, contact).pipe(
+      map(updatedCompany => {
+        // 更新本地狀態
+        const currentCompanies = this.companiesSignal();
+        const updatedCompanies = currentCompanies.map(company =>
+          company.id === companyId ? updatedCompany : company
+        );
+        this.companiesSignal.set(updatedCompanies);
+        return updatedCompany;
+      }),
+      finalize(() => this.loadingSignal.set(false)),
+      catchError(error => {
+        console.error('新增聯絡人失敗:', error);
+        this.errorSignal.set('新增聯絡人失敗');
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * 更新聯絡人
+   */
+  updateContact(companyId: string, contactIndex: number, contact: ContactDto): Observable<CompanyResponseDto> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    return this.updateCompanyContactUseCase.updateContact(companyId, contactIndex, contact).pipe(
+      map(updatedCompany => {
+        // 更新本地狀態
+        const currentCompanies = this.companiesSignal();
+        const updatedCompanies = currentCompanies.map(company =>
+          company.id === companyId ? updatedCompany : company
+        );
+        this.companiesSignal.set(updatedCompanies);
+        return updatedCompany;
+      }),
+      finalize(() => this.loadingSignal.set(false)),
+      catchError(error => {
+        console.error('更新聯絡人失敗:', error);
+        this.errorSignal.set('更新聯絡人失敗');
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * 刪除聯絡人
+   */
+  removeContact(companyId: string, contactIndex: number): Observable<CompanyResponseDto> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    return this.updateCompanyContactUseCase.removeContact(companyId, contactIndex).pipe(
+      map(updatedCompany => {
+        // 更新本地狀態
+        const currentCompanies = this.companiesSignal();
+        const updatedCompanies = currentCompanies.map(company =>
+          company.id === companyId ? updatedCompany : company
+        );
+        this.companiesSignal.set(updatedCompanies);
+        return updatedCompany;
+      }),
+      finalize(() => this.loadingSignal.set(false)),
+      catchError(error => {
+        console.error('刪除聯絡人失敗:', error);
+        this.errorSignal.set('刪除聯絡人失敗');
+        throw error;
+      })
+    );
   }
 }
