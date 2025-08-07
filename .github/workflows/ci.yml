@@ -29,7 +29,7 @@ jobs:
       - name: 'Deploy Site'
         if: github.event.number
         run: |
-          export DEPLOY_DOMAIN=https://preview-${{ github.event.number }}-ng-ac.surge.sh
+          export DEPLOY_DOMAIN=https://preview-${{ github.event.number }}-ng-alain.surge.sh
           echo "Deploy to $DEPLOY_DOMAIN"
           cp ./dist/ng-alain/browser/index.html ./dist/ng-alain/browser/404.html
           npx surge --project ./dist/ng-alain/browser --domain $DEPLOY_DOMAIN
@@ -41,7 +41,7 @@ jobs:
       - name: 'Update comment on github'
         if: github.event.number
         run: |
-          export DEPLOY_DOMAIN=https://preview-${{ github.event.number }}-ng-ac.surge.sh
+          export DEPLOY_DOMAIN=https://preview-${{ github.event.number }}-ng-alain.surge.sh
           node ./scripts/_ci/github-comment.js "RELEASE" "[Preview is ready!]($DEPLOY_DOMAIN)"
         env:
           ACCESS_REPO: ${{ github.repository }}
@@ -76,7 +76,7 @@ jobs:
       - name: 'Deploy Site'
         if: github.event.number
         run: |
-          export DEPLOY_DOMAIN=https://preview-${{ github.event.number }}-day-ng-ac.surge.sh
+          export DEPLOY_DOMAIN=https://preview-${{ github.event.number }}-day-ng-alain.surge.sh
           echo "Deploy to $DEPLOY_DOMAIN"
           cp ./dist/ng-alain/browser/index.html ./dist/ng-alain/browser/404.html
           npx surge --project ./dist/ng-alain/browser --domain $DEPLOY_DOMAIN
@@ -88,7 +88,7 @@ jobs:
       - name: 'Update comment on github'
         if: github.event.number
         run: |
-          export DEPLOY_DOMAIN=https://preview-${{ github.event.number }}-day-ng-ac.surge.sh
+          export DEPLOY_DOMAIN=https://preview-${{ github.event.number }}-day-ng-alain.surge.sh
           node ./scripts/_ci/github-comment.js "RELEASE_DAY" "[Using day release @delon, Preview is ready!]($DEPLOY_DOMAIN)"
         env:
           ACCESS_REPO: ${{ github.repository }}
