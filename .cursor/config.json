@@ -1,0 +1,22 @@
+{
+    "alwaysApply": true,
+    "calls": [
+      {
+        "match": ".*",
+        "tool": "sequential-thinking"
+      },
+      {
+        "match": ".*",
+        "tool": "fetch"
+      },
+      {
+        "match": ".*",
+        "tool": "memory"
+      },
+      {
+        "match": ".*",
+        "tool": "context7"
+      }
+    ]
+  }
+  

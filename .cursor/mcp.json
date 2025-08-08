@@ -1,0 +1,59 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./"],
+      "disabled": false,
+      "autoApprove": ["read_file", "write_file", "list_directory"]
+    },
+      "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "env": {}
+      },
+      "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=2048"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "resolve-library-id",
+        "get-library-docs"
+      ]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=1024"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "sequentialthinking"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "./memory-bank/memory.json",
+        "NODE_OPTIONS": "--max-old-space-size=2048"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
