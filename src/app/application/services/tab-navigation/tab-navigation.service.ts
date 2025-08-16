@@ -17,12 +17,12 @@
  * - 使用官方 Angular Material Tabs API 規範
  */
 
-import { Injectable, signal, computed, effect, inject } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { TabItem, TabChangeEvent } from '../../../shared/interfaces/tab/tab.interface';
 import { TAB_CONFIG } from '../../../shared/constants/tab/tab.constants';
-import { generateTabId, hasTab, getTabIndex, canAddTab } from '../../../shared/utils/tab/tab.util';
+import { TabItem } from '../../../shared/interfaces/tab/tab.interface';
 import { storage } from '../../../shared/utils';
+import { canAddTab, generateTabId, getTabIndex, hasTab } from '../../../shared/utils/tab/tab.util';
 
 @Injectable({ providedIn: 'root' })
 export class TabNavigationService {
@@ -45,7 +45,7 @@ export class TabNavigationService {
 
   constructor() {
     this.loadState();
-    
+
     // 自動路由同步
     effect(() => {
       const currentRoute = this.router.url;
@@ -109,9 +109,9 @@ export class TabNavigationService {
   private loadState(): void {
     try {
       const savedTabs = storage.get<TabItem[]>(TAB_CONFIG.CACHE_KEY, []);
-      const savedActiveId = storage.get<string>(`${TAB_CONFIG.CACHE_KEY}-active`, null);
-      
-      if (savedTabs.length > 0) {
+      const savedActiveId = storage.get<string>(`${TAB_CONFIG.CACHE_KEY}-active`, '');
+
+      if (savedTabs && savedTabs.length > 0) {
         this._tabs.set(savedTabs);
         if (savedActiveId && hasTab(savedTabs, savedActiveId)) {
           this._activeTabId.set(savedActiveId);

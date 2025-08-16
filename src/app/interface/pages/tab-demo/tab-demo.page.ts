@@ -17,13 +17,13 @@
  * - 使用官方 Angular Material 組件
  */
 
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { TabNavigationService } from '../../../../application/services/tab-navigation/tab-navigation.service';
-import { TAB_ICONS } from '../../../../shared/constants/tab/tab.constants';
+import { MatIconModule } from '@angular/material/icon';
+import { TabNavigationService } from '../../../application/services/tab-navigation/tab-navigation.service';
+import { TAB_ICONS } from '../../../shared/constants/tab/tab.constants';
 
 @Component({
   selector: 'app-tab-demo',
@@ -41,34 +41,34 @@ import { TAB_ICONS } from '../../../../shared/constants/tab/tab.constants';
           <mat-card-title>Tab Navigation 演示</mat-card-title>
           <mat-card-subtitle>點擊按鈕新增標籤頁</mat-card-subtitle>
         </mat-card-header>
-        
+
         <mat-card-content>
           <div class="button-group">
-            <button 
-              mat-raised-button 
+            <button
+              mat-raised-button
               color="primary"
               (click)="addDashboardTab()">
               <mat-icon>{{ TAB_ICONS.DASHBOARD }}</mat-icon>
               新增儀表板標籤
             </button>
-            
-            <button 
-              mat-raised-button 
+
+            <button
+              mat-raised-button
               color="accent"
               (click)="addUserTab()">
               <mat-icon>{{ TAB_ICONS.USER }}</mat-icon>
               新增用戶標籤
             </button>
-            
-            <button 
-              mat-raised-button 
+
+            <button
+              mat-raised-button
               color="warn"
               (click)="addSettingsTab()">
               <mat-icon>{{ TAB_ICONS.SETTINGS }}</mat-icon>
               新增設置標籤
             </button>
           </div>
-          
+
           <div class="info-section">
             <p>當前標籤頁數量: {{ tabService.tabs().length }}</p>
             <p>活動標籤頁: {{ tabService.activeTab()?.label || '無' }}</p>
@@ -80,8 +80,9 @@ import { TAB_ICONS } from '../../../../shared/constants/tab/tab.constants';
   styleUrls: ['./tab-demo.page.scss']
 })
 export class TabDemoPage {
-  private tabService = inject(TabNavigationService);
-  
+  // 將 tabService 改為 public 以便在模板中訪問
+  public tabService = inject(TabNavigationService);
+
   readonly TAB_ICONS = TAB_ICONS;
 
   addDashboardTab(): void {
