@@ -1,0 +1,81 @@
+/**
+ * @fileoverview 應用路由配置檔案 (Application Routes)
+ * @description 定義應用程式的所有路由規則，包括頁面導航和懶加載配置
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @since 2024-01-01
+ *
+ * 檔案性質：
+ * - 類型：Interface Layer Routing
+ * - 職責：路由配置、頁面導航、組件懶加載
+ * - 依賴：Angular Router, 頁面組件
+ * - 不可變更：此文件的所有註解和架構說明均不可變更
+ *
+ * 重要說明：
+ * - 此檔案只存放路由配置，不包含業務邏輯
+ * - 所有新頁面必須在此檔案中註冊路由
+ * - 使用懶加載來優化應用性能
+ * - 側邊欄組件全局應用於認證後的頁面
+ */
+
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+  // 重定向到登錄頁面
+  {
+    path: '',
+    redirectTo: '/auth/login',
+    pathMatch: 'full'
+  },
+
+  // 認證相關路由（使用認證佈局，無側邊欄）
+  {
+    path: 'auth',
+    loadComponent: () => import('./interface/layouts/passport').then(m => m.PassportLayoutComponent),
+    children: [
+      {
+        path: 'login',
+        loadComponent: () => import('./interface/pages/auth/login').then(m => m.LoginPageComponent)
+      },
+      {
+        path: 'register',
+        loadComponent: () => import('./interface/pages/auth/register').then(m => m.RegisterPageComponent)
+      }
+    ]
+  },
+
+  // 主應用路由（使用側邊欄佈局 + 認證守衛）
+  {
+    path: 'app',
+    loadComponent: () => import('./shared/components/sidebar').then(m => m.SidebarComponent),
+    canActivate: [
+      () => import('./security/authentication/guards').then(m => m.AuthGuard)
+    ],
+    children: [
+      // 儀表板
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./interface/pages/dashboard').then(m => m.DashboardPageComponent)
+      },
+
+      // 用戶管理
+      {
+        path: 'users',
+        loadComponent: () => import('./interface/pages/user/user-list').then(m => m.UserListPageComponent)
+      },
+
+      // 重定向到儀表板
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      }
+    ]
+  },
+
+  // 404 頁面
+  {
+    path: '**',
+    redirectTo: '/auth/login'
+  }
+];

@@ -1,2 +1,28 @@
-export { provideBindAuthRefresh } from './refresh-token';
-export * from './default.interceptor';
+/**
+ * @fileoverview 網絡服務統一導出檔案 (Network Services Unified Export)
+ * @description 統一導出網絡相關服務
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @since 2024-01-01
+ *
+ * 檔案性質：
+ * - 類型：Core Layer Network Services Unified Export
+ * - 職責：網絡服務統一導出
+ * - 依賴：網絡服務實現
+ * - 不可變更：此文件的所有註解和架構說明均不可變更
+ *
+ * 重要說明：
+ * - 此檔案只存放網絡服務的統一導出，不包含業務邏輯
+ * - 所有網絡服務必須在此檔案中導出
+ * - 此檔案須遵守此架構規則1：網絡服務統一化
+ * - 此檔案須遵守此架構規則2：服務聚合匯出
+ * - 此檔案須遵守此架構規則3：依賴注入配置
+ * - 此檔案須遵守此架構規則4：服務生命週期管理
+ * - 此檔案須遵守此架構規則5：服務配置管理
+ * - 此檔案須遵守此架構規則6：服務監控
+ * - 此檔案須遵守此架構規則7：服務性能優化
+ * - 此檔案須遵守此架構規則8：服務安全保護
+ */
+
+// 功能 (狀態: 待實現)
+// 代碼:

@@ -1,39 +1,246 @@
 {
-  "typescript.tsdk": "./node_modules/typescript/lib",
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.fixAll.stylelint": "explicit"
-  },
-  "[typescript]": {
+    // ===== CURSOR AI 專用設定 =====
+
+    // 聊天和 AI 助手設定
+    "cursor.chat.defaultSystemMessage": "You are an advanced AI assistant with access to multiple tools and operational modes:\n\n🔧 AVAILABLE TOOLS:\n- context7: Contextual code assistance (trigger: '7' or 'c7')\n- resolve-library-id: Library identification and resolution\n- get-library-docs: Documentation retrieval\n\n🎯 OPERATIONAL MODES:\n- @VAN: Vision & Analysis (project initialization, complexity assessment)\n- @PLAN: Planning (detailed implementation planning)\n- @CREATIVE: Creative Design (design exploration)\n- @IMPLEMENT: Implementation (systematic code building)\n- @QA: Quality Assurance (code validation)\n- @REFLECT: Reflection (lessons learned)\n- @ARCHIVE: Archive (comprehensive documentation)\n\n🚀 TRIGGER RULES:\n- '7' or 'c7' → Use context7 tool\n- Library mentions → Use resolve-library-id\n- Documentation requests → Use get-library-docs\n- @[MODE] → Activate corresponding operational mode\n\nAlways respond with appropriate mode headers and maintain project context.",
+
+    // AI 模型和行為設定
+    "cursor.general.defaultModel": "claude-3.5-sonnet",
+    "cursor.chat.contextSizeLimit": 200000,
+    "cursor.chat.maxDiffs": 50,
+    "cursor.chat.enableTools": true,
+    "cursor.chat.tools": [
+      "context7",
+      "resolve-library-id",
+      "get-library-docs"
+    ],
+
+    // Cursor 特定功能
+    "cursor.cpp.disabledLanguages": ["scminput", "yaml"],
+    "cursor.autocomplete.enabled": true,
+    "cursor.autocomplete.suggestOnEveryKeystroke": true,
+
+    // ===== 編輯器設定 =====
+
+    // 基本編輯器配置
+    "editor.fontSize": 14,
+    "editor.fontFamily": "'Fira Code', 'Cascadia Code', Consolas, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "on",
+    "editor.wordWrapColumn": 120,
+    "editor.lineHeight": 1.5,
+
+    // 格式化設定
     "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.formatOnPaste": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
-  "[markdown]": {
-    "editor.formatOnSave": false
-  },
-  "[javascript]": {
-    "editor.formatOnSave": false
-  },
-  "[json]": {
-    "editor.formatOnSave": false
-  },
-  "[jsonc]": {
-    "editor.formatOnSave": false
-  },
-  "[less]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "stylelint.vscode-stylelint"
-  },
-  "files.watcherExclude": {
-    "**/.git/*/**": true,
-    "**/node_modules/*/**": true,
-    "**/dist/*/**": true,
-    "**/coverage/*/**": true
-  },
-  "files.associations": {
-    "*.json": "jsonc",
-    ".prettierrc": "jsonc"
-  },
-  "typescript.referencesCodeLens.enabled": true
-}
+
+    // 自動完成和建議
+    "editor.suggestSelection": "first",
+    "editor.suggest.showMethods": true,
+    "editor.suggest.preview": true,
+    "editor.acceptSuggestionOnEnter": "on",
+    "editor.snippetSuggestions": "top",
+    "editor.inlineSuggest.enabled": true,
+    "editor.accessibilitySupport": "off",
+
+    // 程式碼動作
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
+
+    // ===== 語言特定設定 =====
+
+    // JavaScript/TypeScript
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+
+    // JSON
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // HTML/CSS
+    "[html]": {
+      "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[css]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[scss]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Python
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.defaultInterpreterPath": "python3",
+
+    // Rust
+    "[rust]": {
+      "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+
+    // Go
+    "[go]": {
+      "editor.defaultFormatter": "golang.go"
+    },
+    "go.toolsManagement.autoUpdate": true,
+
+    // Markdown
+    "[markdown]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.wordWrap": "on"
+    },
+
+    // ===== 檔案和工作區設定 =====
+
+    // 檔案處理
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      "**/node_modules": true,
+      "**/.classpath": true,
+      "**/.project": true,
+      "**/.settings": true,
+      "**/.factorypath": true,
+      "**/dist": true,
+      "**/build": true
+    },
+
+    // 搜尋設定
+    "search.mode": "reuseEditor",
+    "search.searchEditor.focusResultsOnSearch": true,
+    "search.searchOnType": false,
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.git": true,
+      "**/coverage": true
+    },
+
+    // ===== 外觀和 UI 設定 =====
+
+    // 工作區外觀
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.iconTheme": "vs-seti",
+    "workbench.statusBar.visible": true,
+    "workbench.sideBar.location": "left",
+    "window.zoomLevel": 0,
+
+    // 標籤頁設定
+    "workbench.editor.tabCloseButton": "right",
+    "workbench.editor.tabSizing": "fit",
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.limit.value": 10,
+
+    // ===== 終端機設定 =====
+
+    // 終端機配置
+    "terminal.integrated.fontSize": 13,
+    "terminal.integrated.fontFamily": "'Fira Code', 'Cascadia Code', Consolas",
+    "terminal.integrated.shell.windows": "powershell.exe",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.defaultProfile.linux": "bash",
+
+    // ===== 擴充功能設定 =====
+
+    // Git
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "git.autofetch": true,
+
+    // Explorer
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.compactFolders": false,
+
+    // 安全性
+    "security.workspace.trust.untrustedFiles": "open",
+
+    // ===== 開發工具整合 =====
+
+    // Prettier
+    "prettier.singleQuote": true,
+    "prettier.semi": true,
+    "prettier.trailingComma": "es5",
+    "prettier.printWidth": 80,
+    "prettier.tabWidth": 2,
+
+    // ESLint
+    "eslint.enable": true,
+    "eslint.autoFixOnSave": true,
+
+    // Live Share
+    "liveshare.featureSet": "stable",
+
+    // ===== 性能和除錯設定 =====
+
+    // 性能優化
+    "extensions.autoUpdate": "onlyEnabledExtensions",
+    "telemetry.telemetryLevel": "off",
+
+    // 除錯
+    "debug.console.fontSize": 13,
+    "debug.inlineValues": "on",
+
+    // ===== Context7 專用觸發器 =====
+
+    // 自訂鍵盤快捷鍵 (需要在 keybindings.json 中設定)
+    "keyboard.dispatch": "keyCode",
+
+    // JSON Schema 設定
+    "json.schemas": [
+      {
+        "fileMatch": [".cursorrules"],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "alwaysApply": {"type": "boolean"},
+            "systemMessage": {"type": "string"},
+            "tools": {"type": "array"},
+            "modes": {"type": "object"}
+          }
+        }
+      }
+    ],
+
+    // ===== 實驗性功能 =====
+
+    // 預覽功能
+    "workbench.editor.preview": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+
+    // 自動更新
+    "update.mode": "start",
+    "extensions.autoCheckUpdates": true,
+    "workbench.editor.tabActionLocation": "right"
+  }

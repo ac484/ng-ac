@@ -1,48 +1,46 @@
-import { Component, ElementRef, OnInit, Renderer2, inject } from '@angular/core';
-import { NavigationEnd, NavigationError, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router';
-import { TitleService, VERSION as VERSION_ALAIN, stepPreloader } from '@delon/theme';
-import { environment } from '@env/environment';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd/version';
+/**
+ * @fileoverview 應用根組件 (Root Component)
+ * @description 主組件，通常是應用的入口組件，負責視圖渲染和組件承載
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @since 2024-01-01
+ *
+ * 檔案性質：
+ * - 類型：Interface Layer Component
+ * - 職責：視圖渲染、組件承載、路由承載
+ * - 依賴：RouterOutlet, DDD 架構服務
+ * - 不可變更：此文件的所有註解和架構說明均不可變更
+ *
+ * DDD 架構說明：
+ * - Interface Layer: 只負責基本的組件結構和路由承載
+ * - 樣式將從 Shared Layer 引用
+ * - 業務邏輯將從 Application Layer 引用
+ * - 配置將從 Infrastructure Layer 引用
+ * - 佈局將由各個頁面組件自己處理
+ */
+
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  template: `<router-outlet />`,
-  imports: [RouterOutlet]
+  standalone: true,
+  imports: [RouterOutlet],
+  template: `
+    <!-- 簡化的根組件，只負責路由承載 -->
+    <router-outlet />
+  `,
+  styles: [`
+    /* 移除所有自定義樣式，避免與側邊欄衝突 */
+    :host {
+      display: block;
+      height: 100vh;
+      width: 100vw;
+    }
+  `]
 })
-export class AppComponent implements OnInit {
-  private readonly router = inject(Router);
-  private readonly titleSrv = inject(TitleService);
-  private readonly modalSrv = inject(NzModalService);
-
-  private donePreloader = stepPreloader();
-
-  constructor(el: ElementRef, renderer: Renderer2) {
-    renderer.setAttribute(el.nativeElement, 'ng-alain-version', VERSION_ALAIN.full);
-    renderer.setAttribute(el.nativeElement, 'ng-zorro-version', VERSION_ZORRO.full);
-  }
-
-  ngOnInit(): void {
-    let configLoad = false;
-    this.router.events.subscribe(ev => {
-      if (ev instanceof RouteConfigLoadStart) {
-        configLoad = true;
-      }
-      if (configLoad && ev instanceof NavigationError) {
-        this.modalSrv.confirm({
-          nzTitle: `提醒`,
-          nzContent: environment.production ? `应用可能已发布新版本，请点击刷新才能生效。` : `无法加载路由：${ev.url}`,
-          nzCancelDisabled: false,
-          nzOkText: '刷新',
-          nzCancelText: '忽略',
-          nzOnOk: () => location.reload()
-        });
-      }
-      if (ev instanceof NavigationEnd) {
-        this.donePreloader();
-        this.titleSrv.setTitle();
-        this.modalSrv.closeAll();
-      }
-    });
-  }
+export class AppComponent {
+  // 精簡的組件實現
+  // 所有佈局邏輯將由各個頁面組件自己處理
+  // 側邊欄組件將處理自己的佈局
 }

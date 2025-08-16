@@ -1,37 +1,34 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
+    "useDefineForClassFields": false,
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
     "paths": {
-      "@shared": [
-        "src/app/shared/index"
-      ],
-      "@core": [
-        "src/app/core/index"
-      ],
-      "@env/*": [
-        "src/environments/*"
-      ],
-      "@_mock": [
-        "_mock/index"
-      ]
+      "@app/*": ["src/app/*"],
+      "@domain/*": ["src/app/domain/*"],
+      "@application/*": ["src/app/application/*"],
+      "@infrastructure/*": ["src/app/infrastructure/*"],
+      "@interface/*": ["src/app/interface/*"],
+      "@shared/*": ["src/app/shared/*"]
     }
   },
   "angularCompilerOptions": {

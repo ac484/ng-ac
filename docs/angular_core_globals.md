@@ -1,0 +1,14 @@
+window.ng globals
+applyChanges
+ComponentDebugMetadata
+DirectiveDebugMetadata
+getComponent
+getContext
+getDirectiveMetadata
+getDirectives
+getHostElement
+getInjector
+getListeners
+getOwningComponent
+getRootComponents
+Listener

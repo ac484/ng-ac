@@ -4,6 +4,6 @@ alwaysApply: true
 ## 技術規格
 - **作業系統**: Windows 11
 - **套件管理器**: Yarn
-- **前端框架**: Angular 20
-- **UI 組件庫**: ng-zorro-antd 20
+- **前端框架**: Angular 
+- **UI 組件庫**: ng-zorro-antd 
 - **應用框架**: ng-alain (企業級中後台解決方案)

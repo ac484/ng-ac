@@ -1,0 +1,9 @@
+createCustomElement
+NgElement
+NgElementConfig
+NgElementConstructor
+NgElementStrategy
+NgElementStrategyEvent
+NgElementStrategyFactory
+VERSION
+WithProperties

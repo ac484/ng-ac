@@ -1,115 +1,28 @@
-// 请参考：https://ng-alain.com/docs/i18n
-import { Platform } from '@angular/cdk/platform';
-import { registerLocaleData } from '@angular/common';
-import ngEn from '@angular/common/locales/en';
-import ngZh from '@angular/common/locales/zh';
-import ngZhTw from '@angular/common/locales/zh-Hant';
-import { Injectable, inject } from '@angular/core';
-import {
-  DelonLocaleService,
-  en_US as delonEnUS,
-  SettingsService,
-  zh_CN as delonZhCn,
-  zh_TW as delonZhTw,
-  _HttpClient,
-  AlainI18nBaseService
-} from '@delon/theme';
-import { AlainConfigService } from '@delon/util/config';
-import { enUS as dfEn, zhCN as dfZhCn, zhTW as dfZhTw } from 'date-fns/locale';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { en_US as zorroEnUS, NzI18nService, zh_CN as zorroZhCN, zh_TW as zorroZhTW } from 'ng-zorro-antd/i18n';
-import { Observable } from 'rxjs';
+/**
+ * @fileoverview 國際化服務 (I18n Service)
+ * @description 多語言支持和本地化服務
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @since 2024-01-01
+ *
+ * 檔案性質：
+ * - 類型：Core Layer I18n Service
+ * - 職責：多語言支持
+ * - 依賴：語言包配置
+ * - 不可變更：此文件的所有註解和架構說明均不可變更
+ *
+ * 重要說明：
+ * - 此檔案負責多語言支持和本地化
+ * - 包含語言切換、文本翻譯等
+ * - 此檔案須遵守此架構規則1：語言包管理
+ * - 此檔案須遵守此架構規則2：語言切換
+ * - 此檔案須遵守此架構規則3：文本翻譯
+ * - 此檔案須遵守此架構規則4：日期格式化
+ * - 此檔案須遵守此架構規則5：數字格式化
+ * - 此檔案須遵守此架構規則6：貨幣格式化
+ * - 此檔案須遵守此架構規則7：性能優化
+ * - 此檔案須遵守此架構規則8：緩存策略
+ */
 
-interface LangConfigData {
-  abbr: string;
-  text: string;
-  ng: NzSafeAny;
-  zorro: NzSafeAny;
-  date: NzSafeAny;
-  delon: NzSafeAny;
-}
-
-const DEFAULT = 'zh-CN';
-const LANGS: Record<string, LangConfigData> = {
-  'zh-CN': {
-    text: '简体中文',
-    ng: ngZh,
-    zorro: zorroZhCN,
-    date: dfZhCn,
-    delon: delonZhCn,
-    abbr: '🇨🇳'
-  },
-  'zh-TW': {
-    text: '繁体中文',
-    ng: ngZhTw,
-    zorro: zorroZhTW,
-    date: dfZhTw,
-    delon: delonZhTw,
-    abbr: '🇭🇰'
-  },
-  'en-US': {
-    text: 'English',
-    ng: ngEn,
-    zorro: zorroEnUS,
-    date: dfEn,
-    delon: delonEnUS,
-    abbr: '🇬🇧'
-  }
-};
-
-@Injectable({ providedIn: 'root' })
-export class I18NService extends AlainI18nBaseService {
-  private readonly http = inject(_HttpClient);
-  private readonly settings = inject(SettingsService);
-  private readonly nzI18nService = inject(NzI18nService);
-  private readonly delonLocaleService = inject(DelonLocaleService);
-  private readonly platform = inject(Platform);
-
-  protected override _defaultLang = DEFAULT;
-  private _langs = Object.keys(LANGS).map(code => {
-    const item = LANGS[code];
-    return { code, text: item.text, abbr: item.abbr };
-  });
-
-  constructor(cogSrv: AlainConfigService) {
-    super(cogSrv);
-
-    const defaultLang = this.getDefaultLang();
-    this._defaultLang = this._langs.findIndex(w => w.code === defaultLang) === -1 ? DEFAULT : defaultLang;
-  }
-
-  private getDefaultLang(): string {
-    if (!this.platform.isBrowser) {
-      return DEFAULT;
-    }
-    if (this.settings.layout.lang) {
-      return this.settings.layout.lang;
-    }
-    let res = (navigator.languages ? navigator.languages[0] : null) || navigator.language;
-    const arr = res.split('-');
-    return arr.length <= 1 ? res : `${arr[0]}-${arr[1].toUpperCase()}`;
-  }
-
-  loadLangData(lang: string): Observable<NzSafeAny> {
-    return this.http.get(`./assets/tmp/i18n/${lang}.json`);
-  }
-
-  use(lang: string, data: Record<string, unknown>): void {
-    if (this._currentLang === lang) return;
-
-    this._data = this.flatData(data, []);
-
-    const item = LANGS[lang];
-    registerLocaleData(item.ng);
-    this.nzI18nService.setLocale(item.zorro);
-    this.nzI18nService.setDateLocale(item.date);
-    this.delonLocaleService.setLocale(item.delon);
-    this._currentLang = lang;
-
-    this._change$.next(lang);
-  }
-
-  getLangs(): Array<{ code: string; text: string; abbr: string }> {
-    return this._langs;
-  }
-}
+// 功能 (狀態: 待實現)
+// 代碼:

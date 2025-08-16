@@ -2,15 +2,16 @@
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "./",
-        "./.cursor",
-        "./src",
-        "./custom_modes",
-        "./memory-bank"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem",
+      "D:\\7s\\ac-beta\\.cursor",
+      "D:\\7s\\ac-beta\\.vscode",
+      "D:\\7s\\ac-beta\\custom_modes",
+      "D:\\7s\\ac-beta\\docs",
+      "D:\\7s\\ac-beta\\public",
+      "D:\\7s\\ac-beta\\src",
+      "D:\\7s\\ac-beta\\memory-bank"
+    ],
+      "disabled": false,
       "autoApprove": [
         "list_allowed_directories",
         "list_directory",
@@ -21,10 +22,18 @@
         "edit_file",
         "delete_file",
         "move_file",
-        "copy_file"
+        "copy_file",
+        "search_files"
       ]
     },
-    "context7": {
+      "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "env": {}
+      },
+      "context7": {
       "command": "npx",
       "args": [
         "-y",
@@ -38,19 +47,6 @@
         "resolve-library-id",
         "get-library-docs"
       ]
-    },
-    "memory": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ],
-      "env": {
-        "MEMORY_FILE_PATH": "./memory-bank/memory.json",
-        "NODE_OPTIONS": "--max-old-space-size=2048"
-      },
-      "disabled": false,
-      "autoApprove": []
     },
     "sequential-thinking": {
       "command": "npx",
@@ -66,12 +62,16 @@
         "sequentialthinking"
       ]
     },
-    "fetch": {
-      "command": "uvx",
+    "memory": {
+      "command": "npx",
       "args": [
-        "mcp-server-fetch"
+        "-y",
+        "@modelcontextprotocol/server-memory"
       ],
-      "env": {},
+      "env": {
+        "MEMORY_FILE_PATH": "./memory-bank/memory.json",
+        "NODE_OPTIONS": "--max-old-space-size=2048"
+      },
       "disabled": false,
       "autoApprove": []
     }

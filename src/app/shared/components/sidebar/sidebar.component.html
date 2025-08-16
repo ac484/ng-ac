@@ -1,0 +1,51 @@
+<!-- 極簡側邊欄組件模板 -->
+<mat-sidenav-container class="sidebar-container" [autosize]="true">
+  <!-- 側邊欄 -->
+  <mat-sidenav #drawer class="sidebar" mode="side" [opened]="isSidebarOpen">
+    <!-- 側邊欄標題 -->
+    <h2 class="sidebar-title">NG-AC</h2>
+
+    <!-- 導航列表 -->
+    <mat-nav-list>
+      @for (item of navItems; track item.route) {
+      <a mat-list-item [routerLink]="item.route" routerLinkActive="active">
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+      }
+    </mat-nav-list>
+
+    <!-- 切換按鈕 -->
+    <button mat-button (click)="showFiller = !showFiller">
+      Toggle extra text
+    </button>
+
+    @if (showFiller) {
+    <p>Lorem, ipsum dolor sit amet consectetur.</p>
+    }
+  </mat-sidenav>
+
+  <!-- 主要內容區域 -->
+  <mat-sidenav-content class="sidebar-content">
+    <!-- 頂部工具欄 -->
+    <div class="content-header">
+      <button mat-button (click)="toggleSidebar()" class="menu-toggle-btn">
+        <mat-icon>{{ isSidebarOpen ? 'close' : 'menu' }}</mat-icon>
+      </button>
+      <span class="page-title">應用程式</span>
+
+      <!-- 側邊欄開關控制 -->
+      <div class="sidebar-toggle">
+        <mat-slide-toggle [checked]="isSidebarOpen" (change)="isSidebarOpen ? closeSidebar() : openSidebar()"
+          color="primary">
+          側邊欄
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <!-- 路由出口 -->
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

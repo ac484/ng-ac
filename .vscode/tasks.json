@@ -1,42 +1,362 @@
 {
-  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
   "version": "2.0.0",
   "tasks": [
+    // ===== Context7 相關任務 =====
+
     {
-      "type": "npm",
-      "script": "start",
+      "label": "Context7: 啟動上下文協助",
+      "type": "shell",
+      "command": "echo",
+      "args": ["觸發 Context7 工具..."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Context7: 程式庫文檔查詢",
+      "type": "shell",
+      "command": "echo",
+      "args": ["正在查詢程式庫文檔..."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+
+    // ===== 記憶銀行模式任務 =====
+
+    {
+      "label": "Memory Bank: 初始化專案分析 (VAN)",
+      "type": "shell",
+      "command": "echo",
+      "args": ["🎯 VAN MODE: 開始專案分析..."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Memory Bank: 創建實作計劃 (PLAN)",
+      "type": "shell",
+      "command": "echo",
+      "args": ["🎯 PLAN MODE: 創建詳細計劃..."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "dependsOn": "Memory Bank: 初始化專案分析 (VAN)",
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Memory Bank: 品質檢查 (QA)",
+      "type": "shell",
+      "command": "echo",
+      "args": ["🎯 QA MODE: 執行品質檢查..."],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+
+    // ===== 開發工作流程任務 =====
+
+    {
+      "label": "Dev: 安裝依賴",
+      "type": "shell",
+      "command": "npm",
+      "args": ["install"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": ["$tsc"]
+    },
+
+    {
+      "label": "Dev: 啟動開發伺服器",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",
         "pattern": "$tsc",
         "background": {
           "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
-          }
+          "beginsPattern": ".*",
+          "endsPattern": ".*"
         }
       }
     },
+
     {
-      "type": "npm",
-      "script": "test",
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
-          }
-        }
+      "label": "Dev: 執行測試",
+      "type": "shell",
+      "command": "npm",
+      "args": ["test"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Dev: 程式碼格式化",
+      "type": "shell",
+      "command": "npx",
+      "args": ["prettier", "--write", "."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Dev: ESLint 檢查",
+      "type": "shell",
+      "command": "npx",
+      "args": ["eslint", ".", "--fix"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": ["$eslint-stylish"]
+    },
+
+    // ===== Git 工作流程任務 =====
+
+    {
+      "label": "Git: 檢查狀態",
+      "type": "shell",
+      "command": "git",
+      "args": ["status"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Git: 新增所有變更",
+      "type": "shell",
+      "command": "git",
+      "args": ["add", "."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Git: 提交變更",
+      "type": "shell",
+      "command": "git",
+      "args": ["commit", "-m", "${input:commitMessage}"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "dependsOn": "Git: 新增所有變更",
+      "problemMatcher": []
+    },
+
+    // ===== 部署任務 =====
+
+    {
+      "label": "Deploy: 建構專案",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "dependsOn": [
+        "Dev: 程式碼格式化",
+        "Dev: ESLint 檢查",
+        "Dev: 執行測試"
+      ],
+      "problemMatcher": ["$tsc"]
+    },
+
+    {
+      "label": "Deploy: 預覽部署",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "preview"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "dependsOn": "Deploy: 建構專案",
+      "problemMatcher": []
+    },
+
+    // ===== 複合任務 =====
+
+    {
+      "label": "工作流程: 完整開發準備",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Dev: 安裝依賴",
+        "Memory Bank: 初始化專案分析 (VAN)",
+        "Memory Bank: 創建實作計劃 (PLAN)"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
       }
+    },
+
+    {
+      "label": "工作流程: 代碼品質檢查",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Dev: 程式碼格式化",
+        "Dev: ESLint 檢查",
+        "Dev: 執行測試",
+        "Memory Bank: 品質檢查 (QA)"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+
+    {
+      "label": "工作流程: 發布前準備",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "工作流程: 代碼品質檢查",
+        "Deploy: 建構專案",
+        "Git: 檢查狀態"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    }
+  ],
+
+  // ===== 輸入變數定義 =====
+
+  "inputs": [
+    {
+      "id": "commitMessage",
+      "description": "輸入提交訊息",
+      "default": "更新程式碼",
+      "type": "promptString"
+    },
+    {
+      "id": "branchName",
+      "description": "輸入分支名稱",
+      "default": "feature/new-feature",
+      "type": "promptString"
+    },
+    {
+      "id": "modeInput",
+      "description": "選擇記憶銀行模式",
+      "type": "pickString",
+      "options": [
+        {
+          "label": "VAN - 視野分析",
+          "value": "@VAN"
+        },
+        {
+          "label": "PLAN - 計劃制定",
+          "value": "@PLAN"
+        },
+        {
+          "label": "CREATIVE - 創意設計",
+          "value": "@CREATIVE"
+        },
+        {
+          "label": "IMPLEMENT - 實作開發",
+          "value": "@IMPLEMENT"
+        },
+        {
+          "label": "QA - 品質檢查",
+          "value": "@QA"
+        },
+        {
+          "label": "REFLECT - 反思總結",
+          "value": "@REFLECT"
+        },
+        {
+          "label": "ARCHIVE - 文檔歸檔",
+          "value": "@ARCHIVE"
+        }
+      ]
     }
   ]
 }

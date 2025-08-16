@@ -1,84 +1,96 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { default as ngLang } from '@angular/common/locales/zh-Hant';
-import { ApplicationConfig, EnvironmentProviders, Provider } from '@angular/core';
+/**
+ * @fileoverview 應用配置檔案 (Application Configuration)
+ * @description 存放應用程式的所有配置，包括 Firebase 服務、路由、動畫等
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @since 2024-01-01
+ *
+ * 檔案性質：
+ * - 類型：Infrastructure Layer Configuration
+ * - 職責：應用配置管理、服務提供者配置、Firebase 整合
+ * - 依賴：Angular Core, Angular Fire, 路由配置
+ * - 不可變更：此文件的所有註解和架構說明均不可變更
+ *
+ * 重要說明：
+ * - 此檔案只存放配置，不包含業務邏輯
+ * - Firebase 配置包含敏感信息，請妥善保管
+ * - 所有服務提供者必須在此檔案中註冊
+ */
+
+import { provideHttpClient } from '@angular/common/http';
+import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideRouter, withComponentInputBinding, withViewTransitions, withInMemoryScrolling, withHashLocation, RouterFeatures } from '@angular/router';
-import { I18NService, defaultInterceptor, provideStartup } from '@core';
-import { provideCellWidgets } from '@delon/abc/cell';
-import { provideSTWidgets } from '@delon/abc/st';
-import { authSimpleInterceptor, provideAuth } from '@delon/auth';
-import { provideSFConfig } from '@delon/form';
-import { AlainProvideLang, provideAlain, zh_TW as delonLang } from '@delon/theme';
-import { AlainConfig } from '@delon/util/config';
-import { environment } from '@env/environment';
-import { CELL_WIDGETS, ST_WIDGETS, SF_WIDGETS } from '@shared';
-import { zhTW as dateLang } from 'date-fns/locale';
-import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
-import { zh_TW as zorroLang } from 'ng-zorro-antd/i18n';
+import { provideRouter } from '@angular/router';
 
-import { provideBindAuthRefresh } from './core/net';
-import { routes } from './routes/routes';
-import { ICONS } from '../style-icons';
-import { ICONS_AUTO } from '../style-icons-auto';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth as provideAuth_alias } from '@angular/fire/auth';
+// Firebase Analytics 服務 - 提供網站分析、螢幕追蹤和用戶追蹤功能
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
-import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
+// Firebase 應用程式初始化 - 設定 Firebase 專案配置
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+// Firebase App Check 服務 - 提供 reCAPTCHA 企業版驗證，防止濫用
+import { initializeAppCheck, provideAppCheck, ReCaptchaEnterpriseProvider } from '@angular/fire/app-check';
+// Firebase 身份驗證服務 - 處理用戶登入、註冊和身份管理
+import { getAuth, provideAuth } from '@angular/fire/auth';
+// Firebase Firestore 資料庫服務 - 提供 NoSQL 雲端資料庫功能
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+// Firebase Cloud Functions 服務 - 執行伺服器端程式碼
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
+// Firebase Cloud Messaging 服務 - 處理推播通知
 import { getMessaging, provideMessaging } from '@angular/fire/messaging';
+// Firebase Performance 服務 - 監控應用程式效能指標
 import { getPerformance, providePerformance } from '@angular/fire/performance';
-import { getStorage, provideStorage } from '@angular/fire/storage';
+// Firebase Remote Config 服務 - 遠端配置管理，無需更新應用程式
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
+// Firebase Storage 服務 - 雲端檔案儲存和管理
+import { getStorage, provideStorage } from '@angular/fire/storage';
+// Firebase VertexAI 服務 - 整合 Google AI 模型和機器學習功能
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
-
-const defaultLang: AlainProvideLang = {
-  abbr: 'zh-Hant',
-  ng: ngLang,
-  zorro: zorroLang,
-  date: dateLang,
-  delon: delonLang
-};
-
-const alainConfig: AlainConfig = {
-  auth: { login_url: '/passport/login' }
-};
-
-const ngZorroConfig: NzConfig = {};
-
-const routerFeatures: RouterFeatures[] = [
-  withComponentInputBinding(),
-  withViewTransitions(),
-  withInMemoryScrolling({ scrollPositionRestoration: 'top' })
-];
-if (environment.useHash) routerFeatures.push(withHashLocation());
-
-const providers: Array<Provider | EnvironmentProviders> = [
-  provideHttpClient(withInterceptors([...(environment.interceptorFns ?? []), authSimpleInterceptor, defaultInterceptor])),
-  provideAnimations(),
-  provideRouter(routes, ...routerFeatures),
-  provideAlain({ config: alainConfig, defaultLang, i18nClass: I18NService, icons: [...ICONS_AUTO, ...ICONS] }),
-  provideNzConfig(ngZorroConfig),
-  provideAuth(),
-  provideCellWidgets(...CELL_WIDGETS),
-  provideSTWidgets(...ST_WIDGETS),
-  provideSFConfig({
-    widgets: [...SF_WIDGETS]
-  }),
-  provideStartup(),
-  ...(environment.providers || [])
-];
-
-// If you use `@delon/auth` to refresh the token, additional registration `provideBindAuthRefresh` is required
-if (environment.api?.refreshTokenEnabled && environment.api.refreshTokenType === 'auth-refresh') {
-  providers.push(provideBindAuthRefresh());
-}
+import { environment } from '../environments/environment';
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
-  providers: providers,
-  providers: [provideFirebaseApp(() => initializeApp({ projectId: "ng-acc", appId: "1:289956121604:web:4dd9d608a2db962aeaf951", storageBucket: "ng-acc.firebasestorage.app", apiKey: "AIzaSyCmWn3NJBClxZeJHsg-eaEaqA3bdB9bzOQ", authDomain: "ng-acc.firebaseapp.com", messagingSenderId: "289956121604", measurementId: "G-6YM5S9LCNV" })), provideAuth_alias(() => getAuth()), provideAnalytics(() => getAnalytics()), ScreenTrackingService, UserTrackingService, provideAppCheck(() => {
-  // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
-  const provider = new ReCaptchaEnterpriseProvider(/* reCAPTCHA Enterprise site key */);
-  return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
-}), provideFirestore(() => getFirestore()), provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), providePerformance(() => getPerformance()), provideStorage(() => getStorage()), provideRemoteConfig(() => getRemoteConfig()), provideVertexAI(() => getVertexAI())]
+    providers: [
+        // 提供路由功能 - 處理應用程式內的頁面導航
+        provideRouter(routes),
+        // 提供動畫功能 - 支援 Angular 動畫系統
+        provideAnimations(),
+        // 提供 HTTP 客戶端 - 處理 API 請求和後端通訊
+        provideHttpClient(),
+        // 初始化 Firebase 應用程式 - 設定專案 ID、API 金鑰等配置
+        provideFirebaseApp(() => initializeApp({
+            projectId: "acc-ng",
+            appId: "1:713375778540:web:ddf84d3016300c2abb87c9",
+            storageBucket: "acc-ng.firebasestorage.app",
+            apiKey: "AIzaSyD0mftbDKLDXTDttoXUQwnHNQUeJEwADQc",
+            authDomain: "acc-ng.firebaseapp.com",
+            messagingSenderId: "713375778540",
+            measurementId: "G-FWEJ2HQYZD"
+        })),
+        // 提供 Firebase 身份驗證服務
+        provideAuth(() => getAuth()),
+        // 提供 Firebase Analytics 分析服務
+        provideAnalytics(() => getAnalytics()),
+        // 提供螢幕追蹤服務 - 追蹤用戶在不同頁面的瀏覽行為
+        ScreenTrackingService,
+        // 提供用戶追蹤服務 - 追蹤用戶在應用程式中的活動
+        UserTrackingService,
+        // 提供 Firebase App Check 服務 - 使用 reCAPTCHA 企業版防止濫用
+        provideAppCheck(() => {
+            const provider = new ReCaptchaEnterpriseProvider(environment.firebase.appCheck.recaptchaSiteKey);
+            return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
+        }),
+        // 提供 Firebase Firestore 資料庫服務
+        provideFirestore(() => getFirestore()),
+        // 提供 Firebase Cloud Functions 服務
+        provideFunctions(() => getFunctions()),
+        // 提供 Firebase Cloud Messaging 推播通知服務
+        provideMessaging(() => getMessaging()),
+        // 提供 Firebase Performance 效能監控服務
+        providePerformance(() => getPerformance()),
+        // 提供 Firebase Storage 檔案儲存服務
+        provideStorage(() => getStorage()),
+        // 提供 Firebase Remote Config 遠端配置服務
+        provideRemoteConfig(() => getRemoteConfig()),
+        // 提供 Firebase VertexAI AI 服務
+        provideVertexAI(() => getVertexAI())
+    ]
 };

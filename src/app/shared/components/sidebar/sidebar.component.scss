@@ -1,0 +1,98 @@
+/* 極簡側邊欄組件樣式 */
+.sidebar-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+}
+
+.sidebar {
+  width: 280px;
+  padding: 16px;
+  background-color: #fafafa;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+
+  .sidebar-title {
+    margin: 0 0 16px 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #1976d2;
+  }
+}
+
+.sidebar-content {
+  flex: 1;
+  background-color: #fff;
+}
+
+/* 頂部工具欄 */
+.content-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .menu-toggle-btn {
+    margin-right: 16px;
+    color: #666;
+  }
+
+  .page-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    flex: 1;
+    margin-left: 16px;
+  }
+
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    mat-slide-toggle {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  }
+}
+
+/* 內容包裝器 */
+.content-wrapper {
+  padding: 24px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+/* 導航項目樣式 */
+mat-nav-list {
+  a {
+    margin: 4px 0;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(25, 118, 210, 0.08);
+    }
+
+    &.active {
+      background-color: rgba(25, 118, 210, 0.12);
+      color: #1976d2;
+
+      mat-icon {
+        color: #1976d2;
+      }
+    }
+  }
+}
+
+/* 基本響應式 */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    max-width: 320px;
+  }
+}
