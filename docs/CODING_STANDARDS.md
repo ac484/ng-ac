@@ -354,6 +354,7 @@ export class UserTableComponent {
 @Component({
   selector: 'app-data-table',
   template: `
+  {% raw %}
     <table>
       <thead>
         <tr>
@@ -374,6 +375,7 @@ export class UserTableComponent {
         </tr>
       </tbody>
     </table>
+    {% endraw %}
   `
 })
 export class DataTableComponent<T> {
