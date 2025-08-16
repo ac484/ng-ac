@@ -64,6 +64,12 @@ export const routes: Routes = [
         loadComponent: () => import('./interface/pages/user/user-list').then(m => m.UserListPageComponent)
       },
 
+      // Tab Demo
+      {
+        path: 'tab-demo',
+        loadComponent: () => import('./interface/pages/tab-demo').then(m => m.TabDemoPage)
+      },
+
       // 重定向到儀表板
       {
         path: '',

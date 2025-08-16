@@ -1,26 +1,26 @@
 /**
- * @fileoverview 侧边栏常量定义 (Sidebar Constants)
- * @description 定义侧边栏相关的常量值，基於官方 Angular Material Sidenav API
+ * @fileoverview 側邊欄常量定義檔案 (Sidebar Constants Definition)
+ * @description 定義側邊欄組件的常量
  * @author NG-AC Team
  * @version 1.0.0
  * @since 2024-01-01
  *
  * 檔案性質：
- * - 類型：Shared Layer Constants
- * - 職責：侧边栏常量定义
- * - 依賴：侧边栏接口
+ * - 類型：Shared Layer Sidebar Constants
+ * - 職責：側邊欄常量定義
+ * - 依賴：無
  * - 不可變更：此文件的所有註解和架構說明均不可變更
  *
  * 重要說明：
- * - 此檔案定義侧边栏的默认配置和导航项
- * - 使用極簡主義設計，避免過度複雜化
- * - 基於官方 API 進行效能優化
+ * - 此檔案只定義側邊欄相關的常量，不包含業務邏輯
+ * - 遵循極簡主義原則，只定義必要的常量
+ * - 使用官方 Angular Material Sidenav API 規範
  */
 
-// 側邊欄導航項目常量
 export const SIDEBAR_NAV_ITEMS = [
   { label: '儀表板', icon: 'dashboard', route: '/app/dashboard' },
-  { label: '用戶管理', icon: 'people', route: '/app/users' }
+  { label: '用戶管理', icon: 'people', route: '/app/users' },
+  { label: 'Tab 演示', icon: 'tab', route: '/app/tab-demo' }
 ];
 
 // 側邊欄配置常量 - 極簡設計

@@ -1,0 +1,133 @@
+/**
+ * @fileoverview Tab Navigation 服務檔案 (Tab Navigation Service)
+ * @description 提供 Tab Navigation 系統的核心服務
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @since 2024-01-01
+ *
+ * 檔案性質：
+ * - 類型：Application Layer Tab Navigation Service
+ * - 職責：Tab 導航服務
+ * - 依賴：Tab 介面、工具函數、Router
+ * - 不可變更：此文件的所有註解和架構說明均不可變更
+ *
+ * 重要說明：
+ * - 此檔案使用 Angular 20+ Signals 進行狀態管理
+ * - 遵循極簡主義原則，只實現必要的功能
+ * - 使用官方 Angular Material Tabs API 規範
+ */
+
+import { Injectable, signal, computed, effect, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { TabItem, TabChangeEvent } from '../../../shared/interfaces/tab/tab.interface';
+import { TAB_CONFIG } from '../../../shared/constants/tab/tab.constants';
+import { generateTabId, hasTab, getTabIndex, canAddTab } from '../../../shared/utils/tab/tab.util';
+import { storage } from '../../../shared/utils';
+
+@Injectable({ providedIn: 'root' })
+export class TabNavigationService {
+  private router = inject(Router);
+
+  // 核心 Signals
+  private readonly _tabs = signal<TabItem[]>([]);
+  private readonly _activeTabId = signal<string | null>(null);
+
+  // 計算 Signals
+  readonly tabs = this._tabs.asReadonly();
+  readonly activeTabId = this._activeTabId.asReadonly();
+  readonly activeTab = computed(() =>
+    this._tabs().find(tab => tab.id === this._activeTabId())
+  );
+  readonly hasTabs = computed(() => this._tabs().length > 0);
+  readonly canCloseTabs = computed(() =>
+    this._tabs().some(tab => tab.closable)
+  );
+
+  constructor() {
+    this.loadState();
+    
+    // 自動路由同步
+    effect(() => {
+      const currentRoute = this.router.url;
+      const matchingTab = this._tabs().find(tab => tab.route === currentRoute);
+      if (matchingTab && matchingTab.id !== this._activeTabId()) {
+        this._activeTabId.set(matchingTab.id);
+      }
+    });
+  }
+
+  // 操作方法
+  addTab(tab: Omit<TabItem, 'id'>): string {
+    if (!canAddTab(this._tabs(), TAB_CONFIG.MAX_TABS)) {
+      throw new Error(`Cannot add more than ${TAB_CONFIG.MAX_TABS} tabs`);
+    }
+
+    const id = generateTabId();
+    const newTab: TabItem = { ...tab, id };
+
+    this._tabs.update(tabs => [...tabs, newTab]);
+
+    if (!this._activeTabId()) {
+      this._activeTabId.set(id);
+    }
+
+    this.saveState();
+    return id;
+  }
+
+  closeTab(tabId: string): void {
+    const tabs = this._tabs();
+    const tabIndex = getTabIndex(tabs, tabId);
+
+    if (tabIndex === -1) return;
+
+    const newTabs = tabs.filter(tab => tab.id !== tabId);
+    this._tabs.set(newTabs);
+
+    // 自動選擇下一個標籤
+    if (this._activeTabId() === tabId) {
+      const nextTab = newTabs[tabIndex] || newTabs[tabIndex - 1] || newTabs[0];
+      if (nextTab) {
+        this._activeTabId.set(nextTab.id);
+        this.router.navigate([nextTab.route]);
+      }
+    }
+
+    this.saveState();
+  }
+
+  activateTab(tabId: string): void {
+    const tab = this._tabs().find(t => t.id === tabId);
+    if (tab) {
+      this._activeTabId.set(tabId);
+      this.router.navigate([tab.route]);
+      this.saveState();
+    }
+  }
+
+  // 私有方法
+  private loadState(): void {
+    try {
+      const savedTabs = storage.get<TabItem[]>(TAB_CONFIG.CACHE_KEY, []);
+      const savedActiveId = storage.get<string>(`${TAB_CONFIG.CACHE_KEY}-active`, null);
+      
+      if (savedTabs.length > 0) {
+        this._tabs.set(savedTabs);
+        if (savedActiveId && hasTab(savedTabs, savedActiveId)) {
+          this._activeTabId.set(savedActiveId);
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to load tab state:', error);
+    }
+  }
+
+  private saveState(): void {
+    try {
+      storage.set(TAB_CONFIG.CACHE_KEY, this._tabs());
+      storage.set(`${TAB_CONFIG.CACHE_KEY}-active`, this._activeTabId());
+    } catch (error) {
+      console.warn('Failed to save tab state:', error);
+    }
+  }
+}

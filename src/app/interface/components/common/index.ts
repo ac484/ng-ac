@@ -1,6 +1,6 @@
 /**
  * @fileoverview 通用組件統一導出檔案 (Common Components Unified Export)
- * @description 存放通用組件的統一導出檔案
+ * @description 存放所有通用組件的統一導出檔案
  * @author NG-AC Team
  * @version 1.0.0
  * @since 2024-01-01
@@ -8,7 +8,7 @@
  * 檔案性質：
  * - 類型：Interface Layer Common Components
  * - 職責：通用組件統一導出
- * - 依賴：通用組件
+ * - 依賴：所有通用組件
  * - 不可變更：此文件的所有註解和架構說明均不可變更
  *
  * 重要說明：
@@ -16,7 +16,8 @@
  * - 所有通用組件必須在此檔案中導出
  */
 
-export * from './button';
-export * from './input';
-export * from './modal';
+export * from './forms';
+export * from './layout';
+export * from './widgets';
+export * from './tab-navigation';
 
