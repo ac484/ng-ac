@@ -36,3 +36,6 @@ export * from '../core';
 
 // 權限模組導出 (待實現)
 // export * from './permission';
+
+// App Shell 模組導出
+export * from './app-shell';

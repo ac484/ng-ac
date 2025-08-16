@@ -19,5 +19,8 @@
 // 佈局導出
 export * from './layouts';
 
+// 組件導出
+export * from './components';
+
 // 頁面導出
 export * from './pages';

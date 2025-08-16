@@ -1,0 +1,30 @@
+/**
+ * App Shell 變數定義
+ *
+ * @author NG-AC Team
+ * @since 2024-12-19
+ * @version 1.0.0
+ */
+
+:root {
+  // App Shell 尺寸變數
+  --app-shell-header-height: 64px;
+  --app-shell-sidebar-width: 280px;
+  --app-shell-footer-height: 60px;
+  --app-shell-content-padding: 24px;
+
+  // 響應式斷點
+  --app-shell-breakpoint-mobile: 768px;
+  --app-shell-breakpoint-tablet: 1024px;
+  --app-shell-breakpoint-desktop: 1200px;
+
+  // 動畫時間
+  --app-shell-transition-fast: 0.15s ease-out;
+  --app-shell-transition-normal: 0.25s ease-out;
+  --app-shell-transition-slow: 0.35s ease-out;
+
+  // 陰影層級
+  --app-shell-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --app-shell-shadow-2: 0 3px 6px rgba(0, 0, 0, 0.15);
+  --app-shell-shadow-3: 0 10px 20px rgba(0, 0, 0, 0.19);
+}

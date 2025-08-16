@@ -29,7 +29,7 @@ export * from './constants';
 // export * from './enums';
 
 // 接口定義導出
-// export * from './interfaces';
+export * from './interfaces';
 
 // 類型定義導出
 // export * from './types';
@@ -57,3 +57,4 @@ export * from './components';
 
 // Material服務導出
 export * from './services/material';
+

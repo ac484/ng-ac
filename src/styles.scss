@@ -56,6 +56,9 @@ body {
   box-sizing: border-box;
 }
 
+/* App Shell 樣式 */
+@import './styles/app-shell';
+
 html,
 body {
   height: 100%;

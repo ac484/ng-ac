@@ -70,6 +70,12 @@ export const routes: Routes = [
         loadComponent: () => import('./interface/pages/tab-demo').then(m => m.TabDemoPage)
       },
 
+      // App Shell Demo
+      {
+        path: 'app-shell-demo',
+        loadComponent: () => import('./interface/pages/app-shell-demo').then(m => m.AppShellDemoPage)
+      },
+
       // 重定向到儀表板
       {
         path: '',

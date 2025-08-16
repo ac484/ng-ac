@@ -22,8 +22,8 @@
  * - 此檔案須遵守里氏替換原則
  */
 
-// 實體導出 (待實現)
-// export * from './entities';
+// 實體導出
+export * from './entities';
 
 // 值對象導出 (待實現)
 // export * from './value-objects';
