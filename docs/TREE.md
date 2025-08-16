@@ -1,5 +1,7 @@
 │  index.html
 │  main.ts
+│  manifest.webmanifest
+│  ngsw-config.json
 │  styles.scss
 │
 ├─app
@@ -85,6 +87,11 @@
 │  │  │  │  user-application.service.ts
 │  │  │  │  user.service.ts
 │  │  │  │
+│  │  │  ├─app-shell
+│  │  │  │      app-shell.service.ts
+│  │  │  │      index.ts
+│  │  │  │      offline.service.ts
+│  │  │  │
 │  │  │  ├─auth
 │  │  │  │      index.ts
 │  │  │  │
@@ -93,6 +100,10 @@
 │  │  │  │
 │  │  │  ├─permission
 │  │  │  │      index.ts
+│  │  │  │
+│  │  │  ├─tab-navigation
+│  │  │  │      index.ts
+│  │  │  │      tab-navigation.service.ts
 │  │  │  │
 │  │  │  └─user
 │  │  │          index.ts
@@ -161,6 +172,11 @@
 │  │  │      index.ts
 │  │  │
 │  │  ├─entities
+│  │  │  ├─app-shell
+│  │  │  │      app-shell.entity.ts
+│  │  │  │      app-shell.factory.ts
+│  │  │  │      index.ts
+│  │  │  │
 │  │  │  ├─base
 │  │  │  │      index.ts
 │  │  │  │
@@ -217,7 +233,11 @@
 │  │  │      index.ts
 │  │  │
 │  │  ├─external-services
-│  │  │      index.ts
+│  │  │  │  index.ts
+│  │  │  │
+│  │  │  └─pwa
+│  │  │          index.ts
+│  │  │          service-worker.service.ts
 │  │  │
 │  │  ├─interceptors
 │  │  │      auth.interceptor.ts
@@ -269,9 +289,14 @@
 │  │  │  │  │      index.ts
 │  │  │  │  │      input.component.ts
 │  │  │  │  │
-│  │  │  │  └─modal
+│  │  │  │  ├─modal
+│  │  │  │  │      index.ts
+│  │  │  │  │      modal.component.ts
+│  │  │  │  │
+│  │  │  │  └─tab-navigation
 │  │  │  │          index.ts
-│  │  │  │          modal.component.ts
+│  │  │  │          tab-navigation.component.scss
+│  │  │  │          tab-navigation.component.ts
 │  │  │  │
 │  │  │  ├─forms
 │  │  │  │  │  index.ts
@@ -286,6 +311,11 @@
 │  │  │  │
 │  │  │  ├─layout
 │  │  │  │  │  index.ts
+│  │  │  │  │
+│  │  │  │  ├─app-shell
+│  │  │  │  │      app-shell.component.spec.ts
+│  │  │  │  │      app-shell.component.ts
+│  │  │  │  │      index.ts
 │  │  │  │  │
 │  │  │  │  ├─footer
 │  │  │  │  │      footer.component.ts
@@ -347,6 +377,10 @@
 │  │  ├─pages
 │  │  │  │  index.ts
 │  │  │  │
+│  │  │  ├─app-shell-demo
+│  │  │  │      app-shell-demo.page.ts
+│  │  │  │      index.ts
+│  │  │  │
 │  │  │  ├─auth
 │  │  │  │  │  index.ts
 │  │  │  │  │
@@ -361,6 +395,11 @@
 │  │  │  ├─dashboard
 │  │  │  │      dashboard.page.ts
 │  │  │  │      index.ts
+│  │  │  │
+│  │  │  ├─tab-demo
+│  │  │  │      index.ts
+│  │  │  │      tab-demo.page.scss
+│  │  │  │      tab-demo.page.ts
 │  │  │  │
 │  │  │  └─user
 │  │  │      │  index.ts
@@ -380,9 +419,13 @@
 │  │          index.ts
 │  │
 │  ├─modules
-│  │      auth.module.ts
-│  │      index.ts
-│  │      user.module.ts
+│  │  │  auth.module.ts
+│  │  │  index.ts
+│  │  │  user.module.ts
+│  │  │
+│  │  └─app-shell
+│  │          app-shell.module.ts
+│  │          index.ts
 │  │
 │  ├─security
 │  │  │  index.ts
@@ -510,8 +553,12 @@
 │      │          sidebar.component.ts
 │      │
 │      ├─constants
-│      │      index.ts
-│      │      sidebar.constants.ts
+│      │  │  index.ts
+│      │  │  sidebar.constants.ts
+│      │  │
+│      │  └─tab
+│      │          index.ts
+│      │          tab.constants.ts
 │      │
 │      ├─decorators
 │      │      index.ts
@@ -532,8 +579,17 @@
 │      │      index.ts
 │      │
 │      ├─interfaces
-│      │      index.ts
-│      │      sidebar.interface.ts
+│      │  │  index.ts
+│      │  │  sidebar.interface.ts
+│      │  │
+│      │  ├─app-shell
+│      │  │      app-shell.interface.ts
+│      │  │      index.ts
+│      │  │      offline.interface.ts
+│      │  │
+│      │  └─tab
+│      │          index.ts
+│      │          tab.interface.ts
 │      │
 │      ├─models
 │      │      index.ts
@@ -554,8 +610,12 @@
 │      │      index.ts
 │      │
 │      ├─utils
-│      │      index.ts
-│      │      storage.util.ts
+│      │  │  index.ts
+│      │  │  storage.util.ts
+│      │  │
+│      │  └─tab
+│      │          index.ts
+│      │          tab.util.ts
 │      │
 │      └─validators
 │              index.ts
@@ -570,11 +630,24 @@
 │  │      index.ts
 │  │
 │  ├─icons
+│  │      icon-128x128.png
+│  │      icon-144x144.png
+│  │      icon-152x152.png
+│  │      icon-192x192.png
+│  │      icon-384x384.png
+│  │      icon-512x512.png
+│  │      icon-72x72.png
+│  │      icon-96x96.png
 │  │      index.ts
 │  │
 │  └─images
 │          index.ts
 │
-└─environments
-        environment.prod.ts
-        environment.ts
+├─environments
+│      environment.prod.ts
+│      environment.ts
+│
+└─styles
+    └─app-shell
+            index.scss
+            _app-shell-variables.scss

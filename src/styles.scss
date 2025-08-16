@@ -57,7 +57,7 @@ body {
 }
 
 /* App Shell 樣式 */
-@import './styles/app-shell';
+@use './styles/app-shell' as *;
 
 html,
 body {
