@@ -1,0 +1,113 @@
+/**
+ * App Shell 主題系統
+ *
+ * @author NG-AC Team
+ * @since 2024-12-19
+ * @version 1.0.0
+ */
+
+@use './app-shell-variables' as vars;
+
+// 亮色主題
+.app-shell.theme-light {
+  --app-shell-bg-primary: #ffffff;
+  --app-shell-bg-secondary: #f5f5f5;
+  --app-shell-bg-tertiary: #e0e0e0;
+  --app-shell-text-primary: #212121;
+  --app-shell-text-secondary: #757575;
+  --app-shell-border: #e0e0e0;
+  --app-shell-shadow: rgba(0, 0, 0, 0.1);
+}
+
+// 暗色主題
+.app-shell.theme-dark {
+  --app-shell-bg-primary: #121212;
+  --app-shell-bg-secondary: #1e1e1e;
+  --app-shell-bg-tertiary: #2d2d2d;
+  --app-shell-text-primary: #ffffff;
+  --app-shell-text-secondary: #b3b3b3;
+  --app-shell-border: #404040;
+  --app-shell-shadow: rgba(0, 0, 0, 0.3);
+}
+
+// 緊湊主題
+.app-shell.theme-compact {
+  --app-shell-header-height: 48px;
+  --app-shell-sidebar-width: 240px;
+  --app-shell-footer-height: 48px;
+  --app-shell-content-padding: 16px;
+}
+
+// 主題切換動畫
+.app-shell {
+  transition:
+    background-color vars.$transition-normal,
+    color vars.$transition-normal,
+    border-color vars.$transition-normal,
+    box-shadow vars.$transition-normal;
+
+  * {
+    transition:
+      background-color vars.$transition-normal,
+      color vars.$transition-normal,
+      border-color vars.$transition-normal;
+  }
+}
+
+// 主題相關的組件樣式
+.app-header {
+  background: var(--app-shell-bg-primary);
+  border-bottom: 1px solid var(--app-shell-border);
+  box-shadow: 0 1px 3px var(--app-shell-shadow);
+}
+
+.app-sidebar {
+  background: var(--app-shell-bg-secondary);
+  border-right: 1px solid var(--app-shell-border);
+}
+
+.app-main {
+  background: var(--app-shell-bg-primary);
+}
+
+.app-footer {
+  background: var(--app-shell-bg-secondary);
+  border-top: 1px solid var(--app-shell-border);
+  color: var(--app-shell-text-secondary);
+}
+
+// 導航元素主題
+.app-nav {
+  .nav-brand .brand-name {
+    color: var(--app-shell-text-primary);
+  }
+
+  .nav-actions {
+    color: var(--app-shell-text-secondary);
+  }
+}
+
+// 響應式主題調整
+@media (prefers-color-scheme: dark) {
+  .app-shell:not(.theme-light) {
+    --app-shell-bg-primary: #121212;
+    --app-shell-bg-secondary: #1e1e1e;
+    --app-shell-bg-tertiary: #2d2d2d;
+    --app-shell-text-primary: #ffffff;
+    --app-shell-text-secondary: #b3b3b3;
+    --app-shell-border: #404040;
+    --app-shell-shadow: rgba(0, 0, 0, 0.3);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .app-shell:not(.theme-dark) {
+    --app-shell-bg-primary: #ffffff;
+    --app-shell-bg-secondary: #f5f5f5;
+    --app-shell-bg-tertiary: #e0e0e0;
+    --app-shell-text-primary: #212121;
+    --app-shell-text-secondary: #757575;
+    --app-shell-border: #e0e0e0;
+    --app-shell-shadow: rgba(0, 0, 0, 0.1);
+  }
+}

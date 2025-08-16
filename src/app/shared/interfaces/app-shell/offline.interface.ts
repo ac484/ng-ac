@@ -10,10 +10,12 @@ export interface IOfflineStatus {
   isOnline: boolean;
   lastOnlineTime?: Date;
   offlineDuration?: number;
+  lastUpdateTime?: Date;
 }
 
 export interface IOfflineService {
   getStatus(): IOfflineStatus;
   onOnline(callback: () => void): void;
   onOffline(callback: () => void): void;
+  setOnlineStatus(isOnline: boolean): void;
 }

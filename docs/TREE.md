@@ -650,4 +650,8 @@
 └─styles
     └─app-shell
             index.scss
+            _app-shell-accessibility.scss
+            _app-shell-layout.scss
+            _app-shell-responsive.scss
+            _app-shell-theme.scss
             _app-shell-variables.scss

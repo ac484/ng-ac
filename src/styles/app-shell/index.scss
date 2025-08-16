@@ -7,3 +7,7 @@
  */
 
 @use './app-shell-variables' as *;
+@use './app-shell-layout' as *;
+@use './app-shell-responsive' as *;
+@use './app-shell-theme' as *;
+@use './app-shell-accessibility' as *;

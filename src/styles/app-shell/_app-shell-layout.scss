@@ -1,0 +1,103 @@
+/**
+ * App Shell 佈局樣式
+ *
+ * @author NG-AC Team
+ * @since 2024-12-19
+ * @version 1.0.0
+ */
+
+@use './app-shell-variables' as vars;
+
+.app-shell {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+    "footer footer";
+  grid-template-columns: vars.$sidebar-width 1fr;
+  grid-template-rows: vars.$header-height 1fr vars.$footer-height;
+  min-height: 100vh;
+
+  @media (max-width: vars.$breakpoint-mobile) {
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+    grid-template-columns: 1fr;
+    grid-template-rows: vars.$header-height 1fr vars.$footer-height;
+  }
+}
+
+.app-header {
+  grid-area: header;
+  background: var(--mat-sys-surface);
+  border-bottom: 1px solid var(--mat-divider-color);
+  box-shadow: vars.$shadow-1;
+  z-index: 1000;
+
+  .app-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 vars.$content-padding;
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .brand-logo {
+        width: 32px;
+        height: 32px;
+      }
+
+      .brand-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--mat-sys-on-surface);
+      }
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+  }
+}
+
+.app-sidebar {
+  grid-area: sidebar;
+  background: var(--mat-sys-surface);
+  border-right: 1px solid var(--mat-divider-color);
+  overflow-y: auto;
+
+  @media (max-width: vars.$breakpoint-mobile) {
+    display: none;
+  }
+
+  .sidebar-content {
+    padding: vars.$content-padding;
+  }
+}
+
+.app-main {
+  grid-area: main;
+  background: var(--mat-sys-surface);
+  overflow-y: auto;
+
+  .main-content {
+    padding: vars.$content-padding;
+    min-height: calc(100vh - vars.$header-height - vars.$footer-height);
+  }
+}
+
+.app-footer {
+  grid-area: footer;
+  background: var(--mat-sys-surface);
+  border-top: 1px solid var(--mat-divider-color);
+  padding: 16px vars.$content-padding;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}

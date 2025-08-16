@@ -1,0 +1,155 @@
+/**
+ * App Shell 無障礙支援樣式
+ *
+ * @author NG-AC Team
+ * @since 2024-12-19
+ * @version 1.0.0
+ */
+
+@use './app-shell-variables' as vars;
+
+// 螢幕閱讀器專用樣式
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// 焦點樣式
+.app-shell {
+  *:focus {
+    outline: 2px solid var(--app-shell-focus-color, #1976d2);
+    outline-offset: 2px;
+  }
+
+  // 鍵盤導航支援
+  .app-nav {
+    button:focus,
+    a:focus {
+      outline: 2px solid var(--app-shell-focus-color, #1976d2);
+      outline-offset: 2px;
+    }
+  }
+
+  // 高對比度支援
+  .app-header,
+  .app-sidebar,
+  .app-main,
+  .app-footer {
+    // 確保文字對比度符合 WCAG AA 標準
+    color: var(--app-shell-text-primary);
+    background: var(--app-shell-bg-primary);
+  }
+
+  // 互動元素狀態指示
+  button,
+  a {
+    &:hover {
+      background-color: var(--app-shell-hover-bg, rgba(0, 0, 0, 0.04));
+    }
+
+    &:active {
+      background-color: var(--app-shell-active-bg, rgba(0, 0, 0, 0.08));
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// 動畫偏好設定支援
+@media (prefers-reduced-motion: reduce) {
+  .app-shell {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+// 高對比度模式支援
+@media (prefers-contrast: high) {
+  .app-shell {
+    --app-shell-border: #000000;
+    --app-shell-shadow: #000000;
+
+    .app-header,
+    .app-sidebar,
+    .app-main,
+    .app-footer {
+      border: 2px solid var(--app-shell-border);
+    }
+  }
+}
+
+// 減少動畫模式支援
+@media (prefers-reduced-motion: reduce) {
+  .app-shell {
+    .app-sidebar {
+      transition: none;
+    }
+  }
+}
+
+// 焦點可見性增強
+.app-shell {
+  .app-nav {
+    button:focus-visible,
+    a:focus-visible {
+      box-shadow: 0 0 0 3px var(--app-shell-focus-color, #1976d2);
+    }
+  }
+}
+
+// 無障礙標籤支援
+.app-shell {
+  [aria-label],
+  [aria-labelledby],
+  [aria-describedby] {
+    // 確保 ARIA 屬性正確應用
+  }
+
+  // 隱藏內容的無障礙處理
+  [aria-hidden="true"] {
+    display: none !important;
+  }
+}
+
+// 鍵盤導航增強
+.app-shell {
+  // Tab 鍵導航順序
+  .app-nav {
+    button,
+    a {
+      tabindex: 0;
+    }
+  }
+
+  // 跳過導航連結
+  .skip-nav {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--app-shell-bg-primary);
+    color: var(--app-shell-text-primary);
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1001;
+
+    &:focus {
+      top: 6px;
+    }
+  }
+}

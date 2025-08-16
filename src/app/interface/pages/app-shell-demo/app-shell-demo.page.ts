@@ -36,7 +36,9 @@ import { AppShellService, OfflineService } from '../../../application/services/a
         <h2>PWA 功能</h2>
         <p>Service Worker: {{ hasServiceWorker ? '支援' : '不支援' }}</p>
         <p>推送通知: {{ hasPushNotification ? '支援' : '不支援' }}</p>
-        <button (click)="installPWA()" *ngIf="canInstallPWA">安裝 PWA</button>
+        @if (canInstallPWA) {
+          <button (click)="installPWA()">安裝 PWA</button>
+        }
       </div>
     </div>
   `,

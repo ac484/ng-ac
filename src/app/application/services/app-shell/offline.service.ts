@@ -35,6 +35,14 @@ export class OfflineService implements IOfflineService {
     window.addEventListener('offline', callback);
   }
 
+  setOnlineStatus(isOnline: boolean): void {
+    this._status.update(status => ({
+      ...status,
+      isOnline,
+      lastUpdateTime: new Date()
+    }));
+  }
+
   private setupEventListeners(): void {
     window.addEventListener('online', () => {
       this._status.update(status => ({

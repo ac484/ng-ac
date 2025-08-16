@@ -18,6 +18,9 @@
  * - 所有註解和架構說明均不可變更
  */
 
+/* Sass 模組導入 - 必須在所有其他規則之前 */
+@use './styles/app-shell' as *;
+
 /* Angular Material 主題導入 */
 @use '@angular/material' as mat;
 @use "tailwindcss";
@@ -55,9 +58,6 @@ body {
 * {
   box-sizing: border-box;
 }
-
-/* App Shell 樣式 */
-@use './styles/app-shell' as *;
 
 html,
 body {
