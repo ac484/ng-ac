@@ -78,6 +78,294 @@
 
 ## 📝 詳細任務分解
 
+## 🚀 專案概述
+
+本文檔詳細規劃了在 ng-ac 專案中實現現代化 App Shell 系統的完整建置方案。使用 **Angular 20+ App Shell + PWA + Angular Material 3** 技術棧，確保與現有 DDD 架構完全吻合，實現企業級的應用骨架架構。
+
+## 📊 建置規模統計
+
+| 項目 | 數量 | 說明 |
+|------|------|------|
+| **新增檔案** | 45 個 | 完整的 App Shell + PWA 系統 |
+| **更新檔案** | 12 個 | 現有檔案的整合更新 |
+| **總工作量** | 57 個檔案 | 完整的實現和整合 |
+| **代碼行數** | 4,200+ 行 | 包含所有功能實現 |
+| **架構整合度** | 100% | 完全符合現有 DDD 架構 |
+
+## 🏗️ 檔案結構規劃
+
+### **1. Application Layer (12 個檔案)**
+
+```
+src/app/application/
+├─services/
+│  └─app-shell/
+│      ├─app-shell.service.ts               # 🎯 核心 App Shell 服務
+│      ├─app-shell.interface.ts             # 🎯 App Shell 服務介面定義
+│      ├─offline.service.ts                 # 🎯 離線狀態管理服務
+│      ├─push-notification.service.ts       # 🎯 推送通知服務
+│      └─index.ts                           # 🔄 索引更新
+├─dto/
+│  └─app-shell/
+│      ├─app-shell.dto.ts                   # 🎯 App Shell 數據傳輸對象
+│      ├─offline-status.dto.ts              # 🎯 離線狀態 DTO
+│      └─index.ts                           # 🔄 索引更新
+├─use-cases/
+│  └─app-shell/
+│      ├─initialize-app-shell.use-case.ts   # 🎯 初始化 App Shell 用例
+│      ├─handle-offline.use-case.ts         # 🎯 處理離線狀態用例
+│      └─index.ts                           # 🔄 索引更新
+└─validators/
+    └─app-shell/
+        ├─app-shell.validator.ts             # 🎯 App Shell 驗證器
+        └─index.ts                           # 🔄 索引更新
+```
+
+### **2. Domain Layer (8 個檔案)**
+
+```
+src/app/domain/
+├─entities/
+│  └─app-shell/
+│      ├─app-shell.entity.ts                # 🎯 App Shell 實體
+│      ├─app-shell.factory.ts               # 🎯 App Shell 工廠
+│      └─index.ts                           # 🔄 索引更新
+├─value-objects/
+│  └─app-shell/
+│      ├─app-shell-id.vo.ts                 # 🎯 App Shell ID 值對象
+│      └─index.ts                           # 🔄 索引更新
+├─repositories/
+│  └─app-shell/
+│      ├─app-shell.repository.interface.ts  # 🎯 App Shell 倉儲介面
+│      └─index.ts                           # 🔄 索引更新
+├─events/
+│  └─app-shell/
+│      ├─app-shell-initialized.event.ts     # 🎯 App Shell 初始化事件
+│      └─index.ts                           # 🔄 索引更新
+└─services/
+    └─app-shell/
+        ├─app-shell-domain.service.ts        # 🎯 App Shell 領域服務
+        └─index.ts                           # 🔄 索引更新
+```
+
+### **3. Infrastructure Layer (6 個檔案)**
+
+```
+src/app/infrastructure/
+├─persistence/
+│  └─repositories/
+│      └─app-shell/
+│          ├─app-shell.repository.ts         # 🎯 App Shell 倉儲實現
+│          └─index.ts                        # 🔄 索引更新
+├─config/
+│  └─app-shell/
+│      ├─app-shell.config.ts                 # 🎯 App Shell 配置
+│      └─index.ts                            # 🔄 索引更新
+└─external-services/
+    └─pwa/
+        ├─service-worker.service.ts           # 🎯 Service Worker 服務
+        └─index.ts                           # 🔄 索引更新
+```
+
+### **4. Interface Layer (12 個檔案)**
+
+```
+src/app/interface/
+├─components/
+│  └─layout/
+│      └─app-shell/
+│          ├─app-shell.component.ts          # 🎯 App Shell 主組件
+│          ├─app-shell.component.html        # 🎯 App Shell 主模板
+│          ├─app-shell.component.scss        # 🎯 App Shell 主樣式
+│          ├─app-header/
+│          │   ├─app-header.component.ts     # 🎯 應用頭部組件
+│          │   ├─app-header.component.html   # 🎯 應用頭部模板
+│          │   ├─app-header.component.scss   # 🎯 應用頭部樣式
+│          │   └─index.ts                    # 🔄 索引更新
+│          ├─app-sidebar/
+│          │   ├─app-sidebar.component.ts    # 🎯 應用側邊欄組件
+│          │   ├─app-sidebar.component.html  # 🎯 應用側邊欄模板
+│          │   ├─app-sidebar.component.scss  # 🎯 應用側邊欄樣式
+│          │   └─index.ts                    # 🔄 索引更新
+│          ├─app-main/
+│          │   ├─app-main.component.ts       # 🎯 應用主內容組件
+│          │   ├─app-main.component.html     # 🎯 應用主內容模板
+│          │   ├─app-main.component.scss     # 🎯 應用主內容樣式
+│          │   └─index.ts                    # 🔄 索引更新
+│          ├─app-footer/
+│          │   ├─app-footer.component.ts     # 🎯 應用頁腳組件
+│          │   ├─app-footer.component.html   # 🎯 應用頁腳模板
+│          │   ├─app-footer.component.scss   # 🎯 應用頁腳樣式
+│          │   └─index.ts                    # 🔄 索引更新
+│          └─index.ts                        # 🔄 索引更新
+├─pages/
+│  └─app-shell-demo/
+│      ├─app-shell-demo.page.ts             # 🎯 App Shell 演示頁面
+│      └─index.ts                           # 🔄 索引更新
+└─layouts/
+    └─app-shell/
+        ├─app-shell.layout.ts                # 🎯 App Shell 佈局
+        └─index.ts                           # 🔄 索引更新
+```
+
+### **5. Shared Layer (7 個檔案)**
+
+```
+src/app/shared/
+├─interfaces/
+│  └─app-shell/
+│      ├─app-shell.interface.ts             # 🎯 App Shell 介面
+│      ├─offline.interface.ts                # 🎯 離線狀態介面
+│      └─index.ts                            # 🔄 索引更新
+├─types/
+│  └─app-shell/
+│      ├─app-shell.types.ts                  # 🎯 App Shell 類型
+│      └─index.ts                            # 🔄 索引更新
+├─utils/
+│  └─app-shell/
+│      ├─app-shell.util.ts                   # 🎯 App Shell 工具函數
+│      └─index.ts                            # 🔄 索引更新
+├─constants/
+│  └─app-shell/
+│      ├─app-shell.constants.ts              # 🎯 App Shell 常量
+│      └─index.ts                            # 🔄 索引更新
+└─services/
+    └─app-shell/
+        ├─accessibility.service.ts            # 🎯 無障礙服務
+        └─index.ts                           # 🔄 索引更新
+```
+
+### **6. Modules Layer (3 個檔案)**
+
+```
+src/app/modules/
+└─app-shell/
+    ├─app-shell.module.ts                    # 🎯 App Shell 模組
+    ├─app-shell.routes.ts                    # 🎯 App Shell 路由
+    └─index.ts                               # 🔄 索引更新
+```
+
+### **7. PWA 配置檔案 (6 個檔案)**
+
+```
+src/
+├─manifest.webmanifest                        # 🎯 Web App Manifest
+├─ngsw-config.json                           # 🎯 Service Worker 配置
+├─assets/
+│  └─icons/                                  # 🎯 PWA 圖示資源
+│      ├─icon-72x72.png                      # 🎯 72x72 圖示
+│      ├─icon-96x96.png                      # 🎯 96x96 圖示
+│      ├─icon-128x128.png                    # 🎯 128x128 圖示
+│      ├─icon-144x144.png                    # 🎯 144x144 圖示
+│      ├─icon-152x152.png                    # 🎯 152x152 圖示
+│      ├─icon-192x192.png                    # 🎯 192x192 圖示
+│      ├─icon-384x384.png                    # 🎯 384x384 圖示
+│      └─icon-512x512.png                    # 🎯 512x512 圖示
+└─styles/
+    └─app-shell/
+        ├─_app-shell-variables.scss           # 🎯 App Shell 變數
+        ├─_app-shell-layout.scss              # 🎯 App Shell 佈局樣式
+        ├─_app-shell-responsive.scss          # 🎯 App Shell 響應式樣式
+        └─index.scss                          # 🔄 樣式索引更新
+```
+
+## 🔄 **需要更新的現有檔案 (12 個)**
+
+### **1. 核心索引更新**
+```
+src/app/application/index.ts                 # 🔄 添加 App Shell 服務導出
+src/app/domain/index.ts                      # 🔄 添加 App Shell 實體導出
+src/app/infrastructure/index.ts              # 🔄 添加 App Shell 配置導出
+src/app/interface/index.ts                   # 🔄 添加 App Shell 組件導出
+src/app/shared/index.ts                      # 🔄 添加 App Shell 介面導出
+src/app/modules/index.ts                     # 🔄 添加 App Shell 模組導出
+```
+
+### **2. 現有佈局更新**
+```
+src/app/interface/layouts/
+├─basic/
+│  ├─basic.layout.ts                         # 🔄 整合 App Shell 組件
+│  └─basic.layout.html                       # 🔄 添加 App Shell 區域
+├─dashboard/
+│  ├─dashboard.layout.ts                     # 🔄 整合 App Shell 組件
+│  └─dashboard.layout.html                   # 🔄 添加 App Shell 區域
+└─passport/
+    ├─passport.layout.ts                     # 🔄 整合 App Shell 組件
+    └─passport.layout.html                   # 🔄 添加 App Shell 區域
+```
+
+### **3. 主路由更新**
+```
+src/app/app.routes.ts                        # 🔄 添加 App Shell 演示路由
+src/app/app.config.ts                        # 🔄 添加 PWA 和 App Shell 配置
+src/app/main.ts                              # 🔄 添加 Service Worker 註冊
+```
+
+## 📋 **建置階段規劃**
+
+### **第一階段：基礎架構 (20 個檔案)**
+**目標**: 建立 App Shell 的基礎架構
+**時間**: 5-6 天
+
+**包含檔案**:
+- Domain Layer - 實體、值對象、介面
+- Shared Layer - 介面、類型、常量
+- Application Layer - 服務、DTO
+- PWA 配置檔案
+
+**驗收標準**:
+- ✅ 所有基礎類別可以正常編譯
+- ✅ 基本的依賴注入配置完成
+- ✅ PWA 配置檔案正確
+- ✅ 單元測試可以通過
+
+### **第二階段：實現層 (18 個檔案)**
+**目標**: 實現 App Shell 的核心功能
+**時間**: 4-5 天
+
+**包含檔案**:
+- Infrastructure Layer - 倉儲、配置
+- Interface Layer - 組件、頁面
+- Modules Layer - 模組、路由
+
+**驗收標準**:
+- ✅ App Shell 組件可以正常渲染
+- ✅ 基本的佈局功能正常
+- ✅ 響應式設計適配良好
+- ✅ 路由整合完成
+
+### **第三階段：整合更新 (12 個檔案)**
+**目標**: 完成與現有系統的整合
+**時間**: 2-3 天
+
+**包含檔案**:
+- 更新所有索引文件
+- 更新現有佈局
+- 更新主路由和配置
+
+**驗收標準**:
+- ✅ 與現有系統完全整合
+- ✅ 所有功能正常運作
+- ✅ 性能指標達標
+- ✅ 離線功能可用
+
+### **第四階段：PWA 功能 (7 個檔案)**
+**目標**: 實現完整的 PWA 功能
+**時間**: 3-4 天
+
+**包含檔案**:
+- Service Worker 實現
+- 推送通知功能
+- 離線快取策略
+- 安裝體驗優化
+
+**驗收標準**:
+- ✅ Service Worker 正常註冊
+- ✅ 離線功能完整可用
+- ✅ 推送通知正常
+- ✅ PWA 安裝提示正常
+
 ### Phase 1: 基礎架構搭建 (Week 1-2)
 
 #### 任務 1.1: 專案結構搭建
