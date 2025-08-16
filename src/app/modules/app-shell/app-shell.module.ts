@@ -52,6 +52,6 @@ export const AppShellModuleConfig = {
   // 路由配置
   routes: () => import('../../interface/components/layout/app-shell'),
 
-  // 核心服務
-  core: () => import('../../core')
+  // 授權守衛
+  guards: () => import('../../security/authorization/guards')
 };
