@@ -242,5 +242,6 @@
     // 自動更新
     "update.mode": "start",
     "extensions.autoCheckUpdates": true,
-    "workbench.editor.tabActionLocation": "right"
+    "workbench.editor.tabActionLocation": "right",
+    "kiroAgent.configureMCP": "Disabled"
   }

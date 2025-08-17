@@ -94,7 +94,8 @@ export class TabNavigationComponent {
   readonly activeTabIndex = computed(() => {
     const tabs = this.tabService.tabs();
     const activeId = this.tabService.activeTabId();
-    return tabs.findIndex(tab => tab.id === activeId);
+    const index = tabs.findIndex(tab => tab.id === activeId);
+    return index >= 0 ? index : (tabs.length > 0 ? 0 : 0);
   });
 
   // 事件處理
