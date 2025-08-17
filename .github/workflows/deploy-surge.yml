@@ -30,6 +30,10 @@ jobs:
       - name: Build Angular app
         run: pnpm run build
 
+      - name: Add SPA fallback (200.html)
+        run: |
+          cp ./dist/ng-ac/index.html ./dist/ng-ac/200.html
+
       - name: Deploy to Surge
         env:
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
