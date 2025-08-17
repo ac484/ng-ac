@@ -61,7 +61,8 @@ export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
       { label: '員工管理', route: '/app/personnel' },
       { label: '用戶管理', route: '/app/users' },
       { label: '出勤管理', route: '/app/attendance' },
-      { label: '合作夥伴', route: '/app/partners' }
+      { label: '合作夥伴', route: '/app/partners' },
+      { label: '狀態機', route: '/app/state-machine' }
     ]
   },
   // ⚠️ 安全監控
@@ -96,15 +97,6 @@ export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
       { label: '績效分析', route: '/app/analytics/performance' },
       { label: '成本分析', route: '/app/analytics/costs' },
       { label: '統計報表', route: '/app/analytics/reports' }
-    ]
-  },
-  // 🤝 夥伴
-  {
-    label: '夥伴',
-    icon: 'partner',
-    children: [
-      { label: '夥伴們', route: '/app/partners' },
-      { label: '狀態機', route: '/app/state-machine' }
     ]
   },
   // ⚙️ 系統設定
