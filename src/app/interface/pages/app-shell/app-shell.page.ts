@@ -1,8 +1,8 @@
 /**
- * @fileoverview App Shell 演示頁面，展示 App Shell 功能和現代化佈局組件
+ * @fileoverview App Shell 頁面（正式），使用現代化佈局組件展示應用骨架能力
  * @author NG-AC Team
  * @version 1.0.0
- * @lastModified 2024-12-19 by NG-AC Team
+ * @lastModified 2025-08-17 by NG-AC Team
  *
  * 📋 檔案性質：
  * • 類型：Interface Layer - Page
@@ -10,10 +10,10 @@
  *
  * ⚠️ 架構規則 (Immutable)：
  * • 此檔案的註解格式不可變更
- * • 只負責演示頁面的渲染和交互
+ * • 只負責頁面的渲染和交互
  * • 不包含具體的業務邏輯
  *
- * @module AppShellDemoPage
+ * @module AppShellPage
  * @layer Interface
  * @context Layout System
  * @see docs/5.new_Tree_layout.md
@@ -25,15 +25,15 @@ import { AppShellModernComponent } from '../../components/layout/app-shell-moder
 import { LayoutGridComponent } from '../../components/layout/layout-grid';
 
 @Component({
-  selector: 'app-shell-demo',
+  selector: 'app-shell-page',
   standalone: true,
   imports: [LayoutGridComponent, AppShellModernComponent],
   template: `
     <div class="demo-page">
-      <h1>App Shell 演示</h1>
+      <h1>App Shell</h1>
 
       <div class="demo-section">
-        <h2>狀態監控</h2>
+        <h2>狀態</h2>
         <p>初始化狀態: {{ appShellService.isInitialized() ? '已初始化' : '未初始化' }}</p>
         <p>網路狀態: {{ offlineService.isOnline() ? '在線' : '離線' }}</p>
         <p>當前主題: {{ appShellService.currentTheme() }}</p>
@@ -41,7 +41,7 @@ import { LayoutGridComponent } from '../../components/layout/layout-grid';
       </div>
 
       <div class="demo-section">
-        <h2>功能測試</h2>
+        <h2>操作</h2>
         <button (click)="testTheme()">切換主題</button>
         <button (click)="testSidebar()">切換側邊欄</button>
         <button (click)="testOffline()">模擬離線</button>
@@ -50,13 +50,13 @@ import { LayoutGridComponent } from '../../components/layout/layout-grid';
       <div class="demo-section">
         <h2>現代化佈局組件</h2>
 
-        <h3>Layout Grid 組件</h3>
+        <h3>Layout Grid</h3>
         <app-layout-grid [columns]="2" [gap]="'1rem'" [padding]="'1rem'">
           <div class="grid-item">項目 1</div>
           <div class="grid-item">項目 2</div>
         </app-layout-grid>
 
-        <h3>App Shell Modern 組件</h3>
+        <h3>App Shell Modern</h3>
         <app-shell-modern>
           <div shell-sidenav>
             <h4>側邊欄內容</h4>
@@ -74,7 +74,7 @@ import { LayoutGridComponent } from '../../components/layout/layout-grid';
       </div>
 
       <div class="demo-section">
-        <h2>PWA 功能</h2>
+        <h2>PWA</h2>
         <p>Service Worker: {{ hasServiceWorker ? '支援' : '不支援' }}</p>
         <p>推送通知: {{ hasPushNotification ? '支援' : '不支援' }}</p>
         @if (canInstallPWA) {
@@ -123,7 +123,7 @@ import { LayoutGridComponent } from '../../components/layout/layout-grid';
     }
   `]
 })
-export class AppShellDemoPage {
+export class AppShellPage {
   protected readonly appShellService = inject(AppShellService);
   protected readonly offlineService = inject(OfflineService);
 

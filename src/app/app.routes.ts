@@ -21,73 +21,79 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  // 重定向到登錄頁面
-  {
-    path: '',
-    redirectTo: '/auth/login',
-    pathMatch: 'full'
-  },
+	// 重定向到登錄頁面
+	{
+		path: '',
+		redirectTo: '/auth/login',
+		pathMatch: 'full'
+	},
 
-  // 認證相關路由（使用認證佈局，無側邊欄）
-  {
-    path: 'auth',
-    loadComponent: () => import('./interface/layouts/passport').then(m => m.PassportLayoutComponent),
-    children: [
-      {
-        path: 'login',
-        loadComponent: () => import('./interface/pages/auth/login').then(m => m.LoginPageComponent)
-      },
-      {
-        path: 'register',
-        loadComponent: () => import('./interface/pages/auth/register').then(m => m.RegisterPageComponent)
-      }
-    ]
-  },
+	// 認證相關路由（使用認證佈局，無側邊欄）
+	{
+		path: 'auth',
+		loadComponent: () => import('./interface/layouts/passport').then(m => m.PassportLayoutComponent),
+		children: [
+			{
+				path: 'login',
+				loadComponent: () => import('./interface/pages/auth/login').then(m => m.LoginPageComponent)
+			},
+			{
+				path: 'register',
+				loadComponent: () => import('./interface/pages/auth/register').then(m => m.RegisterPageComponent)
+			}
+		]
+	},
 
-  // 主應用路由（使用側邊欄佈局 + 認證守衛）
-  {
-    path: 'app',
-    loadComponent: () => import('./shared/components/sidebar').then(m => m.SidebarComponent),
-    canActivate: [
-      () => import('./security/authentication/guards').then(m => m.AuthGuard)
-    ],
-    children: [
-      // 儀表板
-      {
-        path: 'dashboard',
-        loadComponent: () => import('./interface/pages/dashboard').then(m => m.DashboardPageComponent)
-      },
+	// 主應用路由（使用側邊欄佈局 + 認證守衛）
+	{
+		path: 'app',
+		loadComponent: () => import('./shared/components/sidebar').then(m => m.SidebarComponent),
+		canActivate: [
+			() => import('./security/authentication/guards').then(m => m.AuthGuard)
+		],
+		children: [
+			// 儀表板
+			{
+				path: 'dashboard',
+				loadComponent: () => import('./interface/pages/dashboard').then(m => m.DashboardPageComponent)
+			},
 
-      // 用戶管理
-      {
-        path: 'users',
-        loadComponent: () => import('./interface/pages/user/user-list').then(m => m.UserListPageComponent)
-      },
+			// 用戶管理
+			{
+				path: 'users',
+				loadComponent: () => import('./interface/pages/user/user-list').then(m => m.UserListPageComponent)
+			},
 
-      // Tab Demo
-      {
-        path: 'tab-demo',
-        loadComponent: () => import('./interface/pages/tab-demo').then(m => m.TabDemoPage)
-      },
+			// Tab Demo
+			{
+				path: 'tab-demo',
+				loadComponent: () => import('./interface/pages/tab-demo').then(m => m.TabDemoPage)
+			},
 
-      // App Shell Demo
-      {
-        path: 'app-shell-demo',
-        loadComponent: () => import('./interface/pages/app-shell-demo').then(m => m.AppShellDemoPage)
-      },
+			// App Shell（正式）
+			{
+				path: 'app-shell',
+				loadComponent: () => import('./interface/pages/app-shell').then(m => m.AppShellPage)
+			},
+			// 舊路由兼容：app-shell-demo -> app-shell
+			{
+				path: 'app-shell-demo',
+				redirectTo: 'app-shell',
+				pathMatch: 'full'
+			},
 
-      // 重定向到儀表板
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
-    ]
-  },
+			// 重定向到儀表板
+			{
+				path: '',
+				redirectTo: 'dashboard',
+				pathMatch: 'full'
+			}
+		]
+	},
 
-  // 404 頁面
-  {
-    path: '**',
-    redirectTo: '/auth/login'
-  }
+	// 404 頁面
+	{
+		path: '**',
+		redirectTo: '/auth/login'
+	}
 ];
