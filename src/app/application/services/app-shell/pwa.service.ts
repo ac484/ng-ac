@@ -18,7 +18,7 @@
  * - 極簡主義實現
  */
 
-import { Injectable, signal, computed } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 
 export interface PWAInstallPrompt {
   prompt(): Promise<void>;
@@ -37,7 +37,7 @@ export class PwaService {
   readonly hasServiceWorker = this._hasServiceWorker.asReadonly();
 
   // 計算屬性
-  readonly showInstallPrompt = computed(() => 
+  readonly showInstallPrompt = computed(() =>
     this._canInstall() && !this._isInstalled()
   );
 
@@ -56,12 +56,12 @@ export class PwaService {
     try {
       await this.installPrompt.prompt();
       const choice = await this.installPrompt.userChoice;
-      
+
       if (choice.outcome === 'accepted') {
         this._isInstalled.set(true);
         return true;
       }
-      
+
       return false;
     } catch (error) {
       console.error('PWA 安裝失敗:', error);
@@ -98,9 +98,16 @@ export class PwaService {
 
   private setupInstallPrompt(): void {
     window.addEventListener('beforeinstallprompt', (event) => {
-      event.preventDefault();
-      this.installPrompt = event as PWAInstallPrompt;
-      this._canInstall.set(true);
+      const ev = event as any;
+      if (typeof ev.preventDefault === 'function') {
+        ev.preventDefault();
+      }
+
+      // 最小型類型守衛：以 in 與函式型別檢查
+      if (typeof ev.prompt === 'function' && 'userChoice' in ev) {
+        this.installPrompt = ev as PWAInstallPrompt;
+        this._canInstall.set(true);
+      }
     });
 
     window.addEventListener('appinstalled', () => {

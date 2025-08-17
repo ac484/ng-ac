@@ -33,12 +33,22 @@ export class AppShellService {
   private readonly _sidebarState = signal<SidebarState>('open');
   readonly sidebarState = this._sidebarState.asReadonly();
 
+  // 新增：初始化狀態信號（模板需要 isInitialized()）
+  private readonly _isInitialized = signal<boolean>(false);
+  readonly isInitialized = this._isInitialized.asReadonly();
+
   // 計算屬性
   readonly isDarkTheme = computed(() => this._theme() === 'dark');
   readonly isSidebarOpen = computed(() => this._sidebarState() === 'open');
 
+  // 新增：為模板相容提供別名信號
+  readonly currentTheme = this.theme;
+  readonly sidebarOpen = this.isSidebarOpen;
+
   constructor() {
     this.initializeTheme();
+    // 標記初始化完成
+    this._isInitialized.set(true);
   }
 
   // 主題管理
