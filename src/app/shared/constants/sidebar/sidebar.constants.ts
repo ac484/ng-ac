@@ -90,6 +90,7 @@ export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
     label: '數據分析',
     icon: 'analytics',
     children: [
+      { label: '合約分析', route: '/app/contracts' },
       { label: '專案分析', route: '/app/analytics/projects' },
       { label: '績效分析', route: '/app/analytics/performance' },
       { label: '成本分析', route: '/app/analytics/costs' },

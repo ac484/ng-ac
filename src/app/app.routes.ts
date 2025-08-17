@@ -64,14 +64,14 @@ export const routes: Routes = [
 			{ path: 'contract', loadComponent: () => import('./interface/pages/assignment/contract').then(m => m.ContractPageComponent) },
 			{ path: 'daily-reports', loadComponent: () => import('./interface/pages/construction/daily-reports').then(m => m.DailyReportsPageComponent) },
 			{ path: 'log', loadComponent: () => import('./interface/pages/construction/log').then(m => m.LogPageComponent) },
-			{ path: 'schedules', loadComponent: () => import('./interface/pages/schedules').then(m => m.SchedulesPageComponent) },
+			{ path: 'schedules', loadComponent: () => import('./interface/pages/construction/schedules').then(m => m.SchedulesPageComponent) },
 			{ path: 'weather-reports', loadComponent: () => import('./interface/pages/construction/weather-reports').then(m => m.WeatherReportsPageComponent) },
 			{ path: 'task', loadComponent: () => import('./interface/pages/construction/task').then(m => m.TaskPageComponent) },
 
 			// 用戶管理
 			{
 				path: 'users',
-				loadComponent: () => import('./interface/pages/user/user-list').then(m => m.UserListPageComponent)
+				loadComponent: () => import('./interface/pages/people/user/user-list').then(m => m.UserListPageComponent)
 			},
 
 			// 公開資訊
@@ -90,7 +90,7 @@ export const routes: Routes = [
 			// 監控
 			{
 				path: 'monitoring',
-				loadComponent: () => import('./interface/pages/monitoring/monitoring.page').then(m => m.MonitoringPageComponent)
+				loadComponent: () => import('./interface/pages/security/monitoring/monitoring.page').then(m => m.MonitoringPageComponent)
 			},
 
 			// 安全
