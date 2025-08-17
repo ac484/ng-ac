@@ -68,11 +68,20 @@ export const routes: Routes = [
 			{ path: 'weather-reports', loadComponent: () => import('./interface/pages/construction/weather-reports').then(m => m.WeatherReportsPageComponent) },
 			{ path: 'task', loadComponent: () => import('./interface/pages/construction/task').then(m => m.TaskPageComponent) },
 
+			// 專案管理
+			{ path: 'inventory', loadComponent: () => import('./interface/pages/assignment/inventory').then(m => m.InventoryPageComponent) },
+			{ path: 'equipment', loadComponent: () => import('./interface/pages/assignment/equipment').then(m => m.EquipmentPageComponent) },
+			{ path: 'quality-control', loadComponent: () => import('./interface/pages/assignment/quality-control').then(m => m.QualityControlPageComponent) },
+			{ path: 'documents', loadComponent: () => import('./interface/pages/assignment/documents').then(m => m.DocumentsPageComponent) },
+
 			// 用戶管理
 			{
 				path: 'users',
 				loadComponent: () => import('./interface/pages/people/user/user-list').then(m => m.UserListPageComponent)
 			},
+			{ path: 'personnel', loadComponent: () => import('./interface/pages/people/personnel').then(m => m.PersonnelPageComponent) },
+			{ path: 'attendance', loadComponent: () => import('./interface/pages/people/attendance').then(m => m.AttendancePageComponent) },
+			{ path: 'partners', loadComponent: () => import('./interface/pages/partner/partners').then(m => m.PartnersPageComponent) },
 
 			// 公開資訊
 			{
@@ -98,6 +107,30 @@ export const routes: Routes = [
 				path: 'security',
 				loadComponent: () => import('./interface/pages/security/security/security.page').then(m => m.SecurityPageComponent)
 			},
+			{ path: 'safety', loadComponent: () => import('./interface/pages/security/safety').then(m => m.SafetyPageComponent) },
+			{ path: 'incident-reports', loadComponent: () => import('./interface/pages/security/incident-reports').then(m => m.IncidentReportsPageComponent) },
+
+			// 財務管理
+			{ path: 'budget', loadComponent: () => import('./interface/pages/finance/budget').then(m => m.BudgetPageComponent) },
+			{ path: 'expenses', loadComponent: () => import('./interface/pages/finance/expenses').then(m => m.ExpensesPageComponent) },
+			{ path: 'payments', loadComponent: () => import('./interface/pages/finance/payments').then(m => m.PaymentsPageComponent) },
+			{ path: 'financial-reports', loadComponent: () => import('./interface/pages/finance/financial-reports').then(m => m.FinancialReportsPageComponent) },
+
+			// 數據分析
+			{ path: 'contracts', loadComponent: () => import('./interface/pages/analytics/contracts').then(m => m.ContractsPageComponent) },
+			{ path: 'analytics/projects', loadComponent: () => import('./interface/pages/analytics/projects').then(m => m.AnalyticsProjectsPageComponent) },
+			{ path: 'analytics/performance', loadComponent: () => import('./interface/pages/analytics/performance').then(m => m.AnalyticsPerformancePageComponent) },
+			{ path: 'analytics/costs', loadComponent: () => import('./interface/pages/analytics/costs').then(m => m.AnalyticsCostsPageComponent) },
+			{ path: 'analytics/reports', loadComponent: () => import('./interface/pages/analytics/reports').then(m => m.AnalyticsReportsPageComponent) },
+
+			// 系統設定
+			{ path: 'settings/system', loadComponent: () => import('./interface/pages/settings/system').then(m => m.SettingsSystemPageComponent) },
+			{ path: 'settings/permissions', loadComponent: () => import('./interface/pages/settings/permissions').then(m => m.SettingsPermissionsPageComponent) },
+			{ path: 'settings/notifications', loadComponent: () => import('./interface/pages/settings/notifications').then(m => m.SettingsNotificationsPageComponent) },
+			{ path: 'settings/backup', loadComponent: () => import('./interface/pages/settings/backup').then(m => m.SettingsBackupPageComponent) },
+
+			// 其他
+			{ path: 'state-machine', loadComponent: () => import('./interface/pages/partner/state-machine').then(m => m.StateMachinePageComponent) },
 
 			// 重定向到儀表板
 			{

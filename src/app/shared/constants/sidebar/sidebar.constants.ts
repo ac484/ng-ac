@@ -57,6 +57,7 @@ export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
     label: '人員管理',
     icon: 'people',
     children: [
+      { label: '用戶審核', route: '/app/user-approval' },
       { label: '員工管理', route: '/app/personnel' },
       { label: '用戶管理', route: '/app/users' },
       { label: '出勤管理', route: '/app/attendance' },
