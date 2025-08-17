@@ -64,6 +64,18 @@ export const routes: Routes = [
 				loadComponent: () => import('./interface/pages/user/user-list').then(m => m.UserListPageComponent)
 			},
 
+			// 監控
+			{
+				path: 'monitoring',
+				loadComponent: () => import('./interface/pages/monitoring/monitoring.page').then(m => m.MonitoringPageComponent)
+			},
+
+			// 安全
+			{
+				path: 'security',
+				loadComponent: () => import('./interface/pages/security/security.page').then(m => m.SecurityPageComponent)
+			},
+
 			// 重定向到儀表板
 			{
 				path: '',
