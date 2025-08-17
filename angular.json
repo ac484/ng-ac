@@ -25,6 +25,8 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "serviceWorker": true,
+            "ngswConfigPath": "src/ngsw-config.json",
             "assets": [
               "src/favicon.ico",
               {
