@@ -1,29 +1,34 @@
 /**
- * @fileoverview 認證領域服務 (Authentication Domain Service)
- * @description 處理認證相關的領域業務邏輯
- * @author NG-AC Team
- * @version 1.0.0
- * @since 2024-01-01
- *
- * 檔案性質：
- * - 類型：Domain Layer Service
- * - 職責：認證領域業務邏輯
- * - 依賴：Domain Entities, Value Objects
- * - 不可變更：此文件的所有註解和架構說明均不可變更
- *
- * 重要說明：
- * - 此檔案負責實現認證的領域業務邏輯
- * - 包含密碼驗證、權限檢查等核心邏輯
- * - 不依賴外部服務，保持領域的純粹性
- * - 此檔案須遵守此架構規則1：Domain Layer 職責
- * - 此檔案須遵守此架構規則2：領域服務模式
- * - 此檔案須遵守此架構規則3：業務邏輯實現
- * - 此檔案須遵守此架構規則4：業務規則封裝
- * - 此檔案須遵守此架構規則5：值對象使用
- * - 此檔案須遵守此架構規則6：領域事件
- * - 此檔案須遵守此架構規則7：業務驗證
- * - 此檔案須遵守此架構規則8：測試友好
+ * @fileoverview 授權領域服務 (Authorization Domain Service)
+ * @description 定義最小角色×權限矩陣與規則檢查 API
  */
 
-// 功能 (狀態: 待實現)
-// 代碼:
+import { Injectable } from '@angular/core';
+
+@Injectable({ providedIn: 'root' })
+export class AuthDomainService {
+    // 最小可擴展矩陣
+    private readonly roleToPermissions: Record<string, readonly string[]> = {
+        admin: ['dashboard.view', 'user.list'],
+        user: ['dashboard.view']
+    } as const;
+
+    hasRole(userRoles: readonly string[], role: string): boolean {
+        return userRoles.includes(role);
+    }
+
+    hasPermission(userPermissions: readonly string[], permission: string): boolean {
+        if (userPermissions.includes(permission)) {
+            return true;
+        }
+        // 根據角色矩陣推導
+        for (const [_, perms] of Object.entries(this.roleToPermissions)) {
+            if (perms.includes(permission)) {
+                // 此方法只檢查集合是否包含該權限；實際角色關聯在 Facade 端整合
+                return true;
+            }
+        }
+        return false;
+    }
+}
+

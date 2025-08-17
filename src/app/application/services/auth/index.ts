@@ -6,11 +6,9 @@
  * @since 2024-01-01
  */
 
-// 認證管理應用服務導出
-// export * from './authentication-management.service';
+export * from './auth.facade';
 
-// 會話管理應用服務導出
-// export * from './session-management.service';
+// 其他認證相關服務可在此擴充
 
 // 安全策略應用服務導出
 // export * from './security-policy.service';

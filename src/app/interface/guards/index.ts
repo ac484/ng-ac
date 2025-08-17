@@ -22,11 +22,9 @@
  * - 此檔案須遵守性能優化原則
  */
 
-// 路由守衛導出 (待實現)
-// export * from './route';
+export * from './auth.guard';
 
 // 功能守衛導出 (待實現)
 // export * from './feature';
 
-// 驗證守衛導出 (待實現)
-// export * from './validation';
+

@@ -46,6 +46,9 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
+import { AuthHttpInterceptor } from './infrastructure/interceptors/auth-http.interceptor';
+import { ErrorInterceptor } from './infrastructure/interceptors/error.interceptor';
+import { LoggingInterceptor } from './infrastructure/interceptors/logging.interceptor';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -55,7 +58,9 @@ export const appConfig: ApplicationConfig = {
         provideAnimations(),
         // 提供 HTTP 客戶端 - 處理 API 請求和後端通訊
         provideHttpClient(withInterceptors([
-            // add interceptors here when implemented
+            LoggingInterceptor,
+            AuthHttpInterceptor,
+            ErrorInterceptor
         ])),
         // 初始化 Firebase 應用程式 - 設定專案 ID、API 金鑰等配置
         provideFirebaseApp(() => initializeApp({

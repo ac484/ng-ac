@@ -49,7 +49,7 @@ export const routes: Routes = [
 		path: 'app',
 		loadComponent: () => import('./interface/layouts/main-app').then(m => m.MainAppLayoutComponent),
 		canActivate: [
-			() => import('./security/authentication/guards').then(m => m.AuthGuard)
+			() => import('./interface/guards').then(m => m.AuthGuard)
 		],
 		children: [
 			// 儀表板
