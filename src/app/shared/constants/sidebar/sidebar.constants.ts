@@ -25,8 +25,8 @@ export type SidebarItem = {
 };
 
 export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
+  { label: '空白頁面', icon: 'dashboard', route: '/app/blank' },
   { label: '儀表板', icon: 'dashboard', route: '/app/dashboard' },
-  { label: '空白頁面', icon: 'blank', route: '/app/blank' },
   // 🏗️ 現場管理
   {
     label: '現場管理',

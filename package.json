@@ -12,6 +12,9 @@
     "lint:fix": "ng lint --fix",
     "lint:check": "eslint . --ext .ts,.html",
     "generate:fs": "node scripts/generate-file-structure.mjs",
+    "generate:fs:watch": "node scripts/generate-file-structure.mjs --watch",
+    "sync:status": "node scripts/generate-file-structure.mjs --status",
+    "dev:sync": "node scripts/dev-sync.mjs",
     "prepare": "simple-git-hooks"
   },
   "private": true,
@@ -53,7 +56,7 @@
     "simple-git-hooks": "^2.11.1"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm -s generate:fs && git add docs/0.FILE_STRUCTURE_NOW.md",
-    "pre-push": "pnpm -s generate:fs && git diff --quiet -- docs/0.FILE_STRUCTURE_NOW.md || (echo 'docs/0.FILE_STRUCTURE_NOW.md changed. Commit the update before pushing.' && exit 1)"
+    "pre-commit": "node scripts/hooks/pre-commit.mjs",
+    "pre-push": "node scripts/hooks/pre-push.mjs"
   }
 }

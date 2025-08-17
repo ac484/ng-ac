@@ -52,17 +52,18 @@ export const routes: Routes = [
 			() => import('./security/authentication/guards').then(m => m.AuthGuard)
 		],
 		children: [
+					// 空白頁面
+			{
+				path: 'blank',
+				loadComponent: () => import('./interface/pages/blank').then(m => m.BlankPageComponent)
+			},
+
 			// 儀表板
 			{
 				path: 'dashboard',
 				loadComponent: () => import('./interface/pages/dashboard').then(m => m.DashboardPageComponent)
 			},
 
-			// 空白頁面
-			{
-				path: 'blank',
-				loadComponent: () => import('./interface/pages/blank').then(m => m.BlankPageComponent)
-			},
 
 			// 現場作業與報表
 			{ path: 'calendars', loadComponent: () => import('./interface/pages/construction/calendars').then(m => m.CalendarsPageComponent) },
@@ -141,7 +142,7 @@ export const routes: Routes = [
 			// 重定向到儀表板
 			{
 				path: '',
-				redirectTo: 'dashboard',
+				redirectTo: 'blank',
 				pathMatch: 'full'
 			}
 		]

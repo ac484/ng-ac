@@ -101,7 +101,7 @@ export class SidebarComponent {
           label: item.label,
           route: item.route,
           icon: item.icon,
-          closable: item.route !== '/app/dashboard'
+          closable: item.route !== '/app/blank'
         });
 
     this.tabService.activateTab(tabId);
@@ -121,7 +121,7 @@ export class SidebarComponent {
           label: child.label,
           route: child.route,
           icon: undefined,
-          closable: child.route !== '/app/dashboard'
+          closable: child.route !== '/app/blank'
         });
 
     this.tabService.activateTab(tabId);

@@ -14,9 +14,9 @@
   "prefer_related_applications": false,
   "shortcuts": [
     {
-      "name": "Dashboard",
-      "short_name": "Dashboard",
-      "url": "/app/dashboard",
+      "name": "Blank",
+      "short_name": "Blank",
+      "url": "/app/blank",
       "icons": [
         { "src": "assets/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
       ]

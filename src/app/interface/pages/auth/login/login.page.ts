@@ -152,7 +152,7 @@ export class LoginPageComponent {
       const user = await this.authService.login(this.email, this.password);
       if (user) {
         // 登錄成功，跳轉到儀表板
-        this.router.navigate(['/app/dashboard']);
+        this.router.navigate(['/app/blank']);
       } else {
         this.errorMessage = '登錄失敗，請檢查郵箱和密碼';
       }
