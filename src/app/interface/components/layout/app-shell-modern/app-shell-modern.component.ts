@@ -19,9 +19,9 @@
  * @see docs/5.new_Tree_layout.md
  */
 
+import { ModernBreakpointService } from '@/app/shared/services/material/modern-breakpoint.service';
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
-import { ModernBreakpointService } from '@/app/shared/services/material/modern-breakpoint.service';
 
 @Component({
   selector: 'app-shell-modern',
@@ -44,7 +44,7 @@ import { ModernBreakpointService } from '@/app/shared/services/material/modern-b
 })
 export class AppShellModernComponent {
   constructor(public readonly bps: ModernBreakpointService) {}
-  
+
   @ViewChild('drawer') drawer?: MatSidenav;
   @ViewChild(MatSidenavContainer) container?: MatSidenavContainer;
 }

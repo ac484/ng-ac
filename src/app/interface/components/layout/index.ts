@@ -1,22 +1,31 @@
 /**
- * @fileoverview 佈局組件統一導出檔案 (Layout Components Unified Export)
- * @description 存放佈局組件的統一導出檔案
+ * @fileoverview 佈局組件索引文件，統一導出所有佈局相關組件
  * @author NG-AC Team
  * @version 1.0.0
- * @since 2024-01-01
+ * @lastModified 2024-12-19 by NG-AC Team
  *
- * 檔案性質：
- * - 類型：Interface Layer Layout Components
- * - 職責：佈局組件統一導出
- * - 依賴：佈局組件
- * - 不可變更：此文件的所有註解和架構說明均不可變更
+ * 📋 檔案性質：
+ * • 類型：Interface Layer - Components Index
+ * • 依賴：所有佈局組件
  *
- * 重要說明：
- * - 此檔案只存放佈局組件的統一導出，不包含業務邏輯
- * - 所有佈局組件必須在此檔案中導出
+ * ⚠️ 架構規則 (Immutable)：
+ * • 此檔案的註解格式不可變更
+ * • 只負責組件的重新導出
+ * • 不包含具體的組件實現
+ *
+ * @module LayoutComponents
+ * @layer Interface
+ * @context Layout System
+ * @see docs/5.new_Tree_layout.md
  */
 
-export * from './footer';
+// 基礎佈局組件
+export * from './app-shell';
 export * from './header';
 export * from './sidebar';
+export * from './footer';
+
+// 現代化佈局組件
+export * from './layout-grid';
+export * from './app-shell-modern';
 

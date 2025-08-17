@@ -21,8 +21,8 @@
 
 import { Component, inject } from '@angular/core';
 import { AppShellService, OfflineService } from '../../../application/services/app-shell';
-import { LayoutGridComponent } from '../../components/layout/layout-grid';
 import { AppShellModernComponent } from '../../components/layout/app-shell-modern';
+import { LayoutGridComponent } from '../../components/layout/layout-grid';
 
 @Component({
   selector: 'app-shell-demo',
@@ -49,7 +49,7 @@ import { AppShellModernComponent } from '../../components/layout/app-shell-moder
 
       <div class="demo-section">
         <h2>現代化佈局組件</h2>
-        
+
         <h3>Layout Grid 組件</h3>
         <app-layout-grid [columns]="2" [gap]="'1rem'" [padding]="'1rem'">
           <div class="grid-item">項目 1</div>
