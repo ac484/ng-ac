@@ -9,7 +9,27 @@
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "zh-TW",
+  "dir": "ltr",
   "categories": ["business", "productivity"],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "url": "/app/dashboard",
+      "icons": [
+        { "src": "assets/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "Users",
+      "short_name": "Users",
+      "url": "/app/users",
+      "icons": [
+        { "src": "assets/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    }
+  ],
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",
