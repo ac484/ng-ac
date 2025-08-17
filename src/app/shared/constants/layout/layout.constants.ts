@@ -27,16 +27,16 @@ export const LAYOUT_CONSTANTS = {
     LG: '(min-width: 1280px) and (max-width: 1919.98px)',
     XL: '(min-width: 1920px)'
   },
-  CONTAINER: { 
-    SMALL: 400, 
-    MEDIUM: 800, 
-    LARGE: 1200 
+  CONTAINER: {
+    SMALL: 400,
+    MEDIUM: 800,
+    LARGE: 1200
   },
-  SPACING: { 
-    XS: '0.5rem', 
-    SM: '1rem', 
-    MD: '1.5rem', 
-    LG: '2rem', 
-    XL: '3rem' 
+  SPACING: {
+    XS: '0.5rem',
+    SM: '1rem',
+    MD: '1.5rem',
+    LG: '2rem',
+    XL: '3rem'
   }
 } as const;

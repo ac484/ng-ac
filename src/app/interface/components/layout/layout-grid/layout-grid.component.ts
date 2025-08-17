@@ -36,17 +36,17 @@ export class LayoutGridComponent {
   @Input() gap = '1rem';
   @Input() padding = '1rem';
 
-  get gridClass(): string { 
-    return typeof this.columns === 'number' ? 
-      `layout-grid--${this.columns}-col` : 
-      `layout-grid--${this.columns}`; 
+  get gridClass(): string {
+    return typeof this.columns === 'number' ?
+      `layout-grid--${this.columns}-col` :
+      `layout-grid--${this.columns}`;
   }
-  
-  get gridStyles(): Record<string, string> { 
-    return { 
-      '--min-width': this.minWidth, 
-      '--grid-gap': this.gap, 
-      '--grid-padding': this.padding 
-    }; 
+
+  get gridStyles(): Record<string, string> {
+    return {
+      '--min-width': this.minWidth,
+      '--grid-gap': this.gap,
+      '--grid-padding': this.padding
+    };
   }
 }

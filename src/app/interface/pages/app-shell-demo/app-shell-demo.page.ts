@@ -1,18 +1,33 @@
 /**
- * App Shell 演示頁面
- * 展示 App Shell 功能和特性
- *
+ * @fileoverview App Shell 演示頁面，展示 App Shell 功能和現代化佈局組件
  * @author NG-AC Team
- * @since 2024-12-19
  * @version 1.0.0
+ * @lastModified 2024-12-19 by NG-AC Team
+ *
+ * 📋 檔案性質：
+ * • 類型：Interface Layer - Page
+ * • 依賴：AppShellService, OfflineService, LayoutGridComponent, AppShellModernComponent
+ *
+ * ⚠️ 架構規則 (Immutable)：
+ * • 此檔案的註解格式不可變更
+ * • 只負責演示頁面的渲染和交互
+ * • 不包含具體的業務邏輯
+ *
+ * @module AppShellDemoPage
+ * @layer Interface
+ * @context Layout System
+ * @see docs/5.new_Tree_layout.md
  */
 
 import { Component, inject } from '@angular/core';
 import { AppShellService, OfflineService } from '../../../application/services/app-shell';
+import { LayoutGridComponent } from '../../components/layout/layout-grid';
+import { AppShellModernComponent } from '../../components/layout/app-shell-modern';
 
 @Component({
   selector: 'app-shell-demo',
   standalone: true,
+  imports: [LayoutGridComponent, AppShellModernComponent],
   template: `
     <div class="demo-page">
       <h1>App Shell 演示</h1>
@@ -30,6 +45,32 @@ import { AppShellService, OfflineService } from '../../../application/services/a
         <button (click)="testTheme()">切換主題</button>
         <button (click)="testSidebar()">切換側邊欄</button>
         <button (click)="testOffline()">模擬離線</button>
+      </div>
+
+      <div class="demo-section">
+        <h2>現代化佈局組件</h2>
+        
+        <h3>Layout Grid 組件</h3>
+        <app-layout-grid [columns]="2" [gap]="'1rem'" [padding]="'1rem'">
+          <div class="grid-item">項目 1</div>
+          <div class="grid-item">項目 2</div>
+        </app-layout-grid>
+
+        <h3>App Shell Modern 組件</h3>
+        <app-shell-modern>
+          <div shell-sidenav>
+            <h4>側邊欄內容</h4>
+            <ul>
+              <li>導航項目 1</li>
+              <li>導航項目 2</li>
+              <li>導航項目 3</li>
+            </ul>
+          </div>
+          <div class="main-content">
+            <h4>主要內容區域</h4>
+            <p>這是使用現代化 App Shell 組件的主要內容區域。</p>
+          </div>
+        </app-shell-modern>
       </div>
 
       <div class="demo-section">
@@ -54,6 +95,17 @@ import { AppShellService, OfflineService } from '../../../application/services/a
       padding: 1rem;
       border: 1px solid #ddd;
       border-radius: 8px;
+    }
+
+    .grid-item {
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .main-content {
+      padding: 1rem;
     }
 
     button {
@@ -98,13 +150,13 @@ export class AppShellDemoPage {
 
   private checkPWAInstallation(): void {
     // 檢查是否可以安裝 PWA
-    window.addEventListener('beforeinstallprompt', (e) => {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
       this.canInstallPWA = true;
-    });
+    }
   }
 
   installPWA(): void {
-    // 觸發 PWA 安裝
-    console.log('PWA 安裝功能');
+    // PWA 安裝邏輯
+    console.log('PWA 安裝功能待實現');
   }
 }

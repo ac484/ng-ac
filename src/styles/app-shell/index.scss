@@ -20,12 +20,12 @@
  */
 
 // 基礎樣式
-@use 'variables';
-@use 'layout';
-@use 'responsive';
-@use 'theme';
-@use 'accessibility';
+@use './app-shell-variables' as *;
+@use './app-shell-layout' as *;
+@use './app-shell-responsive' as *;
+@use './app-shell-theme' as *;
+@use './app-shell-accessibility' as *;
 
 // 現代化佈局樣式
-@use 'container-queries';
-@use 'layout-grid';
+@use './container-queries';
+@use './layout-grid';

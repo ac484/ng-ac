@@ -19,17 +19,17 @@
  * @see docs/5.new_Tree_layout.md
  */
 
-import { Injectable, computed, inject, signal } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ModernBreakpointService {
   private readonly bo = inject(BreakpointObserver);
-  
+
   readonly isHandset = signal(this.bo.isMatched(Breakpoints.Handset));
   readonly isTablet = signal(this.bo.isMatched(Breakpoints.Tablet));
   readonly isWeb = signal(this.bo.isMatched(Breakpoints.Web));
-  
+
   readonly layout = computed(() => ({
     isHandset: this.isHandset(),
     isTablet: this.isTablet(),

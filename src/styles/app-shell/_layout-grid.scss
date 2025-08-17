@@ -20,10 +20,10 @@
  */
 
 // 基礎網格佈局
-.layout-grid { 
-  display: grid; 
-  gap: var(--grid-gap, 1rem); 
-  padding: var(--grid-padding, 1rem); 
+.layout-grid {
+  display: grid;
+  gap: var(--grid-gap, 1rem);
+  padding: var(--grid-padding, 1rem);
 }
 
 // 固定列數網格
@@ -33,10 +33,10 @@
 .layout-grid--4-col { grid-template-columns: repeat(4, 1fr); }
 
 // 自適應網格
-.layout-grid--auto-fit { 
-  grid-template-columns: repeat(auto-fit, minmax(var(--min-width, 300px), 1fr)); 
+.layout-grid--auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-width, 300px), 1fr));
 }
 
-.layout-grid--auto-fill { 
-  grid-template-columns: repeat(auto-fill, minmax(var(--min-width, 300px), 1fr)); 
+.layout-grid--auto-fill {
+  grid-template-columns: repeat(auto-fill, minmax(var(--min-width, 300px), 1fr));
 }
