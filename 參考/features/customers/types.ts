@@ -1,0 +1,2 @@
+// Customers feature types
+export {}

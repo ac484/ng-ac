@@ -1,0 +1,2 @@
+// Sales feature types
+export {}

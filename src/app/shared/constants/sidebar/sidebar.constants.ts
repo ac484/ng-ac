@@ -45,6 +45,7 @@ export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
     label: '專案管理',
     icon: 'assignment',
     children: [
+      { label: '合約專案', route: '/app/project' },
       { label: '合約管理', route: '/app/contract' },
       { label: '材料庫存', route: '/app/inventory' },
       { label: '設備管理', route: '/app/equipment' },

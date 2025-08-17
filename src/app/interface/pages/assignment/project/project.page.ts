@@ -1,0 +1,23 @@
+/**
+ * @fileoverview 專案頁面 (Project Page)
+ * @author NG-AC Team
+ * @version 1.0.0
+ */
+
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-project-page',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div style="padding:16px;">
+      <h2>專案</h2>
+      <p>此為專案頁面骨架。</p>
+    </div>
+  `
+})
+export class ProjectPageComponent {}
+
+

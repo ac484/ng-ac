@@ -1,0 +1,2 @@
+// Reports feature types
+export {}

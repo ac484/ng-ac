@@ -1,0 +1,2 @@
+// Knowledge feature types
+export {}

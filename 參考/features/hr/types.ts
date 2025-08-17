@@ -1,0 +1,2 @@
+// HR feature types
+export {}

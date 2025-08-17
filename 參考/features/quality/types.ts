@@ -1,0 +1,2 @@
+// Quality feature types
+export {}
