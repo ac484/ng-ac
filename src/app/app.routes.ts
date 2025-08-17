@@ -75,12 +75,6 @@ export const routes: Routes = [
 				path: 'app-shell',
 				loadComponent: () => import('./interface/pages/app-shell').then(m => m.AppShellPage)
 			},
-			// 舊路由兼容：app-shell-demo -> app-shell
-			{
-				path: 'app-shell-demo',
-				redirectTo: 'app-shell',
-				pathMatch: 'full'
-			},
 
 			// 重定向到儀表板
 			{
