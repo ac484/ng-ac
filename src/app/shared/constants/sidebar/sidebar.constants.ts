@@ -26,9 +26,38 @@ export type SidebarItem = {
 
 export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
   { label: '儀表板', icon: 'dashboard', route: '/app/dashboard' },
-  { label: '用戶管理', icon: 'people', route: '/app/users' },
-  { label: '監控', icon: 'monitor_heart', route: '/app/monitoring' },
-  { label: '安全', icon: 'security', route: '/app/security' },
+
+  {
+    label: '核心業務',
+    icon: 'core',
+    children: [
+      { label: '核心業務', route: '/app/analytics/core' },
+      { label: '管理', route: '/app/analytics/admin' },
+    ]
+  },
+    {
+    label: '管理',
+    icon: 'manage',
+    children: [
+      { label: '管理', route: '/app/manage' },
+    ]
+  },
+  {
+    label: '夥伴',
+    icon: 'partner',
+    children: [
+      { label: '夥伴', route: '/app/partners' }
+    ]
+  },
+  {
+    label: '分析與監控',
+    icon: 'insights',
+    children: [
+      { label: '用戶管理', route: '/app/users' },
+      { label: '監控', route: '/app/monitoring' },
+      { label: '安全', route: '/app/security' }
+    ]
+  },
   {
     label: '公開資訊',
     icon: 'public',
