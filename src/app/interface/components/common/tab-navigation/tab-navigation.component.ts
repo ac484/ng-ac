@@ -28,6 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { RouterOutlet } from '@angular/router';
 import { TabNavigationService } from '../../../../application/services/tab-navigation/tab-navigation.service';
 
 @Component({
@@ -38,7 +39,8 @@ import { TabNavigationService } from '../../../../application/services/tab-navig
     MatTabsModule,
     MatIconModule,
     MatButtonModule,
-    MatRippleModule
+    MatRippleModule,
+    RouterOutlet
   ],
   template: `
     @if (tabService.hasTabs()) {
@@ -86,7 +88,7 @@ import { TabNavigationService } from '../../../../application/services/tab-navig
   styleUrls: ['./tab-navigation.component.scss']
 })
 export class TabNavigationComponent {
-  private tabService = inject(TabNavigationService);
+  readonly tabService = inject(TabNavigationService);
 
   // 計算屬性
   readonly activeTabIndex = computed(() => {

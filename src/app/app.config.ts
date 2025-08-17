@@ -17,7 +17,7 @@
  * - 所有服務提供者必須在此檔案中註冊
  */
 
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
@@ -54,7 +54,9 @@ export const appConfig: ApplicationConfig = {
         // 提供動畫功能 - 支援 Angular 動畫系統
         provideAnimations(),
         // 提供 HTTP 客戶端 - 處理 API 請求和後端通訊
-        provideHttpClient(),
+        provideHttpClient(withInterceptors([
+            // add interceptors here when implemented
+        ])),
         // 初始化 Firebase 應用程式 - 設定專案 ID、API 金鑰等配置
         provideFirebaseApp(() => initializeApp({
             projectId: "acc-ng",

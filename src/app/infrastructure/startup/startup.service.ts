@@ -6,7 +6,7 @@
  * @since 2024-01-01
  *
  * 檔案性質：
- * - 類型：Core Layer Startup Service
+ * - 類型：Infrastructure Layer Startup Service
  * - 職責：應用啟動初始化實現
  * - 依賴：Angular 核心服務
  * - 不可變更：此文件的所有註解和架構說明均不可變更
@@ -57,3 +57,5 @@ export class StartupService {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
 }
+
+
