@@ -18,7 +18,9 @@
  */
 
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, map, startWith } from 'rxjs/operators';
 import { SIDEBAR_NAV_ITEMS } from '../../../shared/constants/sidebar/sidebar.constants';
 import { TAB_CONFIG } from '../../../shared/constants/tab/tab.constants';
 import { TabItem } from '../../../shared/interfaces/tab/tab.interface';
@@ -47,21 +49,25 @@ export class TabNavigationService {
   constructor() {
     this.loadState();
 
-    // 自動路由同步
-    effect(() => {
-      const currentRoute = this.router.url;
+    const routerUrl = toSignal(
+      this.router.events.pipe(
+        filter(e => e instanceof NavigationEnd),
+        map(() => this.router.url),
+        startWith(this.router.url)
+      ),
+      { initialValue: this.router.url }
+    );
 
-      // 僅在主應用路由下處理自動建 tab
-      if (!currentRoute.startsWith('/app')) {
-        return;
-      }
+    // 自動路由同步（基於 Signal 的 routerUrl）
+    effect(() => {
+      const currentRoute = routerUrl();
+      if (!currentRoute?.startsWith('/app')) return;
 
       const tabs = this._tabs();
       const matchingTab = tabs.find(tab => tab.route === currentRoute);
 
       if (!matchingTab) {
         const meta = this.findMenuMeta(currentRoute);
-        // 僅對有對應側邊欄定義的路由建立 tab
         if (meta && canAddTab(tabs, TAB_CONFIG.MAX_TABS)) {
           const newId = this.addTab({
             label: meta.label,

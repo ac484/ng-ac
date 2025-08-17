@@ -7,7 +7,14 @@ alwaysApply: true
 - **前端框架**: Angular 20.0.0
 - **UI 組件庫**: @angular/material 20.0.0 @angular/cdk 20.0.0
 - **應用框架**: Angular 20.0.0
+- **Firebase**: @angular/fire 20.0.1
 - **資料庫**: Firebase 10.0.0
+- **認證**: Firebase Auth 10.0.0
+- **授權**: Firebase Firestore 10.0.0
+- **儲存**: Firebase Storage 10.0.0
+- **分析**: Firebase Analytics 10.0.0
+- **遠端設定**: Firebase Remote Config 10.0.0
+- **測試**: Jest 10.0.0
 - **語言**: TypeScript 5.0.0
 - **風格**: 極簡主義
 - **架構**: 現代化

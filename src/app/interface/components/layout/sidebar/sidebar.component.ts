@@ -95,22 +95,19 @@ export class SidebarComponent {
     const tabs = this.tabService.tabs();
     const existingTab = tabs.find(t => t.route === item.route);
 
-    if (existingTab) {
-      // 如果 Tab 已存在，激活它
-      this.tabService.activateTab(existingTab.id);
-    } else {
-      // 如果 Tab 不存在，創建新的 Tab
-      const newTabId = this.tabService.addTab({
-        label: item.label,
-        route: item.route,
-        icon: item.icon,
-        closable: item.route !== '/app/dashboard'
-      });
-      this.tabService.activateTab(newTabId);
-    }
+    const tabId = existingTab
+      ? existingTab.id
+      : this.tabService.addTab({
+          label: item.label,
+          route: item.route,
+          icon: item.icon,
+          closable: item.route !== '/app/dashboard'
+        });
 
-    // 同步導航狀態
-    this.navigationSync.syncNavigation(item.route, '');
+    this.tabService.activateTab(tabId);
+
+    // 同步導航狀態（帶入實際 tabId）
+    this.navigationSync.syncNavigation(item.route, tabId);
   }
 
   onChildClick(child: { label: string; route: string }): void {
@@ -118,22 +115,19 @@ export class SidebarComponent {
     const tabs = this.tabService.tabs();
     const existingTab = tabs.find(t => t.route === child.route);
 
-    if (existingTab) {
-      // 如果 Tab 已存在，激活它
-      this.tabService.activateTab(existingTab.id);
-    } else {
-      // 如果 Tab 不存在，創建新的 Tab
-      const newTabId = this.tabService.addTab({
-        label: child.label,
-        route: child.route,
-        icon: undefined, // 子項目沒有圖標
-        closable: child.route !== '/app/dashboard'
-      });
-      this.tabService.activateTab(newTabId);
-    }
+    const tabId = existingTab
+      ? existingTab.id
+      : this.tabService.addTab({
+          label: child.label,
+          route: child.route,
+          icon: undefined,
+          closable: child.route !== '/app/dashboard'
+        });
 
-    // 同步導航狀態
-    this.navigationSync.syncNavigation(child.route, '');
+    this.tabService.activateTab(tabId);
+
+    // 同步導航狀態（帶入實際 tabId）
+    this.navigationSync.syncNavigation(child.route, tabId);
   }
 
   toggleGroup(group: string): void {

@@ -21,7 +21,9 @@
 
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter, map, startWith } from 'rxjs/operators';
 
 import { NavigationSyncService } from '../../../application/services/navigation-sync';
 import { TabNavigationService } from '../../../application/services/tab-navigation/tab-navigation.service';
@@ -61,6 +63,16 @@ export class MainAppLayoutComponent {
   private readonly router = inject(Router);
 
   constructor() {
+    // 以 Signal 監聽路由變更
+    const routerUrl = toSignal(
+      this.router.events.pipe(
+        filter(e => e instanceof NavigationEnd),
+        map(() => this.router.url),
+        startWith(this.router.url)
+      ),
+      { initialValue: this.router.url }
+    );
+
     // 監聽 Tab 服務的變化，同步到導航服務
     effect(() => {
       const activeTabId = this.tabService.activeTabId();
@@ -73,7 +85,7 @@ export class MainAppLayoutComponent {
 
     // 監聽路由變化，同步到導航服務
     effect(() => {
-      const currentUrl = this.router.url;
+      const currentUrl = routerUrl();
       if (currentUrl && currentUrl.startsWith('/app')) {
         // 找到對應的 Tab
         const tabs = this.tabService.tabs();
