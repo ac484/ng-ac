@@ -16,5 +16,5 @@
  * - 所有側邊欄組件必須在此檔案中導出
  */
 
-export * from './sidebar.component';
+// Deprecated: Sidebar moved to Interface Layer. Keep empty or re-export for short-term compatibility if needed.
 

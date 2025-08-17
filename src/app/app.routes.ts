@@ -47,7 +47,7 @@ export const routes: Routes = [
 	// 主應用路由（使用側邊欄佈局 + 認證守衛）
 	{
 		path: 'app',
-		loadComponent: () => import('./shared/components/sidebar').then(m => m.SidebarComponent),
+		loadComponent: () => import('./interface/components/layout/sidebar').then(m => m.SidebarComponent),
 		canActivate: [
 			() => import('./security/authentication/guards').then(m => m.AuthGuard)
 		],
