@@ -49,7 +49,7 @@ export const routes: Routes = [
 		path: 'app',
 		loadComponent: () => import('./interface/layouts/main-app').then(m => m.MainAppLayoutComponent),
 		canActivate: [
-			() => import('./interface/guards').then(m => m.AuthGuard)
+			() => import('./security/authentication/guards').then(m => m.AuthGuard)
 		],
 		children: [
 			// 儀表板
@@ -57,6 +57,16 @@ export const routes: Routes = [
 				path: 'dashboard',
 				loadComponent: () => import('./interface/pages/dashboard').then(m => m.DashboardPageComponent)
 			},
+
+			// 現場作業與報表
+			{ path: 'calendars', loadComponent: () => import('./interface/pages/construction/calendars').then(m => m.CalendarsPageComponent) },
+			{ path: 'construction-reports', loadComponent: () => import('./interface/pages/construction/construction-reports').then(m => m.ConstructionReportsPageComponent) },
+			{ path: 'contract', loadComponent: () => import('./interface/pages/assignment/contract').then(m => m.ContractPageComponent) },
+			{ path: 'daily-reports', loadComponent: () => import('./interface/pages/construction/daily-reports').then(m => m.DailyReportsPageComponent) },
+			{ path: 'log', loadComponent: () => import('./interface/pages/construction/log').then(m => m.LogPageComponent) },
+			{ path: 'schedules', loadComponent: () => import('./interface/pages/schedules').then(m => m.SchedulesPageComponent) },
+			{ path: 'weather-reports', loadComponent: () => import('./interface/pages/construction/weather-reports').then(m => m.WeatherReportsPageComponent) },
+			{ path: 'task', loadComponent: () => import('./interface/pages/construction/task').then(m => m.TaskPageComponent) },
 
 			// 用戶管理
 			{
@@ -86,7 +96,7 @@ export const routes: Routes = [
 			// 安全
 			{
 				path: 'security',
-				loadComponent: () => import('./interface/pages/security/security.page').then(m => m.SecurityPageComponent)
+				loadComponent: () => import('./interface/pages/security/security/security.page').then(m => m.SecurityPageComponent)
 			},
 
 			// 重定向到儀表板
