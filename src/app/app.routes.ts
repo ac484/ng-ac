@@ -44,10 +44,10 @@ export const routes: Routes = [
 		]
 	},
 
-	// 主應用路由（使用側邊欄佈局 + 認證守衛）
+	// 主應用路由（使用 AppShell 佈局容器 + 認證守衛）
 	{
 		path: 'app',
-		loadComponent: () => import('./interface/components/layout/sidebar').then(m => m.SidebarComponent),
+		loadComponent: () => import('./interface/layouts/app-shell').then(m => m.AppShellLayoutComponent),
 		canActivate: [
 			() => import('./security/authentication/guards').then(m => m.AuthGuard)
 		],
