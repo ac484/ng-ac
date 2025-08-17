@@ -81,7 +81,7 @@ export const routes: Routes = [
 			},
 			{ path: 'personnel', loadComponent: () => import('./interface/pages/people/personnel').then(m => m.PersonnelPageComponent) },
 			{ path: 'attendance', loadComponent: () => import('./interface/pages/people/attendance').then(m => m.AttendancePageComponent) },
-			{ path: 'partners', loadComponent: () => import('./interface/pages/partner/partners').then(m => m.PartnersPageComponent) },
+			{ path: 'partners', loadComponent: () => import('./interface/pages/people/partners').then(m => m.PartnersPageComponent) },
 
 			// 公開資訊
 			{
@@ -130,7 +130,7 @@ export const routes: Routes = [
 			{ path: 'settings/backup', loadComponent: () => import('./interface/pages/settings/backup').then(m => m.SettingsBackupPageComponent) },
 
 			// 其他
-			{ path: 'state-machine', loadComponent: () => import('./interface/pages/partner/state-machine').then(m => m.StateMachinePageComponent) },
+			{ path: 'state-machine', loadComponent: () => import('./interface/pages/people/state-machine').then(m => m.StateMachinePageComponent) },
 
 			// 重定向到儀表板
 			{
