@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavigationSyncService } from '../../../../application/services/navigation-sync';
+import { TabNavigationService } from '../../../../application/services/tab-navigation';
 import { SidebarItem } from '../../../../shared/constants/sidebar/sidebar.constants';
 
 @Component({
@@ -76,6 +77,7 @@ export class SidebarComponent {
   @Input() navItems: SidebarItem[] = [];
 
   private readonly navigationSync = inject(NavigationSyncService);
+  private readonly tabService = inject(TabNavigationService);
   private readonly router = inject(Router);
 
   // 計算屬性
@@ -89,19 +91,49 @@ export class SidebarComponent {
   onItemClick(item: SidebarItem): void {
     if (!item.route) return;
 
+    // 檢查是否已存在對應的 Tab
+    const tabs = this.tabService.tabs();
+    const existingTab = tabs.find(t => t.route === item.route);
+
+    if (existingTab) {
+      // 如果 Tab 已存在，激活它
+      this.tabService.activateTab(existingTab.id);
+    } else {
+      // 如果 Tab 不存在，創建新的 Tab
+      const newTabId = this.tabService.addTab({
+        label: item.label,
+        route: item.route,
+        icon: item.icon,
+        closable: item.route !== '/app/dashboard'
+      });
+      this.tabService.activateTab(newTabId);
+    }
+
     // 同步導航狀態
     this.navigationSync.syncNavigation(item.route, '');
-
-    // 導航到路由
-    this.router.navigate([item.route]);
   }
 
   onChildClick(child: { label: string; route: string }): void {
+    // 檢查是否已存在對應的 Tab
+    const tabs = this.tabService.tabs();
+    const existingTab = tabs.find(t => t.route === child.route);
+
+    if (existingTab) {
+      // 如果 Tab 已存在，激活它
+      this.tabService.activateTab(existingTab.id);
+    } else {
+      // 如果 Tab 不存在，創建新的 Tab
+      const newTabId = this.tabService.addTab({
+        label: child.label,
+        route: child.route,
+        icon: undefined, // 子項目沒有圖標
+        closable: child.route !== '/app/dashboard'
+      });
+      this.tabService.activateTab(newTabId);
+    }
+
     // 同步導航狀態
     this.navigationSync.syncNavigation(child.route, '');
-
-    // 導航到路由
-    this.router.navigate([child.route]);
   }
 
   toggleGroup(group: string): void {

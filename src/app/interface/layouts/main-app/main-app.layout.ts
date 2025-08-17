@@ -21,7 +21,7 @@
 
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 import { NavigationSyncService } from '../../../application/services/navigation-sync';
 import { TabNavigationService } from '../../../application/services/tab-navigation/tab-navigation.service';
@@ -58,6 +58,7 @@ export class MainAppLayoutComponent {
   navItems: SidebarItem[] = SIDEBAR_NAV_ITEMS;
   private readonly tabService = inject(TabNavigationService);
   private readonly navigationSync = inject(NavigationSyncService);
+  private readonly router = inject(Router);
 
   constructor() {
     // 監聽 Tab 服務的變化，同步到導航服務
@@ -67,6 +68,23 @@ export class MainAppLayoutComponent {
 
       if (activeTab && activeTabId) {
         this.navigationSync.syncNavigation(activeTab.route, activeTabId);
+      }
+    });
+
+    // 監聽路由變化，同步到導航服務
+    effect(() => {
+      const currentUrl = this.router.url;
+      if (currentUrl && currentUrl.startsWith('/app')) {
+        // 找到對應的 Tab
+        const tabs = this.tabService.tabs();
+        const matchingTab = tabs.find(t => t.route === currentUrl);
+
+        if (matchingTab) {
+          // 如果找到對應的 Tab，激活它
+          if (this.tabService.activeTabId() !== matchingTab.id) {
+            this.tabService.activateTab(matchingTab.id);
+          }
+        }
       }
     });
   }

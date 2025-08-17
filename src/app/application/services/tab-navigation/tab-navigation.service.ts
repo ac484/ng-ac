@@ -135,8 +135,8 @@ export class TabNavigationService {
 
   // 通知導航同步服務
   private notifyNavigationSync(route: string, tabId: string): void {
-    // 暫時留空，避免循環依賴
-    // 實際使用時會通過 MainAppLayout 進行同步
+    // 通過路由變化觸發 MainAppLayout 的 effect
+    // 這樣可以避免循環依賴，同時保持同步
     console.log('Tab activated:', { route, tabId });
   }
 
