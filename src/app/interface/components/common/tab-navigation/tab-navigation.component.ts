@@ -15,16 +15,20 @@
  * - 此檔案使用 Angular 20+ 和 Material Tabs API
  * - 遵循極簡主義原則，只實現必要的功能
  * - 使用官方 Angular Material Tabs 組件
+ *
+ * @module TabNavigation
+ * @layer Interface
+ * @context Tab Navigation UI
+ * @see docs/0.FILE_HEADER_CONVENTION.md
  */
 
-import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 import { TabNavigationService } from '../../../../application/services/tab-navigation/tab-navigation.service';
-import { TabItem } from '../../../../shared/interfaces/tab/tab.interface';
 
 @Component({
   selector: 'app-tab-navigation',

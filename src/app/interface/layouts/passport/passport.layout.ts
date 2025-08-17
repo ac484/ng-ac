@@ -4,6 +4,7 @@
  * @author NG-AC Team
  * @version 1.0.0
  * @since 2024-01-01
+ * @lastModified 2025-08-17 by System Migration
  *
  * 檔案性質：
  * - 類型：Interface Layer Passport Layout
@@ -15,6 +16,11 @@
  * - 此檔案使用Angular Material組件實現認證佈局
  * - 採用極簡主義設計，避免過度複雜化
  * - 使用card組件包裝認證內容
+ *
+ * @module Layout
+ * @layer Interface
+ * @context Authentication Layout (Passport)
+ * @see docs/0.FILE_HEADER_CONVENTION.md
  */
 
 import { CommonModule } from '@angular/common';

@@ -15,6 +15,11 @@
  * - 此檔案使用Angular Material組件實現頁腳
  * - 採用超極簡主義設計，一行解決
  * - 只提供最基本的頁腳功能
+ *
+ * @module FooterComponent
+ * @layer Interface
+ * @context Layout - Footer
+ * @see docs/0.FILE_HEADER_CONVENTION.md
  */
 
 import { Component } from '@angular/core';

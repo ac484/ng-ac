@@ -19,5 +19,6 @@
 export * from './basic';
 export * from './blank';
 export * from './dashboard';
+export * from './main-app';
 export * from './passport';
 

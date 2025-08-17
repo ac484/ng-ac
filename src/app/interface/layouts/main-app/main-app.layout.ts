@@ -12,6 +12,11 @@
  * ⚠️ 架構規則 (Immutable)：
  * • 此檔案的註解格式不可變更
  * • 僅負責佈局組裝與委派，不包含業務邏輯
+ *
+ * @module Layout
+ * @layer Interface
+ * @context Main Application Layout
+ * @see docs/0.FILE_HEADER_CONVENTION.md
  */
 
 import { Component } from '@angular/core';

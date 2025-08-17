@@ -22,9 +22,6 @@
  * - 此檔案須遵守組件文檔化原則
  */
 
-// 側邊欄組件導出
-export * from './sidebar';
-
 // Material組件導出
 export * from './material';
 

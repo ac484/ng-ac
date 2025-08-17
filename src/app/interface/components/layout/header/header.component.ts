@@ -15,6 +15,11 @@
  * - 此檔案使用Angular Material組件實現頭部
  * - 採用超極簡主義設計，一行解決
  * - 只提供最基本的頭部功能
+ *
+ * @module HeaderComponent
+ * @layer Interface
+ * @context Layout - Header
+ * @see docs/0.FILE_HEADER_CONVENTION.md
  */
 
 import { Component, Input } from '@angular/core';
