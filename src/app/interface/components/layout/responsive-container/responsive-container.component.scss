@@ -1,0 +1,15 @@
+/**
+ * @fileoverview Responsive Container 組件樣式定義
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @lastModified 2025-08-17 by System Migration
+ */
+
+.responsive-container {
+  width: 100%;
+  max-width: var(--responsive-max-width, 1200px);
+  margin: 0 auto;
+  padding: var(--responsive-padding, 1rem);
+}
+
+
