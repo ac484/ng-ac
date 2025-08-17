@@ -73,7 +73,7 @@
 
   .close-button {
     margin-left: auto;
-    opacity: 0;
+    opacity: 1; /* Always show close button for clarity */
     transition: opacity 0.2s ease;
 
     &:hover {
@@ -82,9 +82,7 @@
   }
 }
 
-.mat-mdc-tab:hover .close-button {
-  opacity: 1;
-}
+/* Removed hover-only visibility; keep buttons visible by default */
 
 .tab-content {
   padding: 16px;

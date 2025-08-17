@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
-import { SIDEBAR_NAV_ITEMS, type SidebarItem } from '../../../shared/constants/sidebar.constants';
+import { SIDEBAR_NAV_ITEMS, type SidebarItem } from '../../../shared/constants/sidebar/sidebar.constants';
 import { TabNavigationComponent } from '../../components/common/tab-navigation';
 import { AppShellModernComponent } from '../../components/layout/app-shell-modern';
 import { FooterComponent } from '../../components/layout/footer';
