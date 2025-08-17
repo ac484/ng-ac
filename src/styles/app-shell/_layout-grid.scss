@@ -1,0 +1,42 @@
+/**
+ * @fileoverview CSS Grid 佈局樣式工具類，提供網格佈局的實用助手
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @lastModified 2024-12-19 by NG-AC Team
+ *
+ * 📋 檔案性質：
+ * • 類型：Shared Layer - Styles
+ * • 依賴：無
+ *
+ * ⚠️ 架構規則 (Immutable)：
+ * • 此檔案的註解格式不可變更
+ * • 只提供網格佈局相關的工具類
+ * • 不包含具體的業務樣式
+ *
+ * @module AppShellStyles
+ * @layer Shared
+ * @context Layout System
+ * @see docs/5.new_Tree_layout.md
+ */
+
+// 基礎網格佈局
+.layout-grid { 
+  display: grid; 
+  gap: var(--grid-gap, 1rem); 
+  padding: var(--grid-padding, 1rem); 
+}
+
+// 固定列數網格
+.layout-grid--1-col { grid-template-columns: 1fr; }
+.layout-grid--2-col { grid-template-columns: repeat(2, 1fr); }
+.layout-grid--3-col { grid-template-columns: repeat(3, 1fr); }
+.layout-grid--4-col { grid-template-columns: repeat(4, 1fr); }
+
+// 自適應網格
+.layout-grid--auto-fit { 
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-width, 300px), 1fr)); 
+}
+
+.layout-grid--auto-fill { 
+  grid-template-columns: repeat(auto-fill, minmax(var(--min-width, 300px), 1fr)); 
+}

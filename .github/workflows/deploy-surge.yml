@@ -44,6 +44,6 @@ jobs:
       - name: Deploy to Surge
         env:
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
-        run: npx --yes surge --project ./dist/ng-ac --domain acc-ng.surge.sh --token "$SURGE_TOKEN"
+        run: npx --yes surge --project ./dist/ng-ac --domain ac-angular.surge.sh --token "$SURGE_TOKEN"
 
 

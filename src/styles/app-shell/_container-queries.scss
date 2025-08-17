@@ -1,0 +1,55 @@
+/**
+ * @fileoverview Container Queries 樣式工具類，提供容器查詢的實用助手
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @lastModified 2024-12-19 by NG-AC Team
+ *
+ * 📋 檔案性質：
+ * • 類型：Shared Layer - Styles
+ * • 依賴：無
+ *
+ * ⚠️ 架構規則 (Immutable)：
+ * • 此檔案的註解格式不可變更
+ * • 只提供容器查詢相關的工具類
+ * • 不包含具體的業務樣式
+ *
+ * @module AppShellStyles
+ * @layer Shared
+ * @context Layout System
+ * @see docs/5.new_Tree_layout.md
+ */
+
+// 基礎容器查詢工具類
+.cq { 
+  container-type: inline-size; 
+}
+
+// 命名容器工具類
+.cq--name-small  { container-name: small;  }
+.cq--name-medium { container-name: medium; }
+.cq--name-large  { container-name: large;  }
+
+// 實用的容器查詢助手
+.cq-small  { container-name: small;  }
+.cq-medium { container-name: medium; }
+.cq-large  { container-name: large;  }
+
+// 容器查詢斷點示例
+@container small (max-width: 600px) {
+  .responsive-content {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+@container medium (max-width: 1200px) {
+  .responsive-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@container large (min-width: 1200px) {
+  .responsive-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
