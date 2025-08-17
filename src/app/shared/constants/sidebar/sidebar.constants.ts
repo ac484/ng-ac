@@ -102,7 +102,8 @@ export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
     label: '夥伴',
     icon: 'partner',
     children: [
-      { label: '夥伴', route: '/app/partners' }
+      { label: '夥伴們', route: '/app/partners' },
+      { label: '狀態機', route: '/app/state-machine' }
     ]
   },
   // ⚙️ 系統設定
