@@ -19,6 +19,7 @@
 
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { SIDEBAR_NAV_ITEMS } from '../../../shared/constants/sidebar/sidebar.constants';
 import { TAB_CONFIG } from '../../../shared/constants/tab/tab.constants';
 import { TabItem } from '../../../shared/interfaces/tab/tab.interface';
 import { storage } from '../../../shared/utils';
@@ -49,8 +50,31 @@ export class TabNavigationService {
     // 自動路由同步
     effect(() => {
       const currentRoute = this.router.url;
-      const matchingTab = this._tabs().find(tab => tab.route === currentRoute);
-      if (matchingTab && matchingTab.id !== this._activeTabId()) {
+
+      // 僅在主應用路由下處理自動建 tab
+      if (!currentRoute.startsWith('/app')) {
+        return;
+      }
+
+      const tabs = this._tabs();
+      const matchingTab = tabs.find(tab => tab.route === currentRoute);
+
+      if (!matchingTab) {
+        const meta = this.findMenuMeta(currentRoute);
+        // 僅對有對應側邊欄定義的路由建立 tab
+        if (meta && canAddTab(tabs, TAB_CONFIG.MAX_TABS)) {
+          const newId = this.addTab({
+            label: meta.label,
+            route: currentRoute,
+            icon: meta.icon,
+            closable: currentRoute !== '/app/dashboard'
+          });
+          this._activeTabId.set(newId);
+        }
+        return;
+      }
+
+      if (matchingTab.id !== this._activeTabId()) {
         this._activeTabId.set(matchingTab.id);
       }
     });
@@ -129,5 +153,20 @@ export class TabNavigationService {
     } catch (error) {
       console.warn('Failed to save tab state:', error);
     }
+  }
+
+  /**
+   * 依據當前路由尋找側邊欄定義的標籤資料
+   */
+  private findMenuMeta(route: string): { label: string; icon?: string } | null {
+    const direct = SIDEBAR_NAV_ITEMS.find(item => item.route === route);
+    if (direct) return { label: direct.label, icon: direct.icon };
+
+    for (const item of SIDEBAR_NAV_ITEMS) {
+      if (!item.children) continue;
+      const found = item.children.find(child => child.route === route);
+      if (found) return { label: found.label, icon: item.icon };
+    }
+    return null;
   }
 }
