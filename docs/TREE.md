@@ -91,6 +91,7 @@
 │  │  │  │      app-shell.service.ts
 │  │  │  │      index.ts
 │  │  │  │      offline.service.ts
+│  │  │  │      pwa.service.ts
 │  │  │  │
 │  │  │  ├─auth
 │  │  │  │      index.ts
@@ -313,6 +314,7 @@
 │  │  │  │  │  index.ts
 │  │  │  │  │
 │  │  │  │  ├─app-shell
+│  │  │  │  │      app-shell.component.scss
 │  │  │  │  │      app-shell.component.spec.ts
 │  │  │  │  │      app-shell.component.ts
 │  │  │  │  │      index.ts
@@ -446,7 +448,13 @@
 │  │  │          index.ts
 │  │  │
 │  │  ├─authorization
-│  │  │      index.ts
+│  │  │  │  index.ts
+│  │  │  │
+│  │  │  └─guards
+│  │  │          auth.guard.ts
+│  │  │          index.ts
+│  │  │          permission.guard.ts
+│  │  │          role.guard.ts
 │  │  │
 │  │  ├─encryption
 │  │  │      index.ts
