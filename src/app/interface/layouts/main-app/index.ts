@@ -1,0 +1,11 @@
+/**
+ * @fileoverview Main App 佈局容器導出 (Index)
+ * @description 統一導出 MainAppLayoutComponent
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @lastModified 2025-08-17 by NG-AC Team
+ */
+
+export * from './main-app.layout';
+
+
