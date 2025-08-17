@@ -64,18 +64,6 @@ export const routes: Routes = [
 				loadComponent: () => import('./interface/pages/user/user-list').then(m => m.UserListPageComponent)
 			},
 
-			// Tab Demo
-			{
-				path: 'tab-demo',
-				loadComponent: () => import('./interface/pages/tab-demo').then(m => m.TabDemoPage)
-			},
-
-			// App Shell（正式）
-			{
-				path: 'app-shell',
-				loadComponent: () => import('./interface/pages/app-shell').then(m => m.AppShellPage)
-			},
-
 			// 重定向到儀表板
 			{
 				path: '',

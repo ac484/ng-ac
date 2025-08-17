@@ -36,7 +36,6 @@ import { HeaderComponent } from '../../components/layout/header';
       <div shell-sidenav style="padding: 12px; display: flex; flex-direction: column; gap: 8px;">
         <a routerLink="/app/dashboard">儀表板</a>
         <a routerLink="/app/users">用戶管理</a>
-        <a routerLink="/app/tab-demo">Tab Demo</a>
       </div>
 
       <div style="display: flex; flex-direction: column; height: 100vh;">

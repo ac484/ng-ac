@@ -19,8 +19,7 @@
 
 export const SIDEBAR_NAV_ITEMS = [
   { label: '儀表板', icon: 'dashboard', route: '/app/dashboard' },
-  { label: '用戶管理', icon: 'people', route: '/app/users' },
-  { label: 'Tab 演示', icon: 'tab', route: '/app/tab-demo' }
+  { label: '用戶管理', icon: 'people', route: '/app/users' }
 ];
 
 // 側邊欄配置常量 - 極簡設計
