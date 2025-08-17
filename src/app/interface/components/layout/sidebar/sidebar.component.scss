@@ -1,0 +1,198 @@
+/**
+ * @fileoverview 極簡側邊欄樣式 (Minimalist Sidebar Styles)
+ * @description 使用 CSS Custom Properties 和現代化樣式實現的極簡側邊欄
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @since 2024-12-19
+ */
+
+:host {
+  --sidebar-bg: #fafafa;
+  --sidebar-border: #e0e0e0;
+  --sidebar-text: #333;
+  --sidebar-text-secondary: #666;
+  --sidebar-hover-bg: rgba(0, 0, 0, 0.04);
+  --sidebar-active-bg: #1976d2;
+  --sidebar-active-color: white;
+  --sidebar-active-border: #1565c0;
+  --sidebar-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --sidebar-width: 280px;
+  --sidebar-item-height: 48px;
+  --sidebar-padding: 16px;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100%;
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-content {
+  padding: var(--sidebar-padding);
+}
+
+// 導航項目
+.nav-item {
+  display: flex;
+  align-items: center;
+  height: var(--sidebar-item-height);
+  padding: 0 16px;
+  margin: 2px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--sidebar-transition);
+  user-select: none;
+
+  &:hover {
+    background-color: var(--sidebar-hover-bg);
+    transform: translateX(4px);
+  }
+
+  &.active {
+    background-color: var(--sidebar-active-bg);
+    color: var(--sidebar-active-color);
+
+    .nav-icon {
+      color: var(--sidebar-active-color);
+    }
+
+    // 左側指示條
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background-color: var(--sidebar-active-border);
+      border-radius: 0 2px 2px 0;
+    }
+  }
+
+  // 子項目樣式
+  &.nav-child {
+    margin-left: 24px;
+    height: 40px;
+    font-size: 0.9em;
+
+    &:hover {
+      transform: translateX(2px);
+    }
+  }
+}
+
+// 導航圖標
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--sidebar-text-secondary);
+  transition: var(--sidebar-transition);
+}
+
+// 導航標籤
+.nav-label {
+  flex: 1;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 導航群組
+.nav-group {
+  margin: 8px 0;
+}
+
+.nav-group-header {
+  display: flex;
+  align-items: center;
+  height: var(--sidebar-item-height);
+  padding: 0 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: var(--sidebar-transition);
+  user-select: none;
+
+  &:hover {
+    background-color: var(--sidebar-hover-bg);
+  }
+
+  &.expanded {
+    background-color: var(--sidebar-hover-bg);
+
+    .nav-arrow {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+.nav-arrow {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--sidebar-text-secondary);
+  transition: var(--sidebar-transition);
+  transform: rotate(-90deg);
+}
+
+// 群組子項目容器
+.nav-group-children {
+  margin-top: 4px;
+  margin-left: 16px;
+  border-left: 1px solid var(--sidebar-border);
+  padding-left: 16px;
+}
+
+// 響應式設計
+@media (max-width: 768px) {
+  :host {
+    --sidebar-width: 240px;
+  }
+
+  .sidebar {
+    position: fixed;
+    z-index: 1000;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// 動畫效果
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.nav-group-children {
+  animation: slideIn 0.2s ease-out;
+}
+
+// 滾動條樣式
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}

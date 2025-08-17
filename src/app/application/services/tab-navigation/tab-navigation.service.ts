@@ -125,8 +125,19 @@ export class TabNavigationService {
     if (tab) {
       this._activeTabId.set(tabId);
       this.router.navigate([tab.route]);
+
+      // 通知導航同步服務
+      this.notifyNavigationSync(tab.route, tabId);
+
       this.saveState();
     }
+  }
+
+  // 通知導航同步服務
+  private notifyNavigationSync(route: string, tabId: string): void {
+    // 暫時留空，避免循環依賴
+    // 實際使用時會通過 MainAppLayout 進行同步
+    console.log('Tab activated:', { route, tabId });
   }
 
   // 私有方法

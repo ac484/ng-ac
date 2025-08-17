@@ -15,7 +15,7 @@
  * • 僅負責狀態同步，不包含業務邏輯
  */
 
-import { Injectable, signal, computed } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 
 export interface NavigationState {
   /** 當前激活的路由 */
@@ -37,7 +37,7 @@ export class NavigationSyncService {
 
   // 公開的唯讀狀態
   readonly state = this._state.asReadonly();
-  
+
   // 計算屬性
   readonly activeRoute = computed(() => this._state().activeRoute);
   readonly activeTabId = computed(() => this._state().activeTabId);

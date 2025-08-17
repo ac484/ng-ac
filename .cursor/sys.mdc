@@ -3,7 +3,15 @@ alwaysApply: true
 ---
 ## 技術規格
 - **作業系統**: Windows 11
-- **套件管理器**: Yarn
-- **前端框架**: Angular 
-- **UI 組件庫**: ng-zorro-antd 
-- **應用框架**: ng-alain (企業級中後台解決方案)
+- **套件管理器**: pnpm
+- **前端框架**: Angular 20.0.0
+- **UI 組件庫**: @angular/material 20.0.0 @angular/cdk 20.0.0
+- **應用框架**: Angular 20.0.0
+- **資料庫**: Firebase 10.0.0
+- **語言**: TypeScript 5.0.0
+- **風格**: 極簡主義
+- **架構**: 現代化
+- **工具**: Cursor 1.0.0
+- **版本控制**: Git 1.0.0
+- **版本管理**: SemVer 1.0.0
+- **測試框架**: Jest 1.0.0

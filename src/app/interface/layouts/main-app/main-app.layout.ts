@@ -20,41 +20,26 @@
  */
 
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { NavigationSyncService } from '../../../application/services/navigation-sync';
 import { TabNavigationService } from '../../../application/services/tab-navigation/tab-navigation.service';
 import { SIDEBAR_NAV_ITEMS, type SidebarItem } from '../../../shared/constants/sidebar/sidebar.constants';
 import { TabNavigationComponent } from '../../components/common/tab-navigation';
 import { AppShellModernComponent } from '../../components/layout/app-shell-modern';
 import { FooterComponent } from '../../components/layout/footer';
 import { HeaderComponent } from '../../components/layout/header';
+import { SidebarComponent } from '../../components/layout/sidebar';
 
 @Component({
   selector: 'app-main-app-layout',
   standalone: true,
-  imports: [CommonModule, AppShellModernComponent, HeaderComponent, FooterComponent, TabNavigationComponent, RouterOutlet],
+  imports: [CommonModule, AppShellModernComponent, HeaderComponent, FooterComponent, TabNavigationComponent, SidebarComponent, RouterOutlet],
   template: `
     <app-shell-modern>
-      <div shell-sidenav style="padding: 12px; display: flex; flex-direction: column; gap: 8px;">
-        <nav style="display: flex; flex-direction: column; gap: 6px;">
-          @for (item of navItems; track item.label) {
-            @if (!item.children) {
-              <a href (click)="openNav(item); $event.preventDefault()">{{ item.label }}</a>
-            } @else {
-              <a href (click)="toggleGroup(item.label); $event.preventDefault()">
-                {{ item.label }} {{ expanded(item.label) ? '▾' : '▸' }}
-              </a>
-              @if (expanded(item.label)) {
-                <div style="padding-left: 12px; display: flex; flex-direction: column; gap: 4px;">
-                  @for (child of item.children; track child.route) {
-                    <a href (click)="openNav(child); $event.preventDefault()">{{ child.label }}</a>
-                  }
-                </div>
-              }
-            }
-          }
-        </nav>
+      <div shell-sidenav>
+        <app-sidebar [navItems]="navItems" />
       </div>
 
       <div style="display: flex; flex-direction: column; height: 100vh;">
@@ -71,34 +56,19 @@ import { HeaderComponent } from '../../components/layout/header';
 })
 export class MainAppLayoutComponent {
   navItems: SidebarItem[] = SIDEBAR_NAV_ITEMS;
-  private expandedGroups = new Set<string>();
   private readonly tabService = inject(TabNavigationService);
+  private readonly navigationSync = inject(NavigationSyncService);
 
-  expanded(label: string): boolean {
-    return this.expandedGroups.has(label);
-  }
+  constructor() {
+    // 監聽 Tab 服務的變化，同步到導航服務
+    effect(() => {
+      const activeTabId = this.tabService.activeTabId();
+      const activeTab = this.tabService.activeTab();
 
-  toggleGroup(label: string): void {
-    if (this.expandedGroups.has(label)) this.expandedGroups.delete(label);
-    else this.expandedGroups.add(label);
-  }
-
-  openNav(item: Pick<SidebarItem, 'label' | 'route' | 'icon'>): void {
-    if (!item.route) return;
-    const tabs = this.tabService.tabs();
-    const existing = tabs.find(t => t.route === item.route);
-    if (existing) {
-      this.tabService.activateTab(existing.id);
-      return;
-    }
-
-    const newTabId = this.tabService.addTab({
-      label: item.label,
-      route: item.route,
-      icon: item.icon,
-      closable: item.route !== '/app/dashboard'
+      if (activeTab && activeTabId) {
+        this.navigationSync.syncNavigation(activeTab.route, activeTabId);
+      }
     });
-    this.tabService.activateTab(newTabId);
   }
 }
 

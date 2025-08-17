@@ -17,8 +17,10 @@
  */
 
 export * from './auth';
+export * from './cache.service';
+export * from './navigation-sync';
 export * from './organization';
 export * from './permission';
-export * from './user';
-export * from './cache.service';
 export * from './tab-navigation';
+export * from './user';
+
