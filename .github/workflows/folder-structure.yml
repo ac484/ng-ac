@@ -1,0 +1,26 @@
+name: Update Folder Structure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate folder structure
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tree
+          tree -L 3 -I "node_modules|dist|.git|.angular" > docs/0.FOLDER_STRUCTURE_NOW.md
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/0.FOLDER_STRUCTURE_NOW.md
+          git commit -m "chore: update folder structure" || echo "No changes"
+          git push
