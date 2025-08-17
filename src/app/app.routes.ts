@@ -64,6 +64,19 @@ export const routes: Routes = [
 				loadComponent: () => import('./interface/pages/user/user-list').then(m => m.UserListPageComponent)
 			},
 
+			// 公開資訊
+			{
+				path: 'public',
+				children: [
+					{ path: 'about', loadComponent: () => import('./interface/pages/public/about/about.page').then(m => m.PublicAboutPageComponent) },
+					{ path: 'blog', loadComponent: () => import('./interface/pages/public/blog/blog.page').then(m => m.PublicBlogPageComponent) },
+					{ path: 'jobs', loadComponent: () => import('./interface/pages/public/jobs/jobs.page').then(m => m.PublicJobsPageComponent) },
+					{ path: 'cases', loadComponent: () => import('./interface/pages/public/cases/cases.page').then(m => m.PublicCasesPageComponent) },
+					{ path: 'contact', loadComponent: () => import('./interface/pages/public/contact/contact.page').then(m => m.PublicContactPageComponent) },
+					{ path: 'legal', loadComponent: () => import('./interface/pages/public/legal/legal.page').then(m => m.PublicLegalPageComponent) }
+				]
+			},
+
 			// 監控
 			{
 				path: 'monitoring',

@@ -1,9 +1,21 @@
 /**
  * @fileoverview 安全頁面 (Security Page)
- * @description 顯示最小安全狀態資訊與操作（極簡實作）
  * @author NG-AC Team
  * @version 1.0.0
- * @since 2025-08-17
+ * @lastModified 2025-08-17 by NG-AC Team
+ *
+ * 📋 檔案性質：
+ * • 類型：Interface Layer - Page Component (Standalone)
+ * • 依賴：Angular Core, CommonModule
+ *
+ * ⚠️ 架構規則 (Immutable)：
+ * • 此檔案的註解格式不可變更
+ * • 僅顯示安全狀態視圖，不包含認證資料存取邏輯
+ *
+ * @module Security
+ * @layer Interface
+ * @context Minimal Security Status View
+ * @see docs/0.FILE_HEADER_CONVENTION.md
  */
 
 import { CommonModule } from '@angular/common';

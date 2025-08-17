@@ -17,11 +17,30 @@
  * - 使用官方 Angular Material Sidenav API 規範
  */
 
-export const SIDEBAR_NAV_ITEMS = [
+export type SidebarItem = {
+  label: string;
+  icon?: string;
+  route?: string;
+  children?: Array<{ label: string; route: string }>
+};
+
+export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
   { label: '儀表板', icon: 'dashboard', route: '/app/dashboard' },
   { label: '用戶管理', icon: 'people', route: '/app/users' },
   { label: '監控', icon: 'monitor_heart', route: '/app/monitoring' },
-  { label: '安全', icon: 'security', route: '/app/security' }
+  { label: '安全', icon: 'security', route: '/app/security' },
+  {
+    label: '公開資訊',
+    icon: 'public',
+    children: [
+      { label: '關於', route: '/app/public/about' },
+      { label: '部落格', route: '/app/public/blog' },
+      { label: '職缺', route: '/app/public/jobs' },
+      { label: '案例', route: '/app/public/cases' },
+      { label: '聯繫我們', route: '/app/public/contact' },
+      { label: '法律', route: '/app/public/legal' }
+    ]
+  }
 ];
 
 // 側邊欄配置常量 - 極簡設計
