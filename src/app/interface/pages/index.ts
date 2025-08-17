@@ -17,6 +17,7 @@
  */
 
 export * from './auth';
+export * from './blank';
 export * from './dashboard';
 export * from './people/user';
 export * from './public';

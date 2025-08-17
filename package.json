@@ -10,7 +10,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
-    "lint:check": "eslint . --ext .ts,.html"
+    "lint:check": "eslint . --ext .ts,.html",
+    "generate:fs": "node scripts/generate-file-structure.mjs",
+    "prepare": "simple-git-hooks"
   },
   "private": true,
   "dependencies": {
@@ -47,6 +49,11 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "sass": "^1.90.0",
-    "typescript": "~5.8.2"
+    "typescript": "~5.8.2",
+    "simple-git-hooks": "^2.11.1"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm -s generate:fs && git add docs/0.FILE_STRUCTURE_NOW.md",
+    "pre-push": "pnpm -s generate:fs && git diff --quiet -- docs/0.FILE_STRUCTURE_NOW.md || (echo 'docs/0.FILE_STRUCTURE_NOW.md changed. Commit the update before pushing.' && exit 1)"
   }
 }

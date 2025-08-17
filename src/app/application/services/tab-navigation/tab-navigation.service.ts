@@ -73,7 +73,7 @@ export class TabNavigationService {
             label: meta.label,
             route: currentRoute,
             icon: meta.icon,
-            closable: currentRoute !== '/app/dashboard'
+            closable: currentRoute !== '/app/dashboard' && currentRoute !== '/app/blank'
           });
           this._activeTabId.set(newId);
         }
