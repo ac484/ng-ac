@@ -2,7 +2,7 @@
  * @fileoverview 現代化 App Shell 組件，使用 Material 3 sidenav 和 Container Queries 實現響應式佈局
  * @author NG-AC Team
  * @version 1.0.0
- * @lastModified 2024-12-19 by NG-AC Team
+ * @lastModified 2025-08-17 by NG-AC Team
  *
  * 📋 檔案性質：
  * • 類型：Interface Layer - Component
@@ -19,13 +19,14 @@
  * @see docs/5.new_Tree_layout.md
  */
 
-import { ModernBreakpointService } from '@/app/shared/services/material/modern-breakpoint.service';
 import { Component, ViewChild } from '@angular/core';
-import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavContainer, MatSidenavModule } from '@angular/material/sidenav';
+import { ModernBreakpointService } from '../../../../shared/services/material/modern-breakpoint.service';
 
 @Component({
   selector: 'app-shell-modern',
   standalone: true,
+  imports: [MatSidenavModule],
   template: `
     <mat-sidenav-container class="app-shell cq cq-medium">
       <mat-sidenav #drawer [mode]="(bps.layout().isMobile ? 'over' : 'side')" [opened]="!bps.layout().isMobile">

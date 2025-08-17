@@ -1,25 +1,29 @@
 /**
- * @fileoverview 常量統一導出檔案 (Constants Unified Export)
- * @description 存放所有常量的統一導出檔案
+ * @fileoverview 共享常量索引文件，統一導出所有共享常量
  * @author NG-AC Team
  * @version 1.0.0
- * @since 2024-01-01
+ * @lastModified 2024-12-19 by NG-AC Team
  *
- * 檔案性質：
- * - 類型：Shared Layer Constants
- * - 職責：常量統一導出
- * - 依賴：所有常量
- * - 不可變更：此文件的所有註解和架構說明均不可變更
+ * 📋 檔案性質：
+ * • 類型：Shared Layer - Constants Index
+ * • 依賴：所有常量模組
  *
- * 重要說明：
- * - 此檔案只存放常量的統一導出，不包含業務邏輯
- * - 所有常量必須在此檔案中導出
+ * ⚠️ 架構規則 (Immutable)：
+ * • 此檔案的註解格式不可變更
+ * • 只負責常量的重新導出
+ * • 不包含具體的常量定義
+ *
+ * @module SharedConstants
+ * @layer Shared
+ * @context Cross-Domain Constants
+ * @see docs/5.new_Tree_layout.md
  */
 
-export * from './app';
 export * from './api';
-export * from './validation';
+export * from './app';
 export * from './business';
+export * from './layout';
 export * from './sidebar';
 export * from './tab';
+export * from './validation';
 
