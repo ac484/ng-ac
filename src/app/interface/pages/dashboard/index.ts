@@ -1,3 +1,5 @@
+export { DashboardPageComponent } from './dashboard.page';
+
 /**
  * @fileoverview 儀表板頁面統一導出檔案 (Dashboard Page Unified Export)
  * @description 存放儀表板頁面的統一導出檔案

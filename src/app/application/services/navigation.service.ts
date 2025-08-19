@@ -38,6 +38,16 @@ export class NavigationService {
         security: 'security'
     };
 
+    /** 群組顯示順序（main-flat 先行，其餘依此順序呈現） */
+    private readonly GROUP_ORDER: string[] = [
+        'analytics',
+        'construction',
+        'finance',
+        'people',
+        'public',
+        'security'
+    ];
+
     private readonly LABELS: Record<string, string> = {
         dashboard: '儀表板',
         // analytics
@@ -160,14 +170,32 @@ export class NavigationService {
             }
         }
 
-        // 組裝最終 SidebarItem[]：先平鋪 main，再各 group 作為父節點
+        // 組裝最終 SidebarItem[]：先平鋪 main，再各 group 依固定順序呈現
         const result: SidebarItem[] = [];
         if (grouped['main-flat']) {
             result.push(...grouped['main-flat'].sort(this.sortByLabel));
         }
 
-        for (const [group, children] of Object.entries(grouped)) {
-            if (group === 'main-flat') continue;
+        // 依指定順序加入各群組
+        for (const group of this.GROUP_ORDER) {
+            const children = grouped[group];
+            if (!children || children.length === 0) continue;
+            const parent: SidebarItem = {
+                id: group,
+                title: this.GROUP_TITLES[group] ?? group,
+                label: this.GROUP_TITLES[group] ?? group,
+                icon: this.GROUP_ICONS[group],
+                children: children.sort(this.sortByLabel)
+            };
+            result.push(parent);
+        }
+
+        // 其餘未在指定順序內的群組（若有），按群組名排序後附加
+        const remainingGroups = Object.keys(grouped)
+            .filter(g => g !== 'main-flat' && !this.GROUP_ORDER.includes(g))
+            .sort();
+        for (const group of remainingGroups) {
+            const children = grouped[group];
             const parent: SidebarItem = {
                 id: group,
                 title: this.GROUP_TITLES[group] ?? group,

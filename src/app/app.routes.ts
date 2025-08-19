@@ -64,6 +64,10 @@ export const routes: Routes = [
 				loadComponent: () => import('./interface/pages/dashboard').then(m => m.DashboardPageComponent)
 			},
 
+			// Contracts & Projects
+			{ path: 'contracts', loadComponent: () => import('./interface/pages/contracts').then(m => m.ContractsPageComponent) },
+			{ path: 'projects', loadComponent: () => import('./interface/pages/projects').then(m => m.ProjectsPage) },
+
 
 			// ?�場作業?�報�?
 			{ path: 'calendars', loadComponent: () => import('./interface/pages/construction/calendars').then(m => m.CalendarsPageComponent) },

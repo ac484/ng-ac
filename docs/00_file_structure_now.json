@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T17:23:41.667Z",
+    "generatedAt": "2025-08-19T17:42:21.232Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
@@ -925,8 +925,8 @@
           "name": "00_file_structure_now.json",
           "type": "file",
           "path": "docs/00_file_structure_now.json",
-          "size": 249177,
-          "modified": "2025-08-19T17:21:18.879Z"
+          "size": 249176,
+          "modified": "2025-08-19T17:23:41.749Z"
         },
         {
           "name": "00-file-header-convention.md",
@@ -1082,6 +1082,433 @@
       "type": "directory",
       "path": "memory-bank",
       "children": []
+    },
+    {
+      "name": "Project & Contract Demo Angular",
+      "type": "directory",
+      "path": "Project & Contract Demo Angular",
+      "children": [
+        {
+          "name": "src",
+          "type": "directory",
+          "path": "Project & Contract Demo Angular/src",
+          "children": [
+            {
+              "name": "app",
+              "type": "directory",
+              "path": "Project & Contract Demo Angular/src/app",
+              "children": [
+                {
+                  "name": "application",
+                  "type": "directory",
+                  "path": "Project & Contract Demo Angular/src/app/application",
+                  "children": [
+                    {
+                      "name": "services",
+                      "type": "directory",
+                      "path": "Project & Contract Demo Angular/src/app/application/services",
+                      "children": [
+                        {
+                          "name": "contract.service.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/application/services/contract.service.ts",
+                          "size": 2149,
+                          "modified": "2025-08-18T20:15:30.230Z"
+                        },
+                        {
+                          "name": "project.service.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/application/services/project.service.ts",
+                          "size": 4832,
+                          "modified": "2025-08-18T20:37:21.721Z"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "domain",
+                  "type": "directory",
+                  "path": "Project & Contract Demo Angular/src/app/domain",
+                  "children": [
+                    {
+                      "name": "entities",
+                      "type": "directory",
+                      "path": "Project & Contract Demo Angular/src/app/domain/entities",
+                      "children": [
+                        {
+                          "name": "contract.entity.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/domain/entities/contract.entity.ts",
+                          "size": 2471,
+                          "modified": "2025-08-18T18:24:50.789Z"
+                        },
+                        {
+                          "name": "project.entity.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/domain/entities/project.entity.ts",
+                          "size": 2687,
+                          "modified": "2025-08-18T20:33:42.837Z"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "repositories",
+                      "type": "directory",
+                      "path": "Project & Contract Demo Angular/src/app/domain/repositories",
+                      "children": [
+                        {
+                          "name": "contract.repository.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/domain/repositories/contract.repository.ts",
+                          "size": 807,
+                          "modified": "2025-08-18T20:15:18.176Z"
+                        },
+                        {
+                          "name": "project.repository.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/domain/repositories/project.repository.ts",
+                          "size": 1095,
+                          "modified": "2025-08-18T20:33:51.127Z"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "infrastructure",
+                  "type": "directory",
+                  "path": "Project & Contract Demo Angular/src/app/infrastructure",
+                  "children": [
+                    {
+                      "name": "persistence",
+                      "type": "directory",
+                      "path": "Project & Contract Demo Angular/src/app/infrastructure/persistence",
+                      "children": [
+                        {
+                          "name": "repositories",
+                          "type": "directory",
+                          "path": "Project & Contract Demo Angular/src/app/infrastructure/persistence/repositories",
+                          "children": [
+                            {
+                              "name": "firebase",
+                              "type": "directory",
+                              "path": "Project & Contract Demo Angular/src/app/infrastructure/persistence/repositories/firebase",
+                              "children": [
+                                {
+                                  "name": "firebase-contract.repository.ts",
+                                  "type": "file",
+                                  "path": "Project & Contract Demo Angular/src/app/infrastructure/persistence/repositories/firebase/firebase-contract.repository.ts",
+                                  "size": 6388,
+                                  "modified": "2025-08-18T20:05:24.034Z"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "firebase-project.repository.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/infrastructure/persistence/firebase-project.repository.ts",
+                          "size": 5654,
+                          "modified": "2025-08-18T18:24:50.790Z"
+                        },
+                        {
+                          "name": "mock-contract.repository.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/infrastructure/persistence/mock-contract.repository.ts",
+                          "size": 5701,
+                          "modified": "2025-08-18T20:37:44.172Z"
+                        },
+                        {
+                          "name": "mock-project.repository.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/infrastructure/persistence/mock-project.repository.ts",
+                          "size": 8064,
+                          "modified": "2025-08-18T20:34:20.795Z"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "interface",
+                  "type": "directory",
+                  "path": "Project & Contract Demo Angular/src/app/interface",
+                  "children": [
+                    {
+                      "name": "components",
+                      "type": "directory",
+                      "path": "Project & Contract Demo Angular/src/app/interface/components",
+                      "children": [
+                        {
+                          "name": "contracts",
+                          "type": "directory",
+                          "path": "Project & Contract Demo Angular/src/app/interface/components/contracts",
+                          "children": [
+                            {
+                              "name": "contracts-dashboard-stats.component.ts",
+                              "type": "file",
+                              "path": "Project & Contract Demo Angular/src/app/interface/components/contracts/contracts-dashboard-stats.component.ts",
+                              "size": 4862,
+                              "modified": "2025-08-18T20:33:21.739Z"
+                            },
+                            {
+                              "name": "contracts-table.component.ts",
+                              "type": "file",
+                              "path": "Project & Contract Demo Angular/src/app/interface/components/contracts/contracts-table.component.ts",
+                              "size": 6972,
+                              "modified": "2025-08-18T20:32:30.378Z"
+                            },
+                            {
+                              "name": "csv-export-button.component.ts",
+                              "type": "file",
+                              "path": "Project & Contract Demo Angular/src/app/interface/components/contracts/csv-export-button.component.ts",
+                              "size": 2897,
+                              "modified": "2025-08-18T20:21:47.241Z"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "create-project-dialog",
+                          "type": "directory",
+                          "path": "Project & Contract Demo Angular/src/app/interface/components/create-project-dialog",
+                          "children": [
+                            {
+                              "name": "create-project-dialog.component.ts",
+                              "type": "file",
+                              "path": "Project & Contract Demo Angular/src/app/interface/components/create-project-dialog/create-project-dialog.component.ts",
+                              "size": 7989,
+                              "modified": "2025-08-18T20:37:52.005Z"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "project-progress-chart",
+                          "type": "directory",
+                          "path": "Project & Contract Demo Angular/src/app/interface/components/project-progress-chart",
+                          "children": [
+                            {
+                              "name": "project-progress-chart.component.ts",
+                              "type": "file",
+                              "path": "Project & Contract Demo Angular/src/app/interface/components/project-progress-chart/project-progress-chart.component.ts",
+                              "size": 6430,
+                              "modified": "2025-08-18T20:31:15.189Z"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "layouts",
+                      "type": "directory",
+                      "path": "Project & Contract Demo Angular/src/app/interface/layouts",
+                      "children": [
+                        {
+                          "name": "main-layout",
+                          "type": "directory",
+                          "path": "Project & Contract Demo Angular/src/app/interface/layouts/main-layout",
+                          "children": [
+                            {
+                              "name": "main-layout.component.ts",
+                              "type": "file",
+                              "path": "Project & Contract Demo Angular/src/app/interface/layouts/main-layout/main-layout.component.ts",
+                              "size": 3354,
+                              "modified": "2025-08-18T20:35:12.666Z"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "pages",
+                      "type": "directory",
+                      "path": "Project & Contract Demo Angular/src/app/interface/pages",
+                      "children": [
+                        {
+                          "name": "contracts",
+                          "type": "directory",
+                          "path": "Project & Contract Demo Angular/src/app/interface/pages/contracts",
+                          "children": [
+                            {
+                              "name": "contracts.page.ts",
+                              "type": "file",
+                              "path": "Project & Contract Demo Angular/src/app/interface/pages/contracts/contracts.page.ts",
+                              "size": 3725,
+                              "modified": "2025-08-18T20:32:37.184Z"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "dashboard",
+                          "type": "directory",
+                          "path": "Project & Contract Demo Angular/src/app/interface/pages/dashboard",
+                          "children": [
+                            {
+                              "name": "dashboard.page.ts",
+                              "type": "file",
+                              "path": "Project & Contract Demo Angular/src/app/interface/pages/dashboard/dashboard.page.ts",
+                              "size": 7534,
+                              "modified": "2025-08-18T20:31:20.373Z"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "projects",
+                          "type": "directory",
+                          "path": "Project & Contract Demo Angular/src/app/interface/pages/projects",
+                          "children": [
+                            {
+                              "name": "projects.page.ts",
+                              "type": "file",
+                              "path": "Project & Contract Demo Angular/src/app/interface/pages/projects/projects.page.ts",
+                              "size": 8139,
+                              "modified": "2025-08-18T20:35:44.377Z"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "shared",
+                  "type": "directory",
+                  "path": "Project & Contract Demo Angular/src/app/shared",
+                  "children": [
+                    {
+                      "name": "types",
+                      "type": "directory",
+                      "path": "Project & Contract Demo Angular/src/app/shared/types",
+                      "children": [
+                        {
+                          "name": "index.ts",
+                          "type": "file",
+                          "path": "Project & Contract Demo Angular/src/app/shared/types/index.ts",
+                          "size": 2052,
+                          "modified": "2025-08-18T20:32:54.277Z"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "app.component.ts",
+                  "type": "file",
+                  "path": "Project & Contract Demo Angular/src/app/app.component.ts",
+                  "size": 793,
+                  "modified": "2025-08-18T18:24:50.787Z"
+                },
+                {
+                  "name": "app.routes.ts",
+                  "type": "file",
+                  "path": "Project & Contract Demo Angular/src/app/app.routes.ts",
+                  "size": 1388,
+                  "modified": "2025-08-18T20:11:31.351Z"
+                }
+              ]
+            },
+            {
+              "name": "environments",
+              "type": "directory",
+              "path": "Project & Contract Demo Angular/src/environments",
+              "children": [
+                {
+                  "name": "environment.prod.ts",
+                  "type": "file",
+                  "path": "Project & Contract Demo Angular/src/environments/environment.prod.ts",
+                  "size": 818,
+                  "modified": "2025-08-18T21:00:50.756Z"
+                },
+                {
+                  "name": "environment.ts",
+                  "type": "file",
+                  "path": "Project & Contract Demo Angular/src/environments/environment.ts",
+                  "size": 819,
+                  "modified": "2025-08-18T21:00:50.733Z"
+                }
+              ]
+            },
+            {
+              "name": "index.html",
+              "type": "file",
+              "path": "Project & Contract Demo Angular/src/index.html",
+              "size": 798,
+              "modified": "2025-08-18T18:24:50.794Z"
+            },
+            {
+              "name": "main.ts",
+              "type": "file",
+              "path": "Project & Contract Demo Angular/src/main.ts",
+              "size": 1357,
+              "modified": "2025-08-18T20:31:37.310Z"
+            },
+            {
+              "name": "styles.scss",
+              "type": "file",
+              "path": "Project & Contract Demo Angular/src/styles.scss",
+              "size": 1189,
+              "modified": "2025-08-18T18:24:50.794Z"
+            }
+          ]
+        },
+        {
+          "name": ".gitignore",
+          "type": "file",
+          "path": "Project & Contract Demo Angular/.gitignore",
+          "size": 641,
+          "modified": "2025-08-15T19:55:59.761Z"
+        },
+        {
+          "name": "angular.json",
+          "type": "file",
+          "path": "Project & Contract Demo Angular/angular.json",
+          "size": 4054,
+          "modified": "2025-08-18T18:24:50.787Z"
+        },
+        {
+          "name": "error.md",
+          "type": "file",
+          "path": "Project & Contract Demo Angular/error.md",
+          "size": 20890,
+          "modified": "2025-08-18T20:26:35.404Z"
+        },
+        {
+          "name": "package.json",
+          "type": "file",
+          "path": "Project & Contract Demo Angular/package.json",
+          "size": 1480,
+          "modified": "2025-08-18T18:24:50.787Z"
+        },
+        {
+          "name": "Project & Contract Demo.md",
+          "type": "file",
+          "path": "Project & Contract Demo Angular/Project & Contract Demo.md",
+          "size": 30917,
+          "modified": "2025-08-18T18:24:50.812Z"
+        },
+        {
+          "name": "tsconfig.app.json",
+          "type": "file",
+          "path": "Project & Contract Demo Angular/tsconfig.app.json",
+          "size": 199,
+          "modified": "2025-08-18T18:24:50.794Z"
+        },
+        {
+          "name": "tsconfig.json",
+          "type": "file",
+          "path": "Project & Contract Demo Angular/tsconfig.json",
+          "size": 1181,
+          "modified": "2025-08-18T18:24:50.795Z"
+        },
+        {
+          "name": "tsconfig.spec.json",
+          "type": "file",
+          "path": "Project & Contract Demo Angular/tsconfig.spec.json",
+          "size": 209,
+          "modified": "2025-08-18T18:24:50.795Z"
+        }
+      ]
     },
     {
       "name": "public",
@@ -1685,6 +2112,13 @@
                       "modified": "2025-08-18T14:05:59.660Z"
                     },
                     {
+                      "name": "contract.service.ts",
+                      "type": "file",
+                      "path": "src/app/application/services/contract.service.ts",
+                      "size": 1645,
+                      "modified": "2025-08-19T17:41:48.972Z"
+                    },
+                    {
                       "name": "index.ts",
                       "type": "file",
                       "path": "src/app/application/services/index.ts",
@@ -1695,8 +2129,15 @@
                       "name": "navigation.service.ts",
                       "type": "file",
                       "path": "src/app/application/services/navigation.service.ts",
-                      "size": 7704,
-                      "modified": "2025-08-19T17:18:52.078Z"
+                      "size": 8754,
+                      "modified": "2025-08-19T17:31:25.172Z"
+                    },
+                    {
+                      "name": "project.service.ts",
+                      "type": "file",
+                      "path": "src/app/application/services/project.service.ts",
+                      "size": 3850,
+                      "modified": "2025-08-19T17:41:48.972Z"
                     },
                     {
                       "name": "user-application.service.ts",
@@ -2138,11 +2579,25 @@
                       "modified": "2025-08-19T16:50:43.003Z"
                     },
                     {
+                      "name": "contract.repository.ts",
+                      "type": "file",
+                      "path": "src/app/domain/repositories/contract.repository.ts",
+                      "size": 349,
+                      "modified": "2025-08-19T17:41:48.964Z"
+                    },
+                    {
                       "name": "index.ts",
                       "type": "file",
                       "path": "src/app/domain/repositories/index.ts",
                       "size": 917,
                       "modified": "2025-08-19T17:14:18.781Z"
+                    },
+                    {
+                      "name": "project.repository.ts",
+                      "type": "file",
+                      "path": "src/app/domain/repositories/project.repository.ts",
+                      "size": 683,
+                      "modified": "2025-08-19T17:41:48.964Z"
                     },
                     {
                       "name": "user.repository.ts",
@@ -2597,6 +3052,20 @@
                       "path": "src/app/infrastructure/persistence/index.ts",
                       "size": 674,
                       "modified": "2025-08-18T14:05:59.695Z"
+                    },
+                    {
+                      "name": "mock-contract.repository.ts",
+                      "type": "file",
+                      "path": "src/app/infrastructure/persistence/mock-contract.repository.ts",
+                      "size": 2650,
+                      "modified": "2025-08-19T17:41:48.965Z"
+                    },
+                    {
+                      "name": "mock-project.repository.ts",
+                      "type": "file",
+                      "path": "src/app/infrastructure/persistence/mock-project.repository.ts",
+                      "size": 4084,
+                      "modified": "2025-08-19T17:41:48.964Z"
                     }
                   ]
                 },
@@ -2798,6 +3267,27 @@
                           "path": "src/app/interface/components/common/index.ts",
                           "size": 566,
                           "modified": "2025-08-19T09:13:38.634Z"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "contracts",
+                      "type": "directory",
+                      "path": "src/app/interface/components/contracts",
+                      "children": [
+                        {
+                          "name": "contracts-dashboard-stats.component.ts",
+                          "type": "file",
+                          "path": "src/app/interface/components/contracts/contracts-dashboard-stats.component.ts",
+                          "size": 3368,
+                          "modified": "2025-08-19T17:41:48.972Z"
+                        },
+                        {
+                          "name": "contracts-table.component.ts",
+                          "type": "file",
+                          "path": "src/app/interface/components/contracts/contracts-table.component.ts",
+                          "size": 5300,
+                          "modified": "2025-08-19T17:41:48.978Z"
                         }
                       ]
                     },
@@ -3684,6 +4174,27 @@
                       ]
                     },
                     {
+                      "name": "contracts",
+                      "type": "directory",
+                      "path": "src/app/interface/pages/contracts",
+                      "children": [
+                        {
+                          "name": "contracts.page.ts",
+                          "type": "file",
+                          "path": "src/app/interface/pages/contracts/contracts.page.ts",
+                          "size": 2863,
+                          "modified": "2025-08-19T17:41:48.978Z"
+                        },
+                        {
+                          "name": "index.ts",
+                          "type": "file",
+                          "path": "src/app/interface/pages/contracts/index.ts",
+                          "size": 64,
+                          "modified": "2025-08-19T17:41:17.973Z"
+                        }
+                      ]
+                    },
+                    {
                       "name": "dashboard",
                       "type": "directory",
                       "path": "src/app/interface/pages/dashboard",
@@ -3699,8 +4210,8 @@
                           "name": "index.ts",
                           "type": "file",
                           "path": "src/app/interface/pages/dashboard/index.ts",
-                          "size": 647,
-                          "modified": "2025-08-18T14:05:59.753Z"
+                          "size": 709,
+                          "modified": "2025-08-19T17:41:48.978Z"
                         }
                       ]
                     },
@@ -3939,6 +4450,27 @@
                               "modified": "2025-08-18T14:05:59.762Z"
                             }
                           ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "projects",
+                      "type": "directory",
+                      "path": "src/app/interface/pages/projects",
+                      "children": [
+                        {
+                          "name": "index.ts",
+                          "type": "file",
+                          "path": "src/app/interface/pages/projects/index.ts",
+                          "size": 53,
+                          "modified": "2025-08-19T17:41:14.470Z"
+                        },
+                        {
+                          "name": "projects.page.ts",
+                          "type": "file",
+                          "path": "src/app/interface/pages/projects/projects.page.ts",
+                          "size": 5393,
+                          "modified": "2025-08-19T17:41:48.978Z"
                         }
                       ]
                     },
@@ -5079,7 +5611,7 @@
                           "type": "file",
                           "path": "src/app/shared/constants/sidebar/sidebar.constants.ts",
                           "size": 966,
-                          "modified": "2025-08-19T17:23:39.066Z"
+                          "modified": "2025-08-19T17:23:45.148Z"
                         }
                       ]
                     },
@@ -5393,6 +5925,20 @@
                   ]
                 },
                 {
+                  "name": "types",
+                  "type": "directory",
+                  "path": "src/app/shared/types",
+                  "children": [
+                    {
+                      "name": "index.ts",
+                      "type": "file",
+                      "path": "src/app/shared/types/index.ts",
+                      "size": 1671,
+                      "modified": "2025-08-19T17:41:48.949Z"
+                    }
+                  ]
+                },
+                {
                   "name": "utils",
                   "type": "directory",
                   "path": "src/app/shared/utils",
@@ -5503,8 +6049,8 @@
               "name": "app.routes.ts",
               "type": "file",
               "path": "src/app/app.routes.ts",
-              "size": 7454,
-              "modified": "2025-08-19T16:54:43.402Z"
+              "size": 7714,
+              "modified": "2025-08-19T17:41:53.109Z"
             },
             {
               "name": "index.ts",
