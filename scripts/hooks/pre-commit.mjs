@@ -46,13 +46,8 @@ async function readDirectoryTree(directoryPath, basePath) {
       });
     } else {
       const stats = await fs.stat(absolutePath);
-      entries.push({
-        name: dirent.name,
-        type: 'file',
-        path: relativePath,
-        size: stats.size,
-        modified: stats.mtime.toISOString()
-      });
+      const fileInfo = `${dirent.name} | ${relativePath} | ${stats.size} bytes | ${stats.mtime.toISOString()}`;
+      entries.push(fileInfo);
     }
   }
   return entries;
