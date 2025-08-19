@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T16:54:51.640Z",
+    "generatedAt": "2025-08-19T16:58:43.669Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
@@ -1085,8 +1085,8 @@
           "name": "00_file_structure_now.json",
           "type": "file",
           "path": "docs/00_file_structure_now.json",
-          "size": 252872,
-          "modified": "2025-08-19T13:49:50.914Z"
+          "size": 255723,
+          "modified": "2025-08-19T16:54:51.725Z"
         },
         {
           "name": "00-file-header-convention.md",
@@ -2229,8 +2229,8 @@
                           "name": "user.entity.ts",
                           "type": "file",
                           "path": "src/app/domain/entities/user/user.entity.ts",
-                          "size": 1518,
-                          "modified": "2025-08-18T14:05:59.675Z"
+                          "size": 1549,
+                          "modified": "2025-08-19T16:58:40.478Z"
                         }
                       ]
                     },
@@ -3373,20 +3373,6 @@
                       "path": "src/app/interface/exceptions/index.ts",
                       "size": 1116,
                       "modified": "2025-08-18T14:05:59.726Z"
-                    }
-                  ]
-                },
-                {
-                  "name": "interceptors",
-                  "type": "directory",
-                  "path": "src/app/interface/interceptors",
-                  "children": [
-                    {
-                      "name": "index.ts",
-                      "type": "file",
-                      "path": "src/app/interface/interceptors/index.ts",
-                      "size": 1227,
-                      "modified": "2025-08-19T16:50:42.575Z"
                     }
                   ]
                 },
@@ -4713,8 +4699,8 @@
                           "name": "base-value-object.ts",
                           "type": "file",
                           "path": "src/app/shared/base/value-objects/base-value-object.ts",
-                          "size": 3015,
-                          "modified": "2025-08-19T16:50:42.670Z"
+                          "size": 3444,
+                          "modified": "2025-08-19T16:57:27.686Z"
                         }
                       ]
                     },

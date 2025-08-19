@@ -24,7 +24,7 @@
  * - 此檔案須遵守此架構規則8：文檔完整
  */
 
-import { BaseEntity } from '../../base';
+import { BaseEntity } from '../../../shared/base/entities/base.entity';
 import { Email } from '../../value-objects/email';
 
 export class User extends BaseEntity {

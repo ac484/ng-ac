@@ -14,7 +14,7 @@
 
 import { Result } from '../result/result';
 
-export abstract class BaseValueObject<Props> {
+export abstract class BaseValueObject<Props extends object> {
   protected readonly props: Readonly<Props>;
 
   protected constructor(props: Props) {
@@ -25,13 +25,17 @@ export abstract class BaseValueObject<Props> {
    * 靜態工廠方法，用於創建值物件實例
    * 子類必須實現此方法
    */
-  abstract static create(props: any): Result<BaseValueObject<any>>;
+  static create(props: any): Result<BaseValueObject<any>> {
+    throw new Error('Subclasses must implement create method');
+  }
 
   /**
    * 驗證屬性是否有效
    * 子類必須實現此方法
    */
-  abstract static isValidProps(props: any): boolean;
+  static isValidProps(props: any): boolean {
+    throw new Error('Subclasses must implement isValidProps method');
+  }
 
   /**
    * 獲取屬性值
@@ -57,13 +61,13 @@ export abstract class BaseValueObject<Props> {
     const thisProps = this.toObject();
     const otherProps = other.toObject();
 
-    const thisKeys = Object.keys(thisProps);
-    const otherKeys = Object.keys(otherProps);
+    const thisKeys = Object.keys(thisProps) as Array<keyof Props>;
+    const otherKeys = Object.keys(otherProps) as Array<keyof Props>;
 
     if (thisKeys.length !== otherKeys.length) return false;
 
     return thisKeys.every(key =>
-      thisProps[key as keyof Props] === otherProps[key as keyof Props]
+      thisProps[key] === otherProps[key]
     );
   }
 
@@ -84,7 +88,7 @@ export abstract class BaseValueObject<Props> {
   /**
    * 設置屬性值（返回新的實例）
    */
-  protected set<Key extends keyof Props>(key: Key): Setter<Props[Key]> {
+  protected set<Key extends keyof Props>(key: Key): Setter<Props[Key], Props> {
     return new Setter(this, key);
   }
 
@@ -99,19 +103,26 @@ export abstract class BaseValueObject<Props> {
     const newProps = { ...this.props, [key]: value };
     return new (this.constructor as any)(newProps);
   }
+
+  /**
+   * 公開的屬性變更方法，供 Setter 類使用
+   */
+  public changeProperty<Key extends keyof Props>(key: Key, value: Props[Key]): BaseValueObject<Props> {
+    return this.change(key, value);
+  }
 }
 
 /**
  * 屬性設置器類別
  */
-export class Setter<T> {
+export class Setter<T, Props extends object> {
   constructor(
-    private readonly valueObject: BaseValueObject<any>,
-    private readonly key: keyof any
+    private readonly valueObject: BaseValueObject<Props>,
+    private readonly key: keyof Props
   ) {}
 
-  to(value: T): BaseValueObject<any> {
-    return this.valueObject.change(this.key, value);
+  to(value: T): BaseValueObject<Props> {
+    return this.valueObject.changeProperty(this.key, value as any);
   }
 }
 
