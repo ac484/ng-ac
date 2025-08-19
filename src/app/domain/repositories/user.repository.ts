@@ -25,5 +25,11 @@
  * - 此檔案須遵守此架構規則8：性能考量
  */
 
-// 功能 (狀態: 待實現)
-// 代碼:
+import { Result } from '../../shared/base/result/result';
+import { User } from '../entities/user/user.entity';
+
+export interface IUserRepository {
+  findById(id: string): Promise<Result<User, string>>;
+  save(user: User): Promise<Result<void, string>>;
+  delete(id: string): Promise<Result<void, string>>;
+}

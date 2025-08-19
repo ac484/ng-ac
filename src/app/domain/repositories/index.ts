@@ -22,8 +22,7 @@
  * - 此檔案須遵守倉儲查詢原則
  */
 
-// 現有倉儲接口導出（待實現）
-// export * from './user.repository';
+export * from './user.repository';
 
 // 現代 DDD 倉儲接口
 export * from './app-shell.repository';

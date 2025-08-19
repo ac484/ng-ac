@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T17:10:49.665Z",
+    "generatedAt": "2025-08-19T17:15:48.846Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
@@ -1085,8 +1085,8 @@
           "name": "00_file_structure_now.json",
           "type": "file",
           "path": "docs/00_file_structure_now.json",
-          "size": 255199,
-          "modified": "2025-08-19T16:58:43.764Z"
+          "size": 254501,
+          "modified": "2025-08-19T17:10:49.748Z"
         },
         {
           "name": "00-file-header-convention.md",
@@ -2216,7 +2216,7 @@
                           "type": "file",
                           "path": "src/app/domain/entities/user/user.entity.ts",
                           "size": 1879,
-                          "modified": "2025-08-19T17:07:14.114Z"
+                          "modified": "2025-08-19T17:10:50.311Z"
                         }
                       ]
                     },
@@ -2294,15 +2294,15 @@
                       "name": "index.ts",
                       "type": "file",
                       "path": "src/app/domain/repositories/index.ts",
-                      "size": 963,
-                      "modified": "2025-08-19T16:50:41.487Z"
+                      "size": 917,
+                      "modified": "2025-08-19T17:14:18.781Z"
                     },
                     {
                       "name": "user.repository.ts",
                       "type": "file",
                       "path": "src/app/domain/repositories/user.repository.ts",
-                      "size": 1130,
-                      "modified": "2025-08-18T14:05:59.678Z"
+                      "size": 1403,
+                      "modified": "2025-08-19T17:14:18.781Z"
                     }
                   ]
                 },
@@ -3242,7 +3242,7 @@
                               "type": "file",
                               "path": "src/app/interface/components/layout/sidebar/sidebar.component.ts",
                               "size": 3701,
-                              "modified": "2025-08-19T17:06:43.586Z"
+                              "modified": "2025-08-19T17:14:53.598Z"
                             }
                           ]
                         },
