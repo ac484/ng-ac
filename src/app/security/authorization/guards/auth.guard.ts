@@ -18,19 +18,18 @@
  */
 
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  
+
   // 檢查是否已認證 (極簡實現)
   const isAuthenticated = localStorage.getItem('ng-ac-auth-token');
-  
+
   if (isAuthenticated) {
     return true;
   }
-  
+
   // 未認證時重定向到登錄頁面
   router.navigate(['/auth/login']);
   return false;

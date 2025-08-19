@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T18:54:35.779Z",
+    "generatedAt": "2025-08-19T19:00:32.568Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules) - Format: name | path | size/modified | type"
@@ -127,6 +127,7 @@
         },
         ".cursorrules | .cursor/.cursorrules | 9307 bytes | 2025-08-18T14:05:59.579Z",
         "ANGULAR20_BEST_PRACTICES.mdc | .cursor/ANGULAR20_BEST_PRACTICES.mdc | 24672 bytes | 2025-08-18T14:05:59.580Z",
+        "context7.json | .cursor/context7.json | 783 bytes | 2025-08-18T14:05:59.585Z",
         "context7.mdc | .cursor/context7.mdc | 614 bytes | 2025-08-18T14:05:59.581Z",
         "FILE_HEADER_CONVENTION.mdc | .cursor/FILE_HEADER_CONVENTION.mdc | 9845 bytes | 2025-08-18T14:05:59.581Z",
         "improved_architecture.md | .cursor/improved_architecture.md | 67860 bytes | 2025-08-18T14:05:59.582Z",
@@ -225,7 +226,7 @@
             "angular_url.json | docs/08-angular-api-reference/angular_url.json | 20487 bytes | 2025-08-19T13:09:02.274Z"
           ]
         },
-        "00_file_structure_now.json | docs/00_file_structure_now.json | 144068 bytes | 2025-08-19T18:54:02.083Z",
+        "00_file_structure_now.json | docs/00_file_structure_now.json | 128021 bytes | 2025-08-19T18:54:35.869Z",
         "00-file-header-convention.md | docs/00-file-header-convention.md | 15558 bytes | 2025-08-19T12:40:49.119Z",
         "00.angular_ddd_core_guide.md | docs/00.angular_ddd_core_guide.md | 14533 bytes | 2025-08-19T13:34:09.377Z",
         "00.angular_ddd_core.json | docs/00.angular_ddd_core.json | 15407 bytes | 2025-08-19T13:34:33.635Z",
@@ -236,16 +237,11 @@
         "01-angular20-layout-implementation.md | docs/01-angular20-layout-implementation.md | 24674 bytes | 2025-08-18T14:05:59.585Z",
         "01-angular20-quick-reference.md | docs/01-angular20-quick-reference.md | 5655 bytes | 2025-08-18T15:10:05.972Z",
         "01.ddd_violations_fixed.md | docs/01.ddd_violations_fixed.md | 6965 bytes | 2025-08-19T16:53:25.890Z",
-        "11.security_plan.md | docs/11.security_plan.md | 9065 bytes | 2025-08-18T14:05:59.636Z",
         "12.construct-v1.md | docs/12.construct-v1.md | 34164 bytes | 2025-08-18T15:34:17.648Z",
-        "12.construct-v2.md | docs/12.construct-v2.md | 4051 bytes | 2025-08-18T14:05:59.637Z",
-        "12.construct.md | docs/12.construct.md | 4231 bytes | 2025-08-18T14:05:59.637Z",
         "12.contract.md | docs/12.contract.md | 15399 bytes | 2025-08-18T14:05:59.637Z",
         "13.project.md | docs/13.project.md | 12924 bytes | 2025-08-18T14:05:59.637Z",
         "14.partners.md | docs/14.partners.md | 18788 bytes | 2025-08-18T14:05:59.637Z",
         "15.documents.md | docs/15.documents.md | 19154 bytes | 2025-08-18T14:05:59.637Z",
-        "CONTRIBUTING.md | docs/CONTRIBUTING.md | 8873 bytes | 2025-08-18T14:05:59.637Z",
-        "LICENSE.md | docs/LICENSE.md | 883 bytes | 2025-08-18T14:05:59.637Z",
         "README-ANGULAR-DOCS.md | docs/README-ANGULAR-DOCS.md | 3973 bytes | 2025-08-19T13:35:13.369Z"
       ]
     },
@@ -558,7 +554,7 @@
                     "index.ts | src/app/application/validators/index.ts | 1158 bytes | 2025-08-18T14:05:59.669Z"
                   ]
                 },
-                "index.ts | src/app/application/index.ts | 1118 bytes | 2025-08-19T18:52:51.856Z"
+                "index.ts | src/app/application/index.ts | 1346 bytes | 2025-08-19T18:55:46.398Z"
               ]
             },
             {
@@ -902,7 +898,7 @@
                     "startup.service.ts | src/app/infrastructure/startup/startup.service.ts | 1950 bytes | 2025-08-18T14:05:59.700Z"
                   ]
                 },
-                "index.ts | src/app/infrastructure/index.ts | 917 bytes | 2025-08-19T18:52:51.856Z"
+                "index.ts | src/app/infrastructure/index.ts | 1143 bytes | 2025-08-19T18:55:46.401Z"
               ]
             },
             {
@@ -1534,7 +1530,7 @@
                     {
                       "info": "guards/ | src/app/security/authorization/guards | directory",
                       "children": [
-                        "auth.guard.ts | src/app/security/authorization/guards/auth.guard.ts | 1036 bytes | 2025-08-19T18:52:51.865Z",
+                        "auth.guard.ts | src/app/security/authorization/guards/auth.guard.ts | 995 bytes | 2025-08-19T18:55:46.053Z",
                         "index.ts | src/app/security/authorization/guards/index.ts | 732 bytes | 2025-08-18T14:05:59.788Z",
                         "permission.guard.ts | src/app/security/authorization/guards/permission.guard.ts | 1469 bytes | 2025-08-18T14:05:59.788Z",
                         "role.guard.ts | src/app/security/authorization/guards/role.guard.ts | 1379 bytes | 2025-08-18T14:05:59.788Z"
@@ -1930,18 +1926,12 @@
     ".postcssrc.json | .postcssrc.json | 59 bytes | 2025-08-18T14:05:59.585Z",
     ".prettierrc.js | .prettierrc.js | 1518 bytes | 2025-08-18T14:05:59.585Z",
     "angular.json | angular.json | 3422 bytes | 2025-08-19T09:06:47.713Z",
-    "context7.json | context7.json | 783 bytes | 2025-08-18T14:05:59.585Z",
-    "creative_mode_think_tool.md | creative_mode_think_tool.md | 8341 bytes | 2025-08-18T14:05:59.585Z",
-    "cursor_commands.md | cursor_commands.md | 3517 bytes | 2025-08-18T14:05:59.585Z",
     "eslint.config.js | eslint.config.js | 3144 bytes | 2025-08-18T14:05:59.637Z",
     "firebase.json | firebase.json | 2 bytes | 2025-08-18T14:05:59.637Z",
     "genkit.config.ts | genkit.config.ts | 1178 bytes | 2025-08-18T14:05:59.637Z",
-    "MEMORY_BANK_OPTIMIZATIONS.md | MEMORY_BANK_OPTIMIZATIONS.md | 7050 bytes | 2025-08-07T13:46:43.250Z",
-    "memory_bank_upgrade_guide.md | memory_bank_upgrade_guide.md | 29179 bytes | 2025-08-18T14:05:59.637Z",
     "package.json | package.json | 2039 bytes | 2025-08-19T13:37:05.709Z",
     "pnpm-lock.yaml | pnpm-lock.yaml | 476044 bytes | 2025-08-19T16:43:46.741Z",
     "pnpm-workspace.yaml | pnpm-workspace.yaml | 49 bytes | 2025-08-19T08:02:02.535Z",
-    "Project & Contract Demo.md | Project & Contract Demo.md | 30917 bytes | 2025-08-19T08:02:02.515Z",
     "tsconfig.app.json | tsconfig.app.json | 199 bytes | 2025-08-18T14:05:59.878Z",
     "tsconfig.json | tsconfig.json | 1113 bytes | 2025-08-19T09:06:47.741Z",
     "tsconfig.spec.json | tsconfig.spec.json | 434 bytes | 2025-08-07T13:21:00.008Z"
