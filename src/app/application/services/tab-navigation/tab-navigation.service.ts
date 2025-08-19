@@ -21,11 +21,12 @@ import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs/operators';
-import { SIDEBAR_NAV_ITEMS, type SidebarItem } from '../../../shared/constants/sidebar/sidebar.constants';
 import { TAB_CONFIG } from '../../../shared/constants/tab/tab.constants';
+import { SidebarItem } from '../../../shared/interfaces/layout/sidebar.interface';
 import { TabItem } from '../../../shared/interfaces/tab/tab.interface';
 import { storage } from '../../../shared/utils';
 import { canAddTab, generateTabId, getTabIndex, hasTab } from '../../../shared/utils/tab/tab.util';
+import { NavigationService } from '../navigation.service';
 
 @Injectable({ providedIn: 'root' })
 export class TabNavigationService {
@@ -45,6 +46,8 @@ export class TabNavigationService {
   readonly canCloseTabs = computed(() =>
     this._tabs().some(tab => tab.closable)
   );
+
+  private readonly navigationService = inject(NavigationService);
 
   constructor() {
     this.loadState();
@@ -176,11 +179,11 @@ export class TabNavigationService {
    * 依據當前路由尋找側邊欄定義的標籤資料
    */
   private findMenuMeta(route: string): { label: string; icon?: string } | null {
-    // 明確類型註解，避免隱式 any
-    const direct = SIDEBAR_NAV_ITEMS.find((item: SidebarItem) => item.route === route);
+    const items = this.navigationService.navigationItems();
+    const direct = items.find((item: SidebarItem) => item.route === route);
     if (direct) return { label: direct.label || direct.title, icon: direct.icon };
 
-    for (const item of SIDEBAR_NAV_ITEMS) {
+    for (const item of items) {
       if (!item.children) continue;
       const found = item.children.find((child: SidebarItem) => child.route === route);
       if (found) return { label: found.label || found.title, icon: item.icon };

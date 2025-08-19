@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T17:20:30.118Z",
+    "generatedAt": "2025-08-19T17:21:18.802Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
@@ -925,8 +925,8 @@
           "name": "00_file_structure_now.json",
           "type": "file",
           "path": "docs/00_file_structure_now.json",
-          "size": 254501,
-          "modified": "2025-08-19T17:15:48.929Z"
+          "size": 249177,
+          "modified": "2025-08-19T17:20:30.227Z"
         },
         {
           "name": "00-file-header-convention.md",
@@ -1658,8 +1658,8 @@
                           "name": "tab-navigation.service.ts",
                           "type": "file",
                           "path": "src/app/application/services/tab-navigation/tab-navigation.service.ts",
-                          "size": 6165,
-                          "modified": "2025-08-19T09:02:00.024Z"
+                          "size": 6261,
+                          "modified": "2025-08-19T17:20:44.273Z"
                         }
                       ]
                     },
@@ -3089,7 +3089,7 @@
                               "type": "file",
                               "path": "src/app/interface/components/layout/sidebar/sidebar.component.ts",
                               "size": 3710,
-                              "modified": "2025-08-19T17:20:29.448Z"
+                              "modified": "2025-08-19T17:20:44.273Z"
                             }
                           ]
                         },
