@@ -1,0 +1,351 @@
+---
+alwaysApply: true
+---
+## 📋 完整分層模板範例
+
+### 1. Domain Layer 模板
+
+#### Entity 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Domain/Entity",
+ *   "purpose": "User實體-用戶核心業務邏輯",
+ *   "constraints": ["無外部服務依賴", "業務規則內部封裝", "聚合一致性"],
+ *   "dependencies": ["Email", "Password", "UserRole"],
+ *   "security": "high",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage User.create(data), User.changeEmail(email)
+ * @see docs/architecture/domain.md
+ */
+```
+
+#### Value Object 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Domain/ValueObject",
+ *   "purpose": "Email值對象-郵箱格式驗證",
+ *   "constraints": ["不可變對象", "值相等性", "格式驗證"],
+ *   "dependencies": [],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage Email.create('user@example.com'), email.isValid()
+ * @see docs/architecture/domain.md
+ */
+```
+
+#### Repository Interface 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Domain/Repository",
+ *   "purpose": "User倉儲接口-用戶數據存取抽象",
+ *   "constraints": ["接口契約定義", "無實現細節", "領域語言"],
+ *   "dependencies": ["User", "UserId"],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage userRepo.findById(id), userRepo.save(user)
+ * @see docs/architecture/domain.md
+ */
+```
+
+### 2. Application Layer 模板
+
+#### Use Case 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Application/UseCase",
+ *   "purpose": "登入用例-用戶認證流程",
+ *   "constraints": ["單一用例職責", "事務邊界", "輸入驗證"],
+ *   "dependencies": ["UserRepository", "AuthService", "LoginDTO"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage loginUseCase.execute(loginDTO)
+ * @see docs/architecture/application.md
+ */
+```
+
+#### DTO 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Application/DTO",
+ *   "purpose": "用戶註冊DTO-註冊請求數據結構",
+ *   "constraints": ["數據傳輸專用", "驗證規則", "序列化支持"],
+ *   "dependencies": [],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage new RegisterDTO(email, password, name)
+ * @see docs/architecture/application.md
+ */
+```
+
+#### Application Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Application/Service",
+ *   "purpose": "用戶應用服務-用戶管理協調邏輯",
+ *   "constraints": ["協調領域服務", "事務管理", "無業務邏輯"],
+ *   "dependencies": ["UserRepository", "EmailService", "UserMapper"],
+ *   "security": "high",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage userAppService.createUser(dto)
+ * @see docs/architecture/application.md
+ */
+```
+
+### 3. Infrastructure Layer 模板
+
+#### Repository Implementation 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Infrastructure/Repository",
+ *   "purpose": "Firebase用戶倉儲-用戶數據持久化實現",
+ *   "constraints": ["實現領域接口", "技術細節封裝", "錯誤處理"],
+ *   "dependencies": ["FirestoreService", "UserRepository", "User"],
+ *   "security": "high",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage userRepo.save(user), userRepo.findByEmail(email)
+ * @see docs/architecture/infrastructure.md
+ */
+```
+
+#### Config Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Infrastructure/Config",
+ *   "purpose": "環境配置服務-應用配置統一管理",
+ *   "constraints": ["配置集中管理", "環境隔離", "類型安全"],
+ *   "dependencies": [],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage envService.get('DATABASE_URL')
+ * @see docs/architecture/infrastructure.md
+ */
+```
+
+#### External Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Infrastructure/External",
+ *   "purpose": "Firebase認證服務-外部認證整合",
+ *   "constraints": ["外部依賴封裝", "錯誤轉換", "重試機制"],
+ *   "dependencies": ["firebase/auth", "AuthConfig"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage firebaseAuth.signIn(email, password)
+ * @see docs/architecture/infrastructure.md
+ */
+```
+
+### 4. Interface Layer 模板
+
+#### Page Component 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Interface/Page",
+ *   "purpose": "登入頁面-用戶登入界面",
+ *   "constraints": ["單一頁面職責", "響應式設計", "用戶體驗"],
+ *   "dependencies": ["LoginUseCase", "LoginForm", "AuthGuard"],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage <login-page></login-page>
+ * @see docs/architecture/interface.md
+ */
+```
+
+#### Component 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Interface/Component",
+ *   "purpose": "登入表單組件-用戶登入輸入界面",
+ *   "constraints": ["組件複用性", "數據雙向綁定", "表單驗證"],
+ *   "dependencies": ["ReactiveFormsModule", "LoginDTO"],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage <login-form (submit)="onLogin($event)"></login-form>
+ * @see docs/architecture/interface.md
+ */
+```
+
+#### Guard 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Interface/Guard",
+ *   "purpose": "認證路由守衛-登入狀態檢查",
+ *   "constraints": ["路由保護", "重定向邏輯", "狀態檢查"],
+ *   "dependencies": ["AuthService", "Router"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage { path: 'dashboard', canActivate: [AuthGuard] }
+ * @see docs/architecture/interface.md
+ */
+```
+
+### 5. Security Layer 模板
+
+#### Authentication Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Security/Auth",
+ *   "purpose": "用戶認證服務-身份驗證管理",
+ *   "constraints": ["安全最佳實踐", "會話管理", "密碼安全"],
+ *   "dependencies": ["JWTService", "UserRepository", "HashService"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage authService.login(credentials)
+ * @see docs/architecture/security.md
+ */
+```
+
+#### JWT Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Security/JWT",
+ *   "purpose": "JWT令牌服務-Token生成驗證",
+ *   "constraints": ["Token安全性", "過期處理", "簽名驗證"],
+ *   "dependencies": ["jsonwebtoken", "ConfigService"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage jwtService.sign(payload), jwtService.verify(token)
+ * @see docs/architecture/security.md
+ */
+```
+
+### 6. Shared Layer 模板
+
+#### Utility 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Shared/Utility",
+ *   "purpose": "存儲工具類-本地存儲統一管理",
+ *   "constraints": ["純函數", "無副作用", "類型安全"],
+ *   "dependencies": [],
+ *   "security": "low",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage StorageUtil.set('key', value), StorageUtil.get('key')
+ * @see docs/architecture/shared.md
+ */
+```
+
+#### Type Definition 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Shared/Type",
+ *   "purpose": "應用通用類型-TypeScript類型定義",
+ *   "constraints": ["類型安全", "接口一致性", "泛型支持"],
+ *   "dependencies": [],
+ *   "security": "none",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage ApiResponse<User>, PaginatedResult<T>
+ * @see docs/architecture/shared.md
+ */
+```
+
+#### Interface Definition 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Shared/Interface",
+ *   "purpose": "Tab接口定義-標籤頁通用接口",
+ *   "constraints": ["接口契約", "實現解耦", "擴展性"],
+ *   "dependencies": [],
+ *   "security": "none",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage class TabComponent implements ITabComponent
+ * @see docs/architecture/shared.md
+ */
+```
+
+---
+
+## 🎯 安全等級定義
+
+| 等級 | 描述 | 適用場景 |
+|------|------|----------|
+| `none` | 無安全風險 | 類型定義、工具函數 |
+| `low` | 低風險 | UI 組件、常量定義 |
+| `medium` | 中等風險 | 業務邏輯、數據處理 |
+| `high` | 高風險 | 用戶數據、權限管理 |
+| `critical` | 關鍵風險 | 認證授權、配置管理 |
+
+---
+
+## 🔧 VSCode 代碼片段配置
+
+```json
+{
+  "AI Domain Entity": {
+    "prefix": "ai-domain-entity",
+    "body": [
+      "/**",
+      " * @ai-context {",
+      " *   \"role\": \"Domain/Entity\",",
+      " *   \"purpose\": \"${1:EntityName}實體-${2:核心業務邏輯}\",",
+      " *   \"constraints\": [\"無外部服務依賴\", \"業務規則內部封裝\", \"${3:聚合一致性}\"],",
+      " *   \"dependencies\": [${4:\"依賴1\", \"依賴2\"}],",
+      " *   \"security\": \"${5|none,low,medium,high,critical|}\",",
+      " *   \"lastmod\": \"${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}\"",
+      " * }",
+      " * @usage ${6:使用範例}",
+      " * @see docs/architecture/domain.md",
+      " */"
+    ],
+    "description": "AI optimized Domain Entity header"
+  }
+}
+```
+
+---
+
+## 📊 Token 消耗對比
+
+| 檔案類型 | 原版 Token | JSON版 Token | 節省率 |
+|----------|------------|--------------|--------|
+| Domain Entity | ~180 | ~45 | 75% |
+| Use Case | ~165 | ~42 | 75% |
+| Component | ~155 | ~38 | 76% |
+| Service | ~170 | ~43 | 75% |
+| Guard | ~145 | ~36 | 75% |
+
+**平均節省 Token：75%**
+
+---
+
+## ✅ 實作建議
+
+1. **建立代碼片段**：為每種類型創建 VSCode snippet
+2. **Git Hook 檢查**：確保註解格式一致性
+3. **自動化工具**：開發註解格式檢查器
+4. **團隊培訓**：統一團隊對新格式的理解
+5. **文檔更新**：更新架構文檔說明新格式

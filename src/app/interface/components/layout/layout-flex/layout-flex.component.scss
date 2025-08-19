@@ -1,0 +1,16 @@
+/**
+ * @fileoverview Layout Flex 組件樣式定義
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @lastModified 2025-08-17 by System Migration
+ */
+
+.layout-flex {
+  display: flex;
+  gap: var(--flex-gap, 1rem);
+}
+
+.layout-flex--row { flex-direction: row; }
+.layout-flex--column { flex-direction: column; }
+
+

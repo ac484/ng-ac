@@ -1,0 +1,528 @@
+{
+  "title": "Angular Core API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular 核心框架的完整 API 參考，包含現代化控制流、信號、組件系統和依賴注入",
+  "metadata": {
+    "category": "Core Framework",
+    "complexity": "High",
+    "usage": "應用架構、組件開發、狀態管理、依賴注入、生命週期管理",
+    "lastmod": "2025-01-17"
+  },
+  "modern_control_flow": {
+    "@defer": {
+      "purpose": "延遲載入控制流",
+      "usage": "延遲載入組件或模板內容",
+      "example": "@defer (when condition) { <heavy-component /> }",
+      "triggers": ["when", "on", "after", "idle", "viewport", "interaction", "hover", "immediate"],
+      "blocks": ["placeholder", "loading", "error", "suspense"]
+    },
+    "@for": {
+      "purpose": "循環控制流",
+      "usage": "替代 *ngFor，提供更好的性能和語法",
+      "example": "@for (item of items; track item.id) { <div>{{ item.name }}</div> }",
+      "syntax": "item of items; track trackFn; let index = $index; let first = $first; let last = $last; let even = $even; let odd = $odd; let count = $count",
+      "advantages": ["更好的性能", "內建 trackBy", "更清晰的語法"]
+    },
+    "@if": {
+      "purpose": "條件控制流",
+      "usage": "替代 *ngIf，提供更簡潔的條件渲染",
+      "example": "@if (condition) { <div>True</div> } @else { <div>False</div> }",
+      "syntax": "condition; else templateRef",
+      "advantages": ["更清晰的語法", "更好的類型推斷", "內建 else 支援"]
+    },
+    "@let": {
+      "purpose": "變數宣告控制流",
+      "usage": "在模板中宣告局部變數",
+      "example": "@let user = userService.currentUser(); <div>{{ user.name }}</div>",
+      "syntax": "variable = expression",
+      "advantages": ["避免重複計算", "提高模板可讀性", "類型安全"]
+    },
+    "@switch": {
+      "purpose": "分支控制流",
+      "usage": "替代 ngSwitch，提供更清晰的分支邏輯",
+      "example": "@switch (status) { @case ('loading') { Loading... } @default { Ready } }",
+      "syntax": "expression; @case value; @default",
+      "advantages": ["更清晰的語法", "類型安全", "更好的性能"]
+    }
+  },
+  "signals_api": {
+    "signal": {
+      "purpose": "創建可寫信號",
+      "usage": "創建響應式狀態管理",
+      "example": "const count = signal(0); count.set(1); count.update(n => n + 1)",
+      "methods": ["set(value)", "update(fn)", "asReadonly()"],
+      "type": "WritableSignal<T>"
+    },
+    "Signal": {
+      "purpose": "信號介面",
+      "usage": "定義信號的基本結構",
+      "properties": ["()", "asReadonly()"],
+      "type": "基礎信號類型"
+    },
+    "WritableSignal": {
+      "purpose": "可寫信號介面",
+      "usage": "定義可修改的信號",
+      "methods": ["set(value: T)", "update(fn: (value: T) => T)"],
+      "extends": "Signal<T>"
+    },
+    "computed": {
+      "purpose": "創建計算信號",
+      "usage": "基於其他信號創建衍生值",
+      "example": "const doubled = computed(() => count() * 2)",
+      "syntax": "computed(() => expression)",
+      "type": "Signal<T>",
+      "advantages": ["自動依賴追蹤", "懶計算", "記憶化"]
+    },
+    "effect": {
+      "purpose": "創建副作用",
+      "usage": "監聽信號變化並執行副作用",
+      "example": "effect(() => console.log('Count:', count()))",
+      "syntax": "effect(() => { /* side effects */ })",
+      "returns": "EffectRef",
+      "advantages": ["自動依賴追蹤", "生命週期管理", "清理支援"]
+    },
+    "untracked": {
+      "purpose": "非追蹤執行",
+      "usage": "在不被信號追蹤的情況下讀取信號",
+      "example": "untracked(() => someSignal())",
+      "syntax": "untracked(() => expression)",
+      "use_case": "避免不必要的依賴追蹤"
+    }
+  },
+  "modern_input_output": {
+    "input": {
+      "purpose": "創建輸入信號",
+      "usage": "替代 @Input，提供響應式輸入",
+      "example": "readonly name = input<string>(); readonly required = input.required<string>()",
+      "syntax": "input<T>(initialValue?), input.required<T>(), input<T>(options)",
+      "type": "InputSignal<T>",
+      "advantages": ["響應式", "類型安全", "自動變更檢測"]
+    },
+    "InputSignal": {
+      "purpose": "輸入信號類型",
+      "usage": "定義輸入信號的類型",
+      "properties": ["()", "asReadonly()"],
+      "type": "只讀的響應式輸入"
+    },
+    "output": {
+      "purpose": "創建輸出信號",
+      "usage": "替代 @Output，提供響應式輸出",
+      "example": "readonly click = output<MouseEvent>()",
+      "syntax": "output<T>()",
+      "type": "OutputRef<T>",
+      "methods": ["emit(value: T)"]
+    },
+    "model": {
+      "purpose": "創建雙向綁定信號",
+      "usage": "實現雙向數據綁定",
+      "example": "readonly value = model<string>('')",
+      "syntax": "model<T>(initialValue?)",
+      "type": "ModelSignal<T>",
+      "advantages": ["雙向綁定", "響應式", "類型安全"]
+    }
+  },
+  "query_api": {
+    "viewChild": {
+      "purpose": "查詢單個視圖子元素",
+      "usage": "替代 @ViewChild，提供信號化查詢",
+      "example": "readonly button = viewChild<ElementRef>('button')",
+      "syntax": "viewChild<T>(selector)",
+      "type": "Signal<T | undefined>",
+      "advantages": ["響應式", "自動清理", "類型安全"]
+    },
+    "viewChildren": {
+      "purpose": "查詢多個視圖子元素",
+      "usage": "替代 @ViewChildren，提供信號化查詢",
+      "example": "readonly buttons = viewChildren<ElementRef>('button')",
+      "syntax": "viewChildren<T>(selector)",
+      "type": "Signal<T[]>",
+      "advantages": ["響應式", "自動清理", "類型安全"]
+    },
+    "contentChild": {
+      "purpose": "查詢單個內容子元素",
+      "usage": "替代 @ContentChild，提供信號化查詢",
+      "example": "readonly content = contentChild<TemplateRef>('content')",
+      "syntax": "contentChild<T>(selector)",
+      "type": "Signal<T | undefined>"
+    },
+    "contentChildren": {
+      "purpose": "查詢多個內容子元素",
+      "usage": "替代 @ContentChildren，提供信號化查詢",
+      "example": "readonly items = contentChildren<ItemComponent>(ItemComponent)",
+      "syntax": "contentChildren<T>(selector)",
+      "type": "Signal<T[]>"
+    }
+  },
+  "components_directives": {
+    "Component": {
+      "purpose": "組件裝飾器",
+      "usage": "定義 Angular 組件",
+      "example": "@Component({ selector: 'app-user', template: '...' })",
+      "options": ["selector", "template", "templateUrl", "styles", "styleUrls", "standalone", "changeDetection"]
+    },
+    "Directive": {
+      "purpose": "指令裝飾器",
+      "usage": "定義 Angular 指令",
+      "example": "@Directive({ selector: '[appHighlight]' })",
+      "options": ["selector", "standalone", "hostDirectives"]
+    },
+    "Pipe": {
+      "purpose": "管道裝飾器",
+      "usage": "定義 Angular 管道",
+      "example": "@Pipe({ name: 'capitalize' })",
+      "options": ["name", "standalone", "pure"]
+    },
+    "Injectable": {
+      "purpose": "可注入裝飾器",
+      "usage": "標記類別為可注入的服務",
+      "example": "@Injectable({ providedIn: 'root' })",
+      "options": ["providedIn", "deps"]
+    }
+  },
+  "lifecycle_hooks": {
+    "OnInit": {
+      "purpose": "初始化生命週期介面",
+      "usage": "組件初始化時執行",
+      "method": "ngOnInit(): void",
+      "timing": "在輸入屬性綁定後執行"
+    },
+    "OnDestroy": {
+      "purpose": "銷毀生命週期介面",
+      "usage": "組件銷毀時執行清理",
+      "method": "ngOnDestroy(): void",
+      "timing": "在組件銷毀前執行"
+    },
+    "OnChanges": {
+      "purpose": "變更生命週期介面",
+      "usage": "輸入屬性變更時執行",
+      "method": "ngOnChanges(changes: SimpleChanges): void",
+      "timing": "在輸入屬性變更後執行"
+    },
+    "AfterViewInit": {
+      "purpose": "視圖初始化生命週期介面",
+      "usage": "視圖初始化後執行",
+      "method": "ngAfterViewInit(): void",
+      "timing": "在視圖初始化後執行"
+    }
+  },
+  "modern_render_hooks": {
+    "afterRender": {
+      "purpose": "渲染後執行",
+      "usage": "在每次渲染後執行回調",
+      "example": "afterRender(() => { console.log('Rendered'); })",
+      "syntax": "afterRender(() => { /* callback */ })",
+      "returns": "AfterRenderRef"
+    },
+    "afterNextRender": {
+      "purpose": "下次渲染後執行",
+      "usage": "在下一次渲染後執行一次性回調",
+      "example": "afterNextRender(() => { console.log('Next render'); })",
+      "syntax": "afterNextRender(() => { /* callback */ })",
+      "returns": "AfterRenderRef"
+    }
+  },
+  "dependency_injection": {
+    "inject": {
+      "purpose": "注入函數",
+      "usage": "在注入上下文中獲取依賴",
+      "example": "const service = inject(UserService)",
+      "syntax": "inject<T>(token, options?)",
+      "contexts": ["constructor", "field initializer", "injection context"]
+    },
+    "Inject": {
+      "purpose": "注入裝飾器",
+      "usage": "標記構造函數參數為注入依賴",
+      "example": "constructor(@Inject(TOKEN) private value: any)",
+      "syntax": "@Inject(token)"
+    },
+    "Injectable": {
+      "purpose": "可注入裝飾器",
+      "usage": "標記類別為可注入的服務",
+      "example": "@Injectable({ providedIn: 'root' })",
+      "options": ["providedIn", "deps"]
+    },
+    "InjectionToken": {
+      "purpose": "注入令牌",
+      "usage": "創建非類別的注入令牌",
+      "example": "const API_URL = new InjectionToken<string>('api.url')",
+      "syntax": "new InjectionToken<T>(description, options?)"
+    }
+  },
+  "providers_configuration": {
+    "Provider": {
+      "purpose": "提供者配置介面",
+      "usage": "定義依賴注入的提供者",
+      "types": ["ClassProvider", "ValueProvider", "FactoryProvider", "ExistingProvider"]
+    },
+    "ClassProvider": {
+      "purpose": "類別提供者",
+      "usage": "使用類別作為提供者",
+      "example": "{ provide: Service, useClass: ServiceImpl }"
+    },
+    "ValueProvider": {
+      "purpose": "值提供者",
+      "usage": "使用值作為提供者",
+      "example": "{ provide: API_URL, useValue: 'https://api.example.com' }"
+    },
+    "FactoryProvider": {
+      "purpose": "工廠提供者",
+      "usage": "使用工廠函數作為提供者",
+      "example": "{ provide: Service, useFactory: () => new Service() }"
+    }
+  },
+  "environment_platform": {
+    "EnvironmentInjector": {
+      "purpose": "環境注入器",
+      "usage": "管理環境級別的依賴注入",
+      "example": "獨立組件的注入器"
+    },
+    "createEnvironmentInjector": {
+      "purpose": "創建環境注入器",
+      "usage": "程式化創建環境注入器",
+      "example": "createEnvironmentInjector(providers, parent)"
+    },
+    "PlatformRef": {
+      "purpose": "平台引用",
+      "usage": "管理 Angular 平台的生命週期",
+      "methods": ["bootstrapModule()", "destroy()"]
+    },
+    "createPlatform": {
+      "purpose": "創建平台",
+      "usage": "創建 Angular 平台實例",
+      "example": "createPlatform(platformBrowser())"
+    }
+  },
+  "application_config": {
+    "ApplicationConfig": {
+      "purpose": "應用配置介面",
+      "usage": "定義應用的配置選項",
+      "properties": ["providers", "imports"]
+    },
+    "ApplicationRef": {
+      "purpose": "應用引用",
+      "usage": "管理 Angular 應用的生命週期",
+      "methods": ["tick()", "attachView()", "detachView()"]
+    },
+    "bootstrapApplication": {
+      "purpose": "啟動獨立應用",
+      "usage": "啟動基於獨立組件的應用",
+      "example": "bootstrapApplication(AppComponent, { providers: [...] })"
+    }
+  },
+  "constants_tokens": {
+    "APP_ID": {
+      "purpose": "應用 ID 令牌",
+      "usage": "標識應用的唯一 ID",
+      "example": "用於服務端渲染和快取"
+    },
+    "APP_INITIALIZER": {
+      "purpose": "應用初始化器令牌",
+      "usage": "註冊應用啟動時的初始化函數",
+      "example": "{ provide: APP_INITIALIZER, useFactory: initApp, multi: true }"
+    },
+    "PLATFORM_ID": {
+      "purpose": "平台 ID 令牌",
+      "usage": "標識當前運行的平台",
+      "example": "'browser' 或 'server'"
+    },
+    "LOCALE_ID": {
+      "purpose": "語言環境 ID 令牌",
+      "usage": "設定應用的語言環境",
+      "example": "'zh-TW', 'en-US'"
+    }
+  },
+  "change_detection": {
+    "ChangeDetectionStrategy": {
+      "purpose": "變更檢測策略枚舉",
+      "values": ["OnPush", "Default"],
+      "usage": "配置組件的變更檢測策略"
+    },
+    "ChangeDetectorRef": {
+      "purpose": "變更檢測器引用",
+      "usage": "手動控制變更檢測",
+      "methods": ["detectChanges()", "markForCheck()", "detach()", "reattach()"]
+    },
+    "NgZone": {
+      "purpose": "Angular 區域服務",
+      "usage": "管理異步操作和變更檢測",
+      "methods": ["run()", "runOutsideAngular()", "onStable", "onUnstable"]
+    }
+  },
+  "templates_views": {
+    "TemplateRef": {
+      "purpose": "模板引用",
+      "usage": "引用 ng-template 元素",
+      "example": "動態創建嵌入視圖"
+    },
+    "ViewContainerRef": {
+      "purpose": "視圖容器引用",
+      "usage": "管理動態視圖的容器",
+      "methods": ["createComponent()", "createEmbeddedView()", "clear()"]
+    },
+    "ElementRef": {
+      "purpose": "元素引用",
+      "usage": "引用 DOM 元素",
+      "example": "直接操作 DOM 元素"
+    },
+    "Renderer2": {
+      "purpose": "渲染器服務",
+      "usage": "安全地操作 DOM",
+      "methods": ["createElement()", "setProperty()", "addClass()", "removeClass()"]
+    }
+  },
+  "component_creation": {
+    "createComponent": {
+      "purpose": "創建組件",
+      "usage": "程式化創建組件實例",
+      "example": "createComponent(UserComponent, { environmentInjector })",
+      "syntax": "createComponent<T>(component, options)"
+    },
+    "ComponentRef": {
+      "purpose": "組件引用",
+      "usage": "引用動態創建的組件",
+      "properties": ["instance", "location", "injector", "hostView"]
+    }
+  },
+  "module_system": {
+    "NgModule": {
+      "purpose": "模組裝飾器",
+      "usage": "定義 Angular 模組",
+      "example": "@NgModule({ declarations: [...], imports: [...] })",
+      "options": ["declarations", "imports", "exports", "providers", "bootstrap"]
+    },
+    "createNgModule": {
+      "purpose": "創建模組",
+      "usage": "程式化創建模組實例",
+      "example": "createNgModule(AppModule, injector)"
+    },
+    "isStandalone": {
+      "purpose": "檢查是否為獨立組件",
+      "usage": "判斷組件是否為獨立組件",
+      "example": "if (isStandalone(component)) { ... }"
+    }
+  },
+  "attribute_transforms": {
+    "booleanAttribute": {
+      "purpose": "布林屬性轉換",
+      "usage": "將字符串屬性轉換為布林值",
+      "example": "@Input({ transform: booleanAttribute }) disabled: boolean"
+    },
+    "numberAttribute": {
+      "purpose": "數字屬性轉換",
+      "usage": "將字符串屬性轉換為數字",
+      "example": "@Input({ transform: numberAttribute }) count: number"
+    }
+  },
+  "event_handling": {
+    "EventEmitter": {
+      "purpose": "事件發射器",
+      "usage": "發射自定義事件",
+      "example": "@Output() click = new EventEmitter<void>()",
+      "methods": ["emit(value)", "subscribe()", "unsubscribe()"]
+    },
+    "HostBinding": {
+      "purpose": "宿主綁定裝飾器",
+      "usage": "綁定宿主元素的屬性",
+      "example": "@HostBinding('class.active') isActive = true"
+    },
+    "HostListener": {
+      "purpose": "宿主監聽器裝飾器",
+      "usage": "監聽宿主元素的事件",
+      "example": "@HostListener('click', ['$event']) onClick(event) { ... }"
+    }
+  },
+  "difference_detection": {
+    "IterableDiffers": {
+      "purpose": "可迭代差異檢測器集合",
+      "usage": "管理數組和可迭代對象的差異檢測",
+      "example": "檢測列表變化"
+    },
+    "KeyValueDiffers": {
+      "purpose": "鍵值差異檢測器集合",
+      "usage": "管理對象的差異檢測",
+      "example": "檢測對象屬性變化"
+    }
+  },
+  "debugging_testing": {
+    "DebugElement": {
+      "purpose": "調試元素",
+      "usage": "在測試中查詢和操作 DOM 元素",
+      "example": "fixture.debugElement.query(By.css('.button'))"
+    },
+    "enableProdMode": {
+      "purpose": "啟用生產模式",
+      "usage": "禁用開發模式的檢查和警告",
+      "example": "enableProdMode()"
+    },
+    "isDevMode": {
+      "purpose": "檢查是否為開發模式",
+      "usage": "判斷當前是否為開發模式",
+      "example": "if (isDevMode()) { console.log('Debug info'); }"
+    }
+  },
+  "utility_tools": {
+    "forwardRef": {
+      "purpose": "前向引用",
+      "usage": "解決循環依賴問題",
+      "example": "@Inject(forwardRef(() => Service))"
+    },
+    "assertInInjectionContext": {
+      "purpose": "斷言在注入上下文中",
+      "usage": "確保函數在注入上下文中調用",
+      "example": "驗證 inject() 的使用環境"
+    },
+    "runInInjectionContext": {
+      "purpose": "在注入上下文中運行",
+      "usage": "在指定的注入上下文中執行函數",
+      "example": "runInInjectionContext(injector, () => inject(Service))"
+    }
+  },
+  "rxjs_interop": {
+    "toObservable": {
+      "purpose": "信號轉 Observable",
+      "usage": "將信號轉換為 Observable",
+      "example": "toObservable(countSignal)",
+      "syntax": "toObservable(signal, options?)"
+    },
+    "toSignal": {
+      "purpose": "Observable 轉信號",
+      "usage": "將 Observable 轉換為信號",
+      "example": "toSignal(http.get('/api/users'))",
+      "syntax": "toSignal(observable, options?)"
+    },
+    "takeUntilDestroyed": {
+      "purpose": "直到銷毀時取消訂閱",
+      "usage": "自動在組件銷毀時取消 Observable 訂閱",
+      "example": "source$.pipe(takeUntilDestroyed())",
+      "syntax": "takeUntilDestroyed()"
+    }
+  },
+  "usage_examples": {
+    "modern_component": {
+      "description": "現代化組件範例",
+      "code": "@Component({\n  selector: 'app-user',\n  standalone: true,\n  template: `\n    @if (user()) {\n      <div>{{ user().name }}</div>\n      @for (hobby of user().hobbies; track hobby.id) {\n        <span>{{ hobby.name }}</span>\n      }\n    } @else {\n      <div>Loading...</div>\n    }\n  `\n})\nexport class UserComponent {\n  // 現代化輸入\n  readonly userId = input.required<string>();\n\n  // 信號狀態\n  private readonly userService = inject(UserService);\n  readonly user = computed(() =>\n    this.userService.getUser(this.userId())\n  );\n\n  // 現代化輸出\n  readonly userSelected = output<User>();\n\n  // 副作用\n  constructor() {\n    effect(() => {\n      console.log('User changed:', this.user());\n    });\n  }\n}"
+    },
+    "dependency_injection": {
+      "description": "依賴注入範例",
+      "code": "@Injectable({ providedIn: 'root' })\nexport class UserService {\n  private readonly http = inject(HttpClient);\n  private readonly users = signal<User[]>([]);\n\n  readonly allUsers = this.users.asReadonly();\n\n  loadUsers(): void {\n    this.http.get<User[]>('/api/users')\n      .pipe(takeUntilDestroyed())\n      .subscribe(users => this.users.set(users));\n  }\n}"
+    }
+  },
+  "best_practices": [
+    "優先使用現代化控制流 @if、@for、@switch",
+    "使用信號進行響應式狀態管理",
+    "採用獨立組件架構減少模組依賴",
+    "使用 inject() 函數進行依賴注入",
+    "適當使用 OnPush 變更檢測策略",
+    "使用 takeUntilDestroyed 管理 Observable 訂閱",
+    "優先使用信號化的輸入輸出",
+    "使用 afterRender 進行 DOM 操作"
+  ],
+  "performance_tips": [
+    "使用 OnPush 變更檢測策略",
+    "適當使用信號減少不必要的計算",
+    "使用 @defer 延遲載入非關鍵組件",
+    "避免在模板中執行複雜計算",
+    "使用 trackBy 函數優化列表渲染",
+    "適當使用 untracked 避免不必要的依賴追蹤"
+  ]
+}

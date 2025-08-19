@@ -1,0 +1,362 @@
+{
+  "title": "Angular Router API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular 路由系統的完整 API 參考，包含路由配置、導航、守衛和路由事件",
+  "metadata": {
+    "category": "Routing & Navigation",
+    "complexity": "Medium",
+    "usage": "單頁應用路由、導航管理、路由守衛、路由事件處理",
+    "lastmod": "2025-01-17"
+  },
+  "core_routing_configuration": {
+    "Routes": {
+      "purpose": "路由配置陣列類型",
+      "usage": "定義應用的路由結構",
+      "example": "const routes: Routes = [{ path: 'home', component: HomeComponent }]",
+      "type": "Route[]"
+    },
+    "Route": {
+      "purpose": "單個路由配置介面",
+      "usage": "定義路由的各種屬性",
+      "properties": ["path", "component", "redirectTo", "children", "canActivate", "resolve"],
+      "example": "{ path: 'users/:id', component: UserDetailComponent }"
+    },
+    "RouterModule": {
+      "purpose": "路由模組",
+      "usage": "提供路由功能",
+      "methods": ["forRoot()", "forChild()"],
+      "example": "RouterModule.forRoot(routes)"
+    },
+    "ExtraOptions": {
+      "purpose": "路由額外選項介面",
+      "usage": "配置路由的進階選項",
+      "properties": ["enableTracing", "useHash", "scrollPositionRestoration"],
+      "example": "{ enableTracing: true, useHash: true }"
+    }
+  },
+  "routing_directives": {
+    "RouterOutlet": {
+      "selector": "router-outlet",
+      "purpose": "路由出口指令",
+      "usage": "顯示當前路由對應的組件",
+      "example": "<router-outlet></router-outlet>",
+      "attributes": ["name"]
+    },
+    "RouterLink": {
+      "selector": "a[routerLink]",
+      "purpose": "路由連結指令",
+      "usage": "創建導航連結",
+      "example": "<a [routerLink]=\"['/users', userId]\">用戶詳情</a>",
+      "attributes": ["routerLink", "routerLinkActive", "queryParams", "fragment"]
+    },
+    "RouterLinkActive": {
+      "selector": "[routerLinkActive]",
+      "purpose": "路由連結活動狀態指令",
+      "usage": "為活動路由連結添加樣式類",
+      "example": "<a [routerLink]=\"/home\" routerLinkActive=\"active\">首頁</a>",
+      "attributes": ["routerLinkActive", "routerLinkActiveOptions"]
+    },
+    "RouterLinkWithHref": {
+      "selector": "a[routerLink]",
+      "purpose": "帶 href 的路由連結指令",
+      "usage": "為路由連結添加 href 屬性",
+      "example": "<a [routerLink]=\"/home\" href=\"/home\">首頁</a>"
+    }
+  },
+  "navigation_services": {
+    "Router": {
+      "purpose": "路由服務",
+      "usage": "程式化導航和路由操作",
+      "methods": ["navigate()", "navigateByUrl()", "createUrlTree()", "serializeUrl()"],
+      "example": "router.navigate(['/users', userId])",
+      "properties": ["url", "events", "routerState"]
+    },
+    "ActivatedRoute": {
+      "purpose": "當前啟用路由服務",
+      "usage": "獲取當前路由的參數和數據",
+      "properties": ["params", "queryParams", "fragment", "data", "url"],
+      "example": "activatedRoute.params.subscribe(params => console.log(params))"
+    },
+    "Location": {
+      "purpose": "位置服務",
+      "usage": "管理瀏覽器 URL 和歷史記錄",
+      "methods": ["go()", "back()", "forward()", "getState()"],
+      "example": "location.go('/users')"
+    }
+  },
+  "route_guards": {
+    "CanActivateFn": {
+      "purpose": "路由激活守衛函數類型",
+      "usage": "控制路由是否可以激活",
+      "example": "canActivate: [(route, state) => authService.isAuthenticated()]",
+      "returns": "boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree>"
+    },
+    "CanActivateChildFn": {
+      "purpose": "子路由激活守衛函數類型",
+      "usage": "控制子路由是否可以激活",
+      "example": "canActivateChild: [(route, state) => checkPermissions()]",
+      "returns": "boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree>"
+    },
+    "CanDeactivateFn": {
+      "purpose": "路由停用守衛函數類型",
+      "usage": "控制路由是否可以停用",
+      "example": "canDeactivate: [(component) => component.canDeactivate()]",
+      "returns": "boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree>"
+    },
+    "CanMatchFn": {
+      "purpose": "路由匹配守衛函數類型",
+      "usage": "控制路由是否匹配",
+      "example": "canMatch: [(route, segments) => checkFeatureFlag()]",
+      "returns": "boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree>"
+    },
+    "ResolveFn": {
+      "purpose": "路由解析守衛函數類型",
+      "usage": "在路由激活前預載數據",
+      "example": "resolve: { user: (route) => userService.getUser(route.params['id']) }",
+      "returns": "any | Observable<any> | Promise<any>"
+    },
+    "CanLoadFn": {
+      "purpose": "路由載入守衛函數類型",
+      "usage": "控制懶載入路由是否可以載入",
+      "example": "canLoad: [(route) => checkPermissions()]",
+      "returns": "boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree>"
+    }
+  },
+  "route_resolvers": {
+    "ResolveData": {
+      "purpose": "路由解析數據介面",
+      "usage": "定義路由解析器的數據結構",
+      "example": "resolve: { user: UserResolver }",
+      "type": "Record<string | symbol, any>"
+    },
+    "ResolveFn": {
+      "purpose": "路由解析器函數類型",
+      "usage": "在路由激活前預載數據",
+      "example": "resolve: { data: (route) => dataService.getData() }",
+      "returns": "any | Observable<any> | Promise<any>"
+    }
+  },
+  "router_events": {
+    "RouterEvent": {
+      "purpose": "路由事件基類",
+      "usage": "所有路由事件的基礎類型",
+      "properties": ["id", "url"],
+      "type": "extends Event"
+    },
+    "NavigationStart": {
+      "purpose": "導航開始事件",
+      "usage": "導航開始時觸發",
+      "example": "router.events.pipe(filter(e => e instanceof NavigationStart))",
+      "extends": "RouterEvent"
+    },
+    "NavigationEnd": {
+      "purpose": "導航結束事件",
+      "usage": "導航成功完成時觸發",
+      "example": "router.events.pipe(filter(e => e instanceof NavigationEnd))",
+      "extends": "RouterEvent"
+    },
+    "NavigationCancel": {
+      "purpose": "導航取消事件",
+      "usage": "導航被取消時觸發",
+      "example": "導航守衛返回 false 時觸發",
+      "extends": "RouterEvent"
+    },
+    "NavigationError": {
+      "purpose": "導航錯誤事件",
+      "usage": "導航過程中發生錯誤時觸發",
+      "example": "路由配置錯誤或組件載入失敗時觸發",
+      "extends": "RouterEvent",
+      "properties": ["error"]
+    },
+    "GuardsCheckStart": {
+      "purpose": "守衛檢查開始事件",
+      "usage": "開始執行路由守衛時觸發",
+      "extends": "RouterEvent"
+    },
+    "GuardsCheckEnd": {
+      "purpose": "守衛檢查結束事件",
+      "usage": "完成路由守衛檢查時觸發",
+      "extends": "RouterEvent"
+    },
+    "ResolveStart": {
+      "purpose": "解析開始事件",
+      "usage": "開始執行路由解析器時觸發",
+      "extends": "RouterEvent"
+    },
+    "ResolveEnd": {
+      "purpose": "解析結束事件",
+      "usage": "完成路由解析器執行時觸發",
+      "extends": "RouterEvent"
+    }
+  },
+  "url_handling": {
+    "UrlTree": {
+      "purpose": "URL 樹結構",
+      "usage": "表示路由的 URL 結構",
+      "example": "router.createUrlTree(['/users', userId])",
+      "methods": ["toString()", "queryParamMap", "fragment"]
+    },
+    "UrlSegment": {
+      "purpose": "URL 段",
+      "usage": "表示 URL 路徑的一個段",
+      "properties": ["path", "parameters"],
+      "example": "路由參數解析後的 URL 段"
+    },
+    "UrlSegmentGroup": {
+      "purpose": "URL 段組",
+      "usage": "組織 URL 段的層次結構",
+      "properties": ["segments", "children", "parent"],
+      "example": "路由配置的層次結構"
+    },
+    "ParamMap": {
+      "purpose": "參數映射",
+      "usage": "路由參數的鍵值對映射",
+      "methods": ["get()", "getAll()", "has()", "keys()"],
+      "example": "activatedRoute.paramMap.subscribe(params => console.log(params.get('id')))"
+    },
+    "QueryParamMap": {
+      "purpose": "查詢參數映射",
+      "usage": "查詢參數的鍵值對映射",
+      "methods": ["get()", "getAll()", "has()", "keys()"],
+      "example": "activatedRoute.queryParamMap.subscribe(params => console.log(params.get('page')))"
+    }
+  },
+  "route_data": {
+    "Data": {
+      "purpose": "路由數據介面",
+      "usage": "定義路由的靜態數據",
+      "example": "data: { title: '用戶詳情', requiresAuth: true }",
+      "type": "Record<string | symbol, any>"
+    },
+    "ResolveData": {
+      "purpose": "路由解析數據介面",
+      "usage": "定義路由解析器的數據結構",
+      "example": "resolve: { user: UserResolver }",
+      "type": "Record<string | symbol, any>"
+    }
+  },
+  "lazy_loading": {
+    "LoadChildren": {
+      "purpose": "懶載入子路由",
+      "usage": "延遲載入子路由模組",
+      "example": "loadChildren: () => import('./user/user.module').then(m => m.UserModule)",
+      "type": "LoadChildren"
+    },
+    "LoadChildrenCallback": {
+      "purpose": "懶載入回調函數類型",
+      "usage": "定義如何載入子路由",
+      "example": "() => import('./feature/feature.module').then(m => m.FeatureModule)",
+      "returns": "Type<any> | NgModuleFactory<any> | Observable<Type<any>> | Promise<Type<any>>"
+    }
+  },
+  "preloading_strategies": {
+    "PreloadAllModules": {
+      "purpose": "預載所有模組策略",
+      "usage": "預載所有懶載入模組",
+      "example": "RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })",
+      "selector": "PreloadAllModules"
+    },
+    "NoPreloading": {
+      "purpose": "不預載策略",
+      "usage": "禁用預載功能",
+      "example": "RouterModule.forRoot(routes, { preloadingStrategy: NoPreloading })",
+      "selector": "NoPreloading"
+    },
+    "PreloadingStrategy": {
+      "purpose": "預載策略介面",
+      "usage": "自定義預載策略",
+      "methods": ["preload()"],
+      "example": "實現自定義的預載邏輯"
+    }
+  },
+  "route_parameters": {
+    "Params": {
+      "purpose": "路由參數介面",
+      "usage": "路由路徑參數的鍵值對",
+      "example": "params: { id: '123', type: 'user' }",
+      "type": "Record<string, string>"
+    },
+    "QueryParamsHandling": {
+      "purpose": "查詢參數處理策略",
+      "usage": "控制查詢參數的處理方式",
+      "values": ["merge", "preserve", ""],
+      "example": "[routerLink]=\"['/users']\" [queryParams]=\"{page: 1}\" queryParamsHandling=\"merge\""
+    }
+  },
+  "router_state": {
+    "RouterState": {
+      "purpose": "路由狀態介面",
+      "usage": "表示應用的路由狀態",
+      "properties": ["url", "root"],
+      "example": "router.routerState.root"
+    },
+    "RouterStateSnapshot": {
+      "purpose": "路由狀態快照",
+      "usage": "路由狀態的不可變快照",
+      "example": "在路由守衛中獲取路由狀態",
+      "properties": ["url", "root", "urlAfterRedirects"]
+    },
+    "ActivatedRouteSnapshot": {
+      "purpose": "啟用路由快照",
+      "usage": "當前路由的不可變快照",
+      "example": "在路由守衛中獲取路由參數",
+      "properties": ["params", "queryParams", "fragment", "data", "url"]
+    }
+  },
+  "usage_examples": {
+    "basic_routing_setup": {
+      "description": "基本路由設置",
+      "code": "// app.routes.ts\nimport { Routes } from '@angular/router';\nimport { HomeComponent } from './home/home.component';\nimport { UserListComponent } from './user/user-list.component';\nimport { UserDetailComponent } from './user/user-detail.component';\n\nconst routes: Routes = [\n  { path: '', redirectTo: '/home', pathMatch: 'full' },\n  { path: 'home', component: HomeComponent },\n  { path: 'users', component: UserListComponent },\n  { path: 'users/:id', component: UserDetailComponent },\n  { path: '**', component: NotFoundComponent }\n];\n\nexport default routes;\n\n// app.config.ts\nimport { provideRouter } from '@angular/router';\nimport routes from './app.routes';\n\nexport const appConfig: ApplicationConfig = {\n  providers: [\n    provideRouter(routes)\n  ]\n};"
+    },
+    "route_guards": {
+      "description": "路由守衛使用",
+      "code": "// auth.guard.ts\nimport { inject } from '@angular/core';\nimport { Router } from '@angular/router';\nimport { AuthService } from './auth.service';\nimport { CanActivateFn } from '@angular/router';\n\nexport const authGuard: CanActivateFn = (route, state) => {\n  const authService = inject(AuthService);\n  const router = inject(Router);\n\n  if (authService.isAuthenticated()) {\n    return true;\n  }\n\n  router.navigate(['/login'], { queryParams: { returnUrl: state.url } });\n  return false;\n};\n\n// 在路由中使用\n{ path: 'admin', component: AdminComponent, canActivate: [authGuard] }"
+    },
+    "route_resolvers": {
+      "description": "路由解析器使用",
+      "code": "// user.resolver.ts\nimport { inject } from '@angular/core';\nimport { ResolveFn } from '@angular/router';\nimport { UserService } from './user.service';\n\nexport const userResolver: ResolveFn<User> = (route, state) => {\n  const userService = inject(UserService);\n  const userId = route.paramMap.get('id');\n  return userService.getUser(userId!);\n};\n\n// 在路由中使用\n{ path: 'users/:id', component: UserDetailComponent, resolve: { user: userResolver } }"
+    },
+    "lazy_loading": {
+      "description": "懶載入路由",
+      "code": "// 懶載入用戶模組\nconst routes: Routes = [\n  {\n    path: 'users',\n    loadChildren: () => import('./user/user.module').then(m => m.UserModule)\n  }\n];\n\n// 在組件中導航\nconstructor(private router: Router) {}\n\ngoToUser(userId: string) {\n  this.router.navigate(['/users', userId]);\n}\n\n// 程式化導航\nnavigateToAdmin() {\n  this.router.navigate(['/admin'], {\n    queryParams: { section: 'users' },\n    fragment: 'top'\n  });\n}"
+    },
+    "route_events": {
+      "description": "路由事件監聽",
+      "code": "import { Component, OnInit } from '@angular/core';\nimport { Router, NavigationEnd } from '@angular/router';\nimport { filter } from 'rxjs/operators';\n\n@Component({\n  selector: 'app-root',\n  template: '<router-outlet></router-outlet>'\n})\nexport class AppComponent implements OnInit {\n  constructor(private router: Router) {}\n\n  ngOnInit() {\n    this.router.events.pipe(\n      filter(event => event instanceof NavigationEnd)\n    ).subscribe((event: NavigationEnd) => {\n      console.log('導航到:', event.url);\n      // 執行導航後的邏輯\n    });\n  }\n}"
+    },
+    "query_parameters": {
+      "description": "查詢參數處理",
+      "code": "// 在組件中獲取查詢參數\nimport { Component, OnInit } from '@angular/core';\nimport { ActivatedRoute } from '@angular/router';\n\n@Component({\n  selector: 'app-user-list',\n  template: '<div>用戶列表</div>'\n})\nexport class UserListComponent implements OnInit {\n  page = 1;\n  size = 10;\n\n  constructor(private route: ActivatedRoute) {}\n\n  ngOnInit() {\n    this.route.queryParamMap.subscribe(params => {\n      this.page = Number(params.get('page')) || 1;\n      this.size = Number(params.get('size')) || 10;\n      this.loadUsers();\n    });\n  }\n\n  private loadUsers() {\n    // 載入用戶數據\n  }\n\n  // 更新查詢參數\n  changePage(newPage: number) {\n    this.router.navigate([], {\n      relativeTo: this.route,\n      queryParams: { page: newPage },\n      queryParamsHandling: 'merge'\n    });\n  }\n}"
+    },
+    "child_routes": {
+      "description": "子路由配置",
+      "code": "const routes: Routes = [\n  {\n    path: 'admin',\n    component: AdminLayoutComponent,\n    canActivate: [adminGuard],\n    children: [\n      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },\n      { path: 'dashboard', component: DashboardComponent },\n      { path: 'users', component: UserManagementComponent },\n      { path: 'settings', component: SettingsComponent }\n    ]\n  }\n];\n\n// 在 AdminLayoutComponent 中使用 router-outlet\n@Component({\n  template: `\n    <nav>管理導航</nav>\n    <router-outlet></router-outlet>\n  `\n})\nexport class AdminLayoutComponent {}"
+    }
+  },
+  "best_practices": [
+    "使用懶載入減少初始包大小",
+    "實現適當的路由守衛保護敏感路由",
+    "使用路由解析器預載數據",
+    "監聽路由事件進行導航追蹤",
+    "適當使用查詢參數和片段",
+    "實現 404 頁面處理未匹配路由",
+    "使用相對導航減少硬編碼路徑",
+    "適當配置預載策略"
+  ],
+  "performance_tips": [
+    "使用懶載入模組減少初始載入時間",
+    "實現路由預載策略",
+    "避免在路由守衛中執行重操作",
+    "使用 OnPush 變更檢測策略",
+    "適當使用路由快取",
+    "避免在路由事件中執行重邏輯"
+  ],
+  "security_considerations": [
+    "始終實現適當的路由守衛",
+    "驗證路由參數和查詢參數",
+    "保護管理員和敏感路由",
+    "實現適當的權限檢查",
+    "避免在路由中暴露敏感信息",
+    "使用 HTTPS 保護路由通信"
+  ]
+}

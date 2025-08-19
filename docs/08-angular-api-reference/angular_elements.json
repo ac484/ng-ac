@@ -1,0 +1,213 @@
+{
+  "title": "Angular Elements API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular Elements 的完整 API 參考，用於將 Angular 組件轉換為自定義 HTML 元素",
+  "metadata": {
+    "category": "Web Components",
+    "complexity": "Medium",
+    "usage": "微前端、跨框架組件、自定義元素、Web Components",
+    "lastmod": "2025-01-17"
+  },
+  "core_functionality": {
+    "createCustomElement": {
+      "function": "createCustomElement(component, config)",
+      "purpose": "創建自定義元素",
+      "usage": "將 Angular 組件轉換為自定義 HTML 元素",
+      "example": "const customElement = createCustomElement(MyComponent, { injector })",
+      "parameters": ["component: Type<any>", "config: NgElementConfig"],
+      "returns": "NgElementConstructor",
+      "use_case": "創建可在任何 HTML 頁面中使用的 Web Component"
+    }
+  },
+  "element_types_interfaces": {
+    "NgElement": {
+      "purpose": "Angular 元素介面",
+      "usage": "定義 Angular 自定義元素的標準介面",
+      "extends": "HTMLElement",
+      "properties": ["Angular 特定的方法和屬性"]
+    },
+    "NgElementConfig": {
+      "purpose": "Angular 元素配置",
+      "usage": "配置自定義元素的創建選項",
+      "properties": {
+        "injector": "EnvironmentInjector",
+        "strategyFactory": "NgElementStrategyFactory (optional)"
+      }
+    },
+    "NgElementConstructor": {
+      "purpose": "Angular 元素構造函數類型",
+      "usage": "定義自定義元素的構造函數類型",
+      "example": "可以用 new 操作符創建的元素類型"
+    },
+    "WithProperties": {
+      "purpose": "帶屬性的類型工具",
+      "usage": "為自定義元素添加屬性類型定義",
+      "example": "將組件的 @Input 屬性映射到元素屬性",
+      "generic": "WithProperties<T>"
+    }
+  },
+  "strategy_pattern": {
+    "NgElementStrategy": {
+      "purpose": "Angular 元素策略介面",
+      "usage": "定義自定義元素的行為策略",
+      "methods": ["connect()", "disconnect()", "getInputValue()", "setInputValue()"],
+      "example": "控制組件的創建、更新和銷毀"
+    },
+    "NgElementStrategyFactory": {
+      "purpose": "Angular 元素策略工廠",
+      "usage": "創建元素策略的工廠介面",
+      "methods": ["create(injector: Injector): NgElementStrategy"],
+      "example": "自定義元素行為的工廠實現"
+    },
+    "NgElementStrategyEvent": {
+      "purpose": "Angular 元素策略事件",
+      "usage": "定義策略事件的數據結構",
+      "example": "組件輸出事件的包裝"
+    }
+  },
+  "version_information": {
+    "VERSION": {
+      "purpose": "Angular Elements 版本",
+      "usage": "獲取當前 Angular Elements 包的版本",
+      "example": "用於版本檢查和調試"
+    }
+  },
+  "usage_examples": {
+    "basic_custom_element_creation": {
+      "description": "基本自定義元素創建",
+      "code": "import { createCustomElement } from '@angular/elements';\nimport { Injector } from '@angular/core';\n\n@Component({\n  selector: 'app-popup',\n  template: `\n    <div class=\"popup\">\n      <h2>{{ title }}</h2>\n      <p>{{ message }}</p>\n      <button (click)=\"close.emit()\">Close</button>\n    </div>\n  `\n})\nexport class PopupComponent {\n  @Input() title: string = '';\n  @Input() message: string = '';\n  @Output() close = new EventEmitter<void>();\n}\n\n// 創建自定義元素\nconst PopupElement = createCustomElement(PopupComponent, {\n  injector: this.injector\n});\n\n// 註冊自定義元素\ncustomElements.define('app-popup', PopupElement);"
+    },
+    "html_usage": {
+      "description": "在 HTML 中使用自定義元素",
+      "code": "<!-- 在任何 HTML 頁面中使用 -->\n<app-popup\n  title=\"Alert\"\n  message=\"This is a custom element!\"\n  id=\"my-popup\">\n</app-popup>\n\n<script>\n  // 監聽自定義事件\n  document.getElementById('my-popup')\n    .addEventListener('close', () => {\n      console.log('Popup closed');\n    });\n</script>"
+    },
+    "dynamic_creation": {
+      "description": "動態創建自定義元素",
+      "code": "@Component({...})\nexport class AppComponent {\n  constructor(private injector: Injector) {}\n\n  createPopup() {\n    // 動態創建元素\n    const popup = document.createElement('app-popup') as NgElement & WithProperties<{\n      title: string;\n      message: string;\n    }>;\n\n    // 設定屬性\n    popup.title = 'Dynamic Popup';\n    popup.message = 'Created programmatically';\n\n    // 監聽事件\n    popup.addEventListener('close', () => {\n      document.body.removeChild(popup);\n    });\n\n    // 添加到 DOM\n    document.body.appendChild(popup);\n  }\n}"
+    },
+    "custom_strategy_factory": {
+      "description": "自定義策略工廠",
+      "code": "import {\n  NgElementStrategy,\n  NgElementStrategyFactory,\n  NgElementStrategyEvent\n} from '@angular/elements';\n\nexport class CustomElementStrategyFactory implements NgElementStrategyFactory {\n  create(injector: Injector): NgElementStrategy {\n    return new CustomElementStrategy(injector);\n  }\n}\n\nexport class CustomElementStrategy implements NgElementStrategy {\n  events = new Subject<NgElementStrategyEvent>();\n\n  constructor(private injector: Injector) {}\n\n  connect(element: HTMLElement): void {\n    // 自定義連接邏輯\n  }\n\n  disconnect(): void {\n    // 自定義斷開邏輯\n  }\n\n  getInputValue(propName: string): any {\n    // 自定義輸入值獲取\n  }\n\n  setInputValue(propName: string, value: string): void {\n    // 自定義輸入值設定\n  }\n}\n\n// 使用自定義策略\nconst customElement = createCustomElement(MyComponent, {\n  injector,\n  strategyFactory: new CustomElementStrategyFactory()\n});"
+    },
+    "typed_custom_element": {
+      "description": "類型安全的自定義元素",
+      "code": "// 定義組件介面\ninterface PopupComponentInputs {\n  title: string;\n  message: string;\n  type: 'info' | 'warning' | 'error';\n}\n\ninterface PopupComponentOutputs {\n  close: void;\n  action: string;\n}\n\n// 創建類型安全的自定義元素\ntype PopupElement = NgElement & WithProperties<PopupComponentInputs>;\n\n// 使用時具有完整的類型支援\nconst popup = document.createElement('app-popup') as PopupElement;\npopup.title = 'Typed Popup';  // 類型安全\npopup.type = 'warning';       // 類型安全\n// popup.invalid = 'value';   // TypeScript 錯誤"
+    },
+    "cross_framework_usage": {
+      "description": "在不同框架中使用",
+      "code": "<!-- 在 React 中使用 -->\n<div id=\"react-app\">\n  <app-popup\n    title=\"From React\"\n    message=\"Angular component in React!\"\n    ref={popupRef}>\n  </app-popup>\n</div>\n\n<!-- 在 Vue 中使用 -->\n<div id=\"vue-app\">\n  <app-popup\n    :title=\"popupTitle\"\n    :message=\"popupMessage\"\n    @close=\"handleClose\">\n  </app-popup>\n</div>\n\n<!-- 在原生 JavaScript 中使用 -->\n<script>\n  const popup = document.createElement('app-popup');\n  popup.title = 'Native JS';\n  popup.message = 'Pure JavaScript integration';\n\n  popup.addEventListener('close', (event) => {\n    console.log('Popup closed from native JS');\n  });\n\n  document.body.appendChild(popup);\n</script>"
+    }
+  },
+  "best_practices": {
+    "component_design": [
+      "使用 @Input 和 @Output 定義清晰的 API",
+      "避免依賴 Angular 特定的服務",
+      "確保組件可以獨立運行",
+      "使用 OnPush 變更檢測策略",
+      "實現適當的生命週期管理"
+    ],
+    "event_handling": [
+      "使用標準的 DOM 事件而非 Angular 特定事件",
+      "提供清晰的事件命名和數據結構",
+      "支援事件冒泡和取消",
+      "使用 EventEmitter 發射事件",
+      "在外部框架中監聽事件"
+    ],
+    "style_encapsulation": [
+      "使用 ViewEncapsulation.ShadowDom 避免樣式衝突",
+      "提供 CSS 自定義屬性支援主題化",
+      "考慮外部樣式框架的兼容性",
+      "避免使用 Angular 特定的樣式類別",
+      "使用全局樣式或 CSS 變數"
+    ],
+    "performance_optimization": [
+      "使用 OnPush 變更檢測策略",
+      "實現適當的生命週期管理",
+      "避免記憶體洩漏",
+      "使用 trackBy 函數優化列表",
+      "適當使用 @defer 延遲載入"
+    ]
+  },
+  "considerations": {
+    "browser_support": [
+      "需要現代瀏覽器支援 Custom Elements v1",
+      "可能需要 polyfill 支援舊版瀏覽器",
+      "考慮 Shadow DOM 的兼容性",
+      "測試在不同瀏覽器中的行為",
+      "提供降級方案"
+    ],
+    "packaging_deployment": [
+      "需要包含 Angular 運行時",
+      "考慮代碼分割和懶載入",
+      "優化打包大小",
+      "使用 tree-shaking 減少未使用代碼",
+      "考慮使用 standalone 組件"
+    ],
+    "debugging_testing": [
+      "使用瀏覽器開發工具調試",
+      "編寫單元測試和整合測試",
+      "考慮跨框架的測試策略",
+      "測試事件綁定和屬性設定",
+      "驗證樣式封裝效果"
+    ]
+  },
+  "common_use_cases": [
+    "微前端架構中的組件共享",
+    "在非 Angular 應用中使用 Angular 組件",
+    "創建可重用的 UI 組件庫",
+    "跨框架的組件整合",
+    "第三方組件的分發",
+    "漸進式 Web 應用開發",
+    "組件化設計系統"
+  ],
+  "integration_patterns": {
+    "react_integration": {
+      "description": "React 整合模式",
+      "approach": "使用 ref 和 useEffect 管理組件生命週期",
+      "example": "在 useEffect 中創建和清理自定義元素"
+    },
+    "vue_integration": {
+      "description": "Vue 整合模式",
+      "approach": "使用 mounted 和 beforeUnmount 生命週期鉤子",
+      "example": "在 mounted 中創建元素，在 beforeUnmount 中清理"
+    },
+    "vanilla_js_integration": {
+      "description": "原生 JavaScript 整合",
+      "approach": "直接使用 DOM API 創建和管理元素",
+      "example": "使用 createElement 和 addEventListener"
+    }
+  },
+  "advanced_features": {
+    "lazy_loading": {
+      "description": "懶載入自定義元素",
+      "usage": "按需載入組件以減少初始包大小",
+      "example": "使用動態 import 和 createCustomElement"
+    },
+    "dynamic_imports": {
+      "description": "動態導入組件",
+      "usage": "根據條件動態載入不同的組件",
+      "example": "根據用戶權限載入不同的組件"
+    },
+    "state_management": {
+      "description": "狀態管理整合",
+      "usage": "與外部狀態管理系統整合",
+      "example": "使用 Redux、Vuex 或其他狀態管理庫"
+    }
+  },
+  "troubleshooting": {
+    "common_issues": [
+      "組件不顯示：檢查選擇器和模板",
+      "事件不觸發：驗證事件監聽器綁定",
+      "樣式不生效：檢查樣式封裝設定",
+      "依賴注入失敗：確保提供者配置正確",
+      "變更檢測問題：檢查 OnPush 策略使用"
+    ],
+    "debugging_tips": [
+      "使用瀏覽器開發工具檢查元素",
+      "檢查控制台錯誤訊息",
+      "驗證自定義元素註冊",
+      "測試事件發射和監聽",
+      "檢查樣式封裝效果"
+    ]
+  }
+}

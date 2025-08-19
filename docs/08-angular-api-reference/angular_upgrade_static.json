@@ -1,0 +1,259 @@
+{
+  "title": "Angular Upgrade Static API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular Upgrade Static 的完整 API 參考，用於從 AngularJS 遷移到 Angular",
+  "metadata": {
+    "category": "Migration & Upgrade",
+    "complexity": "High",
+    "usage": "AngularJS 到 Angular 的漸進式遷移、混合應用開發、向下兼容",
+    "lastmod": "2025-01-17"
+  },
+  "core_upgrade_functionality": {
+    "UpgradeModule": {
+      "purpose": "升級模組",
+      "usage": "在 Angular 應用中啟用 AngularJS 組件和服務",
+      "example": "在根模組中導入以支援混合應用",
+      "selector": "UpgradeModule",
+      "methods": ["bootstrap()", "downgradeComponent()", "downgradeInjectable()"]
+    },
+    "downgradeComponent": {
+      "function": "downgradeComponent(info)",
+      "purpose": "降級 Angular 組件",
+      "usage": "將 Angular 組件轉換為可在 AngularJS 中使用的指令",
+      "example": "downgradeComponent({ component: MyAngularComponent })",
+      "parameters": ["info: IUpgradeStaticProvider"],
+      "returns": "angular.IDirectiveFactory",
+      "use_case": "在 AngularJS 應用中使用 Angular 組件"
+    },
+    "downgradeInjectable": {
+      "function": "downgradeInjectable(token)",
+      "purpose": "降級 Angular 服務",
+      "usage": "將 Angular 服務轉換為可在 AngularJS 中使用的服務",
+      "example": "downgradeInjectable(MyAngularService)",
+      "parameters": ["token: Type<T> | InjectionToken<T>"],
+      "returns": "angular.IInjectable",
+      "use_case": "在 AngularJS 應用中使用 Angular 服務"
+    },
+    "upgradeModule": {
+      "function": "upgradeModule(angularModule)",
+      "purpose": "升級 AngularJS 模組",
+      "usage": "將 AngularJS 模組升級為可在 Angular 中使用的模組",
+      "example": "upgradeModule(angular.module('myApp'))",
+      "parameters": ["angularModule: angular.IModule"],
+      "returns": "Type<any>",
+      "use_case": "在 Angular 應用中使用 AngularJS 模組"
+    }
+  },
+  "upgrade_interfaces": {
+    "IUpgradeStaticProvider": {
+      "purpose": "升級靜態提供者介面",
+      "usage": "配置降級組件的選項",
+      "properties": ["component", "inputs", "outputs", "downgradedModule"],
+      "example": "{ component: MyComponent, inputs: ['title'], outputs: ['click'] }"
+    },
+    "IUpgradeStatic": {
+      "purpose": "升級靜態介面",
+      "usage": "定義升級模組的靜態方法",
+      "methods": ["downgradeComponent()", "downgradeInjectable()", "upgradeModule()"],
+      "example": "UpgradeModule 的靜態方法集合"
+    }
+  },
+  "hybrid_application_setup": {
+    "HybridApplication": {
+      "purpose": "混合應用配置",
+      "usage": "配置同時包含 AngularJS 和 Angular 的混合應用",
+      "example": "在 Angular 應用中集成 AngularJS 組件",
+      "configuration": ["bootstrap", "downgrade", "upgrade"]
+    },
+    "BootstrapConfig": {
+      "purpose": "啟動配置介面",
+      "usage": "配置混合應用的啟動選項",
+      "properties": ["strictDi", "element", "module"],
+      "example": "{ strictDi: true, element: document.body, module: 'myApp' }"
+    }
+  },
+  "component_downgrading": {
+    "DowngradedComponent": {
+      "purpose": "降級組件配置",
+      "usage": "配置如何將 Angular 組件降級為 AngularJS 指令",
+      "properties": ["component", "inputs", "outputs", "downgradedModule"],
+      "example": "配置組件的輸入輸出屬性映射"
+    },
+    "InputMapping": {
+      "purpose": "輸入屬性映射",
+      "usage": "定義 Angular 組件輸入屬性如何映射到 AngularJS 作用域",
+      "example": "['title', 'items', 'config']",
+      "type": "string[]"
+    },
+    "OutputMapping": {
+      "purpose": "輸出屬性映射",
+      "usage": "定義 Angular 組件輸出事件如何映射到 AngularJS 作用域",
+      "example": "['click', 'change', 'submit']",
+      "type": "string[]"
+    }
+  },
+  "service_downgrading": {
+    "DowngradedService": {
+      "purpose": "降級服務配置",
+      "usage": "配置如何將 Angular 服務降級為 AngularJS 服務",
+      "example": "downgradeInjectable(MyAngularService)",
+      "injection": "依賴注入配置"
+    },
+    "ServiceInjection": {
+      "purpose": "服務注入配置",
+      "usage": "配置降級服務的依賴注入",
+      "example": "在 AngularJS 中注入 Angular 服務",
+      "methods": ["$get()", "factory()"]
+    }
+  },
+  "module_upgrading": {
+    "UpgradedModule": {
+      "purpose": "升級模組配置",
+      "usage": "配置如何將 AngularJS 模組升級為 Angular 模組",
+      "example": "upgradeModule(angular.module('myApp'))",
+      "integration": "與 Angular 模組系統的集成"
+    },
+    "ModuleIntegration": {
+      "purpose": "模組集成配置",
+      "usage": "配置 AngularJS 和 Angular 模組的集成方式",
+      "example": "共享依賴注入、路由配置等",
+      "features": ["providers", "imports", "exports"]
+    }
+  },
+  "dependency_injection_integration": {
+    "HybridInjector": {
+      "purpose": "混合注入器",
+      "usage": "在混合應用中管理依賴注入",
+      "example": "Angular 和 AngularJS 服務的互操作性",
+      "methods": ["get()", "has()"]
+    },
+    "ServiceInterop": {
+      "purpose": "服務互操作性",
+      "usage": "實現 Angular 和 AngularJS 服務之間的互操作",
+      "example": "共享狀態、事件通信等",
+      "patterns": ["bridge", "adapter", "facade"]
+    }
+  },
+  "routing_integration": {
+    "HybridRouter": {
+      "purpose": "混合路由器",
+      "usage": "在混合應用中管理路由",
+      "example": "Angular 和 AngularJS 路由的協調",
+      "features": ["route sharing", "navigation sync", "parameter passing"]
+    },
+    "RouteSharing": {
+      "purpose": "路由共享",
+      "usage": "在 Angular 和 AngularJS 之間共享路由配置",
+      "example": "統一的導航邏輯和 URL 管理",
+      "implementation": ["route mapping", "state synchronization"]
+    }
+  },
+  "change_detection_integration": {
+    "HybridChangeDetection": {
+      "purpose": "混合變更檢測",
+      "usage": "協調 Angular 和 AngularJS 的變更檢測",
+      "example": "確保兩個框架的數據同步",
+      "strategies": ["manual trigger", "zone integration", "digest cycle"]
+    },
+    "ZoneIntegration": {
+      "purpose": "Zone 集成",
+      "usage": "將 AngularJS 的變更檢測集成到 Angular 的 Zone 系統",
+      "example": "NgZone 與 $digest 的協調",
+      "methods": ["run()", "runOutsideAngular()"]
+    }
+  },
+  "performance_optimization": {
+    "HybridPerformance": {
+      "purpose": "混合應用性能優化",
+      "usage": "優化混合應用的性能",
+      "strategies": ["lazy loading", "change detection", "memory management"],
+      "tools": ["performance monitoring", "profiling", "optimization"]
+    },
+    "MemoryManagement": {
+      "purpose": "內存管理",
+      "usage": "管理混合應用中的內存使用",
+      "example": "避免內存洩漏、優化垃圾回收",
+      "techniques": ["cleanup", "disposal", "reference management"]
+    }
+  },
+  "testing_strategies": {
+    "HybridTesting": {
+      "purpose": "混合應用測試策略",
+      "usage": "測試包含 AngularJS 和 Angular 的混合應用",
+      "approaches": ["unit testing", "integration testing", "e2e testing"],
+      "tools": ["Jasmine", "Karma", "Protractor"]
+    },
+    "TestUtilities": {
+      "purpose": "測試工具",
+      "usage": "提供混合應用測試的實用工具",
+      "example": "模擬服務、測試數據、斷言工具",
+      "categories": ["mocking", "stubbing", "assertions"]
+    }
+  },
+  "migration_guidelines": {
+    "MigrationStrategy": {
+      "purpose": "遷移策略",
+      "usage": "制定從 AngularJS 到 Angular 的遷移計劃",
+      "phases": ["preparation", "incremental", "completion"],
+      "considerations": ["timeline", "resources", "risks"]
+    },
+    "IncrementalMigration": {
+      "purpose": "增量遷移",
+      "usage": "逐步遷移 AngularJS 應用到 Angular",
+      "approach": "組件級別、模組級別、功能級別的漸進式遷移",
+      "benefits": ["risk reduction", "continuous delivery", "learning curve"]
+    }
+  },
+  "usage_examples": {
+    "basic_hybrid_setup": {
+      "description": "基本混合應用設置",
+      "code": "// app.config.ts\nimport { ApplicationConfig } from '@angular/core';\nimport { provideRouter } from '@angular/router';\nimport { UpgradeModule } from '@angular/upgrade/static';\nimport routes from './app.routes';\n\nexport const appConfig: ApplicationConfig = {\n  providers: [\n    provideRouter(routes)\n  ]\n};\n\n// app.component.ts\nimport { Component } from '@angular/core';\nimport { UpgradeModule } from '@angular/upgrade/static';\n\n@Component({\n  selector: 'app-root',\n  template: `\n    <h1>Angular 應用</h1>\n    <router-outlet></router-outlet>\n    <div ng-controller=\"AngularJSController\">\n      <ng1-component></ng1-component>\n    </div>\n  `\n})\nexport class AppComponent {\n  constructor(private upgrade: UpgradeModule) {}\n\n  ngOnInit() {\n    // 啟動 AngularJS 模組\n    this.upgrade.bootstrap(document.body, ['myAngularJSApp']);\n  }\n}"
+    },
+    "component_downgrading": {
+      "description": "組件降級示例",
+      "code": "// my-angular.component.ts\nimport { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'app-my-component',\n  template: `\n    <div>\n      <h2>{{ title }}</h2>\n      <button (click)=\"onClick()\">點擊</button>\n    </div>\n  `\n})\nexport class MyAngularComponent {\n  @Input() title = '默認標題';\n  @Output() click = new EventEmitter<void>();\n\n  onClick() {\n    this.click.emit();\n  }\n}\n\n// downgrade.ts\nimport { downgradeComponent } from '@angular/upgrade/static';\nimport { MyAngularComponent } from './my-angular.component';\n\nangular.module('myAngularJSApp')\n  .directive('ng1MyComponent', downgradeComponent({\n    component: MyAngularComponent,\n    inputs: ['title'],\n    outputs: ['click']\n  }));\n\n// 在 AngularJS 模板中使用\n<div ng1-my-component\n     title=\"我的標題\"\n     click=\"handleClick()\">\n</div>"
+    },
+    "service_downgrading": {
+      "description": "服務降級示例",
+      "code": "// my-angular.service.ts\nimport { Injectable } from '@angular/core';\nimport { HttpClient } from '@angular/common/http';\nimport { Observable } from 'rxjs';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class MyAngularService {\n  constructor(private http: HttpClient) {}\n\n  getData(): Observable<any> {\n    return this.http.get('/api/data');\n  }\n\n  saveData(data: any): Observable<any> {\n    return this.http.post('/api/data', data);\n  }\n}\n\n// downgrade.ts\nimport { downgradeInjectable } from '@angular/upgrade/static';\nimport { MyAngularService } from './my-angular.service';\n\nangular.module('myAngularJSApp')\n  .factory('ng1MyService', downgradeInjectable(MyAngularService));\n\n// 在 AngularJS 控制器中使用\nangular.module('myAngularJSApp')\n  .controller('MyController', function(ng1MyService) {\n    ng1MyService.getData().subscribe(data => {\n      console.log('獲取到數據:', data);\n    });\n  });"
+    },
+    "module_upgrading": {
+      "description": "模組升級示例",
+      "code": "// 升級 AngularJS 模組\nimport { upgradeModule } from '@angular/upgrade/static';\nimport { NgModule } from '@angular/core';\n\nconst MyAngularJSModule = upgradeModule(\n  angular.module('myAngularJSApp')\n);\n\n@NgModule({\n  imports: [MyAngularJSModule],\n  declarations: [],\n  providers: []\n})\nexport class AppModule {}\n\n// 在 Angular 應用中使用升級的模組\nimport { Component } from '@angular/core';\nimport { UpgradeModule } from '@angular/upgrade/static';\n\n@Component({\n  selector: 'app-root',\n  template: `\n    <div>\n      <h1>Angular 組件</h1>\n      <div ng-controller=\"AngularJSController\">\n        <ng1-component></ng1-component>\n      </div>\n    </div>\n  `\n})\nexport class AppComponent {\n  constructor(private upgrade: UpgradeModule) {}\n\n  ngOnInit() {\n    // 啟動升級的 AngularJS 模組\n    this.upgrade.bootstrap(document.body, ['myAngularJSApp']);\n  }\n}"
+    },
+    "routing_integration": {
+      "description": "路由集成示例",
+      "code": "// 在 AngularJS 中使用 Angular 路由\nangular.module('myAngularJSApp')\n  .config(function($routeProvider) {\n    $routeProvider\n      .when('/angular-component', {\n        template: '<ng1-angular-component></ng1-angular-component>'\n      })\n      .when('/angularjs-component', {\n        template: '<ng1-component></ng1-component>'\n      });\n  });\n\n// 在 Angular 中使用 AngularJS 路由\nimport { Component } from '@angular/core';\nimport { Router } from '@angular/router';\nimport { UpgradeModule } from '@angular/upgrade/static';\n\n@Component({\n  selector: 'app-root',\n  template: `\n    <nav>\n      <a routerLink=\"/angular\">Angular 路由</a>\n      <a (click)=\"navigateToAngularJS()\">AngularJS 路由</a>\n    </nav>\n    <router-outlet></router-outlet>\n  `\n})\nexport class AppComponent {\n  constructor(\n    private router: Router,\n    private upgrade: UpgradeModule\n  ) {}\n\n  navigateToAngularJS() {\n    // 使用 AngularJS 路由導航\n    this.upgrade.$injector.get('$location').path('/angularjs-component');\n  }\n}"
+    },
+    "change_detection_integration": {
+      "description": "變更檢測集成示例",
+      "code": "import { Component, NgZone } from '@angular/core';\nimport { UpgradeModule } from '@angular/upgrade/static';\n\n@Component({\n  selector: 'app-root',\n  template: `\n    <div>\n      <h1>Angular 計數器: {{ counter }}</h1>\n      <button (click)=\"increment()\">增加</button>\n      <div ng-controller=\"AngularJSCounterController\">\n        <h2>AngularJS 計數器: {{ ng1Counter }}</h2>\n        <button ng-click=\"increment()\">增加</button>\n      </div>\n    </div>\n  `\n})\nexport class AppComponent {\n  counter = 0;\n\n  constructor(\n    private upgrade: UpgradeModule,\n    private ngZone: NgZone\n  ) {}\n\n  increment() {\n    this.counter++;\n    // 手動觸發 AngularJS 變更檢測\n    this.ngZone.runOutsideAngular(() => {\n      this.upgrade.$injector.get('$rootScope').$digest();\n    });\n  }\n\n  ngOnInit() {\n    this.upgrade.bootstrap(document.body, ['myAngularJSApp']);\n\n    // 監聽 AngularJS 變更\n    this.upgrade.$injector.get('$rootScope').$watch('ng1Counter', (newVal: number) => {\n      this.ngZone.run(() => {\n        console.log('AngularJS 計數器變更:', newVal);\n      });\n    });\n  }\n}"
+    }
+  },
+  "best_practices": [
+    "制定清晰的遷移策略和時間表",
+    "使用增量遷移方法減少風險",
+    "保持兩個框架的數據同步",
+    "適當處理變更檢測的協調",
+    "實現統一的錯誤處理機制",
+    "使用適當的測試策略驗證功能",
+    "監控混合應用的性能",
+    "逐步減少對 AngularJS 的依賴"
+  ],
+  "performance_tips": [
+    "避免頻繁的框架間通信",
+    "優化變更檢測策略",
+    "使用適當的內存管理技術",
+    "實現懶載入減少初始包大小",
+    "監控和優化網絡請求",
+    "使用適當的快取策略"
+  ],
+  "migration_considerations": [
+    "評估遷移的複雜性和成本",
+    "制定詳細的遷移計劃",
+    "準備適當的測試環境",
+    "培訓團隊掌握 Angular",
+    "考慮業務連續性要求",
+    "評估第三方庫的兼容性"
+  ]
+}

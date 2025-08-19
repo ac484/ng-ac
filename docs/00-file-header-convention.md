@@ -1,0 +1,449 @@
+# AI 優化檔案標頭註解 - JSON 版本完整模板
+
+## 🎯 統一標準格式
+
+```typescript
+/**
+ * @ai-context {
+ *   "role": "<Layer>/<Type>",
+ *   "purpose": "<核心職責描述>",
+ *   "constraints": ["<架構約束1>", "<架構約束2>"],
+ *   "dependencies": ["<直接依賴1>", "<直接依賴2>"],
+ *   "dependents": ["<被依賴檔案1>", "<被依賴檔案2>"],
+ *   "imports": ["<導入的模組/服務>", "<外部依賴>"],
+ *   "exports": ["<導出的類別/函數>", "<公開介面>"],
+ *   "security": "<none|low|medium|high|critical>",
+ *   "lastmod": "YYYY-MM-DD"
+ * }
+ * @usage <簡潔使用範例>
+ * @see docs/architecture/<相關文件>.md
+ */
+```
+
+---
+
+## 🏗️ 基於實際專案的分層角色對照表
+
+### Domain Layer (領域層)
+| 目錄路徑 | Role 代碼 | 完整名稱 | 描述 |
+|----------|-----------|----------|------|
+| `domain/entities` | `Domain/Entity` | 領域實體 | 核心業務實體 |
+| `domain/value-objects` | `Domain/ValueObject` | 值對象 | 不可變值對象 |
+| `domain/services` | `Domain/Service` | 領域服務 | 跨實體業務邏輯 |
+| `domain/repositories` | `Domain/Repository` | 領域倉儲接口 | 持久化抽象接口 |
+| `domain/aggregates` | `Domain/Aggregate` | 聚合根 | 聚合邊界管理 |
+| `domain/specifications` | `Domain/Specification` | 規格模式 | 業務規則封裝 |
+| `domain/events` | `Domain/Event` | 領域事件 | 業務事件定義 |
+| `domain/exceptions` | `Domain/Exception` | 領域異常 | 業務異常處理 |
+
+### Application Layer (應用層)
+| 目錄路徑 | Role 代碼 | 完整名稱 | 描述 |
+|----------|-----------|----------|------|
+| `application/use-cases` | `Application/UseCase` | 用例服務 | 應用用例邏輯 |
+| `application/services` | `Application/Service` | 應用服務 | 應用層協調服務 |
+| `application/dto` | `Application/DTO` | 數據傳輸對象 | 接口數據結構 |
+| `application/commands` | `Application/Command` | 命令對象 | CQRS 命令模式 |
+| `application/queries` | `Application/Query` | 查詢對象 | CQRS 查詢模式 |
+| `application/mappers` | `Application/Mapper` | 對象映射器 | DTO 轉換邏輯 |
+| `application/validators` | `Application/Validator` | 應用驗證器 | 輸入數據驗證 |
+| `application/exceptions` | `Application/Exception` | 應用異常 | 應用層異常處理 |
+
+### Infrastructure Layer (基礎設施層)
+| 目錄路徑 | Role 代碼 | 完整名稱 | 描述 |
+|----------|-----------|----------|------|
+| `infrastructure/persistence` | `Infrastructure/Repository` | 倉儲實現 | 數據持久化實現 |
+| `infrastructure/config` | `Infrastructure/Config` | 配置管理 | 應用配置服務 |
+| `infrastructure/caching` | `Infrastructure/Cache` | 緩存服務 | 數據緩存處理 |
+| `infrastructure/logging` | `Infrastructure/Logger` | 日誌服務 | 應用日誌記錄 |
+| `infrastructure/monitoring` | `Infrastructure/Monitor` | 監控服務 | 應用監控統計 |
+| `infrastructure/messaging` | `Infrastructure/Message` | 消息服務 | 異步消息處理 |
+| `infrastructure/external-services` | `Infrastructure/External` | 外部服務 | 第三方 API 整合 |
+| `infrastructure/interceptors` | `Infrastructure/Interceptor` | 攔截器 | HTTP 請求攔截 |
+| `infrastructure/security` | `Infrastructure/Security` | 安全服務 | Token/RBAC 管理 |
+
+### Interface Layer (接口層)
+| 目錄路徑 | Role 代碼 | 完整名稱 | 描述 |
+|----------|-----------|----------|------|
+| `interface/components` | `Interface/Component` | UI 組件 | Angular 組件 |
+| `interface/pages` | `Interface/Page` | 頁面組件 | 路由頁面組件 |
+| `interface/layouts` | `Interface/Layout` | 布局組件 | 頁面布局結構 |
+| `interface/controllers` | `Interface/Controller` | 控制器 | HTTP 請求處理 |
+| `interface/guards` | `Interface/Guard` | 路由守衛 | 路由權限檢查 |
+| `interface/pipes` | `Interface/Pipe` | 管道 | 數據轉換管道 |
+| `interface/directives` | `Interface/Directive` | 指令 | Angular 指令 |
+| `interface/resolvers` | `Interface/Resolver` | 路由解析器 | 路由數據預加載 |
+
+### Security Layer (安全層)
+| 目錄路徑 | Role 代碼 | 完整名稱 | 描述 |
+|----------|-----------|----------|------|
+| `security/authentication` | `Security/Auth` | 認證服務 | 用戶身份認證 |
+| `security/authorization` | `Security/AuthZ` | 授權服務 | 權限檢查管理 |
+| `security/jwt` | `Security/JWT` | JWT 服務 | Token 生成驗證 |
+| `security/encryption` | `Security/Encrypt` | 加密服務 | 數據加密解密 |
+| `security/validation` | `Security/Validate` | 安全驗證 | 輸入數據安全檢查 |
+| `security/audit` | `Security/Audit` | 審計日誌 | 安全操作記錄 |
+| `security/rate-limiting` | `Security/RateLimit` | 速率限制 | API 調用頻率控制 |
+
+### Shared Layer (共享層)
+| 目錄路徑 | Role 代碼 | 完整名稱 | 描述 |
+|----------|-----------|----------|------|
+| `shared/utils` | `Shared/Utility` | 工具函數 | 通用工具類 |
+| `shared/types` | `Shared/Type` | 類型定義 | TypeScript 類型 |
+| `shared/constants` | `Shared/Constant` | 常量定義 | 應用常量 |
+| `shared/interfaces` | `Shared/Interface` | 接口定義 | 通用接口定義 |
+| `shared/models` | `Shared/Model` | 數據模型 | 通用數據結構 |
+| `shared/enums` | `Shared/Enum` | 枚舉定義 | 枚舉常量 |
+| `shared/decorators` | `Shared/Decorator` | 裝飾器 | 通用裝飾器 |
+| `shared/validators` | `Shared/Validator` | 通用驗證器 | 共享驗證邏輯 |
+| `shared/components` | `Shared/Component` | 共享組件 | 可複用 UI 組件 |
+
+---
+
+## 📋 完整分層模板範例
+
+### 1. Domain Layer 模板
+
+#### Entity 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Domain/Entity",
+ *   "purpose": "User實體-用戶核心業務邏輯",
+ *   "constraints": ["無外部服務依賴", "業務規則內部封裝", "聚合一致性"],
+ *   "dependencies": ["Email", "Password", "UserRole"],
+ *   "security": "high",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage User.create(data), User.changeEmail(email)
+ * @see docs/architecture/domain.md
+ */
+```
+
+#### Value Object 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Domain/ValueObject",
+ *   "purpose": "Email值對象-郵箱格式驗證",
+ *   "constraints": ["不可變對象", "值相等性", "格式驗證"],
+ *   "dependencies": [],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage Email.create('user@example.com'), email.isValid()
+ * @see docs/architecture/domain.md
+ */
+```
+
+#### Repository Interface 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Domain/Repository",
+ *   "purpose": "User倉儲接口-用戶數據存取抽象",
+ *   "constraints": ["接口契約定義", "無實現細節", "領域語言"],
+ *   "dependencies": ["User", "UserId"],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage userRepo.findById(id), userRepo.save(user)
+ * @see docs/architecture/domain.md
+ */
+```
+
+### 2. Application Layer 模板
+
+#### Use Case 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Application/UseCase",
+ *   "purpose": "登入用例-用戶認證流程",
+ *   "constraints": ["單一用例職責", "事務邊界", "輸入驗證"],
+ *   "dependencies": ["UserRepository", "AuthService", "LoginDTO"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage loginUseCase.execute(loginDTO)
+ * @see docs/architecture/application.md
+ */
+```
+
+#### DTO 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Application/DTO",
+ *   "purpose": "用戶註冊DTO-註冊請求數據結構",
+ *   "constraints": ["數據傳輸專用", "驗證規則", "序列化支持"],
+ *   "dependencies": [],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage new RegisterDTO(email, password, name)
+ * @see docs/architecture/application.md
+ */
+```
+
+#### Application Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Application/Service",
+ *   "purpose": "用戶應用服務-用戶管理協調邏輯",
+ *   "constraints": ["協調領域服務", "事務管理", "無業務邏輯"],
+ *   "dependencies": ["UserRepository", "EmailService", "UserMapper"],
+ *   "security": "high",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage userAppService.createUser(dto)
+ * @see docs/architecture/application.md
+ */
+```
+
+### 3. Infrastructure Layer 模板
+
+#### Repository Implementation 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Infrastructure/Repository",
+ *   "purpose": "Firebase用戶倉儲-用戶數據持久化實現",
+ *   "constraints": ["實現領域接口", "技術細節封裝", "錯誤處理"],
+ *   "dependencies": ["FirestoreService", "UserRepository", "User"],
+ *   "security": "high",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage userRepo.save(user), userRepo.findByEmail(email)
+ * @see docs/architecture/infrastructure.md
+ */
+```
+
+#### Config Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Infrastructure/Config",
+ *   "purpose": "環境配置服務-應用配置統一管理",
+ *   "constraints": ["配置集中管理", "環境隔離", "類型安全"],
+ *   "dependencies": [],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage envService.get('DATABASE_URL')
+ * @see docs/architecture/infrastructure.md
+ */
+```
+
+#### External Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Infrastructure/External",
+ *   "purpose": "Firebase認證服務-外部認證整合",
+ *   "constraints": ["外部依賴封裝", "錯誤轉換", "重試機制"],
+ *   "dependencies": ["firebase/auth", "AuthConfig"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage firebaseAuth.signIn(email, password)
+ * @see docs/architecture/infrastructure.md
+ */
+```
+
+### 4. Interface Layer 模板
+
+#### Page Component 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Interface/Page",
+ *   "purpose": "登入頁面-用戶登入界面",
+ *   "constraints": ["單一頁面職責", "響應式設計", "用戶體驗"],
+ *   "dependencies": ["LoginUseCase", "LoginForm", "AuthGuard"],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage <login-page></login-page>
+ * @see docs/architecture/interface.md
+ */
+```
+
+#### Component 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Interface/Component",
+ *   "purpose": "登入表單組件-用戶登入輸入界面",
+ *   "constraints": ["組件複用性", "數據雙向綁定", "表單驗證"],
+ *   "dependencies": ["ReactiveFormsModule", "LoginDTO"],
+ *   "security": "medium",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage <login-form (submit)="onLogin($event)"></login-form>
+ * @see docs/architecture/interface.md
+ */
+```
+
+#### Guard 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Interface/Guard",
+ *   "purpose": "認證路由守衛-登入狀態檢查",
+ *   "constraints": ["路由保護", "重定向邏輯", "狀態檢查"],
+ *   "dependencies": ["AuthService", "Router"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage { path: 'dashboard', canActivate: [AuthGuard] }
+ * @see docs/architecture/interface.md
+ */
+```
+
+### 5. Security Layer 模板
+
+#### Authentication Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Security/Auth",
+ *   "purpose": "用戶認證服務-身份驗證管理",
+ *   "constraints": ["安全最佳實踐", "會話管理", "密碼安全"],
+ *   "dependencies": ["JWTService", "UserRepository", "HashService"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage authService.login(credentials)
+ * @see docs/architecture/security.md
+ */
+```
+
+#### JWT Service 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Security/JWT",
+ *   "purpose": "JWT令牌服務-Token生成驗證",
+ *   "constraints": ["Token安全性", "過期處理", "簽名驗證"],
+ *   "dependencies": ["jsonwebtoken", "ConfigService"],
+ *   "security": "critical",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage jwtService.sign(payload), jwtService.verify(token)
+ * @see docs/architecture/security.md
+ */
+```
+
+### 6. Shared Layer 模板
+
+#### Utility 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Shared/Utility",
+ *   "purpose": "存儲工具類-本地存儲統一管理",
+ *   "constraints": ["純函數", "無副作用", "類型安全"],
+ *   "dependencies": [],
+ *   "security": "low",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage StorageUtil.set('key', value), StorageUtil.get('key')
+ * @see docs/architecture/shared.md
+ */
+```
+
+#### Type Definition 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Shared/Type",
+ *   "purpose": "應用通用類型-TypeScript類型定義",
+ *   "constraints": ["類型安全", "接口一致性", "泛型支持"],
+ *   "dependencies": [],
+ *   "security": "none",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage ApiResponse<User>, PaginatedResult<T>
+ * @see docs/architecture/shared.md
+ */
+```
+
+#### Interface Definition 模板
+```typescript
+/**
+ * @ai-context {
+ *   "role": "Shared/Interface",
+ *   "purpose": "Tab接口定義-標籤頁通用接口",
+ *   "constraints": ["接口契約", "實現解耦", "擴展性"],
+ *   "dependencies": [],
+ *   "security": "none",
+ *   "lastmod": "2025-08-17"
+ * }
+ * @usage class TabComponent implements ITabComponent
+ * @see docs/architecture/shared.md
+ */
+```
+
+---
+
+## 🎯 安全等級定義
+
+| 等級 | 描述 | 適用場景 |
+|------|------|----------|
+| `none` | 無安全風險 | 類型定義、工具函數 |
+| `low` | 低風險 | UI 組件、常量定義 |
+| `medium` | 中等風險 | 業務邏輯、數據處理 |
+| `high` | 高風險 | 用戶數據、權限管理 |
+| `critical` | 關鍵風險 | 認證授權、配置管理 |
+
+---
+
+## 🔧 VSCode 代碼片段配置
+
+```json
+{
+  "AI Domain Entity": {
+    "prefix": "ai-domain-entity",
+    "body": [
+      "/**",
+      " * @ai-context {",
+      " *   \"role\": \"Domain/Entity\",",
+      " *   \"purpose\": \"${1:EntityName}實體-${2:核心業務邏輯}\",",
+      " *   \"constraints\": [\"無外部服務依賴\", \"業務規則內部封裝\", \"${3:聚合一致性}\"],",
+      " *   \"dependencies\": [${4:\"依賴1\", \"依賴2\"}],",
+      " *   \"security\": \"${5|none,low,medium,high,critical|}\",",
+      " *   \"lastmod\": \"${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}\"",
+      " * }",
+      " * @usage ${6:使用範例}",
+      " * @see docs/architecture/domain.md",
+      " */"
+    ],
+    "description": "AI optimized Domain Entity header"
+  }
+}
+```
+
+---
+
+## 📊 Token 消耗對比
+
+| 檔案類型 | 原版 Token | JSON版 Token | 節省率 |
+|----------|------------|--------------|--------|
+| Domain Entity | ~180 | ~45 | 75% |
+| Use Case | ~165 | ~42 | 75% |
+| Component | ~155 | ~38 | 76% |
+| Service | ~170 | ~43 | 75% |
+| Guard | ~145 | ~36 | 75% |
+
+**平均節省 Token：75%**
+
+---
+
+## ✅ 實作建議
+
+1. **建立代碼片段**：為每種類型創建 VSCode snippet
+2. **Git Hook 檢查**：確保註解格式一致性
+3. **自動化工具**：開發註解格式檢查器
+4. **團隊培訓**：統一團隊對新格式的理解
+5. **文檔更新**：更新架構文檔說明新格式

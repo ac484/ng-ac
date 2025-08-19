@@ -1,0 +1,317 @@
+{
+  "title": "Angular Platform Browser API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular 瀏覽器平台的完整 API 參考，包含平台創建、安全性、元數據管理和服務端渲染",
+  "metadata": {
+    "category": "Platform & Browser",
+    "complexity": "Medium",
+    "usage": "應用啟動、平台管理、瀏覽器適配、服務端渲染、安全性",
+    "lastmod": "2025-01-17"
+  },
+  "core_platform_functionality": {
+    "platformBrowser": {
+      "function": "platformBrowser()",
+      "purpose": "瀏覽器平台工廠函數",
+      "usage": "創建瀏覽器平台實例",
+      "example": "platformBrowser().bootstrapModule(AppModule)",
+      "returns": "PlatformRef",
+      "use_case": "啟動基於 NgModule 的瀏覽器應用"
+    },
+    "BrowserModule": {
+      "purpose": "瀏覽器模組",
+      "usage": "提供瀏覽器環境所需的基礎服務",
+      "includes": ["Location", "Title", "Meta", "DomSanitizer"],
+      "example": "在根模組中導入"
+    },
+    "bootstrapApplication": {
+      "function": "bootstrapApplication(component, config)",
+      "purpose": "啟動獨立應用",
+      "usage": "啟動基於獨立組件的應用",
+      "example": "bootstrapApplication(AppComponent, { providers: [...] })",
+      "parameters": ["component: Type<T>", "config: ApplicationConfig"],
+      "returns": "Promise<ApplicationRef>",
+      "use_case": "啟動現代化的獨立組件應用"
+    },
+    "createApplication": {
+      "function": "createApplication(config)",
+      "purpose": "創建應用實例",
+      "usage": "程式化創建 Angular 應用",
+      "example": "手動控制應用啟動過程",
+      "returns": "ApplicationRef"
+    }
+  },
+  "security": {
+    "DomSanitizer": {
+      "purpose": "DOM 清理器服務",
+      "usage": "清理不安全的 HTML、URL 和其他內容",
+      "methods": ["sanitize()", "bypassSecurityTrustHtml()", "bypassSecurityTrustUrl()"],
+      "example": "sanitizer.sanitize(SecurityContext.HTML, htmlContent)",
+      "security_levels": ["HTML", "STYLE", "SCRIPT", "URL", "RESOURCE_URL"]
+    },
+    "SafeHtml": {
+      "purpose": "安全 HTML 類型",
+      "usage": "表示已清理的安全 HTML 內容",
+      "example": "通過 DomSanitizer 處理後的 HTML",
+      "type": "extends SafeValue"
+    },
+    "SafeUrl": {
+      "purpose": "安全 URL 類型",
+      "usage": "表示已驗證的安全 URL",
+      "example": "通過 DomSanitizer 處理後的 URL",
+      "type": "extends SafeValue"
+    },
+    "SafeResourceUrl": {
+      "purpose": "安全資源 URL 類型",
+      "usage": "表示已驗證的安全資源 URL",
+      "example": "iframe src、object data 等",
+      "type": "extends SafeValue"
+    },
+    "SafeScript": {
+      "purpose": "安全腳本類型",
+      "usage": "表示已驗證的安全腳本內容",
+      "example": "動態腳本注入時使用",
+      "type": "extends SafeValue"
+    },
+    "SafeStyle": {
+      "purpose": "安全樣式類型",
+      "usage": "表示已驗證的安全 CSS 樣式",
+      "example": "動態樣式設定時使用",
+      "type": "extends SafeValue"
+    }
+  },
+  "metadata_management": {
+    "Meta": {
+      "purpose": "元數據服務",
+      "usage": "管理 HTML 文檔的 meta 標籤",
+      "methods": ["addTag()", "addTags()", "updateTag()", "removeTag()", "getTag()"],
+      "example": "meta.addTag({ name: 'description', content: '頁面描述' })"
+    },
+    "MetaDefinition": {
+      "purpose": "元數據定義介面",
+      "usage": "定義 meta 標籤的結構",
+      "properties": ["name", "content", "property", "httpEquiv", "charset"],
+      "example": "{ name: 'viewport', content: 'width=device-width' }"
+    },
+    "Title": {
+      "purpose": "標題服務",
+      "usage": "管理 HTML 文檔的標題",
+      "methods": ["setTitle()", "getTitle()"],
+      "example": "title.setTitle('新頁面標題')"
+    }
+  },
+  "event_management": {
+    "EventManager": {
+      "purpose": "事件管理器服務",
+      "usage": "管理 DOM 事件的註冊和處理",
+      "example": "自定義事件處理邏輯",
+      "methods": ["addEventListener()", "removeEventListener()"]
+    },
+    "EventManagerPlugin": {
+      "purpose": "事件管理器插件介面",
+      "usage": "擴展事件管理器的功能",
+      "methods": ["supports()", "addEventListener()", "removeEventListener()"],
+      "example": "自定義事件類型的處理"
+    },
+    "EVENT_MANAGER_PLUGINS": {
+      "purpose": "事件管理器插件令牌",
+      "usage": "註冊事件管理器插件",
+      "example": "添加自定義事件處理插件"
+    }
+  },
+  "gesture_support": {
+    "HammerModule": {
+      "purpose": "Hammer.js 手勢模組",
+      "usage": "整合 Hammer.js 手勢識別庫",
+      "example": "在模組中導入以支援手勢事件",
+      "selector": "HammerModule"
+    },
+    "HammerGestureConfig": {
+      "purpose": "Hammer 手勢配置",
+      "usage": "配置 Hammer.js 的手勢識別",
+      "example": "自定義手勢識別器和選項",
+      "properties": ["overrides", "options"]
+    },
+    "HAMMER_GESTURE_CONFIG": {
+      "purpose": "Hammer 手勢配置令牌",
+      "usage": "提供 Hammer 手勢配置",
+      "example": "自定義手勢配置的依賴注入"
+    }
+  },
+  "debugging_tools": {
+    "enableDebugTools": {
+      "function": "enableDebugTools(appRef)",
+      "purpose": "啟用調試工具",
+      "usage": "在開發模式下啟用性能分析工具",
+      "example": "enableDebugTools(appRef)",
+      "parameters": ["appRef: ApplicationRef"]
+    },
+    "disableDebugTools": {
+      "function": "disableDebugTools()",
+      "purpose": "禁用調試工具",
+      "usage": "禁用性能分析工具",
+      "example": "在生產模式下調用"
+    },
+    "By": {
+      "purpose": "查詢工具類",
+      "usage": "在測試中查詢 DOM 元素",
+      "methods": ["css()", "directive()", "all()"],
+      "example": "By.css('.my-class'), By.directive(MyDirective)"
+    }
+  },
+  "hydration_features": {
+    "provideClientHydration": {
+      "function": "provideClientHydration(...features)",
+      "purpose": "提供客戶端水合",
+      "usage": "啟用服務端渲染的客戶端水合",
+      "example": "provideClientHydration(withEventReplay())",
+      "parameters": ["...features: HydrationFeature[]"]
+    },
+    "withEventReplay": {
+      "function": "withEventReplay(options?)",
+      "purpose": "啟用事件重播",
+      "usage": "在水合過程中重播用戶事件",
+      "example": "提升 SSR 應用的用戶體驗",
+      "returns": "HydrationFeature"
+    },
+    "withHttpTransferCacheOptions": {
+      "function": "withHttpTransferCacheOptions(options)",
+      "purpose": "配置 HTTP 傳輸快取選項",
+      "usage": "自定義 HTTP 快取的行為",
+      "example": "設定快取的 URL 模式",
+      "parameters": ["options: HttpTransferCacheOptions"]
+    },
+    "withI18nSupport": {
+      "function": "withI18nSupport()",
+      "purpose": "啟用國際化支援",
+      "usage": "在水合過程中支援國際化",
+      "example": "多語言 SSR 應用的水合",
+      "returns": "HydrationFeature"
+    }
+  },
+  "animation_support": {
+    "provideAnimations": {
+      "function": "provideAnimations()",
+      "purpose": "提供動畫支援",
+      "usage": "在獨立應用中啟用動畫",
+      "example": "provideAnimations()",
+      "returns": "Provider"
+    },
+    "provideNoopAnimations": {
+      "function": "provideNoopAnimations()",
+      "purpose": "提供無操作動畫",
+      "usage": "在獨立應用中禁用動畫",
+      "example": "provideNoopAnimations()",
+      "returns": "Provider"
+    },
+    "provideAnimationsAsync": {
+      "function": "provideAnimationsAsync()",
+      "purpose": "提供異步動畫支援",
+      "usage": "異步載入動畫功能以減少初始包大小",
+      "example": "provideAnimationsAsync()",
+      "returns": "Provider"
+    }
+  },
+  "server_side_rendering": {
+    "platformServer": {
+      "function": "platformServer()",
+      "purpose": "服務端平台工廠函數",
+      "usage": "創建服務端渲染平台",
+      "example": "platformServer().bootstrapModule(AppModule)",
+      "returns": "PlatformRef"
+    },
+    "ServerModule": {
+      "purpose": "服務端模組",
+      "usage": "提供服務端渲染所需的服務",
+      "example": "在服務端應用模組中導入",
+      "selector": "ServerModule"
+    },
+    "renderApplication": {
+      "function": "renderApplication(component, options)",
+      "purpose": "渲染應用",
+      "usage": "在服務端渲染獨立應用",
+      "example": "renderApplication(AppComponent, { providers: [...] })",
+      "parameters": ["component: Type<T>", "options: RenderOptions"],
+      "returns": "Promise<string>"
+    },
+    "renderModule": {
+      "function": "renderModule(module, options)",
+      "purpose": "渲染模組",
+      "usage": "在服務端渲染 NgModule 應用",
+      "example": "renderModule(AppModule, { document: template })",
+      "parameters": ["module: Type<any>", "options: RenderOptions"],
+      "returns": "Promise<string>"
+    }
+  },
+  "testing_support": {
+    "BrowserTestingModule": {
+      "purpose": "瀏覽器測試模組",
+      "usage": "提供瀏覽器環境的測試支援",
+      "example": "在測試配置中導入",
+      "selector": "BrowserTestingModule"
+    },
+    "platformBrowserTesting": {
+      "function": "platformBrowserTesting()",
+      "purpose": "瀏覽器測試平台工廠函數",
+      "usage": "創建測試環境的瀏覽器平台",
+      "example": "在測試設置中使用",
+      "returns": "PlatformRef"
+    },
+    "ServerTestingModule": {
+      "purpose": "服務端測試模組",
+      "usage": "提供服務端環境的測試支援",
+      "example": "在 SSR 測試中使用",
+      "selector": "ServerTestingModule"
+    }
+  },
+  "usage_examples": {
+    "basic_browser_app_startup": {
+      "description": "基本瀏覽器應用啟動",
+      "code": "// 使用 NgModule\nimport { platformBrowser } from '@angular/platform-browser';\nimport { AppModule } from './app.module';\n\nplatformBrowser()\n  .bootstrapModule(AppModule)\n  .catch(err => console.error(err));\n\n// 使用獨立組件\nimport { bootstrapApplication } from '@angular/platform-browser';\nimport { AppComponent } from './app.component';\n\nbootstrapApplication(AppComponent, {\n  providers: [\n    // 提供者配置\n  ]\n}).catch(err => console.error(err));"
+    },
+    "security_usage": {
+      "description": "安全性使用",
+      "code": "import { DomSanitizer, SafeHtml } from '@angular/platform-browser';\n\n@Component({\n  template: `<div [innerHTML]=\"safeHtml\"></div>`\n})\nexport class SafeContentComponent {\n  safeHtml: SafeHtml;\n\n  constructor(private sanitizer: DomSanitizer) {\n    const htmlContent = '<p>用戶輸入的 HTML</p>';\n    this.safeHtml = this.sanitizer.sanitize(\n      SecurityContext.HTML,\n      htmlContent\n    ) || '';\n  }\n}"
+    },
+    "metadata_management": {
+      "description": "元數據管理",
+      "code": "import { Meta, Title } from '@angular/platform-browser';\n\n@Component({...})\nexport class PageComponent implements OnInit {\n  constructor(\n    private meta: Meta,\n    private title: Title\n  ) {}\n\n  ngOnInit() {\n    // 設定頁面標題\n    this.title.setTitle('我的頁面');\n\n    // 添加 meta 標籤\n    this.meta.addTags([\n      { name: 'description', content: '頁面描述' },\n      { name: 'keywords', content: '關鍵字1, 關鍵字2' },\n      { property: 'og:title', content: '社交媒體標題' }\n    ]);\n  }\n}"
+    },
+    "server_side_rendering": {
+      "description": "服務端渲染配置",
+      "code": "// 服務端應用模組\nimport { NgModule } from '@angular/core';\nimport { ServerModule } from '@angular/platform-server';\nimport { AppModule } from './app.module';\nimport { AppComponent } from './app.component';\n\n@NgModule({\n  imports: [AppModule, ServerModule],\n  bootstrap: [AppComponent]\n})\nexport class AppServerModule {}\n\n// 服務端渲染\nimport { renderModule } from '@angular/platform-server';\nimport { AppServerModule } from './app.server.module';\n\nconst html = await renderModule(AppServerModule, {\n  document: template,\n  url: req.url\n});"
+    },
+    "client_hydration": {
+      "description": "客戶端水合",
+      "code": "import { bootstrapApplication } from '@angular/platform-browser';\nimport { provideClientHydration, withEventReplay } from '@angular/platform-browser';\n\nbootstrapApplication(AppComponent, {\n  providers: [\n    provideClientHydration(\n      withEventReplay(),\n      withHttpTransferCacheOptions({\n        includePostRequests: true\n      })\n    )\n  ]\n});"
+    },
+    "animation_configuration": {
+      "description": "動畫配置",
+      "code": "// 啟用動畫\nimport { provideAnimations } from '@angular/platform-browser/animations';\n\nbootstrapApplication(AppComponent, {\n  providers: [\n    provideAnimations()\n  ]\n});\n\n// 異步載入動畫\nimport { provideAnimationsAsync } from '@angular/platform-browser/animations/async';\n\nbootstrapApplication(AppComponent, {\n  providers: [\n    provideAnimationsAsync()\n  ]\n});"
+    }
+  },
+  "best_practices": [
+    "始終使用 DomSanitizer 處理用戶輸入",
+    "避免直接操作 innerHTML",
+    "驗證外部 URL 和資源",
+    "使用異步動畫載入減少初始包大小",
+    "啟用 HTTP 傳輸快取優化 SSR",
+    "適當配置事件重播",
+    "正確設定頁面標題和 meta 標籤",
+    "使用服務端渲染提升首屏載入"
+  ],
+  "performance_tips": [
+    "使用異步動畫載入減少初始包大小",
+    "啟用 HTTP 傳輸快取優化 SSR",
+    "適當配置事件重播",
+    "使用 OnPush 變更檢測策略",
+    "適當使用 @defer 延遲載入組件",
+    "考慮使用 standalone 組件減少模組依賴"
+  ],
+  "security_considerations": [
+    "始終清理用戶輸入的 HTML 內容",
+    "驗證外部資源的 URL",
+    "使用適當的 CSP 策略",
+    "避免在模板中直接插入用戶內容",
+    "定期更新依賴包以修復安全漏洞"
+  ]
+}

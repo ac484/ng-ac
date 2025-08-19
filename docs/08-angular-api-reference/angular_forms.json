@@ -1,0 +1,321 @@
+{
+  "title": "Angular Forms API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular 表單系統的完整 API 參考，包含響應式表單、模板驅動表單和驗證器",
+  "metadata": {
+    "category": "Forms & Validation",
+    "complexity": "Medium",
+    "usage": "表單處理、數據驗證、用戶輸入管理、表單狀態控制",
+    "lastmod": "2025-01-17"
+  },
+  "core_modules": {
+    "FormsModule": {
+      "purpose": "模板驅動表單模組",
+      "usage": "提供模板驅動表單的指令和服務",
+      "includes": ["ngModel", "ngForm", "ngModelGroup"],
+      "example": "在模組中導入以使用 ngModel"
+    },
+    "ReactiveFormsModule": {
+      "purpose": "響應式表單模組",
+      "usage": "提供響應式表單的類別和指令",
+      "includes": ["FormControl", "FormGroup", "FormArray", "FormBuilder"],
+      "example": "在模組中導入以使用 FormControl"
+    }
+  },
+  "abstract_controls": {
+    "AbstractControl": {
+      "purpose": "抽象表單控制項基礎類",
+      "usage": "所有表單控制項的基礎實現",
+      "extends": "FormControl、FormGroup、FormArray 的父類",
+      "properties": ["value", "valid", "invalid", "pristine", "dirty", "touched", "untouched", "disabled", "enabled"],
+      "methods": ["setValue()", "patchValue()", "reset()", "markAsTouched()", "markAsDirty()", "markAsPristine()", "markAsUntouched()", "disable()", "enable()"]
+    },
+    "AbstractControlOptions": {
+      "purpose": "抽象控制項選項",
+      "usage": "配置表單控制項的選項",
+      "properties": ["validators", "asyncValidators", "updateOn"],
+      "example": "驗證器、更新策略等配置"
+    }
+  },
+  "reactive_form_controls": {
+    "FormControl": {
+      "purpose": "表單控制項類",
+      "usage": "管理單個表單欄位的值和狀態",
+      "example": "new FormControl('initial value', [Validators.required])",
+      "constructor": "FormControl(value?, validators?, asyncValidators?)",
+      "methods": ["setValue()", "patchValue()", "reset()", "setValidators()", "setAsyncValidators()"]
+    },
+    "FormGroup": {
+      "purpose": "表單群組類",
+      "usage": "管理一組表單控制項",
+      "example": "new FormGroup({ name: new FormControl(''), email: new FormControl('') })",
+      "constructor": "FormGroup(controls, validators?, asyncValidators?)",
+      "methods": ["addControl()", "removeControl()", "setControl()", "contains()", "get()"]
+    },
+    "FormArray": {
+      "purpose": "表單陣列類",
+      "usage": "管理動態數量的表單控制項",
+      "example": "new FormArray([new FormControl('item1'), new FormControl('item2')])",
+      "constructor": "FormArray(controls, validators?, asyncValidators?)",
+      "methods": ["push()", "insert()", "removeAt()", "setControl()", "at()"]
+    },
+    "FormBuilder": {
+      "purpose": "表單建構器服務",
+      "usage": "簡化表單控制項的創建",
+      "example": "fb.group({ name: ['', Validators.required], email: [''] })",
+      "methods": ["group()", "control()", "array()"],
+      "advantages": ["更簡潔的語法", "類型安全", "易於維護"]
+    }
+  },
+  "form_control_options": {
+    "FormControlOptions": {
+      "purpose": "表單控制項選項",
+      "usage": "配置 FormControl 的行為",
+      "properties": ["validators", "asyncValidators", "updateOn", "nonNullable"],
+      "example": "{ validators: [Validators.required], updateOn: 'blur' }"
+    },
+    "FormControlStatus": {
+      "purpose": "表單控制項狀態枚舉",
+      "usage": "定義表單控制項的驗證狀態",
+      "values": ["VALID", "INVALID", "PENDING", "DISABLED"],
+      "example": "檢查控制項是否有效"
+    }
+  },
+  "form_directives": {
+    "FormControlDirective": {
+      "purpose": "表單控制項指令",
+      "usage": "將 FormControl 綁定到表單元素",
+      "example": "<input [formControl]=\"nameControl\">",
+      "selector": "[formControl]"
+    },
+    "FormControlName": {
+      "purpose": "表單控制項名稱指令",
+      "usage": "在 FormGroup 中綁定具名控制項",
+      "example": "<input formControlName=\"name\">",
+      "selector": "[formControlName]"
+    },
+    "FormGroupDirective": {
+      "purpose": "表單群組指令",
+      "usage": "將 FormGroup 綁定到表單元素",
+      "example": "<form [formGroup]=\"userForm\">",
+      "selector": "[formGroup]"
+    },
+    "FormGroupName": {
+      "purpose": "表單群組名稱指令",
+      "usage": "在嵌套表單中綁定具名群組",
+      "example": "<div formGroupName=\"address\">",
+      "selector": "[formGroupName]"
+    },
+    "FormArrayName": {
+      "purpose": "表單陣列名稱指令",
+      "usage": "在表單中綁定 FormArray",
+      "example": "<div formArrayName=\"hobbies\">",
+      "selector": "[formArrayName]"
+    }
+  },
+  "template_driven_forms": {
+    "NgForm": {
+      "purpose": "表單指令",
+      "usage": "為 form 元素提供表單功能",
+      "example": "自動應用到 <form> 元素",
+      "selector": "form",
+      "exportAs": "ngForm"
+    },
+    "NgModel": {
+      "purpose": "雙向綁定指令",
+      "usage": "實現表單欄位的雙向數據綁定",
+      "example": "<input [(ngModel)]=\"user.name\" name=\"name\">",
+      "selector": "[ngModel]",
+      "exportAs": "ngModel"
+    },
+    "NgModelGroup": {
+      "purpose": "模型群組指令",
+      "usage": "在模板驅動表單中分組欄位",
+      "example": "<div ngModelGroup=\"address\">",
+      "selector": "[ngModelGroup]",
+      "exportAs": "ngModelGroup"
+    }
+  },
+  "value_accessors": {
+    "ControlValueAccessor": {
+      "purpose": "控制項值存取器介面",
+      "usage": "定義表單控制項與 DOM 元素的橋接",
+      "methods": ["writeValue()", "registerOnChange()", "registerOnTouched()", "setDisabledState()"],
+      "example": "自定義表單控制項的實現介面"
+    },
+    "DefaultValueAccessor": {
+      "purpose": "默認值存取器",
+      "usage": "處理 input 和 textarea 元素的值存取",
+      "example": "文本輸入的默認實現",
+      "selector": "input:not([type=checkbox]), textarea"
+    },
+    "CheckboxControlValueAccessor": {
+      "purpose": "複選框值存取器",
+      "usage": "處理 checkbox 元素的值存取",
+      "example": "<input type=\"checkbox\" formControlName=\"agree\">",
+      "selector": "input[type=checkbox]"
+    },
+    "SelectControlValueAccessor": {
+      "purpose": "選擇值存取器",
+      "usage": "處理 select 元素的值存取",
+      "example": "<select formControlName=\"country\">",
+      "selector": "select"
+    }
+  },
+  "validators": {
+    "Validator": {
+      "purpose": "驗證器介面",
+      "usage": "定義同步驗證器的標準介面",
+      "methods": ["validate(control: AbstractControl): ValidationErrors | null"],
+      "example": "自定義驗證器的實現介面"
+    },
+    "AsyncValidator": {
+      "purpose": "異步驗證器介面",
+      "usage": "定義異步驗證器的標準介面",
+      "methods": ["validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null>"],
+      "example": "服務端驗證的實現介面"
+    },
+    "ValidatorFn": {
+      "purpose": "驗證器函數類型",
+      "usage": "定義驗證器函數的類型",
+      "signature": "(control: AbstractControl) => ValidationErrors | null",
+      "example": "自定義驗證器函數"
+    },
+    "AsyncValidatorFn": {
+      "purpose": "異步驗證器函數類型",
+      "usage": "定義異步驗證器函數的類型",
+      "signature": "(control: AbstractControl) => Promise<ValidationErrors | null> | Observable<ValidationErrors | null>",
+      "example": "返回 Promise 或 Observable 的驗證器"
+    },
+    "Validators": {
+      "purpose": "內建驗證器集合",
+      "usage": "提供常用的驗證器函數",
+      "methods": [
+        "required", "requiredTrue", "email", "minLength", "maxLength",
+        "min", "max", "pattern", "nullValidator", "compose", "composeAsync"
+      ],
+      "example": "Validators.required, Validators.email, Validators.minLength(5)"
+    }
+  },
+  "built_in_validators": {
+    "RequiredValidator": {
+      "purpose": "必填驗證器指令",
+      "usage": "為模板驅動表單提供必填驗證",
+      "example": "<input required ngModel>",
+      "selector": "[required]"
+    },
+    "EmailValidator": {
+      "purpose": "電子郵件驗證器指令",
+      "usage": "驗證電子郵件格式",
+      "example": "<input email ngModel>",
+      "selector": "[email]"
+    },
+    "MinLengthValidator": {
+      "purpose": "最小長度驗證器指令",
+      "usage": "驗證輸入的最小長度",
+      "example": "<input minlength=\"5\" ngModel>",
+      "selector": "[minlength]"
+    },
+    "MaxLengthValidator": {
+      "purpose": "最大長度驗證器指令",
+      "usage": "驗證輸入的最大長度",
+      "example": "<input maxlength=\"100\" ngModel>",
+      "selector": "[maxlength]"
+    },
+    "PatternValidator": {
+      "purpose": "模式驗證器指令",
+      "usage": "使用正則表達式驗證輸入",
+      "example": "<input pattern=\"[0-9]+\" ngModel>",
+      "selector": "[pattern]"
+    }
+  },
+  "form_events": {
+    "ValueChangeEvent": {
+      "purpose": "值變更事件",
+      "usage": "表示表單控制項值的變更",
+      "example": "監聽表單值變化",
+      "type": "extends ControlEvent"
+    },
+    "StatusChangeEvent": {
+      "purpose": "狀態變更事件",
+      "usage": "表示表單控制項狀態的變更",
+      "example": "監聽驗證狀態變化",
+      "type": "extends ControlEvent"
+    },
+    "FormSubmittedEvent": {
+      "purpose": "表單提交事件",
+      "usage": "表示表單被提交",
+      "example": "監聽表單提交",
+      "type": "extends ControlEvent"
+    }
+  },
+  "type_checking_tools": {
+    "isFormControl": {
+      "purpose": "檢查是否為 FormControl",
+      "usage": "類型守衛函數，判斷是否為 FormControl 實例",
+      "example": "if (isFormControl(control)) { ... }",
+      "signature": "(control: AbstractControl): control is FormControl"
+    },
+    "isFormGroup": {
+      "purpose": "檢查是否為 FormGroup",
+      "usage": "類型守衛函數，判斷是否為 FormGroup 實例",
+      "example": "if (isFormGroup(control)) { ... }",
+      "signature": "(control: AbstractControl): control is FormGroup"
+    },
+    "isFormArray": {
+      "purpose": "檢查是否為 FormArray",
+      "usage": "類型守衛函數，判斷是否為 FormArray 實例",
+      "example": "if (isFormArray(control)) { ... }",
+      "signature": "(control: AbstractControl): control is FormArray"
+    }
+  },
+  "injection_tokens": {
+    "NG_VALUE_ACCESSOR": {
+      "purpose": "值存取器注入令牌",
+      "usage": "註冊自定義值存取器",
+      "example": "{ provide: NG_VALUE_ACCESSOR, useExisting: CustomComponent, multi: true }"
+    },
+    "NG_VALIDATORS": {
+      "purpose": "驗證器注入令牌",
+      "usage": "註冊自定義同步驗證器",
+      "example": "{ provide: NG_VALIDATORS, useExisting: CustomValidator, multi: true }"
+    },
+    "NG_ASYNC_VALIDATORS": {
+      "purpose": "異步驗證器注入令牌",
+      "usage": "註冊自定義異步驗證器",
+      "example": "{ provide: NG_ASYNC_VALIDATORS, useExisting: AsyncValidator, multi: true }"
+    }
+  },
+  "usage_examples": {
+    "reactive_form_example": {
+      "description": "響應式表單範例",
+      "code": "@Component({\n  selector: 'app-user-form',\n  template: `\n    <form [formGroup]=\"userForm\" (ngSubmit)=\"onSubmit()\">\n      <input formControlName=\"name\" placeholder=\"Name\">\n      <div *ngIf=\"userForm.get('name')?.errors?.['required']\">\n        Name is required\n      </div>\n\n      <input formControlName=\"email\" placeholder=\"Email\">\n      <div *ngIf=\"userForm.get('email')?.errors?.['email']\">\n        Invalid email format\n      </div>\n\n      <div formArrayName=\"hobbies\">\n        <div *ngFor=\"let hobby of hobbies.controls; let i = index\">\n          <input [formControlName]=\"i\" placeholder=\"Hobby\">\n        </div>\n      </div>\n\n      <button type=\"submit\" [disabled]=\"userForm.invalid\">Submit</button>\n    </form>\n  `\n})\nexport class UserFormComponent {\n  userForm = this.fb.group({\n    name: ['', [Validators.required, Validators.minLength(2)]],\n    email: ['', [Validators.required, Validators.email]],\n    hobbies: this.fb.array([\n      this.fb.control('')\n    ])\n  });\n\n  constructor(private fb: FormBuilder) {}\n\n  get hobbies() {\n    return this.userForm.get('hobbies') as FormArray;\n  }\n\n  addHobby() {\n    this.hobbies.push(this.fb.control(''));\n  }\n\n  onSubmit() {\n    if (this.userForm.valid) {\n      console.log(this.userForm.value);\n    }\n  }\n}"
+    },
+    "template_driven_form_example": {
+      "description": "模板驅動表單範例",
+      "code": "@Component({\n  selector: 'app-template-form',\n  template: `\n    <form #userForm=\"ngForm\" (ngSubmit)=\"onSubmit(userForm)\">\n      <input\n        name=\"name\"\n        [(ngModel)]=\"user.name\"\n        required\n        minlength=\"2\"\n        #name=\"ngModel\">\n      <div *ngIf=\"name.invalid && name.touched\">\n        <div *ngIf=\"name.errors?.['required']\">Name is required</div>\n        <div *ngIf=\"name.errors?.['minlength']\">Name too short</div>\n      </div>\n\n      <input\n        name=\"email\"\n        [(ngModel)]=\"user.email\"\n        required\n        email\n        #email=\"ngModel\">\n      <div *ngIf=\"email.invalid && email.touched\">\n        <div *ngIf=\"email.errors?.['required']\">Email is required</div>\n        <div *ngIf=\"email.errors?.['email']\">Invalid email</div>\n      </div>\n\n      <button type=\"submit\" [disabled]=\"userForm.invalid\">Submit</button>\n    </form>\n  `\n})\nexport class TemplateFormComponent {\n  user = {\n    name: '',\n    email: ''\n  };\n\n  onSubmit(form: NgForm) {\n    if (form.valid) {\n      console.log(this.user);\n    }\n  }\n}"
+    },
+    "custom_validator_example": {
+      "description": "自定義驗證器範例",
+      "code": "// 自定義驗證器函數\nexport function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {\n  return (control: AbstractControl): ValidationErrors | null => {\n    const forbidden = nameRe.test(control.value);\n    return forbidden ? { forbiddenName: { value: control.value } } : null;\n  };\n}\n\n// 自定義異步驗證器\nexport function uniqueEmailValidator(userService: UserService): AsyncValidatorFn {\n  return (control: AbstractControl): Observable<ValidationErrors | null> => {\n    if (!control.value) {\n      return of(null);\n    }\n\n    return userService.checkEmailExists(control.value).pipe(\n      map(exists => exists ? { emailExists: true } : null),\n      catchError(() => of(null))\n    );\n  };\n}\n\n// 使用自定義驗證器\nthis.userForm = this.fb.group({\n  name: ['', [\n    Validators.required,\n    forbiddenNameValidator(/admin/i)\n  ]],\n  email: ['',\n    [Validators.required, Validators.email],\n    [uniqueEmailValidator(this.userService)]\n  ]\n});"
+    }
+  },
+  "best_practices": [
+    "優先使用響應式表單而非模板驅動表單",
+    "使用 FormBuilder 簡化表單創建",
+    "適當使用類型守衛函數檢查控制項類型",
+    "實現自定義驗證器時遵循標準介面",
+    "使用 OnPush 變更檢測策略優化性能",
+    "適當使用 FormArray 管理動態表單欄位",
+    "實現適當的表單狀態管理",
+    "使用適當的錯誤訊息和驗證反饋"
+  ],
+  "performance_tips": [
+    "使用 OnPush 變更檢測策略",
+    "避免在模板中執行複雜計算",
+    "適當使用 trackBy 函數優化列表",
+    "使用 FormBuilder 而非手動創建控制項",
+    "避免在驗證器中執行昂貴操作",
+    "適當使用異步驗證器"
+  ]
+}

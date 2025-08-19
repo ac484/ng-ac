@@ -1,0 +1,341 @@
+{
+  "title": "Angular Material Components & CDK API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular Material 組件庫和 CDK 的完整 API 參考，包含表單、導航、佈局和數據顯示組件",
+  "metadata": {
+    "category": "UI Components & CDK",
+    "complexity": "Medium",
+    "usage": "用戶界面組件、佈局管理、數據展示、用戶交互",
+    "lastmod": "2025-01-17"
+  },
+  "form_components": {
+    "mat-form-field": {
+      "purpose": "表單字段容器",
+      "usage": "為表單控制項提供統一的外觀和行為",
+      "example": "<mat-form-field><mat-label>姓名</mat-label><input matInput></mat-form-field>",
+      "attributes": ["appearance", "color", "hintLabel", "errorStateMatcher"]
+    },
+    "mat-input": {
+      "purpose": "輸入框指令",
+      "usage": "增強原生 input 和 textarea 元素",
+      "example": "<input matInput placeholder=\"請輸入文字\" [(ngModel)]=\"value\">",
+      "attributes": ["placeholder", "required", "disabled", "readonly"]
+    },
+    "mat-select": {
+      "purpose": "下拉選擇器",
+      "usage": "提供下拉選項選擇功能",
+      "example": "<mat-select [(value)]=\"selected\"><mat-option value=\"option1\">選項1</mat-option></mat-select>",
+      "attributes": ["placeholder", "required", "disabled", "multiple"]
+    },
+    "mat-checkbox": {
+      "purpose": "複選框",
+      "usage": "提供多選功能的複選框",
+      "example": "<mat-checkbox [(ngModel)]=\"checked\">同意條款</mat-checkbox>",
+      "attributes": ["checked", "indeterminate", "disabled", "required"]
+    },
+    "mat-radio-button": {
+      "purpose": "單選按鈕",
+      "usage": "提供單選功能的選項按鈕",
+      "example": "<mat-radio-group><mat-radio-button value=\"1\">選項1</mat-radio-button></mat-radio-group>",
+      "attributes": ["value", "disabled", "required"]
+    },
+    "mat-slide-toggle": {
+      "purpose": "滑動開關",
+      "usage": "提供開關切換功能",
+      "example": "<mat-slide-toggle [(ngModel)]=\"isEnabled\">啟用功能</mat-slide-toggle>",
+      "attributes": ["checked", "disabled", "required"]
+    },
+    "mat-slider": {
+      "purpose": "滑塊",
+      "usage": "提供數值範圍選擇功能",
+      "example": "<mat-slider min=\"0\" max=\"100\" step=\"1\" [(ngModel)]=\"value\"></mat-slider>",
+      "attributes": ["min", "max", "step", "thumbLabel", "tickInterval"]
+    },
+    "mat-datepicker": {
+      "purpose": "日期選擇器",
+      "usage": "提供日期選擇功能",
+      "example": "<input matInput [matDatepicker]=\"picker\"><mat-datepicker #picker></mat-datepicker>",
+      "attributes": ["startAt", "min", "max", "disabled"]
+    },
+    "mat-autocomplete": {
+      "purpose": "自動完成",
+      "usage": "提供輸入建議和自動完成功能",
+      "example": "<input matInput [matAutocomplete]=\"auto\"><mat-autocomplete #auto></mat-autocomplete>",
+      "attributes": ["displayWith", "optionHeight", "panelWidth"]
+    }
+  },
+  "navigation_components": {
+    "mat-toolbar": {
+      "purpose": "工具欄",
+      "usage": "提供應用頂部或底部的工具欄",
+      "example": "<mat-toolbar color=\"primary\"><span>應用標題</span></mat-toolbar>",
+      "attributes": ["color", "position"]
+    },
+    "mat-sidenav": {
+      "purpose": "側邊導航",
+      "usage": "提供側邊欄導航功能",
+      "example": "<mat-sidenav-container><mat-sidenav>導航內容</mat-sidenav></mat-sidenav-container>",
+      "attributes": ["mode", "opened", "position", "fixedInViewport"]
+    },
+    "mat-menu": {
+      "purpose": "菜單",
+      "usage": "提供下拉菜單功能",
+      "example": "<mat-menu #menu><mat-menu-item>菜單項</mat-menu-item></mat-menu>",
+      "attributes": ["xPosition", "yPosition", "overlapTrigger"]
+    },
+    "mat-tabs": {
+      "purpose": "標籤頁",
+      "usage": "提供標籤頁導航功能",
+      "example": "<mat-tab-group><mat-tab label=\"標籤1\">內容1</mat-tab></mat-tab-group>",
+      "attributes": ["selectedIndex", "animationDuration", "disableRipple"]
+    },
+    "mat-stepper": {
+      "purpose": "步驟器",
+      "usage": "提供多步驟流程導航",
+      "example": "<mat-stepper><mat-step label=\"步驟1\">步驟內容</mat-step></mat-stepper>",
+      "attributes": ["linear", "selectedIndex", "orientation"]
+    }
+  },
+  "layout_components": {
+    "mat-card": {
+      "purpose": "卡片",
+      "usage": "提供卡片式內容容器",
+      "example": "<mat-card><mat-card-title>標題</mat-card-title><mat-card-content>內容</mat-card-content></mat-card>",
+      "attributes": ["raised", "color"]
+    },
+    "mat-list": {
+      "purpose": "列表",
+      "usage": "提供基礎列表功能",
+      "example": "<mat-list><mat-list-item>列表項</mat-list-item></mat-list>",
+      "attributes": ["dense", "disableRipple"]
+    },
+    "mat-grid-list": {
+      "purpose": "網格列表",
+      "usage": "提供網格佈局的列表",
+      "example": "<mat-grid-list cols=\"2\"><mat-grid-tile>網格項</mat-grid-tile></mat-grid-list>",
+      "attributes": ["cols", "rowHeight", "gutterSize"]
+    },
+    "mat-expansion-panel": {
+      "purpose": "展開面板",
+      "usage": "提供可展開收縮的內容面板",
+      "example": "<mat-expansion-panel><mat-expansion-panel-header>標題</mat-expansion-panel-header></mat-expansion-panel>",
+      "attributes": ["expanded", "disabled", "hideToggle"]
+    }
+  },
+  "data_display_components": {
+    "mat-table": {
+      "purpose": "表格",
+      "usage": "提供數據表格顯示功能",
+      "example": "<mat-table [dataSource]=\"dataSource\"><ng-container matColumnDef=\"name\"></ng-container></mat-table>",
+      "attributes": ["dataSource", "trackBy", "multiTemplateDataRows"]
+    },
+    "mat-tree": {
+      "purpose": "樹形結構",
+      "usage": "提供層次化數據的樹形顯示",
+      "example": "<mat-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\"></mat-tree>",
+      "attributes": ["dataSource", "treeControl", "trackBy"]
+    },
+    "mat-chips": {
+      "purpose": "標籤",
+      "usage": "提供標籤式的數據顯示",
+      "example": "<mat-chip-listbox><mat-chip-option>標籤1</mat-chip-option></mat-chip-listbox>",
+      "attributes": ["multiple", "selectable", "removable"]
+    }
+  },
+  "button_action_components": {
+    "mat-button": {
+      "purpose": "按鈕",
+      "usage": "提供各種樣式的按鈕",
+      "example": "<button mat-raised-button color=\"primary\">主要按鈕</button>",
+      "variants": ["mat-button", "mat-raised-button", "mat-stroked-button", "mat-flat-button"],
+      "attributes": ["color", "disabled", "disableRipple"]
+    },
+    "mat-icon-button": {
+      "purpose": "圖標按鈕",
+      "usage": "提供只包含圖標的圓形按鈕",
+      "example": "<button mat-icon-button><mat-icon>favorite</mat-icon></button>",
+      "attributes": ["color", "disabled", "disableRipple"]
+    },
+    "mat-fab": {
+      "purpose": "浮動操作按鈕",
+      "usage": "提供浮動的主要操作按鈕",
+      "example": "<button mat-fab color=\"accent\"><mat-icon>add</mat-icon></button>",
+      "attributes": ["color", "disabled", "disableRipple"]
+    }
+  },
+  "feedback_components": {
+    "mat-dialog": {
+      "purpose": "對話框",
+      "usage": "提供模態對話框功能",
+      "example": "this.dialog.open(DialogComponent, { width: '250px', data: {...} })",
+      "methods": ["open()", "close()", "afterClosed()"]
+    },
+    "mat-snack-bar": {
+      "purpose": "提示條",
+      "usage": "提供臨時消息提示功能",
+      "example": "this.snackBar.open('操作成功', '關閉', { duration: 2000 })",
+      "methods": ["open()", "dismiss()"]
+    },
+    "mat-tooltip": {
+      "purpose": "工具提示",
+      "usage": "提供懸停提示功能",
+      "example": "<button matTooltip=\"這是提示信息\">懸停查看提示</button>",
+      "attributes": ["position", "showDelay", "hideDelay", "disabled"]
+    }
+  },
+  "angular_cdk": {
+    "layout": {
+      "BreakpointObserver": {
+        "purpose": "斷點觀察器",
+        "usage": "監聽媒體查詢變化",
+        "example": "breakpointObserver.observe(['(max-width: 600px)'])",
+        "methods": ["observe()", "isMatched()"]
+      },
+      "FlexLayout": {
+        "purpose": "彈性佈局",
+        "usage": "提供 CSS Flexbox 的指令支援",
+        "example": "<div fxLayout=\"row\" fxLayoutGap=\"20px\">",
+        "directives": ["fxLayout", "fxLayoutGap", "fxFlex", "fxFlexOrder"]
+      }
+    },
+    "accessibility": {
+      "FocusTrap": {
+        "purpose": "焦點陷阱",
+        "usage": "將鍵盤焦點限制在特定區域",
+        "example": "<div cdkTrapFocus>模態內容</div>",
+        "directive": "cdkTrapFocus"
+      },
+      "LiveAnnouncer": {
+        "purpose": "實時播報器",
+        "usage": "為螢幕閱讀器提供實時消息播報",
+        "example": "liveAnnouncer.announce('操作完成')",
+        "methods": ["announce()", "clear()"]
+      }
+    },
+    "drag_drop": {
+      "cdkDrag": {
+        "purpose": "拖拽指令",
+        "usage": "使元素可拖拽",
+        "example": "<div cdkDrag>可拖拽的元素</div>",
+        "directive": "cdkDrag",
+        "events": ["cdkDragStarted", "cdkDragEnded", "cdkDragMoved"]
+      },
+      "cdkDropList": {
+        "purpose": "放置列表指令",
+        "usage": "定義可放置的區域",
+        "example": "<div cdkDropList (cdkDropListDropped)=\"drop($event)\">",
+        "directive": "cdkDropList",
+        "events": ["cdkDropListDropped", "cdkDropListEntered", "cdkDropListExited"]
+      }
+    },
+    "scrolling": {
+      "VirtualScrolling": {
+        "purpose": "虛擬滾動",
+        "usage": "高效渲染大量列表項",
+        "example": "<cdk-virtual-scroll-viewport itemSize=\"50\"><div *cdkVirtualFor=\"let item of items\">{{item}}</div></cdk-virtual-scroll-viewport>",
+        "directives": ["cdk-virtual-scroll-viewport", "cdkVirtualFor"]
+      },
+      "ScrollDispatcher": {
+        "purpose": "滾動調度器",
+        "usage": "監聽和管理滾動事件",
+        "example": "scrollDispatcher.scrolled().subscribe()",
+        "methods": ["scrolled()", "register()", "deregister()"]
+      }
+    },
+    "overlay": {
+      "Overlay": {
+        "purpose": "覆蓋層服務",
+        "usage": "創建浮動的覆蓋層內容",
+        "example": "overlay.create({ positionStrategy: ... })",
+        "methods": ["create()", "position()", "attach()", "detach()"]
+      },
+      "Portal": {
+        "purpose": "傳送門",
+        "usage": "將內容動態渲染到其他位置",
+        "example": "new ComponentPortal(MyComponent)",
+        "types": ["ComponentPortal", "TemplatePortal", "DomPortal"]
+      }
+    },
+    "table": {
+      "DataSource": {
+        "purpose": "數據源",
+        "usage": "為表格提供數據管理",
+        "example": "new MatTableDataSource(data)",
+        "methods": ["connect()", "disconnect()", "data", "sortingDataAccessor"]
+      },
+      "Sorting": {
+        "purpose": "排序",
+        "usage": "為表格添加排序功能",
+        "example": "<th mat-sort-header>可排序列</th>",
+        "directive": "mat-sort-header"
+      },
+      "Pagination": {
+        "purpose": "分頁",
+        "usage": "為表格添加分頁功能",
+        "example": "<mat-paginator [length]=\"100\" [pageSize]=\"10\"></mat-paginator>",
+        "component": "mat-paginator",
+        "attributes": ["length", "pageSize", "pageSizeOptions"]
+      }
+    }
+  },
+  "usage_examples": {
+    "complete_form": {
+      "description": "完整表單範例",
+      "code": "@Component({\n  template: `\n    <form [formGroup]=\"userForm\">\n      <mat-form-field>\n        <mat-label>姓名</mat-label>\n        <input matInput formControlName=\"name\" required>\n        <mat-error *ngIf=\"userForm.get('name')?.hasError('required')\">\n          姓名為必填項\n        </mat-error>\n      </mat-form-field>\n\n      <mat-form-field>\n        <mat-label>電子郵件</mat-label>\n        <input matInput type=\"email\" formControlName=\"email\">\n      </mat-form-field>\n\n      <mat-form-field>\n        <mat-label>城市</mat-label>\n        <mat-select formControlName=\"city\">\n          <mat-option value=\"taipei\">台北</mat-option>\n          <mat-option value=\"taichung\">台中</mat-option>\n          <mat-option value=\"kaohsiung\">高雄</mat-option>\n        </mat-select>\n      </mat-form-field>\n\n      <mat-checkbox formControlName=\"agree\">\n        我同意服務條款\n      </mat-checkbox>\n\n      <button mat-raised-button color=\"primary\"\n              [disabled]=\"userForm.invalid\"\n              (click)=\"onSubmit()\">\n        提交\n      </button>\n    </form>\n  `\n})"
+    },
+    "data_table": {
+      "description": "數據表格範例",
+      "code": "@Component({\n  template: `\n    <mat-table [dataSource]=\"dataSource\" matSort>\n      <ng-container matColumnDef=\"name\">\n        <th mat-header-cell *matHeaderCellDef mat-sort-header>姓名</th>\n        <td mat-cell *matCellDef=\"let user\">{{user.name}}</td>\n      </ng-container>\n\n      <ng-container matColumnDef=\"email\">\n        <th mat-header-cell *matHeaderCellDef>電子郵件</th>\n        <td mat-cell *matCellDef=\"let user\">{{user.email}}</td>\n      </ng-container>\n\n      <ng-container matColumnDef=\"actions\">\n        <th mat-header-cell *matHeaderCellDef>操作</th>\n        <td mat-cell *matCellDef=\"let user\">\n          <button mat-icon-button (click)=\"editUser(user)\">\n            <mat-icon>edit</mat-icon>\n          </button>\n          <button mat-icon-button (click)=\"deleteUser(user)\">\n            <mat-icon>delete</mat-icon>\n          </button>\n        </td>\n      </ng-container>\n\n      <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n      <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n    </mat-table>\n\n    <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\"\n                   showFirstLastButtons>\n    </mat-paginator>\n  `\n})"
+    },
+    "drag_drop": {
+      "description": "拖放功能範例",
+      "code": "@Component({\n  template: `\n    <div cdkDropList\n         class=\"task-list\"\n         (cdkDropListDropped)=\"drop($event)\">\n      <div class=\"task-item\"\n           *ngFor=\"let task of tasks\"\n           cdkDrag>\n        <mat-card>\n          <mat-card-content>{{task.title}}</mat-card-content>\n        </mat-card>\n      </div>\n    </div>\n  `\n})\nexport class TaskListComponent {\n  tasks = [\n    { id: 1, title: '任務 1' },\n    { id: 2, title: '任務 2' },\n    { id: 3, title: '任務 3' }\n  ];\n\n  drop(event: CdkDragDrop<any[]>) {\n    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);\n  }\n}"
+    }
+  },
+  "theming": {
+    "custom_theme": {
+      "description": "自定義主題",
+      "code": "@use '@angular/material' as mat;\n\n$primary: mat.define-palette(mat.$indigo-palette);\n$accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);\n$warn: mat.define-palette(mat.$red-palette);\n\n$theme: mat.define-light-theme((\n  color: (\n    primary: $primary,\n    accent: $accent,\n    warn: $warn,\n  )\n));\n\n@include mat.all-component-themes($theme);"
+    },
+    "responsive_design": {
+      "description": "響應式設計",
+      "code": "@Component({\n  template: `\n    <div fxLayout=\"row\" fxLayout.xs=\"column\" fxLayoutGap=\"20px\">\n      <div fxFlex=\"30\" fxFlex.xs=\"100\">側邊欄</div>\n      <div fxFlex=\"70\" fxFlex.xs=\"100\">主內容</div>\n    </div>\n  `\n})\nexport class ResponsiveLayoutComponent {}"
+    }
+  },
+  "best_practices": [
+    "使用 OnPush 變更檢測策略提升性能",
+    "實現虛擬滾動處理大量數據",
+    "適當使用 trackBy 函數優化列表渲染",
+    "為所有互動元素提供適當的 ARIA 標籤",
+    "確保鍵盤導航功能完整",
+    "提供足夠的顏色對比度",
+    "使用一致的動畫和轉場效果",
+    "創建可重用的組件和服務",
+    "使用 Angular Material 的主題系統",
+    "遵循 Material Design 設計原則"
+  ],
+  "performance_optimization": [
+    "使用 OnPush 變更檢測策略",
+    "實現虛擬滾動處理大量數據",
+    "適當使用 trackBy 函數",
+    "使用 CDK 的虛擬滾動優化長列表",
+    "避免在模板中執行複雜計算",
+    "使用 ChangeDetectionStrategy.OnPush"
+  ],
+  "accessibility": [
+    "為所有互動元素提供適當的 ARIA 標籤",
+    "確保鍵盤導航功能完整",
+    "提供足夠的顏色對比度",
+    "使用語義化的 HTML 結構",
+    "測試螢幕閱讀器兼容性",
+    "提供焦點管理"
+  ],
+  "user_experience": [
+    "提供適當的載入狀態指示",
+    "使用一致的動畫和轉場效果",
+    "確保在不同設備上的響應式體驗",
+    "提供清晰的錯誤訊息和驗證反饋",
+    "使用適當的載入和錯誤狀態",
+    "提供鍵盤快捷鍵支援"
+  ]
+}

@@ -1,0 +1,31 @@
+/**
+ * @fileoverview App Shell 樣式索引文件，統一導入所有樣式模組
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @lastModified 2024-12-19 by NG-AC Team
+ *
+ * 📋 檔案性質：
+ * • 類型：Shared Layer - Styles Index
+ * • 依賴：所有 App Shell 樣式模組
+ *
+ * ⚠️ 架構規則 (Immutable)：
+ * • 此檔案的註解格式不可變更
+ * • 只負責樣式模組的導入
+ * • 不包含具體的樣式定義
+ *
+ * @module AppShellStyles
+ * @layer Shared
+ * @context Layout System
+ * @see docs/5.new_Tree_layout.md
+ */
+
+// 基礎樣式
+@use './app-shell-variables' as *;
+@use './app-shell-layout' as *;
+@use './app-shell-responsive' as *;
+@use './app-shell-theme' as *;
+@use './app-shell-accessibility' as *;
+
+// 現代化佈局樣式
+@use './container-queries';
+@use './layout-grid';

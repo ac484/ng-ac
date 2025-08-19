@@ -1,0 +1,226 @@
+{
+  "title": "Angular Core Globals API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular 全局調試 API 的完整參考，包含 window.ng 對象上的調試函數和工具",
+  "metadata": {
+    "category": "Debug & Development",
+    "complexity": "Low",
+    "usage": "開發調試、組件檢查、性能分析、問題排查",
+    "lastmod": "2025-01-17",
+    "note": "僅在開發模式下可用，生產環境中不存在"
+  },
+  "global_debug_api": {
+    "window.ng": {
+      "description": "Angular 在開發模式下暴露的全局調試對象",
+      "availability": "僅開發模式",
+      "purpose": "提供瀏覽器控制台中的 Angular 調試功能"
+    }
+  },
+  "component_debug_functions": {
+    "getComponent": {
+      "function": "ng.getComponent(element)",
+      "purpose": "獲取元素關聯的組件實例",
+      "usage": "在瀏覽器控制台中調試組件",
+      "example": "ng.getComponent(document.querySelector('app-user'))",
+      "parameters": ["element: HTMLElement"],
+      "returns": "Component instance or null",
+      "use_case": "檢查組件狀態、調用組件方法"
+    },
+    "getContext": {
+      "function": "ng.getContext(element)",
+      "purpose": "獲取元素的 Angular 上下文",
+      "usage": "獲取元素的調試上下文信息",
+      "example": "ng.getContext(element)",
+      "parameters": ["element: HTMLElement"],
+      "returns": "Angular context object",
+      "use_case": "了解元素的 Angular 綁定和上下文"
+    },
+    "getDirectives": {
+      "function": "ng.getDirectives(element)",
+      "purpose": "獲取元素上的所有指令實例",
+      "usage": "調試元素上應用的指令",
+      "example": "ng.getDirectives(document.querySelector('[appHighlight]'))",
+      "parameters": ["element: HTMLElement"],
+      "returns": "Array of directive instances",
+      "use_case": "檢查指令狀態、驗證指令行為"
+    },
+    "getDirectiveMetadata": {
+      "function": "ng.getDirectiveMetadata(directive)",
+      "purpose": "獲取指令的元數據信息",
+      "usage": "查看指令的配置和屬性",
+      "example": "ng.getDirectiveMetadata(directiveInstance)",
+      "parameters": ["directive: Directive instance"],
+      "returns": "Directive metadata object",
+      "use_case": "了解指令的選擇器、輸入輸出等配置"
+    },
+    "getHostElement": {
+      "function": "ng.getHostElement(component)",
+      "purpose": "獲取組件或指令的宿主元素",
+      "usage": "從組件實例獲取對應的 DOM 元素",
+      "example": "ng.getHostElement(componentInstance)",
+      "parameters": ["component: Component/Directive instance"],
+      "returns": "HTMLElement",
+      "use_case": "在組件和 DOM 元素之間建立關聯"
+    },
+    "getInjector": {
+      "function": "ng.getInjector(element)",
+      "purpose": "獲取元素關聯的注入器",
+      "usage": "訪問元素上下文中的依賴注入容器",
+      "example": "ng.getInjector(element)",
+      "parameters": ["element: HTMLElement"],
+      "returns": "Injector instance",
+      "use_case": "檢查依賴注入、獲取服務實例"
+    },
+    "getListeners": {
+      "function": "ng.getListeners(element)",
+      "purpose": "獲取元素上的事件監聽器",
+      "usage": "調試元素綁定的事件處理器",
+      "example": "ng.getListeners(document.querySelector('button'))",
+      "parameters": ["element: HTMLElement"],
+      "returns": "Array of event listeners",
+      "use_case": "檢查事件綁定、驗證事件處理邏輯"
+    },
+    "getOwningComponent": {
+      "function": "ng.getOwningComponent(element)",
+      "purpose": "獲取擁有該元素的組件",
+      "usage": "找到包含特定元素的父組件",
+      "example": "ng.getOwningComponent(childElement)",
+      "parameters": ["element: HTMLElement"],
+      "returns": "Component instance or null",
+      "use_case": "了解組件層次結構、調試父子組件關係"
+    },
+    "getRootComponents": {
+      "function": "ng.getRootComponents()",
+      "purpose": "獲取應用的根組件",
+      "usage": "訪問應用的頂級組件實例",
+      "example": "ng.getRootComponents()",
+      "parameters": [],
+      "returns": "Array of root component instances",
+      "use_case": "檢查應用根組件、全局狀態管理"
+    }
+  },
+  "change_detection_functions": {
+    "applyChanges": {
+      "function": "ng.applyChanges(component)",
+      "purpose": "手動觸發變更檢測",
+      "usage": "在控制台中強制執行變更檢測",
+      "example": "ng.applyChanges(componentInstance)",
+      "parameters": ["component: Component instance"],
+      "returns": "void",
+      "use_case": "強制更新視圖、測試變更檢測邏輯"
+    }
+  },
+  "debug_metadata_types": {
+    "ComponentDebugMetadata": {
+      "purpose": "組件調試元數據介面",
+      "usage": "描述組件的調試信息結構",
+      "properties": ["inputs", "outputs", "hostBindings", "queries", "lifecycleHooks"]
+    },
+    "DirectiveDebugMetadata": {
+      "purpose": "指令調試元數據介面",
+      "usage": "描述指令的調試信息結構",
+      "properties": ["selector", "inputs", "outputs", "hostBindings"]
+    },
+    "Listener": {
+      "purpose": "事件監聽器信息介面",
+      "usage": "描述事件監聽器的結構",
+      "properties": ["name", "callback", "options", "element"]
+    }
+  },
+  "usage_examples": {
+    "browser_console_debugging": {
+      "description": "在瀏覽器控制台中調試",
+      "code": "// 獲取頁面上的組件實例\nconst userComponent = ng.getComponent(document.querySelector('app-user'));\nconsole.log('User component:', userComponent);\n\n// 查看組件的屬性\nconsole.log('User name:', userComponent.name);\nconsole.log('User email:', userComponent.email);\n\n// 調用組件方法\nuserComponent.updateProfile();\n\n// 手動觸發變更檢測\nng.applyChanges(userComponent);"
+    },
+    "directive_debugging": {
+      "description": "調試指令",
+      "code": "// 獲取元素上的所有指令\nconst directives = ng.getDirectives(document.querySelector('[appTooltip]'));\nconsole.log('Applied directives:', directives);\n\n// 獲取指令元數據\ndirectives.forEach(directive => {\n  const metadata = ng.getDirectiveMetadata(directive);\n  console.log('Directive metadata:', metadata);\n});"
+    },
+    "event_listener_inspection": {
+      "description": "檢查事件監聽器",
+      "code": "// 獲取按鈕上的事件監聽器\nconst button = document.querySelector('button');\nconst listeners = ng.getListeners(button);\nconsole.log('Event listeners:', listeners);\n\n// 查看監聽器詳情\nlisteners.forEach(listener => {\n  console.log(`Event: ${listener.name}, Handler: ${listener.callback}`);\n});"
+    },
+    "dependency_injection_access": {
+      "description": "訪問依賴注入",
+      "code": "// 獲取元素的注入器\nconst element = document.querySelector('app-user');\nconst injector = ng.getInjector(element);\n\n// 從注入器獲取服務\nconst userService = injector.get('UserService');\nconsole.log('User service:', userService);\n\n// 調用服務方法\nuserService.loadUsers().then(users => {\n  console.log('Loaded users:', users);\n});"
+    },
+    "component_hierarchy_inspection": {
+      "description": "查找組件層次結構",
+      "code": "// 獲取子元素的擁有組件\nconst childElement = document.querySelector('.user-avatar');\nconst owningComponent = ng.getOwningComponent(childElement);\nconsole.log('Owning component:', owningComponent);\n\n// 獲取根組件\nconst rootComponents = ng.getRootComponents();\nconsole.log('Root components:', rootComponents);"
+    },
+    "dynamic_component_state_modification": {
+      "description": "動態修改組件狀態",
+      "code": "// 獲取組件並修改其狀態\nconst component = ng.getComponent(document.querySelector('app-counter'));\n\n// 修改組件屬性\ncomponent.count = 100;\n\n// 觸發變更檢測以更新視圖\nng.applyChanges(component);\n\n// 調用組件方法\ncomponent.increment();\nng.applyChanges(component);"
+    }
+  },
+  "debug_tips": {
+    "quick_access": {
+      "description": "快速訪問組件",
+      "code": "// 在控制台中創建快捷方式\nwindow.$c = (selector) => ng.getComponent(document.querySelector(selector));\n\n// 使用快捷方式\nconst userComp = $c('app-user');"
+    },
+    "batch_component_inspection": {
+      "description": "批量檢查組件",
+      "code": "// 獲取頁面上所有組件\nconst allComponents = Array.from(document.querySelectorAll('*'))\n  .map(el => ng.getComponent(el))\n  .filter(comp => comp);\n\nconsole.log('All components:', allComponents);"
+    },
+    "change_detection_monitoring": {
+      "description": "監控變更檢測",
+      "code": "// 創建變更檢測監控器\nfunction monitorChanges(component) {\n  const originalMethod = component.ngOnChanges;\n  component.ngOnChanges = function(changes) {\n    console.log('Component changes:', changes);\n    if (originalMethod) {\n      originalMethod.call(this, changes);\n    }\n  };\n}\n\n// 使用監控器\nconst comp = ng.getComponent(document.querySelector('app-user'));\nmonitorChanges(comp);"
+    },
+    "route_component_debugging": {
+      "description": "調試路由組件",
+      "code": "// 獲取當前路由組件\nconst routerOutlet = document.querySelector('router-outlet');\nconst currentComponent = ng.getComponent(routerOutlet.nextElementSibling);\nconsole.log('Current route component:', currentComponent);"
+    }
+  },
+  "limitations": {
+    "development_mode_only": {
+      "description": "開發模式限制",
+      "details": [
+        "這些全局函數只在開發模式下可用",
+        "生產模式下 window.ng 對象不存在",
+        "不應在生產代碼中依賴這些 API"
+      ]
+    },
+    "performance_considerations": {
+      "description": "性能考慮",
+      "details": [
+        "頻繁調用這些函數可能影響性能",
+        "主要用於調試和開發階段",
+        "避免在自動化腳本中大量使用"
+      ]
+    },
+    "version_compatibility": {
+      "description": "版本兼容性",
+      "details": [
+        "API 可能在不同 Angular 版本間有變化",
+        "建議查看對應版本的文檔",
+        "某些功能可能在未來版本中被移除"
+      ]
+    },
+    "security_considerations": {
+      "description": "安全考慮",
+      "details": [
+        "不要在生產環境中暴露調試信息",
+        "避免通過這些 API 修改敏感數據",
+        "注意潜在的 XSS 風險"
+      ]
+    }
+  },
+  "best_practices": [
+    "僅在開發和調試階段使用這些 API",
+    "創建快捷方式函數提高調試效率",
+    "結合瀏覽器開發工具進行綜合調試",
+    "使用這些 API 驗證組件行為和狀態",
+    "在團隊開發中分享有用的調試技巧",
+    "定期檢查 API 的版本兼容性"
+  ],
+  "common_use_cases": [
+    "檢查組件輸入輸出屬性",
+    "驗證依賴注入配置",
+    "調試事件綁定問題",
+    "檢查變更檢測行為",
+    "分析組件層次結構",
+    "測試組件方法調用",
+    "驗證指令應用狀態",
+    "檢查服務實例化"
+  ]
+}

@@ -1,0 +1,329 @@
+{
+  "title": "Angular Common API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular 通用功能模組的完整 API 參考，包含管道、指令、服務和 HTTP 客戶端",
+  "metadata": {
+    "category": "Core Common",
+    "complexity": "Medium",
+    "usage": "通用功能、數據格式化、HTTP 通信、國際化",
+    "lastmod": "2025-01-17"
+  },
+  "core_modules": {
+    "CommonModule": {
+      "purpose": "Angular 通用功能模組",
+      "usage": "提供常用的指令、管道和服務",
+      "includes": ["NgIf", "NgFor", "AsyncPipe", "NgClass", "NgStyle"]
+    },
+    "APP_BASE_HREF": {
+      "purpose": "應用程式基礎 URL 注入令牌",
+      "usage": "設定應用程式的基礎路徑",
+      "example": "{ provide: APP_BASE_HREF, useValue: '/my-app' }"
+    },
+    "DOCUMENT": {
+      "purpose": "DOM Document 對象注入令牌",
+      "usage": "在服務中安全地訪問 document 對象",
+      "example": "constructor(@Inject(DOCUMENT) private document: Document)"
+    }
+  },
+  "pipes": {
+    "AsyncPipe": {
+      "purpose": "異步數據管道",
+      "usage": "自動訂閱和取消訂閱 Observable 或 Promise",
+      "example": "{{ data$ | async }}",
+      "auto_unsubscribe": true
+    },
+    "CurrencyPipe": {
+      "purpose": "貨幣格式化管道",
+      "usage": "將數字格式化為貨幣顯示",
+      "example": "{{ price | currency:'USD':'symbol':'1.2-2' }}",
+      "parameters": ["currencyCode", "display", "digitsInfo"]
+    },
+    "DatePipe": {
+      "purpose": "日期格式化管道",
+      "usage": "將日期對象格式化為指定格式的字符串",
+      "example": "{{ today | date:'yyyy-MM-dd' }}",
+      "parameters": ["format", "timezone", "locale"]
+    },
+    "DecimalPipe": {
+      "purpose": "數字格式化管道",
+      "usage": "將數字格式化為指定的小數位數",
+      "example": "{{ number | number:'1.2-3' }}",
+      "parameters": ["digitsInfo", "locale"]
+    },
+    "JsonPipe": {
+      "purpose": "JSON 格式化管道",
+      "usage": "將對象轉換為 JSON 字符串顯示",
+      "example": "{{ object | json }}",
+      "parameters": []
+    },
+    "KeyValuePipe": {
+      "purpose": "鍵值對管道",
+      "usage": "將對象轉換為鍵值對數組進行迭代",
+      "example": "*ngFor=\"let item of object | keyvalue\"",
+      "parameters": ["compareFn"]
+    },
+    "LowerCasePipe": {
+      "purpose": "小寫轉換管道",
+      "usage": "將字符串轉換為小寫",
+      "example": "{{ text | lowercase }}",
+      "parameters": []
+    },
+    "PercentPipe": {
+      "purpose": "百分比格式化管道",
+      "usage": "將數字格式化為百分比顯示",
+      "example": "{{ ratio | percent:'1.2-2' }}",
+      "parameters": ["digitsInfo", "locale"]
+    },
+    "SlicePipe": {
+      "purpose": "數組/字符串切片管道",
+      "usage": "截取數組或字符串的一部分",
+      "example": "{{ array | slice:1:5 }}",
+      "parameters": ["start", "end"]
+    },
+    "TitleCasePipe": {
+      "purpose": "標題格式管道",
+      "usage": "將字符串轉換為標題格式（首字母大寫）",
+      "example": "{{ text | titlecase }}",
+      "parameters": []
+    },
+    "UpperPipe": {
+      "purpose": "大寫轉換管道",
+      "usage": "將字符串轉換為大寫",
+      "example": "{{ text | uppercase }}",
+      "parameters": []
+    }
+  },
+  "formatting_functions": {
+    "formatCurrency": {
+      "purpose": "貨幣格式化函數",
+      "usage": "程式化格式化貨幣數值",
+      "example": "formatCurrency(1234.56, 'en-US', '$')",
+      "parameters": ["value", "locale", "currency", "currencyCode", "digitsInfo"]
+    },
+    "formatDate": {
+      "purpose": "日期格式化函數",
+      "usage": "程式化格式化日期",
+      "example": "formatDate(new Date(), 'yyyy-MM-dd', 'en-US')",
+      "parameters": ["value", "format", "locale", "timezone"]
+    },
+    "formatNumber": {
+      "purpose": "數字格式化函數",
+      "usage": "程式化格式化數字",
+      "example": "formatNumber(1234.56, 'en-US', '1.2-3')",
+      "parameters": ["value", "locale", "digitsInfo"]
+    },
+    "formatPercent": {
+      "purpose": "百分比格式化函數",
+      "usage": "程式化格式化百分比",
+      "example": "formatPercent(0.1234, 'en-US', '1.2-2')",
+      "parameters": ["value", "locale", "digitsInfo"]
+    }
+  },
+  "structural_directives": {
+    "NgClass": {
+      "purpose": "動態 CSS 類別指令",
+      "usage": "根據條件動態添加或移除 CSS 類別",
+      "example": "[ngClass]=\"{ 'active': isActive, 'disabled': isDisabled }\"",
+      "syntax": "object | string | array"
+    },
+    "NgComponentOutlet": {
+      "purpose": "動態組件輸出指令",
+      "usage": "動態創建和插入組件",
+      "example": "<ng-container *ngComponentOutlet=\"componentType\"></ng-container>",
+      "syntax": "componentType"
+    },
+    "NgFor": {
+      "purpose": "循環指令",
+      "usage": "遍歷數組或可迭代對象創建模板",
+      "example": "*ngFor=\"let item of items; let i = index\"",
+      "syntax": "let item of items; trackBy: trackFn"
+    },
+    "NgIf": {
+      "purpose": "條件渲染指令",
+      "usage": "根據條件顯示或隱藏元素",
+      "example": "*ngIf=\"condition; else elseTemplate\"",
+      "syntax": "condition; else templateRef"
+    },
+    "NgStyle": {
+      "purpose": "動態樣式指令",
+      "usage": "根據條件動態設定 CSS 樣式",
+      "example": "[ngStyle]=\"{ 'color': textColor, 'font-size': fontSize + 'px' }\"",
+      "syntax": "object | string"
+    },
+    "NgSwitch": {
+      "purpose": "條件分支指令",
+      "usage": "根據值顯示不同的模板分支",
+      "example": "[ngSwitch]=\"value\" 配合 *ngSwitchCase 使用",
+      "syntax": "value; case1; case2; default"
+    },
+    "NgTemplateOutlet": {
+      "purpose": "模板輸出指令",
+      "usage": "動態插入模板內容",
+      "example": "<ng-container *ngTemplateOutlet=\"template; context: context\"></ng-container>",
+      "syntax": "templateRef; context: object"
+    }
+  },
+  "location_navigation": {
+    "Location": {
+      "purpose": "瀏覽器位置服務",
+      "usage": "管理瀏覽器的 URL 和歷史記錄",
+      "methods": ["back()", "forward()", "go(path)", "path()", "url()"]
+    },
+    "LocationStrategy": {
+      "purpose": "位置策略抽象類",
+      "usage": "定義 URL 管理策略的介面",
+      "implementations": ["HashLocationStrategy", "PathLocationStrategy"]
+    },
+    "HashLocationStrategy": {
+      "purpose": "Hash 位置策略",
+      "usage": "使用 URL hash 管理路由",
+      "example": "URL 格式為 #/path"
+    },
+    "PathLocationStrategy": {
+      "purpose": "路徑位置策略",
+      "usage": "使用 HTML5 pushState 管理路由",
+      "example": "URL 格式為 /path"
+    },
+    "ViewportScroller": {
+      "purpose": "視窗滾動服務",
+      "usage": "管理頁面滾動位置",
+      "methods": ["scrollToTop()", "scrollToPosition([x, y])", "getScrollPosition()"]
+    }
+  },
+  "internationalization": {
+    "I18nPluralPipe": {
+      "purpose": "國際化複數管道",
+      "usage": "根據數量顯示不同的複數形式文本",
+      "example": "處理不同語言的複數規則"
+    },
+    "I18nSelectPipe": {
+      "purpose": "國際化選擇管道",
+      "usage": "根據值選擇不同的文本",
+      "example": "性別、狀態等選擇性文本"
+    },
+    "registerLocaleData": {
+      "purpose": "註冊語言環境數據",
+      "usage": "載入特定語言的格式化數據",
+      "example": "registerLocaleData(localeZhTw)"
+    }
+  },
+  "image_optimization": {
+    "NgOptimizedImage": {
+      "purpose": "優化圖片指令",
+      "usage": "自動優化圖片載入和顯示",
+      "example": "<img ngSrc=\"image.jpg\" width=\"400\" height=\"300\">",
+      "attributes": ["ngSrc", "width", "height", "priority", "fill"]
+    },
+    "IMAGE_CONFIG": {
+      "purpose": "圖片配置令牌",
+      "usage": "配置圖片優化的全局設定",
+      "example": "設定圖片載入器和預設選項"
+    },
+    "IMAGE_LOADER": {
+      "purpose": "圖片載入器令牌",
+      "usage": "自訂圖片 URL 轉換邏輯",
+      "example": "整合 CDN 或圖片服務"
+    }
+  },
+  "platform_detection": {
+    "isPlatformBrowser": {
+      "purpose": "檢測是否為瀏覽器平台",
+      "usage": "判斷代碼是否在瀏覽器中執行",
+      "example": "if (isPlatformBrowser(platformId)) { ... }"
+    },
+    "isPlatformServer": {
+      "purpose": "檢測是否為服務端平台",
+      "usage": "判斷代碼是否在服務端執行",
+      "example": "if (isPlatformServer(platformId)) { ... }"
+    }
+  },
+  "http_client": {
+    "HttpClient": {
+      "purpose": "HTTP 客戶端服務",
+      "usage": "發送 HTTP 請求和處理響應",
+      "methods": ["get<T>()", "post<T>()", "put<T>()", "delete<T>()", "patch<T>()"],
+      "example": "http.get<User[]>('/api/users')"
+    },
+    "HttpHeaders": {
+      "purpose": "HTTP 標頭管理類",
+      "usage": "管理 HTTP 請求和響應的標頭",
+      "example": "new HttpHeaders({ 'Content-Type': 'application/json' })"
+    },
+    "HttpParams": {
+      "purpose": "HTTP 參數管理類",
+      "usage": "管理 URL 查詢參數",
+      "example": "new HttpParams().set('page', '1')"
+    },
+    "HttpInterceptor": {
+      "purpose": "HTTP 攔截器介面",
+      "usage": "定義 HTTP 攔截器的標準介面",
+      "methods": ["intercept(req, next)"]
+    },
+    "provideHttpClient": {
+      "purpose": "提供 HTTP 客戶端",
+      "usage": "配置和提供 HTTP 客戶端服務",
+      "example": "provideHttpClient(withInterceptors([...]))"
+    }
+  },
+  "http_features": {
+    "withFetch": {
+      "purpose": "使用 Fetch API",
+      "usage": "配置 HTTP 客戶端使用 Fetch API",
+      "example": "現代瀏覽器的推薦配置"
+    },
+    "withInterceptors": {
+      "purpose": "配置攔截器",
+      "usage": "添加函數式攔截器",
+      "example": "withInterceptors([authInterceptor, loggingInterceptor])"
+    },
+    "withJsonpSupport": {
+      "purpose": "啟用 JSONP 支援",
+      "usage": "添加 JSONP 請求支援",
+      "example": "跨域請求的解決方案"
+    },
+    "withXsrfConfiguration": {
+      "purpose": "配置 XSRF 保護",
+      "usage": "自定義 XSRF 保護的行為",
+      "example": "設定令牌名稱和標頭名稱"
+    }
+  },
+  "testing_support": {
+    "HttpTestingController": {
+      "purpose": "HTTP 測試控制器",
+      "usage": "在測試中模擬和驗證 HTTP 請求",
+      "example": "httpMock.expectOne('/api/users').flush(mockUsers)"
+    },
+    "provideHttpClientTesting": {
+      "purpose": "提供 HTTP 測試客戶端",
+      "usage": "配置測試環境的 HTTP 客戶端",
+      "example": "在測試模組中替換真實的 HTTP 客戶端"
+    }
+  },
+  "usage_examples": {
+    "basic_pipes": {
+      "description": "基本管道使用",
+      "code": "{{ user.name | titlecase }}\n{{ user.birthday | date:'yyyy-MM-dd' }}\n{{ user.salary | currency:'USD':'symbol':'1.2-2' }}\n{{ users$ | async }}"
+    },
+    "http_client_usage": {
+      "description": "HTTP 客戶端使用",
+      "code": "@Injectable()\nexport class UserService {\n  constructor(private http: HttpClient) {}\n\n  getUsers(): Observable<User[]> {\n    return this.http.get<User[]>('/api/users');\n  }\n\n  createUser(user: User): Observable<User> {\n    return this.http.post<User>('/api/users', user);\n  }\n}"
+    },
+    "location_service": {
+      "description": "位置服務使用",
+      "code": "@Component({...})\nexport class NavigationComponent {\n  constructor(private location: Location) {}\n\n  goBack(): void {\n    this.location.back();\n  }\n\n  getCurrentPath(): string {\n    return this.location.path();\n  }\n}"
+    }
+  },
+  "best_practices": [
+    "使用 AsyncPipe 自動管理 Observable 訂閱生命週期",
+    "優先使用響應式表單而非模板驅動表單",
+    "適當使用 NgOptimizedImage 優化圖片載入",
+    "在服務中使用 HttpClient 而非直接操作 XMLHttpRequest",
+    "使用 HttpInterceptor 統一處理認證和錯誤"
+  ],
+  "performance_tips": [
+    "使用 OnPush 變更檢測策略減少不必要的檢查",
+    "適當使用 trackBy 函數優化 NgFor 性能",
+    "使用 NgOptimizedImage 的 priority 屬性優先載入關鍵圖片",
+    "考慮使用 withFetch 在現代瀏覽器中獲得更好性能"
+  ]
+}

@@ -1,0 +1,90 @@
+/**
+ * @fileoverview Tab Navigation 組件樣式檔案 (Tab Navigation Component Styles)
+ * @description 提供 Tab Navigation 組件的樣式定義
+ * @author NG-AC Team
+ * @version 1.0.0
+ * @since 2024-01-01
+ *
+ * 檔案性質：
+ * - 類型：Interface Layer Tab Navigation Component Styles
+ * - 職責：Tab 導航組件樣式
+ * - 依賴：無
+ * - 不可變更：此文件的所有註解和架構說明均不可變更
+ *
+ * 重要說明：
+ * - 此檔案使用 Material Design 3 設計系統
+ * - 遵循極簡主義原則，只定義必要的樣式
+ * - 使用 CSS 變數和現代化樣式技術
+ */
+
+.modern-tab-group {
+  --tab-height: 48px;
+  --tab-padding: 0 16px;
+  --tab-border-radius: 8px;
+  --tab-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .mat-mdc-tab-header {
+    background: var(--mat-sys-surface);
+    border-bottom: 1px solid var(--mat-divider-color);
+
+    .mat-mdc-tab {
+      min-width: 120px;
+      height: var(--tab-height);
+      padding: var(--tab-padding);
+      border-radius: var(--tab-border-radius);
+      transition: var(--tab-transition);
+
+      &:hover {
+        background: var(--mat-sys-surface-variant);
+      }
+
+      &.mat-mdc-tab-active {
+        background: var(--mat-sys-primary-container);
+        color: var(--mat-sys-on-primary-container);
+      }
+    }
+  }
+
+  .mat-mdc-tab-body-wrapper {
+    background: var(--mat-sys-surface);
+    border-radius: var(--tab-border-radius);
+    margin: 8px;
+    box-shadow: var(--mat-sys-level1);
+  }
+}
+
+.tab-label-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+
+  .tab-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .tab-text {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .close-button {
+    margin-left: auto;
+    opacity: 1; /* Always show close button for clarity */
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+/* Removed hover-only visibility; keep buttons visible by default */
+
+.tab-content {
+  padding: 16px;
+  min-height: 200px;
+}

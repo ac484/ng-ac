@@ -1,0 +1,95 @@
+/**
+ * App Shell 響應式樣式
+ *
+ * @author NG-AC Team
+ * @since 2024-12-19
+ * @version 1.0.0
+ */
+
+@use './app-shell-variables' as vars;
+
+.app-shell {
+  container-type: inline-size;
+  container-name: app-shell;
+}
+
+.app-header {
+  @container app-shell (max-width: 600px) {
+    .app-nav {
+      padding: 0 16px;
+
+      .nav-brand .brand-name {
+        display: none;
+      }
+
+      .nav-actions {
+        gap: 8px;
+      }
+    }
+  }
+}
+
+.app-sidebar {
+  @container app-shell (max-width: vars.$breakpoint-tablet) {
+    width: 240px;
+  }
+
+  @container app-shell (max-width: vars.$breakpoint-mobile) {
+    position: fixed;
+    top: vars.$header-height;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - vars.$header-height);
+    transition: left vars.$transition-normal;
+    z-index: 999;
+
+    &.sidebar-open {
+      left: 0;
+    }
+  }
+}
+
+.app-main {
+  @container app-shell (max-width: vars.$breakpoint-mobile) {
+    .main-content {
+      padding: 16px;
+    }
+  }
+}
+
+// 移動端優化
+@media (max-width: vars.$breakpoint-mobile) {
+  .app-shell {
+    .app-header {
+      .app-nav {
+        .nav-brand .brand-name {
+          display: none;
+        }
+      }
+    }
+
+    .app-sidebar {
+      &.sidebar-open {
+        left: 0;
+      }
+    }
+  }
+}
+
+// 平板端優化
+@media (min-width: vars.$breakpoint-mobile + 1px) and (max-width: vars.$breakpoint-tablet) {
+  .app-shell {
+    .app-sidebar {
+      width: 240px;
+    }
+  }
+}
+
+// 桌面端優化
+@media (min-width: vars.$breakpoint-tablet + 1px) {
+  .app-shell {
+    .app-sidebar {
+      width: vars.$sidebar-width;
+    }
+  }
+}

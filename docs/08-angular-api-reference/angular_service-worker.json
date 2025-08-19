@@ -1,0 +1,230 @@
+{
+  "title": "Angular Service Worker API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular Service Worker 的完整 API 參考，包含 PWA 功能、版本更新和推送通知",
+  "metadata": {
+    "category": "PWA & Service Worker",
+    "complexity": "Medium",
+    "usage": "漸進式 Web 應用、離線功能、推送通知、版本更新管理",
+    "lastmod": "2025-01-17"
+  },
+  "core_service_worker_modules": {
+    "ServiceWorkerModule": {
+      "purpose": "Service Worker 模組",
+      "usage": "在 Angular 應用中註冊和配置 Service Worker",
+      "methods": ["register()", "isSupported()"],
+      "example": "ServiceWorkerModule.register('ngsw-worker.js')",
+      "selector": "ServiceWorkerModule"
+    },
+    "ServiceWorkerModule.register": {
+      "function": "ServiceWorkerModule.register(script, options)",
+      "purpose": "註冊 Service Worker",
+      "usage": "註冊 Angular Service Worker 腳本",
+      "example": "ServiceWorkerModule.register('ngsw-worker.js', { enabled: true })",
+      "parameters": ["script: string", "options?: RegistrationOptions"],
+      "returns": "ModuleWithProviders<ServiceWorkerModule>"
+    }
+  },
+  "service_worker_services": {
+    "SwUpdate": {
+      "purpose": "Service Worker 更新服務",
+      "usage": "管理 Service Worker 的版本更新",
+      "methods": ["checkForUpdate()", "activateUpdate()", "getVersion()"],
+      "example": "swUpdate.checkForUpdate()",
+      "properties": ["versionUpdates", "isEnabled", "isEnabled$"],
+      "injectable": true
+    },
+    "SwPush": {
+      "purpose": "Service Worker 推送服務",
+      "usage": "處理推送通知的訂閱和接收",
+      "methods": ["requestSubscription()", "unsubscribe()", "getSubscription()"],
+      "example": "swPush.requestSubscription({ serverPublicKey: vapidKey })",
+      "properties": ["subscription", "messages", "notificationClicks"],
+      "injectable": true
+    },
+    "SwRegistrationOptions": {
+      "purpose": "Service Worker 註冊選項介面",
+      "usage": "配置 Service Worker 的註冊選項",
+      "properties": ["scope", "updateViaCache", "enabled"],
+      "example": "{ scope: '/', updateViaCache: 'none' }"
+    }
+  },
+  "version_update_management": {
+    "VersionReadyEvent": {
+      "purpose": "版本就緒事件",
+      "usage": "當新版本可用時觸發的事件",
+      "example": "swUpdate.versionUpdates.pipe(filter(evt => evt.type === 'VERSION_READY'))",
+      "properties": ["type", "latestVersion", "previousVersion"],
+      "extends": "VersionEvent"
+    },
+    "VersionDetectedEvent": {
+      "purpose": "版本檢測事件",
+      "usage": "當檢測到新版本時觸發的事件",
+      "example": "swUpdate.versionUpdates.pipe(filter(evt => evt.type === 'VERSION_DETECTED'))",
+      "properties": ["type", "version"],
+      "extends": "VersionEvent"
+    },
+    "VersionInstallationFailedEvent": {
+      "purpose": "版本安裝失敗事件",
+      "usage": "當版本安裝失敗時觸發的事件",
+      "example": "swUpdate.versionUpdates.pipe(filter(evt => evt.type === 'VERSION_INSTALLATION_FAILED'))",
+      "properties": ["type", "version", "error"],
+      "extends": "VersionEvent"
+    },
+    "VersionEvent": {
+      "purpose": "版本事件基類",
+      "usage": "所有版本相關事件的基礎類型",
+      "properties": ["type"],
+      "type": "extends Event"
+    },
+    "VersionUpdate": {
+      "purpose": "版本更新聯合類型",
+      "usage": "表示所有可能的版本更新事件",
+      "types": ["VersionDetectedEvent", "VersionReadyEvent", "VersionInstallationFailedEvent"],
+      "example": "swUpdate.versionUpdates.subscribe((event: VersionUpdate) => { ... })"
+    }
+  },
+  "push_notification_management": {
+    "PushSubscription": {
+      "purpose": "推送訂閱介面",
+      "usage": "表示推送通知的訂閱狀態",
+      "properties": ["endpoint", "keys", "options"],
+      "example": "swPush.subscription.subscribe(subscription => console.log(subscription.endpoint))",
+      "methods": ["toJSON()", "getKey()"]
+    },
+    "PushSubscriptionOptions": {
+      "purpose": "推送訂閱選項介面",
+      "usage": "配置推送通知的訂閱選項",
+      "properties": ["userVisibleOnly", "applicationServerKey"],
+      "example": "{ userVisibleOnly: true, applicationServerKey: vapidKey }"
+    },
+    "PushMessage": {
+      "purpose": "推送消息介面",
+      "usage": "表示接收到的推送消息",
+      "properties": ["data", "notification", "actions"],
+      "example": "swPush.messages.subscribe(message => console.log(message.data))"
+    },
+    "NotificationClickEvent": {
+      "purpose": "通知點擊事件介面",
+      "usage": "當用戶點擊推送通知時觸發的事件",
+      "properties": ["action", "notification", "reply"],
+      "example": "swPush.notificationClicks.subscribe(click => console.log(click.action))"
+    }
+  },
+  "service_worker_configuration": {
+    "NgswConfigPath": {
+      "purpose": "Service Worker 配置路徑令牌",
+      "usage": "指定 Service Worker 配置文件的路徑",
+      "example": "provide(NgswConfigPath, { useValue: '/ngsw-config.json' })",
+      "type": "InjectionToken<string>"
+    },
+    "NgswAppData": {
+      "purpose": "Service Worker 應用數據令牌",
+      "usage": "提供應用的元數據給 Service Worker",
+      "example": "provide(NgswAppData, { useValue: { appData: { version: '1.0.0' } } })",
+      "type": "InjectionToken<AppData>"
+    },
+    "AppData": {
+      "purpose": "應用數據介面",
+      "usage": "定義應用的元數據結構",
+      "properties": ["appData"],
+      "example": "{ appData: { version: '1.0.0', buildTime: '2025-01-17' } }"
+    }
+  },
+  "service_worker_events": {
+    "ServiceWorkerRegistration": {
+      "purpose": "Service Worker 註冊對象",
+      "usage": "表示 Service Worker 的註冊狀態",
+      "properties": ["scope", "active", "installing", "waiting"],
+      "methods": ["update()", "unregister()"],
+      "example": "navigator.serviceWorker.register('ngsw-worker.js')"
+    },
+    "ServiceWorker": {
+      "purpose": "Service Worker 對象",
+      "usage": "表示活動的 Service Worker 實例",
+      "properties": ["scriptURL", "state"],
+      "methods": ["postMessage()"],
+      "example": "registration.active.postMessage({ type: 'SKIP_WAITING' })"
+    }
+  },
+  "offline_functionality": {
+    "OfflineCapable": {
+      "purpose": "離線能力介面",
+      "usage": "檢查應用是否支援離線功能",
+      "example": "檢查 Service Worker 是否已註冊",
+      "methods": ["isOfflineCapable()"]
+    },
+    "CacheStorage": {
+      "purpose": "快取存儲 API",
+      "usage": "管理應用的快取存儲",
+      "methods": ["open()", "keys()", "delete()", "match()"],
+      "example": "caches.open('app-v1').then(cache => cache.add('/')"
+    }
+  },
+  "service_worker_lifecycle": {
+    "ServiceWorkerLifecycle": {
+      "purpose": "Service Worker 生命週期管理",
+      "usage": "管理 Service Worker 的安裝、激活和更新",
+      "stages": ["installing", "waiting", "active", "redundant"],
+      "example": "監聽 Service Worker 狀態變化"
+    },
+    "SkipWaiting": {
+      "purpose": "跳過等待策略",
+      "usage": "讓新的 Service Worker 立即激活",
+      "example": "registration.waiting.postMessage({ type: 'SKIP_WAITING' })",
+      "use_case": "強制更新 Service Worker"
+    }
+  },
+  "usage_examples": {
+    "basic_service_worker_setup": {
+      "description": "基本 Service Worker 設置",
+      "code": "// app.config.ts\nimport { ApplicationConfig } from '@angular/core';\nimport { provideServiceWorker } from '@angular/service-worker';\nimport { environment } from '../environments/environment';\n\nexport const appConfig: ApplicationConfig = {\n  providers: [\n    provideServiceWorker('ngsw-worker.js', {\n      enabled: environment.production,\n      registrationStrategy: 'registerWhenStable:30000'\n    })\n  ]\n};\n\n// 在組件中使用\nimport { Component, OnInit } from '@angular/core';\nimport { SwUpdate } from '@angular/service-worker';\n\n@Component({\n  selector: 'app-root',\n  template: '<div>應用已準備好離線使用</div>'\n})\nexport class AppComponent implements OnInit {\n  constructor(private swUpdate: SwUpdate) {}\n\n  ngOnInit() {\n    if (this.swUpdate.isEnabled) {\n      this.swUpdate.versionUpdates.subscribe(event => {\n        if (event.type === 'VERSION_READY') {\n          this.promptUser();\n        }\n      });\n    }\n  }\n\n  private promptUser() {\n    if (confirm('新版本可用，是否重新載入？')) {\n      window.location.reload();\n    }\n  }\n}"
+    },
+    "version_update_handling": {
+      "description": "版本更新處理",
+      "code": "import { Component, OnInit } from '@angular/core';\nimport { SwUpdate, VersionReadyEvent } from '@angular/service-worker';\nimport { filter, map } from 'rxjs/operators';\n\n@Component({\n  selector: 'app-update-notification',\n  template: `\n    <div *ngIf=\"updateAvailable\" class=\"update-notification\">\n      <p>新版本可用！</p>\n      <button (click)=\"updateApp()\">立即更新</button>\n    </div>\n  `\n})\nexport class UpdateNotificationComponent implements OnInit {\n  updateAvailable = false;\n\n  constructor(private swUpdate: SwUpdate) {}\n\n  ngOnInit() {\n    if (this.swUpdate.isEnabled) {\n      this.swUpdate.versionUpdates\n        .pipe(\n          filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY')\n        )\n        .subscribe(() => {\n          this.updateAvailable = true;\n        });\n    }\n  }\n\n  updateApp() {\n    this.swUpdate.activateUpdate().then(() => {\n      window.location.reload();\n    });\n  }\n}"
+    },
+    "push_notification_setup": {
+      "description": "推送通知設置",
+      "code": "import { Component, OnInit } from '@angular/core';\nimport { SwPush } from '@angular/service-worker';\nimport { HttpClient } from '@angular/common/http';\n\n@Component({\n  selector: 'app-push-notification',\n  template: `\n    <button (click)=\"subscribeToNotifications()\" [disabled]=\"isSubscribed\">\n      {{ isSubscribed ? '已訂閱' : '訂閱推送通知' }}\n    </button>\n  `\n})\nexport class PushNotificationComponent implements OnInit {\n  isSubscribed = false;\n  private readonly VAPID_PUBLIC_KEY = 'YOUR_VAPID_PUBLIC_KEY';\n\n  constructor(\n    private swPush: SwPush,\n    private http: HttpClient\n  ) {}\n\n  ngOnInit() {\n    this.swPush.subscription.subscribe(subscription => {\n      this.isSubscribed = !!subscription;\n    });\n  }\n\n  async subscribeToNotifications() {\n    try {\n      const subscription = await this.swPush.requestSubscription({\n        serverPublicKey: this.VAPID_PUBLIC_KEY\n      });\n\n      // 發送訂閱信息到服務器\n      await this.http.post('/api/push/subscription', subscription).toPromise();\n      this.isSubscribed = true;\n    } catch (error) {\n      console.error('訂閱失敗:', error);\n    }\n  }\n\n  async unsubscribeFromNotifications() {\n    try {\n      await this.swPush.unsubscribe();\n      this.isSubscribed = false;\n      // 通知服務器取消訂閱\n      await this.http.delete('/api/push/subscription').toPromise();\n    } catch (error) {\n      console.error('取消訂閱失敗:', error);\n    }\n  }"
+    },
+    "offline_data_caching": {
+      "description": "離線數據快取",
+      "code": "import { Injectable } from '@angular/core';\nimport { HttpClient } from '@angular/common/http';\nimport { Observable, of } from 'rxjs';\nimport { catchError, tap } from 'rxjs/operators';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class DataService {\n  private cache = new Map<string, any>();\n\n  constructor(private http: HttpClient) {}\n\n  getData(url: string): Observable<any> {\n    // 檢查快取\n    if (this.cache.has(url)) {\n      return of(this.cache.get(url));\n    }\n\n    // 從網絡獲取數據\n    return this.http.get(url).pipe(\n      tap(data => {\n        // 快取數據\n        this.cache.set(url, data);\n        // 也可以存儲到 IndexedDB 或 localStorage\n        this.storeInIndexedDB(url, data);\n      }),\n      catchError(error => {\n        // 離線時嘗試從 IndexedDB 獲取\n        return this.getFromIndexedDB(url);\n      })\n    );\n  }\n\n  private storeInIndexedDB(key: string, data: any) {\n    // 實現 IndexedDB 存儲邏輯\n  }\n\n  private getFromIndexedDB(key: string): Observable<any> {\n    // 實現從 IndexedDB 獲取數據的邏輯\n    return of(null);\n  }\n}"
+    },
+    "service_worker_configuration": {
+      "description": "Service Worker 配置",
+      "code": "// ngsw-config.json\n{\n  \"$schema\": \"./node_modules/@angular/service-worker/config/schema.json\",\n  \"index\": \"/index.html\",\n  \"assetGroups\": [\n    {\n      \"name\": \"app\",\n      \"installMode\": \"prefetch\",\n      \"resources\": {\n        \"files\": [\n          \"/favicon.ico\",\n          \"/index.html\",\n          \"/manifest.webmanifest\",\n          \"/*.css\",\n          \"/*.js\"\n        ]\n      }\n    },\n    {\n      \"name\": \"assets\",\n      \"installMode\": \"lazy\",\n      \"updateMode\": \"prefetch\",\n      \"resources\": {\n        \"files\": [\n          \"/assets/**\",\n          \"/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)\"\n        ]\n      }\n    }\n  ],\n  \"dataGroups\": [\n    {\n      \"name\": \"api-freshness\",\n      \"urls\": [\n        \"/api/**\"\n      ],\n      \"cacheConfig\": {\n        \"strategy\": \"freshness\",\n        \"maxSize\": 100,\n        \"maxAge\": \"3d\",\n        \"timeout\": \"10s\"\n      }\n    }\n  ]\n}\n\n// 在應用中提供配置\nimport { NgswConfigPath } from '@angular/service-worker';\n\nexport const appConfig: ApplicationConfig = {\n  providers: [\n    provideServiceWorker('ngsw-worker.js'),\n    provide(NgswConfigPath, { useValue: '/ngsw-config.json' })\n  ]\n};"
+    },
+    "background_sync": {
+      "description": "背景同步功能",
+      "code": "// 在 Service Worker 中實現背景同步\n// ngsw-worker.js (自定義)\nself.addEventListener('sync', event => {\n  if (event.tag === 'background-sync') {\n    event.waitUntil(doBackgroundSync());\n  }\n});\n\nasync function doBackgroundSync() {\n  try {\n    // 執行背景同步邏輯\n    const requests = await getPendingRequests();\n    for (const request of requests) {\n      await processRequest(request);\n    }\n  } catch (error) {\n    console.error('背景同步失敗:', error);\n  }\n}\n\n// 在 Angular 組件中觸發背景同步\nimport { Injectable } from '@angular/core';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class BackgroundSyncService {\n  async registerBackgroundSync(tag: string) {\n    if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {\n      const registration = await navigator.serviceWorker.ready;\n      await registration.sync.register(tag);\n    }\n  }\n\n  async syncData() {\n    await this.registerBackgroundSync('background-sync');\n  }\n}"
+    }
+  },
+  "best_practices": [
+    "在生產環境中啟用 Service Worker",
+    "實現適當的版本更新提示",
+    "使用 VAPID 金鑰進行推送通知",
+    "實現離線數據快取策略",
+    "適當配置資產快取策略",
+    "處理 Service Worker 更新失敗",
+    "實現背景同步功能",
+    "測試離線功能"
+  ],
+  "performance_tips": [
+    "使用 prefetch 模式預載關鍵資源",
+    "實現智能快取策略",
+    "使用背景同步處理離線操作",
+    "適當配置快取過期時間",
+    "實現增量更新策略",
+    "使用 Service Worker 快取 API 響應"
+  ],
+  "security_considerations": [
+    "使用 HTTPS 協議（Service Worker 要求）",
+    "驗證推送通知的來源",
+    "實現適當的權限檢查",
+    "保護 VAPID 金鑰",
+    "驗證快取數據的完整性",
+    "實現適當的錯誤處理"
+  ]
+}

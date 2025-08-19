@@ -1,0 +1,342 @@
+{
+  "metadata": {
+    "title": "Angular DDD 核心庫 API 參考",
+    "version": "1.0.0",
+    "description": "@type-ddd/core 和 rich-domain 庫的完整 API 參考文檔",
+    "generatedAt": "2025-08-19T13:30:00.000Z"
+  },
+  "libraries": {
+    "@type-ddd/core": {
+      "description": "TypeScript DDD 核心庫，提供實體、值物件、聚合等基礎類別",
+      "version": "latest",
+      "installation": "npm install @type-ddd/core",
+      "peerDependencies": ["rich-domain"],
+      "coreClasses": {
+        "Entity": {
+          "description": "實體基礎類別，代表具有身份和生命週期的業務物件",
+          "extends": "BaseEntity",
+          "constructor": "private constructor(props: Props)",
+          "methods": {
+            "static create(props: Props): Result<Entity>": "創建實體實例的靜態工廠方法",
+            "static isValidProps(props: Props): boolean": "驗證實體屬性的靜態方法",
+            "validation<Key extends keyof Props>(value: Props[Key], key: Key): boolean": "屬性變更驗證方法",
+            "set<Key extends keyof Props>(key: Key): Setter<Props[Key]>": "設置屬性值的方法",
+            "change<Key extends keyof Props>(key: Key, value: Props[Key]): Entity": "變更屬性值的方法",
+            "get<Key extends keyof Props>(key: Key): Props[Key]": "獲取屬性值的方法",
+            "toObject(): Props": "將實體轉換為普通物件",
+            "clone(): Entity": "克隆實體實例",
+            "isEqual(other: Entity): boolean": "比較兩個實體是否相等"
+          },
+          "properties": {
+            "props": "實體的屬性集合",
+            "id": "實體的唯一標識符",
+            "createdAt": "創建時間",
+            "updatedAt": "更新時間"
+          }
+        },
+        "ValueObject": {
+          "description": "值物件基礎類別，代表沒有身份但具有業務意義的物件",
+          "extends": "BaseValueObject",
+          "constructor": "private constructor(props: Props)",
+          "methods": {
+            "static create(props: Props): Result<ValueObject>": "創建值物件實例的靜態工廠方法",
+            "static isValidProps(props: Props): boolean": "驗證值物件屬性的靜態方法",
+            "static init(props: Props): ValueObject": "初始化值物件實例（可能拋出錯誤）",
+            "validation<Key extends keyof Props>(value: Props[Key], key: Key): boolean": "屬性變更驗證方法",
+            "set<Key extends keyof Props>(key: Key): Setter<Props[Key]>": "設置屬性值的方法",
+            "change<Key extends keyof Props>(key: Key, value: Props[Key]): ValueObject": "變更屬性值的方法",
+            "get<Key extends keyof Props>(key: Key): Props[Key]": "獲取屬性值的方法",
+            "toObject(): Props": "將值物件轉換為普通物件",
+            "clone(): ValueObject": "克隆值物件實例",
+            "isEqual(other: ValueObject): boolean": "比較兩個值物件是否相等"
+          },
+          "properties": {
+            "props": "值物件的屬性集合"
+          }
+        },
+        "Aggregate": {
+          "description": "聚合根基礎類別，代表一組相關實體和值物件的集合",
+          "extends": "Entity",
+          "constructor": "private constructor(props: Props)",
+          "methods": {
+            "static create(props: Props): Result<Aggregate>": "創建聚合實例的靜態工廠方法",
+            "addEvent(eventName: string, handler: Function): Aggregate": "添加領域事件",
+            "addEvent(eventHandler: EventHandler): Aggregate": "添加事件處理器實例",
+            "dispatchEvent(eventName: string, ...args: any[]): void": "分發特定事件",
+            "dispatchAll(): Promise<void>": "分發所有事件",
+            "context(): Context": "獲取聚合的事件上下文"
+          },
+          "properties": {
+            "events": "聚合的事件集合"
+          }
+        },
+        "Result": {
+          "description": "結果類型，用於處理成功/失敗的操作結果",
+          "generic": "<Payload, Error, MetaData>",
+          "staticMethods": {
+            "Ok<Payload, MetaData, Error>(payload?: Payload, metaData?: MetaData): Result<Payload, Error, MetaData>": "創建成功結果",
+            "Fail<Error, MetaData, Payload>(error?: Error, metaData?: MetaData): Result<Payload, Error, MetaData>": "創建失敗結果",
+            "combine(results: Result[]): Result": "組合多個結果"
+          },
+          "instanceMethods": {
+            "isOk(): boolean": "檢查是否為成功結果",
+            "isFail(): boolean": "檢查是否為失敗結果",
+            "value(): Payload | null": "獲取成功值（失敗時返回 null）",
+            "error(): Error | null": "獲取錯誤信息（成功時返回 null）",
+            "metaData(): MetaData": "獲取元數據"
+          }
+        },
+        "UID": {
+          "description": "唯一標識符類型別名",
+          "type": "string"
+        },
+        "ID": {
+          "description": "ID 實用工具類別",
+          "staticMethods": {
+            "create(value?: string): ID": "創建 ID 實例",
+            "short(): ID": "創建短 ID",
+            "isValid(value: string): boolean": "驗證 ID 格式"
+          }
+        },
+        "EventHandler": {
+          "description": "事件處理器基礎類別",
+          "constructor": "constructor(options: { eventName: string })",
+          "abstractMethods": {
+            "dispatch(aggregate: Aggregate, ...args: any[]): void | Promise<void>": "處理事件的抽象方法"
+          }
+        },
+        "Context": {
+          "description": "全域事件上下文管理",
+          "staticMethods": {
+            "events(): EventContext": "創建事件上下文實例"
+          }
+        }
+      },
+      "utilities": {
+        "Class": {
+          "description": "用於批量創建實例的工具函數",
+          "usage": "Class<Props>(ClassType, props)"
+        },
+        "Combine": {
+          "description": "Result.combine 的別名",
+          "usage": "Combine([result1, result2, result3])"
+        }
+      }
+    },
+    "rich-domain": {
+      "description": "豐富的領域模型庫，提供額外的實用工具和功能",
+      "version": "latest",
+      "installation": "npm install rich-domain",
+      "coreClasses": {
+        "Result": {
+          "description": "結果類型，與 @type-ddd/core 中的 Result 功能相同",
+          "generic": "<Payload, Error, MetaData>",
+          "staticMethods": {
+            "Ok<Payload, MetaData, Error>(payload?: Payload, metaData?: MetaData): Result<Payload, Error, MetaData>": "創建成功結果",
+            "Fail<Error, MetaData, Payload>(error?: Error, metaData?: MetaData): Result<Payload, Error, MetaData>": "創建失敗結果",
+            "combine(results: Result[]): Result": "組合多個結果"
+          },
+          "instanceMethods": {
+            "isOk(): boolean": "檢查是否為成功結果",
+            "isFail(): boolean": "檢查是否為失敗結果",
+            "value(): Payload | null": "獲取成功值",
+            "error(): Error | null": "獲取錯誤信息",
+            "metaData(): MetaData": "獲取元數據",
+            "execute(command: ICommand): CommandExecutor": "執行命令鉤子",
+            "toObject(): object": "轉換為物件表示"
+          }
+        },
+        "Entity": {
+          "description": "實體基礎類別，與 @type-ddd/core 中的 Entity 功能相同",
+          "extends": "BaseEntity",
+          "methods": {
+            "set<Key extends keyof Props>(key: Key): Setter<Props[Key]>": "設置屬性值",
+            "change<Key extends keyof Props>(key: Key, value: Props[Key]): Entity": "變更屬性值",
+            "clone(options?: CloneOptions): Entity": "克隆實體實例",
+            "history(): History": "獲取實體歷史記錄"
+          }
+        },
+        "ValueObject": {
+          "description": "值物件基礎類別，與 @type-ddd/core 中的 ValueObject 功能相同",
+          "extends": "BaseValueObject",
+          "methods": {
+            "static createMany(configs: ClassConfig[]): CreateManyResult": "批量創建值物件",
+            "clone(): ValueObject": "克隆值物件實例"
+          }
+        },
+        "Aggregate": {
+          "description": "聚合根基礎類別，與 @type-ddd/core 中的 Aggregate 功能相同",
+          "extends": "Entity",
+          "methods": {
+            "addEvent(eventName: string, handler: Function): Aggregate": "添加領域事件",
+            "addEvent(eventHandler: EventHandler): Aggregate": "添加事件處理器",
+            "dispatchEvent(eventName: string, ...args: any[]): void": "分發事件",
+            "dispatchAll(): Promise<void>": "分發所有事件",
+            "clone(options?: CloneOptions): Aggregate": "克隆聚合實例"
+          }
+        },
+        "ID": {
+          "description": "ID 實用工具類別",
+          "staticMethods": {
+            "create(value?: string): ID": "創建 ID 實例",
+            "short(): ID": "創建短 ID",
+            "isValid(value: string): boolean": "驗證 ID 格式"
+          },
+          "instanceMethods": {
+            "value(): string": "獲取 ID 值",
+            "isNew(): boolean": "檢查是否為新生成的 ID",
+            "equal(other: ID): boolean": "比較兩個 ID 是否相等"
+          }
+        },
+        "Id": {
+          "description": "ID 創建函數的別名",
+          "usage": "Id() 或 Id('custom-value')"
+        },
+        "Context": {
+          "description": "全域事件上下文管理",
+          "staticMethods": {
+            "events(): EventContext": "創建事件上下文實例"
+          }
+        },
+        "TsEvents": {
+          "description": "TypeScript 事件管理類別",
+          "constructor": "constructor(aggregate: Aggregate)",
+          "methods": {
+            "addEvent(eventName: string, handler: Function): TsEvents": "添加事件",
+            "dispatchEvent(eventName: string, ...args: any[]): void": "分發特定事件",
+            "dispatchEvents(): Promise<void>": "分發所有事件"
+          }
+        }
+      },
+      "utilities": {
+        "Class": {
+          "description": "用於批量創建實例的工具函數",
+          "usage": "Class<Props>(ClassType, props)"
+        },
+        "Combine": {
+          "description": "Result.combine 的別名",
+          "usage": "Combine([result1, result2, result3])"
+        }
+      }
+    }
+  },
+  "commonPatterns": {
+    "ResultPattern": {
+      "description": "使用 Result 類型處理操作結果的標準模式",
+      "examples": [
+        {
+          "name": "基本使用",
+          "code": "const result = User.create(props);\nif (result.isOk()) {\n  const user = result.value();\n  // 使用用戶實例\n} else {\n  console.error(result.error());\n}"
+        },
+        {
+          "name": "組合多個結果",
+          "code": "const combined = Result.combine([\n  Email.create(email),\n  Name.create(name),\n  Age.create(age)\n]);\nif (combined.isOk()) {\n  // 所有驗證都通過\n}"
+        }
+      ]
+    },
+    "FactoryPattern": {
+      "description": "使用靜態工廠方法創建實例的標準模式",
+      "examples": [
+        {
+          "name": "基本工廠方法",
+          "code": "public static create(props: Props): Result<Entity> {\n  if (!this.isValidProps(props)) {\n    return Fail('驗證失敗');\n  }\n  return Ok(new Entity(props));\n}"
+        },
+        {
+          "name": "帶驗證的工廠方法",
+          "code": "public static create(props: Props): Result<Entity> {\n  const validationResult = this.validateProps(props);\n  if (validationResult.isFail()) {\n    return validationResult;\n  }\n  return Ok(new Entity(props));\n}"
+        }
+      ]
+    },
+    "ValidationPattern": {
+      "description": "實體和值物件的驗證標準模式",
+      "examples": [
+        {
+          "name": "靜態驗證",
+          "code": "public static isValidProps(props: Props): boolean {\n  return props.value && props.value.length > 0;\n}"
+        },
+        {
+          "name": "實例驗證",
+          "code": "validation<Key extends keyof Props>(value: Props[Key], key: Key): boolean {\n  const validators = {\n    name: (value: string) => value.length > 0,\n    age: (value: number) => value > 0 && value < 150\n  };\n  return validators[key](value);\n}"
+        }
+      ]
+    },
+    "EventDrivenPattern": {
+      "description": "使用領域事件解耦業務邏輯的標準模式",
+      "examples": [
+        {
+          "name": "添加事件",
+          "code": "this.addEvent('USER_CREATED', (user) => {\n  console.log('用戶已創建:', user.id);\n});"
+        },
+        {
+          "name": "事件處理器",
+          "code": "class UserCreatedEvent extends EventHandler<User> {\n  dispatch(user: User): void {\n    // 處理用戶創建邏輯\n  }\n}"
+        }
+      ]
+    }
+  },
+  "bestPractices": {
+    "architecture": [
+      "使用 DDD 層級架構：Domain → Application → Infrastructure → Interface",
+      "將業務邏輯封裝在 Domain 層的實體和值物件中",
+      "使用 Application 層的服務來協調 Domain 物件",
+      "在 Infrastructure 層實現技術細節"
+    ],
+    "design": [
+      "始終使用 Result 類型來處理成功/失敗情況",
+      "實現私有構造函數和靜態工廠方法",
+      "在 Value Object 中封裝業務規則",
+      "使用 Aggregate 來管理相關實體的變更"
+    ],
+    "testing": [
+      "為每個 Value Object 和 Entity 編寫測試",
+      "測試業務規則和驗證邏輯",
+      "使用測試驅動開發來設計領域模型",
+      "模擬外部依賴來隔離測試"
+    ],
+    "performance": [
+      "使用不可變的 Value Object",
+      "避免在實體中存儲大量數據",
+      "使用事件驅動架構來解耦組件",
+      "實現適當的緩存策略"
+    ]
+  },
+  "migration": {
+    "fromLegacy": [
+      "將現有的類別重構為繼承自 DDD 基礎類別",
+      "實現 Result 模式來處理錯誤",
+      "添加靜態驗證方法",
+      "重構為使用事件驅動架構"
+    ],
+    "stepByStep": [
+      "第一步：安裝依賴庫",
+      "第二步：創建基礎 Value Object",
+      "第三步：重構現有實體",
+      "第四步：實現 Aggregate 模式",
+      "第五步：添加領域事件",
+      "第六步：重構服務層"
+    ]
+  },
+  "examples": {
+    "completeUserDomain": {
+      "description": "完整的用戶領域模型示例",
+      "files": [
+        "user.entity.ts",
+        "email.vo.ts",
+        "name.vo.ts",
+        "age.vo.ts",
+        "user.repository.ts",
+        "user.service.ts"
+      ]
+    },
+    "orderManagement": {
+      "description": "訂單管理系統示例",
+      "files": [
+        "order.aggregate.ts",
+        "order-item.entity.ts",
+        "money.vo.ts",
+        "order-status.vo.ts",
+        "order.events.ts"
+      ]
+    }
+  }
+}

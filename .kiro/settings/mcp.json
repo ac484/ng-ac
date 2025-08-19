@@ -2,16 +2,20 @@
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "./",
-        "./.cursor",
-        "./src",
-        "./functions",
-        "./custom_modes",
-        "./memory-bank"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem",
+      "D:\\firebase\\ng-ac",
+      "D:\\firebase\\ng-ac\\.cursor",
+      "D:\\firebase\\ng-ac\\.devcontainer",
+      "D:\\firebase\\ng-ac\\.github",
+      "D:\\firebase\\ng-ac\\.kiro",
+      "D:\\firebase\\ng-ac\\.vscode",
+      "D:\\firebase\\ng-ac\\custom_modes",
+      "D:\\firebase\\ng-ac\\docs",
+      "D:\\firebase\\ng-ac\\public",
+      "D:\\firebase\\ng-ac\\src",
+      "D:\\firebase\\ng-ac\\memory-bank"
+    ],
+      "disabled": true,
       "autoApprove": [
         "list_allowed_directories",
         "list_directory",
@@ -22,10 +26,29 @@
         "edit_file",
         "delete_file",
         "move_file",
-        "copy_file"
+        "copy_file",
+        "search_files"
       ]
     },
-    "context7": {
+    "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "fetch"
+      ]
+    },
+        "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp"
+      ],
+      "env": {}
+    },
+      "context7": {
       "command": "npx",
       "args": [
         "-y",
@@ -40,6 +63,7 @@
         "get-library-docs"
       ]
     },
+
     "memory": {
       "command": "npx",
       "args": [
@@ -66,15 +90,8 @@
       "autoApprove": [
         "sequentialthinking"
       ]
-    },
-    "fetch": {
-      "command": "uvx",
-      "args": [
-        "mcp-server-fetch"
-      ],
-      "env": {},
-      "disabled": false,
-      "autoApprove": []
     }
+
+
   }
 }

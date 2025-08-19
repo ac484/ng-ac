@@ -1,0 +1,48 @@
+/**
+ * App Shell 變數定義
+ *
+ * @author NG-AC Team
+ * @since 2024-12-19
+ * @version 1.0.0
+ */
+
+// App Shell 尺寸變數
+$header-height: 64px;
+$sidebar-width: 280px;
+$footer-height: 60px;
+$content-padding: 24px;
+
+// 響應式斷點
+$breakpoint-mobile: 768px;
+$breakpoint-tablet: 1024px;
+$breakpoint-desktop: 1200px;
+
+// 動畫時間
+$transition-fast: 0.15s ease-out;
+$transition-normal: 0.25s ease-out;
+$transition-slow: 0.35s ease-out;
+
+// 陰影層級
+$shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12);
+$shadow-2: 0 3px 6px rgba(0, 0, 0, 0.15);
+$shadow-3: 0 10px 20px rgba(0, 0, 0, 0.19);
+
+// CSS 變數 (用於 CSS 自定義屬性)
+:root {
+  --app-shell-header-height: #{$header-height};
+  --app-shell-sidebar-width: #{$sidebar-width};
+  --app-shell-footer-height: #{$footer-height};
+  --app-shell-content-padding: #{$content-padding};
+
+  --app-shell-breakpoint-mobile: #{$breakpoint-mobile};
+  --app-shell-breakpoint-tablet: #{$breakpoint-tablet};
+  --app-shell-breakpoint-desktop: #{$breakpoint-desktop};
+
+  --app-shell-transition-fast: #{$transition-fast};
+  --app-shell-transition-normal: #{$transition-normal};
+  --app-shell-transition-slow: #{$transition-slow};
+
+  --app-shell-shadow-1: #{$shadow-1};
+  --app-shell-shadow-2: #{$shadow-2};
+  --app-shell-shadow-3: #{$shadow-3};
+}

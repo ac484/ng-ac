@@ -1,0 +1,269 @@
+{
+  "title": "Angular URL API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular URL 處理的完整 API 參考，包含 URL 解析、構建和操作",
+  "metadata": {
+    "category": "URL & Location",
+    "complexity": "Low",
+    "usage": "URL 解析、構建、操作、查詢參數處理、片段管理",
+    "lastmod": "2025-01-17"
+  },
+  "core_url_services": {
+    "Location": {
+      "purpose": "位置服務",
+      "usage": "管理瀏覽器的 URL 和歷史記錄",
+      "methods": ["go()", "back()", "forward()", "getState()", "replaceState()"],
+      "example": "location.go('/users')",
+      "properties": ["path()", "getState()"],
+      "injectable": true
+    },
+    "LocationStrategy": {
+      "purpose": "位置策略介面",
+      "usage": "定義 URL 處理的策略",
+      "methods": ["pushState()", "replaceState()", "popState()", "getBaseHref()"],
+      "example": "自定義 URL 處理策略",
+      "type": "abstract class"
+    },
+    "HashLocationStrategy": {
+      "purpose": "哈希位置策略",
+      "usage": "使用哈希 (#) 進行路由",
+      "example": "URL 格式: /#/users",
+      "selector": "HashLocationStrategy",
+      "extends": "LocationStrategy"
+    },
+    "PathLocationStrategy": {
+      "purpose": "路徑位置策略",
+      "usage": "使用 HTML5 History API 進行路由",
+      "example": "URL 格式: /users",
+      "selector": "PathLocationStrategy",
+      "extends": "LocationStrategy"
+    }
+  },
+  "url_parsing_and_building": {
+    "UrlTree": {
+      "purpose": "URL 樹結構",
+      "usage": "表示路由的 URL 結構",
+      "example": "router.createUrlTree(['/users', userId])",
+      "methods": ["toString()", "queryParamMap", "fragment"],
+      "properties": ["root", "queryParams", "fragment"]
+    },
+    "UrlSegment": {
+      "purpose": "URL 段",
+      "usage": "表示 URL 路徑的一個段",
+      "properties": ["path", "parameters"],
+      "example": "路由參數解析後的 URL 段",
+      "methods": ["toString()", "parameterMap"]
+    },
+    "UrlSegmentGroup": {
+      "purpose": "URL 段組",
+      "usage": "組織 URL 段的層次結構",
+      "properties": ["segments", "children", "parent"],
+      "example": "路由配置的層次結構",
+      "methods": ["toString()", "hasChildren()"]
+    },
+    "UrlParser": {
+      "purpose": "URL 解析器",
+      "usage": "解析 URL 字符串為 URL 樹結構",
+      "example": "解析路由配置中的 URL 模式",
+      "methods": ["parse()", "serialize()"]
+    }
+  },
+  "query_parameters_management": {
+    "QueryParamMap": {
+      "purpose": "查詢參數映射",
+      "usage": "查詢參數的鍵值對映射",
+      "methods": ["get()", "getAll()", "has()", "keys()"],
+      "example": "activatedRoute.queryParamMap.subscribe(params => console.log(params.get('page')))",
+      "properties": ["params"]
+    },
+    "QueryParamsHandling": {
+      "purpose": "查詢參數處理策略",
+      "usage": "控制查詢參數的處理方式",
+      "values": ["merge", "preserve", ""],
+      "example": "[routerLink]=\"['/users']\" [queryParams]=\"{page: 1}\" queryParamsHandling=\"merge\""
+    },
+    "QueryParams": {
+      "purpose": "查詢參數介面",
+      "usage": "定義查詢參數的結構",
+      "example": "{ page: 1, size: 10, sort: 'name' }",
+      "type": "Record<string, string | number | boolean | null | undefined>"
+    }
+  },
+  "fragment_management": {
+    "Fragment": {
+      "purpose": "URL 片段",
+      "usage": "管理 URL 的片段部分",
+      "example": "URL: /users#top",
+      "methods": ["get()", "set()"],
+      "type": "string | null"
+    },
+    "FragmentHandling": {
+      "purpose": "片段處理策略",
+      "usage": "控制 URL 片段的處理方式",
+      "example": "在導航時保持或更新片段",
+      "strategies": ["preserve", "update", "ignore"]
+    }
+  },
+  "url_encoding_and_decoding": {
+    "UrlEncoding": {
+      "purpose": "URL 編碼",
+      "usage": "處理 URL 的編碼和解碼",
+      "methods": ["encodeURIComponent()", "decodeURIComponent()"],
+      "example": "編碼特殊字符和中文",
+      "utilities": ["encodeURI", "decodeURI"]
+    },
+    "UrlDecoding": {
+      "purpose": "URL 解碼",
+      "usage": "解碼編碼後的 URL 組件",
+      "methods": ["decodeURIComponent()", "decodeURI()"],
+      "example": "解碼查詢參數和路徑",
+      "error_handling": "處理解碼錯誤"
+    }
+  },
+  "url_validation": {
+    "UrlValidator": {
+      "purpose": "URL 驗證器",
+      "usage": "驗證 URL 的格式和有效性",
+      "methods": ["isValid()", "validate()", "getErrors()"],
+      "example": "驗證用戶輸入的 URL",
+      "validation_rules": ["format", "protocol", "domain", "path"]
+    },
+    "UrlValidationRules": {
+      "purpose": "URL 驗證規則",
+      "usage": "定義 URL 驗證的規則",
+      "example": "自定義驗證規則",
+      "properties": ["required", "pattern", "custom"]
+    }
+  },
+  "url_manipulation": {
+    "UrlManipulator": {
+      "purpose": "URL 操作器",
+      "usage": "提供 URL 操作的工具方法",
+      "methods": ["addQueryParam()", "removeQueryParam()", "setFragment()", "clearFragment()"],
+      "example": "動態修改 URL 參數",
+      "utilities": ["build", "parse", "modify"]
+    },
+    "UrlBuilder": {
+      "purpose": "URL 構建器",
+      "usage": "程式化構建 URL",
+      "methods": ["setPath()", "addQueryParams()", "setFragment()", "build()"],
+      "example": "構建複雜的 URL 結構",
+      "fluent_api": "支持鏈式調用"
+    }
+  },
+  "location_events": {
+    "LocationChangeEvent": {
+      "purpose": "位置變更事件",
+      "usage": "當 URL 發生變更時觸發的事件",
+      "example": "監聽 URL 變更",
+      "properties": ["url", "state", "type"],
+      "extends": "Event"
+    },
+    "PopStateEvent": {
+      "purpose": "彈出狀態事件",
+      "usage": "當瀏覽器歷史記錄變更時觸發",
+      "example": "處理瀏覽器的前進後退",
+      "properties": ["state", "popstate"],
+      "extends": "Event"
+    }
+  },
+  "url_utilities": {
+    "UrlUtils": {
+      "purpose": "URL 工具函數",
+      "usage": "提供常用的 URL 處理工具",
+      "methods": ["isAbsolute()", "isRelative()", "normalize()", "join()"],
+      "example": "檢查 URL 是否為絕對路徑",
+      "static_methods": "靜態工具方法"
+    },
+    "UrlHelper": {
+      "purpose": "URL 輔助類",
+      "usage": "簡化 URL 操作的輔助方法",
+      "methods": ["extractDomain()", "extractPath()", "extractQuery()"],
+      "example": "提取 URL 的各個部分",
+      "utility_functions": "實用函數集合"
+    }
+  },
+  "url_configuration": {
+    "UrlConfig": {
+      "purpose": "URL 配置介面",
+      "usage": "配置 URL 處理的行為",
+      "properties": ["baseHref", "useHash", "hashPrefix"],
+      "example": "配置應用的基礎路徑",
+      "options": "URL 處理選項"
+    },
+    "BaseHref": {
+      "purpose": "基礎路徑配置",
+      "usage": "設定應用的基礎路徑",
+      "example": "在 index.html 中設定 <base href=\"/app/\">",
+      "configuration": "HTML 配置或程式化配置"
+    }
+  },
+  "url_testing": {
+    "UrlTesting": {
+      "purpose": "URL 測試工具",
+      "usage": "測試 URL 相關功能",
+      "tools": ["MockLocationStrategy", "TestLocationStrategy"],
+      "example": "在測試中模擬 URL 變更",
+      "testing_utilities": "測試實用工具"
+    },
+    "MockLocationStrategy": {
+      "purpose": "模擬位置策略",
+      "usage": "在測試中模擬位置服務",
+      "example": "單元測試中的 URL 模擬",
+      "extends": "LocationStrategy",
+      "testing": "測試環境專用"
+    }
+  },
+  "usage_examples": {
+    "basic_url_operations": {
+      "description": "基本 URL 操作",
+      "code": "import { Component, OnInit } from '@angular/core';\nimport { Location } from '@angular/common';\nimport { ActivatedRoute, Router } from '@angular/router';\n\n@Component({\n  selector: 'app-url-example',\n  template: `\n    <div>\n      <h2>當前路徑: {{ currentPath }}</h2>\n      <button (click)=\"goBack()\">返回</button>\n      <button (click)=\"goForward()\">前進</button>\n      <button (click)=\"navigateTo('/users')\">前往用戶頁面</button>\n    </div>\n  `\n})\nexport class UrlExampleComponent implements OnInit {\n  currentPath = '';\n\n  constructor(\n    private location: Location,\n    private router: Router,\n    private route: ActivatedRoute\n  ) {}\n\n  ngOnInit() {\n    this.currentPath = this.location.path();\n    \n    // 監聽位置變更\n    this.location.onPopState(() => {\n      this.currentPath = this.location.path();\n    });\n  }\n\n  goBack() {\n    this.location.back();\n  }\n\n  goForward() {\n    this.location.forward();\n  }\n\n  navigateTo(path: string) {\n    this.location.go(path);\n    this.currentPath = this.location.path();\n  }\n}"
+    },
+    "query_parameters_handling": {
+      "description": "查詢參數處理",
+      "code": "import { Component, OnInit } from '@angular/core';\nimport { ActivatedRoute, Router } from '@angular/router';\nimport { map } from 'rxjs/operators';\n\n@Component({\n  selector: 'app-query-params',\n  template: `\n    <div>\n      <h2>查詢參數示例</h2>\n      <div>\n        <label>頁面:</label>\n        <input type=\"number\" [value]=\"page\" (input)=\"updatePage($event)\">\n      </div>\n      <div>\n        <label>大小:</label>\n        <select [value]=\"size\" (change)=\"updateSize($event)\">\n          <option value=\"10\">10</option>\n          <option value=\"20\">20</option>\n          <option value=\"50\">50</option>\n        </select>\n      </div>\n      <div>\n        <label>排序:</label>\n        <input [value]=\"sort\" (input)=\"updateSort($event)\">\n      </div>\n      <div>\n        <p>當前查詢參數:</p>\n        <pre>{{ queryParams | json }}</pre>\n      </div>\n    </div>\n  `\n})\nexport class QueryParamsComponent implements OnInit {\n  page = 1;\n  size = 10;\n  sort = 'name';\n  queryParams: any = {};\n\n  constructor(\n    private route: ActivatedRoute,\n    private router: Router\n  ) {}\n\n  ngOnInit() {\n    // 獲取初始查詢參數\n    this.route.queryParamMap.subscribe(params => {\n      this.page = Number(params.get('page')) || 1;\n      this.size = Number(params.get('size')) || 10;\n      this.sort = params.get('sort') || 'name';\n      this.queryParams = Object.fromEntries(params.entries());\n    });\n  }\n\n  updatePage(event: any) {\n    this.page = Number(event.target.value);\n    this.updateQueryParams();\n  }\n\n  updateSize(event: any) {\n    this.size = Number(event.target.value);\n    this.updateQueryParams();\n  }\n\n  updateSort(event: any) {\n    this.sort = event.target.value;\n    this.updateQueryParams();\n  }\n\n  private updateQueryParams() {\n    this.router.navigate([], {\n      relativeTo: this.route,\n      queryParams: {\n        page: this.page,\n        size: this.size,\n        sort: this.sort\n      },\n      queryParamsHandling: 'merge'\n    });\n  }\n}"
+    },
+    "url_building": {
+      "description": "URL 構建",
+      "code": "import { Component } from '@angular/core';\nimport { Router } from '@angular/router';\n\n@Component({\n  selector: 'app-url-builder',\n  template: `\n    <div>\n      <h2>URL 構建示例</h2>\n      <div>\n        <label>用戶 ID:</label>\n        <input type=\"text\" [(ngModel)]=\"userId\" placeholder=\"輸入用戶 ID\">\n      </div>\n      <div>\n        <label>標籤:</label>\n        <input type=\"text\" [(ngModel)]=\"tag\" placeholder=\"輸入標籤\">\n      </div>\n      <div>\n        <label>片段:</label>\n        <input type=\"text\" [(ngModel)]=\"fragment\" placeholder=\"輸入片段\">\n      </div>\n      <button (click)=\"buildUrl()\">構建 URL</button>\n      <div>\n        <p>構建的 URL:</p>\n        <code>{{ builtUrl }}</code>\n      </div>\n      <button (click)=\"navigateToUrl()\" [disabled]=\"!builtUrl\">導航到 URL</button>\n    </div>\n  `\n})\nexport class UrlBuilderComponent {\n  userId = '';\n  tag = '';\n  fragment = '';\n  builtUrl = '';\n\n  constructor(private router: Router) {}\n\n  buildUrl() {\n    if (!this.userId) {\n      alert('請輸入用戶 ID');\n      return;\n    }\n\n    const urlTree = this.router.createUrlTree(\n      ['/users', this.userId],\n      {\n        queryParams: this.tag ? { tag: this.tag } : {},\n        fragment: this.fragment || undefined\n      }\n    );\n\n    this.builtUrl = urlTree.toString();\n  }\n\n  navigateToUrl() {\n    if (this.builtUrl) {\n      this.router.navigateByUrl(this.builtUrl);\n    }\n  }\n}"
+    },
+    "fragment_handling": {
+      "description": "片段處理",
+      "code": "import { Component, OnInit } from '@angular/core';\nimport { ActivatedRoute, Router } from '@angular/router';\nimport { filter, map } from 'rxjs/operators';\n\n@Component({\n  selector: 'app-fragment-handler',\n  template: `\n    <div>\n      <h2>片段處理示例</h2>\n      <div>\n        <button (click)=\"scrollToSection('section1')\">滾動到章節 1</button>\n        <button (click)=\"scrollToSection('section2')\">滾動到章節 2</button>\n        <button (click)=\"scrollToSection('section3')\">滾動到章節 3</button>\n      </div>\n      \n      <div id=\"section1\" class=\"section\">\n        <h3>章節 1</h3>\n        <p>這是第一個章節的內容...</p>\n      </div>\n      \n      <div id=\"section2\" class=\"section\">\n        <h3>章節 2</h3>\n        <p>這是第二個章節的內容...</p>\n      </div>\n      \n      <div id=\"section3\" class=\"section\">\n        <h3>章節 3</h3>\n        <p>這是第三個章節的內容...</p>\n      </div>\n      \n      <div>\n        <p>當前片段: {{ currentFragment || '無' }}</p>\n      </div>\n    </div>\n  `\n})\nexport class FragmentHandlerComponent implements OnInit {\n  currentFragment: string | null = null;\n\n  constructor(\n    private route: ActivatedRoute,\n    private router: Router\n  ) {}\n\n  ngOnInit() {\n    // 監聽片段變更\n    this.route.fragment.subscribe(fragment => {\n      this.currentFragment = fragment;\n      if (fragment) {\n        this.scrollToElement(fragment);\n      }\n    });\n  }\n\n  scrollToSection(sectionId: string) {\n    this.router.navigate([], {\n      relativeTo: this.route,\n      fragment: sectionId\n    });\n  }\n\n  private scrollToElement(elementId: string) {\n    const element = document.getElementById(elementId);\n    if (element) {\n      element.scrollIntoView({ behavior: 'smooth' });\n    }\n  }\n}"
+    },
+    "url_validation": {
+      "description": "URL 驗證",
+      "code": "import { Component } from '@angular/core';\nimport { FormBuilder, FormGroup, Validators } from '@angular/forms';\n\n@Component({\n  selector: 'app-url-validator',\n  template: `\n    <div>\n      <h2>URL 驗證示例</h2>\n      <form [formGroup]=\"urlForm\" (ngSubmit)=\"onSubmit()\">\n        <div>\n          <label>URL:</label>\n          <input type=\"url\" formControlName=\"url\" placeholder=\"https://example.com\">\n          <div *ngIf=\"urlForm.get('url')?.invalid && urlForm.get('url')?.touched\">\n            <div *ngIf=\"urlForm.get('url')?.errors?.['required']\">URL 是必需的</div>\n            <div *ngIf=\"urlForm.get('url')?.errors?.['pattern']\">請輸入有效的 URL</div>\n            <div *ngIf=\"urlForm.get('url')?.errors?.['customUrlValidator']\">請輸入有效的 URL 格式</div>\n          </div>\n        </div>\n        <button type=\"submit\" [disabled]=\"urlForm.invalid\">驗證</button>\n      </form>\n      \n      <div *ngIf=\"validationResult\">\n        <h3>驗證結果:</h3>\n        <pre>{{ validationResult | json }}</pre>\n      </div>\n    </div>\n  `\n})\nexport class UrlValidatorComponent {\n  urlForm: FormGroup;\n  validationResult: any = null;\n\n  constructor(private fb: FormBuilder) {\n    this.urlForm = this.fb.group({\n      url: ['', [Validators.required, this.customUrlValidator()]]\n    });\n  }\n\n  customUrlValidator() {\n    return (control: any) => {\n      const url = control.value;\n      if (!url) return null;\n\n      try {\n        new URL(url);\n        return null;\n      } catch {\n        return { customUrlValidator: true };\n      }\n    };\n  }\n\n  onSubmit() {\n    if (this.urlForm.valid) {\n      const url = this.urlForm.get('url')?.value;\n      this.validationResult = this.validateUrl(url);\n    }\n  }\n\n  private validateUrl(urlString: string) {\n    try {\n      const url = new URL(urlString);\n      return {\n        isValid: true,\n        protocol: url.protocol,\n        hostname: url.hostname,\n        port: url.port,\n        pathname: url.pathname,\n        search: url.search,\n        hash: url.hash,\n        origin: url.origin\n      };\n    } catch (error) {\n      return {\n        isValid: false,\n        error: error.message\n      };\n    }\n  }\n}"
+    },
+    "url_utilities": {
+      "description": "URL 工具函數",
+      "code": "import { Injectable } from '@angular/core';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class UrlUtilityService {\n  /**\n   * 檢查 URL 是否為絕對路徑\n   */\n  isAbsoluteUrl(url: string): boolean {\n    return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('//');\n  }\n\n  /**\n   * 檢查 URL 是否為相對路徑\n   */\n  isRelativeUrl(url: string): boolean {\n    return !this.isAbsoluteUrl(url) && !url.startsWith('/');\n  }\n\n  /**\n   * 標準化 URL 路徑\n   */\n  normalizePath(path: string): string {\n    return path.replace(/\\/+/g, '/').replace(/\\/$/, '') || '/';\n  }\n\n  /**\n   * 連接路徑\n   */\n  joinPaths(...paths: string[]): string {\n    return this.normalizePath(paths.join('/'));\n  }\n\n  /**\n   * 提取域名\n   */\n  extractDomain(url: string): string | null {\n    try {\n      const urlObj = new URL(url);\n      return urlObj.hostname;\n    } catch {\n      return null;\n    }\n  }\n\n  /**\n   * 提取路徑\n   */\n  extractPath(url: string): string | null {\n    try {\n      const urlObj = new URL(url);\n      return urlObj.pathname;\n    } catch {\n      return null;\n    }\n  }\n\n  /**\n   * 提取查詢參數\n   */\n  extractQueryParams(url: string): Record<string, string> {\n    try {\n      const urlObj = new URL(url);\n      const params: Record<string, string> = {};\n      urlObj.searchParams.forEach((value, key) => {\n        params[key] = value;\n      });\n      return params;\n    } catch {\n      return {};\n    }\n  }\n\n  /**\n   * 構建查詢字符串\n   */\n  buildQueryString(params: Record<string, any>): string {\n    const searchParams = new URLSearchParams();\n    \n    Object.entries(params).forEach(([key, value]) => {\n      if (value !== null && value !== undefined) {\n        searchParams.append(key, String(value));\n      }\n    });\n    \n    return searchParams.toString();\n  }\n\n  /**\n   * 安全地編碼 URL 組件\n   */\n  safeEncodeURIComponent(str: string): string {\n    try {\n      return encodeURIComponent(str);\n    } catch {\n      return str;\n    }\n  }\n\n  /**\n   * 安全地解碼 URL 組件\n   */\n  safeDecodeURIComponent(str: string): string {\n    try {\n      return decodeURIComponent(str);\n    } catch {\n      return str;\n    }\n  }\n}"
+    }
+  },
+  "best_practices": [
+    "使用適當的位置策略（Hash vs Path）",
+    "正確處理查詢參數的編碼和解碼",
+    "實現適當的 URL 驗證",
+    "使用 URL 工具函數簡化操作",
+    "適當處理片段導航",
+    "實現 URL 變更的事件監聽",
+    "使用相對路徑減少硬編碼",
+    "適當處理 URL 錯誤"
+  ],
+  "performance_tips": [
+    "避免頻繁的 URL 操作",
+    "使用適當的快取策略",
+    "實現懶載入減少初始包大小",
+    "優化 URL 解析邏輯",
+    "適當使用 URL 快取",
+    "避免在 URL 變更事件中執行重操作"
+  ],
+  "security_considerations": [
+    "驗證用戶輸入的 URL",
+    "防止 URL 注入攻擊",
+    "使用適當的編碼和解碼",
+    "驗證 URL 協議和域名",
+    "實現適當的 URL 過濾",
+    "避免在 URL 中暴露敏感信息"
+  ]
+}

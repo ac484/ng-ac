@@ -1,0 +1,244 @@
+{
+  "title": "Angular Animations API 參考文檔",
+  "version": "Angular 20+",
+  "description": "Angular 動畫系統的完整 API 參考，包含現代化動畫控制流和傳統動畫 API",
+  "metadata": {
+    "category": "Core Animation",
+    "complexity": "Medium",
+    "usage": "UI 動畫、狀態轉換、用戶體驗增強",
+    "lastmod": "2025-01-17"
+  },
+  "core_animation_functions": {
+    "animate": {
+      "function": "animate",
+      "purpose": "定義動畫的時間、延遲和緩動函數",
+      "usage": "創建基本的動畫效果，指定動畫持續時間和樣式變化",
+      "example": "animate('300ms ease-in', style({ opacity: 1 }))",
+      "parameters": ["timings", "styles"],
+      "return_type": "AnimationAnimateMetadata"
+    },
+    "animateChild": {
+      "function": "animateChild",
+      "purpose": "在父動畫中觸發子組件的動畫",
+      "usage": "協調父子組件之間的動畫執行順序",
+      "example": "在路由切換時同時執行子組件動畫",
+      "parameters": ["options"],
+      "return_type": "AnimationAnimateChildMetadata"
+    },
+    "animation": {
+      "function": "animation",
+      "purpose": "定義可重用的動畫序列",
+      "usage": "創建可在多個地方重複使用的動畫模板",
+      "example": "定義淡入淡出動畫供多個組件使用",
+      "parameters": ["steps"],
+      "return_type": "AnimationReferenceMetadata"
+    },
+    "group": {
+      "function": "group",
+      "purpose": "並行執行多個動畫",
+      "usage": "同時執行多個不同的動畫效果",
+      "example": "同時執行淡入和滑動動畫",
+      "parameters": ["animations"],
+      "return_type": "AnimationGroupMetadata"
+    },
+    "keyframes": {
+      "function": "keyframes",
+      "purpose": "定義動畫的關鍵幀序列",
+      "usage": "創建複雜的多階段動畫效果",
+      "example": "創建彈跳或波浪效果動畫",
+      "parameters": ["steps"],
+      "return_type": "AnimationKeyframesSequenceMetadata"
+    },
+    "query": {
+      "function": "query",
+      "purpose": "查詢並選擇要執行動畫的元素",
+      "usage": "對特定的子元素或組件執行動畫",
+      "example": "選擇所有 '.item' 類別的元素執行動畫",
+      "parameters": ["selector", "animation", "options"],
+      "return_type": "AnimationQueryMetadata"
+    },
+    "sequence": {
+      "function": "sequence",
+      "purpose": "按順序執行多個動畫",
+      "usage": "創建連續的動畫效果",
+      "example": "先淡出再淡入的動畫序列",
+      "parameters": ["animations"],
+      "return_type": "AnimationSequenceMetadata"
+    },
+    "stagger": {
+      "function": "stagger",
+      "purpose": "為多個元素創建錯開的動畫效果",
+      "usage": "實現列表項目依次出現的動畫",
+      "example": "菜單項目依次滑入的效果",
+      "parameters": ["timing", "animation"],
+      "return_type": "AnimationStaggerMetadata"
+    },
+    "state": {
+      "function": "state",
+      "purpose": "定義動畫的狀態",
+      "usage": "設定組件在不同狀態下的樣式",
+      "example": "定義按鈕的正常和懸停狀態",
+      "parameters": ["name", "styles"],
+      "return_type": "AnimationStateMetadata"
+    },
+    "style": {
+      "function": "style",
+      "purpose": "定義動畫中的樣式屬性",
+      "usage": "設定動畫過程中元素的 CSS 樣式",
+      "example": "style({ opacity: 0, transform: 'translateX(-100%)' })",
+      "parameters": ["styles"],
+      "return_type": "AnimationStyleMetadata"
+    },
+    "transition": {
+      "function": "transition",
+      "purpose": "定義狀態之間的轉換動畫",
+      "usage": "指定從一個狀態到另一個狀態的動畫效果",
+      "example": "從隱藏狀態轉換到顯示狀態",
+      "parameters": ["stateChangeExpr", "steps"],
+      "return_type": "AnimationTransitionMetadata"
+    },
+    "trigger": {
+      "function": "trigger",
+      "purpose": "創建動畫觸發器",
+      "usage": "將動畫綁定到組件屬性，控制動畫的執行",
+      "example": "@trigger('slideIn', [...])",
+      "parameters": ["name", "definitions"],
+      "return_type": "AnimationTriggerMetadata"
+    },
+    "useAnimation": {
+      "function": "useAnimation",
+      "purpose": "使用預定義的動畫",
+      "usage": "引用和使用已定義的可重用動畫",
+      "example": "在轉換中使用預定義的淡入動畫",
+      "parameters": ["animation", "options"],
+      "return_type": "AnimationAnimateRefMetadata"
+    }
+  },
+  "animation_configuration": {
+    "AnimateChildOptions": {
+      "purpose": "配置子動畫的執行選項",
+      "usage": "控制子組件動畫的執行方式和時機"
+    },
+    "AnimateTimings": {
+      "purpose": "定義動畫的時間配置",
+      "usage": "指定動畫的持續時間、延遲和緩動函數"
+    },
+    "AnimationOptions": {
+      "purpose": "動畫的全局配置選項",
+      "usage": "設定動畫的全局參數和行為"
+    }
+  },
+  "animation_metadata_types": {
+    "AnimationMetadata": {
+      "purpose": "動畫元數據的基礎介面",
+      "usage": "所有動畫元數據類型的基礎類型"
+    },
+    "AnimationMetadataType": {
+      "purpose": "動畫元數據的類型枚舉",
+      "usage": "區分不同類型的動畫元數據"
+    },
+    "AnimationAnimateMetadata": {
+      "purpose": "基本動畫的元數據",
+      "usage": "描述單個動畫步驟的配置信息"
+    },
+    "AnimationGroupMetadata": {
+      "purpose": "並行動畫組的元數據",
+      "usage": "描述同時執行的多個動畫配置"
+    },
+    "AnimationSequenceMetadata": {
+      "purpose": "順序動畫的元數據",
+      "usage": "描述按順序執行的動畫配置"
+    },
+    "AnimationStaggerMetadata": {
+      "purpose": "錯開動畫的元數據",
+      "usage": "描述多元素錯開動畫的配置"
+    },
+    "AnimationStateMetadata": {
+      "purpose": "動畫狀態的元數據",
+      "usage": "描述動畫狀態的樣式配置"
+    },
+    "AnimationStyleMetadata": {
+      "purpose": "動畫樣式的元數據",
+      "usage": "描述動畫中的 CSS 樣式配置"
+    },
+    "AnimationTransitionMetadata": {
+      "purpose": "動畫轉換的元數據",
+      "usage": "描述狀態轉換動畫的配置"
+    },
+    "AnimationTriggerMetadata": {
+      "purpose": "動畫觸發器的元數據",
+      "usage": "描述動畫觸發器的完整配置"
+    }
+  },
+  "animation_execution_control": {
+    "AnimationBuilder": {
+      "purpose": "動畫建構器服務",
+      "usage": "程式化創建和執行動畫",
+      "example": "在組件中動態創建動畫效果"
+    },
+    "AnimationEvent": {
+      "purpose": "動畫事件對象",
+      "usage": "提供動畫執行過程中的事件信息",
+      "example": "監聽動畫開始、結束等事件"
+    },
+    "AnimationPlayer": {
+      "purpose": "動畫播放器",
+      "usage": "控制動畫的播放、暫停、重置等操作",
+      "example": "player.play(), player.pause(), player.reset()"
+    }
+  },
+  "special_constants": {
+    "AUTO_STYLE": {
+      "purpose": "自動樣式常量",
+      "usage": "讓 Angular 自動計算樣式值",
+      "example": "style({ height: AUTO_STYLE })"
+    }
+  },
+  "browser_animation_drivers": {
+    "AnimationDriver": {
+      "purpose": "瀏覽器動畫驅動器介面",
+      "usage": "定義瀏覽器動畫執行的標準介面"
+    },
+    "NoopAnimationDriver": {
+      "purpose": "空操作動畫驅動器",
+      "usage": "在不支持動畫的環境中提供兼容性"
+    }
+  },
+  "testing_tools": {
+    "MockAnimationDriver": {
+      "purpose": "模擬動畫驅動器",
+      "usage": "在測試環境中模擬動畫執行"
+    },
+    "MockAnimationPlayer": {
+      "purpose": "模擬動畫播放器",
+      "usage": "在測試中模擬動畫播放控制"
+    }
+  },
+  "usage_examples": {
+    "basic_trigger": {
+      "description": "基本動畫觸發器",
+      "code": "@Component({ animations: [trigger('slideIn', [state('in', style({transform: 'translateX(0)'})), transition('void => *', [style({transform: 'translateX(-100%)'}), animate(100)])])]})"
+    },
+    "complex_sequence": {
+      "description": "複雜動畫序列",
+      "code": "trigger('complexAnimation', [transition('* => *', [query(':enter', [style({ opacity: 0 }), stagger(100, [animate('300ms ease-in', style({ opacity: 1 }))])], { optional: true })])])"
+    },
+    "reusable_animation": {
+      "description": "可重用動畫",
+      "code": "const fadeIn = animation([style({ opacity: 0 }), animate('{{ duration }}', style({ opacity: 1 }))]); transition('void => *', [useAnimation(fadeIn, { params: { duration: '300ms' } })])"
+    }
+  },
+  "best_practices": [
+    "使用現代化控制流 @defer 延遲載入動畫",
+    "優先使用信號化的動畫狀態管理",
+    "適當使用 stagger 創建錯開動畫效果",
+    "將複雜動畫邏輯提取為可重用動畫",
+    "在測試環境中使用 NoopAnimationsModule"
+  ],
+  "performance_tips": [
+    "使用 OnPush 變更檢測策略減少動畫觸發",
+    "避免在動畫中執行複雜的計算邏輯",
+    "適當使用 will-change CSS 屬性優化動畫性能",
+    "考慮使用 transform 和 opacity 進行動畫"
+  ]
+}
