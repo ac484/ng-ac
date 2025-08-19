@@ -50,6 +50,8 @@ export class NavigationService {
 
     private readonly LABELS: Record<string, string> = {
         dashboard: '儀表板',
+        contracts: '合約管理',
+        projects: '專案管理',
         // analytics
         performance: '效能分析',
         costs: '成本分析',
@@ -92,6 +94,8 @@ export class NavigationService {
 
     private readonly ICONS: Record<string, string> = {
         dashboard: 'dashboard',
+        contracts: 'description',
+        projects: 'folder',
         performance: 'speed',
         costs: 'account_balance',
         reports: 'assessment',
@@ -212,6 +216,7 @@ export class NavigationService {
     private detectGroup(route: Route): string {
         const p = route.path ?? '';
         if (p === 'dashboard' || p === 'blank') return 'main';
+        if (['contracts', 'projects'].includes(p)) return 'main';
         if (['calendars', 'daily-reports', 'log', 'schedules', 'task'].includes(p)) return 'construction';
         if (['budget', 'expenses', 'payments', 'financial-reports'].includes(p)) return 'finance';
         if (['users', 'personnel', 'attendance', 'partners', 'state-machine'].includes(p)) return 'people';
