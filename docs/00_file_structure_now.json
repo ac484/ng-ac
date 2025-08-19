@@ -1,30 +1,22 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T18:54:01.999Z",
+    "generatedAt": "2025-08-19T18:54:35.779Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
-    "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
+    "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules) - Format: name | path | size/modified | type"
   },
   "structure": [
     {
-      "name": ".cursor",
-      "type": "directory",
-      "path": ".cursor",
+      "info": ".cursor/ | .cursor | directory",
       "children": [
         {
-          "name": "rules",
-          "type": "directory",
-          "path": ".cursor/rules",
+          "info": "rules/ | .cursor/rules | directory",
           "children": [
             {
-              "name": "isolation_rules",
-              "type": "directory",
-              "path": ".cursor/rules/isolation_rules",
+              "info": "isolation_rules/ | .cursor/rules/isolation_rules | directory",
               "children": [
                 {
-                  "name": "Core",
-                  "type": "directory",
-                  "path": ".cursor/rules/isolation_rules/Core",
+                  "info": "Core/ | .cursor/rules/isolation_rules/Core | directory",
                   "children": [
                     "command-execution.mdc | .cursor/rules/isolation_rules/Core/command-execution.mdc | 9007 bytes | 2025-08-07T14:04:57.850Z",
                     "complexity-decision-tree.mdc | .cursor/rules/isolation_rules/Core/complexity-decision-tree.mdc | 6076 bytes | 2025-08-07T14:04:57.866Z",
@@ -38,9 +30,7 @@
                   ]
                 },
                 {
-                  "name": "Level1",
-                  "type": "directory",
-                  "path": ".cursor/rules/isolation_rules/Level1",
+                  "info": "Level1/ | .cursor/rules/isolation_rules/Level1 | directory",
                   "children": [
                     "optimized-workflow-level1.mdc | .cursor/rules/isolation_rules/Level1/optimized-workflow-level1.mdc | 5504 bytes | 2025-08-07T14:04:57.916Z",
                     "quick-documentation.mdc | .cursor/rules/isolation_rules/Level1/quick-documentation.mdc | 6520 bytes | 2025-08-07T14:04:57.929Z",
@@ -48,9 +38,7 @@
                   ]
                 },
                 {
-                  "name": "Level2",
-                  "type": "directory",
-                  "path": ".cursor/rules/isolation_rules/Level2",
+                  "info": "Level2/ | .cursor/rules/isolation_rules/Level2 | directory",
                   "children": [
                     "archive-basic.mdc | .cursor/rules/isolation_rules/Level2/archive-basic.mdc | 4948 bytes | 2025-08-07T14:04:57.929Z",
                     "reflection-basic.mdc | .cursor/rules/isolation_rules/Level2/reflection-basic.mdc | 5752 bytes | 2025-08-07T14:04:57.945Z",
@@ -59,18 +47,14 @@
                   ]
                 },
                 {
-                  "name": "Level3",
-                  "type": "directory",
-                  "path": ".cursor/rules/isolation_rules/Level3",
+                  "info": "Level3/ | .cursor/rules/isolation_rules/Level3 | directory",
                   "children": [
                     "planning-comprehensive.mdc | .cursor/rules/isolation_rules/Level3/planning-comprehensive.mdc | 5551 bytes | 2025-08-07T14:04:57.971Z",
                     "task-tracking-intermediate.mdc | .cursor/rules/isolation_rules/Level3/task-tracking-intermediate.mdc | 3967 bytes | 2025-08-07T14:04:57.978Z"
                   ]
                 },
                 {
-                  "name": "Level4",
-                  "type": "directory",
-                  "path": ".cursor/rules/isolation_rules/Level4",
+                  "info": "Level4/ | .cursor/rules/isolation_rules/Level4 | directory",
                   "children": [
                     "architectural-planning.mdc | .cursor/rules/isolation_rules/Level4/architectural-planning.mdc | 25797 bytes | 2025-08-07T14:04:57.985Z",
                     "archive-comprehensive.mdc | .cursor/rules/isolation_rules/Level4/archive-comprehensive.mdc | 22183 bytes | 2025-08-07T14:04:57.992Z",
@@ -81,14 +65,10 @@
                   ]
                 },
                 {
-                  "name": "Phases",
-                  "type": "directory",
-                  "path": ".cursor/rules/isolation_rules/Phases",
+                  "info": "Phases/ | .cursor/rules/isolation_rules/Phases | directory",
                   "children": [
                     {
-                      "name": "CreativePhase",
-                      "type": "directory",
-                      "path": ".cursor/rules/isolation_rules/Phases/CreativePhase",
+                      "info": "CreativePhase/ | .cursor/rules/isolation_rules/Phases/CreativePhase | directory",
                       "children": [
                         "creative-phase-architecture.mdc | .cursor/rules/isolation_rules/Phases/CreativePhase/creative-phase-architecture.mdc | 4888 bytes | 2025-08-07T14:04:58.024Z",
                         "optimized-creative-template.mdc | .cursor/rules/isolation_rules/Phases/CreativePhase/optimized-creative-template.mdc | 7140 bytes | 2025-08-07T14:04:58.024Z"
@@ -97,19 +77,13 @@
                   ]
                 },
                 {
-                  "name": "visual-maps",
-                  "type": "directory",
-                  "path": ".cursor/rules/isolation_rules/visual-maps",
+                  "info": "visual-maps/ | .cursor/rules/isolation_rules/visual-maps | directory",
                   "children": [
                     {
-                      "name": "van_mode_split",
-                      "type": "directory",
-                      "path": ".cursor/rules/isolation_rules/visual-maps/van_mode_split",
+                      "info": "van_mode_split/ | .cursor/rules/isolation_rules/visual-maps/van_mode_split | directory",
                       "children": [
                         {
-                          "name": "van-qa-checks",
-                          "type": "directory",
-                          "path": ".cursor/rules/isolation_rules/visual-maps/van_mode_split/van-qa-checks",
+                          "info": "van-qa-checks/ | .cursor/rules/isolation_rules/visual-maps/van_mode_split/van-qa-checks | directory",
                           "children": [
                             "build-test.mdc | .cursor/rules/isolation_rules/visual-maps/van_mode_split/van-qa-checks/build-test.mdc | 3458 bytes | 2025-08-07T14:04:58.127Z",
                             "config-check.mdc | .cursor/rules/isolation_rules/visual-maps/van_mode_split/van-qa-checks/config-check.mdc | 3808 bytes | 2025-08-07T14:04:58.134Z",
@@ -119,9 +93,7 @@
                           ]
                         },
                         {
-                          "name": "van-qa-utils",
-                          "type": "directory",
-                          "path": ".cursor/rules/isolation_rules/visual-maps/van_mode_split/van-qa-utils",
+                          "info": "van-qa-utils/ | .cursor/rules/isolation_rules/visual-maps/van_mode_split/van-qa-utils | directory",
                           "children": [
                             "common-fixes.mdc | .cursor/rules/isolation_rules/visual-maps/van_mode_split/van-qa-utils/common-fixes.mdc | 3382 bytes | 2025-08-07T14:04:58.150Z",
                             "mode-transitions.mdc | .cursor/rules/isolation_rules/visual-maps/van_mode_split/van-qa-utils/mode-transitions.mdc | 3498 bytes | 2025-08-07T14:04:58.164Z",
@@ -164,9 +136,7 @@
       ]
     },
     {
-      "name": ".devcontainer",
-      "type": "directory",
-      "path": ".devcontainer",
+      "info": ".devcontainer/ | .devcontainer | directory",
       "children": [
         "README.md | .devcontainer/README.md | 2639 bytes | 2025-08-18T14:05:59.583Z",
         "recommended-devcontainer.json | .devcontainer/recommended-devcontainer.json | 366 bytes | 2025-08-18T14:05:59.584Z",
@@ -174,14 +144,10 @@
       ]
     },
     {
-      "name": ".github",
-      "type": "directory",
-      "path": ".github",
+      "info": ".github/ | .github | directory",
       "children": [
         {
-          "name": "workflows",
-          "type": "directory",
-          "path": ".github/workflows",
+          "info": "workflows/ | .github/workflows | directory",
           "children": [
             "deploy-site.yml | .github/workflows/deploy-site.yml | 1392 bytes | 2025-08-18T14:05:59.585Z",
             "deploy-surge.yml | .github/workflows/deploy-surge.yml | 1057 bytes | 2025-08-18T14:05:59.585Z",
@@ -197,14 +163,10 @@
       ]
     },
     {
-      "name": ".husky",
-      "type": "directory",
-      "path": ".husky",
+      "info": ".husky/ | .husky | directory",
       "children": [
         {
-          "name": "_",
-          "type": "directory",
-          "path": ".husky/_",
+          "info": "_/ | .husky/_ | directory",
           "children": [
             "pre-commit | .husky/_/pre-commit | 254 bytes | 2025-08-19T18:52:51.856Z",
             "pre-push | .husky/_/pre-push | 252 bytes | 2025-08-19T18:52:51.856Z"
@@ -214,14 +176,10 @@
       ]
     },
     {
-      "name": ".kiro",
-      "type": "directory",
-      "path": ".kiro",
+      "info": ".kiro/ | .kiro | directory",
       "children": [
         {
-          "name": "settings",
-          "type": "directory",
-          "path": ".kiro/settings",
+          "info": "settings/ | .kiro/settings | directory",
           "children": [
             "mcp.json | .kiro/settings/mcp.json | 2236 bytes | 2025-08-19T17:20:26.168Z"
           ]
@@ -229,9 +187,7 @@
       ]
     },
     {
-      "name": ".vscode",
-      "type": "directory",
-      "path": ".vscode",
+      "info": ".vscode/ | .vscode | directory",
       "children": [
         "extensions.json | .vscode/extensions.json | 381 bytes | 2025-08-18T14:05:59.585Z",
         "launch.json | .vscode/launch.json | 735 bytes | 2025-08-18T14:05:59.585Z",
@@ -240,9 +196,7 @@
       ]
     },
     {
-      "name": "custom_modes",
-      "type": "directory",
-      "path": "custom_modes",
+      "info": "custom_modes/ | custom_modes | directory",
       "children": [
         "creative_instructions.md | custom_modes/creative_instructions.md | 12259 bytes | 2025-08-07T14:04:58.182Z",
         "implement_instructions.md | custom_modes/implement_instructions.md | 9692 bytes | 2025-08-07T14:04:58.195Z",
@@ -252,14 +206,10 @@
       ]
     },
     {
-      "name": "docs",
-      "type": "directory",
-      "path": "docs",
+      "info": "docs/ | docs | directory",
       "children": [
         {
-          "name": "08-angular-api-reference",
-          "type": "directory",
-          "path": "docs/08-angular-api-reference",
+          "info": "08-angular-api-reference/ | docs/08-angular-api-reference | directory",
           "children": [
             "angular_animations.json | docs/08-angular-api-reference/angular_animations.json | 9534 bytes | 2025-08-19T12:43:34.993Z",
             "angular_common.json | docs/08-angular-api-reference/angular_common.json | 12795 bytes | 2025-08-19T12:43:46.498Z",
@@ -275,7 +225,7 @@
             "angular_url.json | docs/08-angular-api-reference/angular_url.json | 20487 bytes | 2025-08-19T13:09:02.274Z"
           ]
         },
-        "00_file_structure_now.json | docs/00_file_structure_now.json | 257419 bytes | 2025-08-19T18:52:51.856Z",
+        "00_file_structure_now.json | docs/00_file_structure_now.json | 144068 bytes | 2025-08-19T18:54:02.083Z",
         "00-file-header-convention.md | docs/00-file-header-convention.md | 15558 bytes | 2025-08-19T12:40:49.119Z",
         "00.angular_ddd_core_guide.md | docs/00.angular_ddd_core_guide.md | 14533 bytes | 2025-08-19T13:34:09.377Z",
         "00.angular_ddd_core.json | docs/00.angular_ddd_core.json | 15407 bytes | 2025-08-19T13:34:33.635Z",
@@ -300,28 +250,20 @@
       ]
     },
     {
-      "name": "memory-bank",
-      "type": "directory",
-      "path": "memory-bank",
+      "info": "memory-bank/ | memory-bank | directory",
       "children": []
     },
     {
-      "name": "public",
-      "type": "directory",
-      "path": "public",
+      "info": "public/ | public | directory",
       "children": [
         "favicon.ico | public/favicon.ico | 15086 bytes | 2025-08-18T14:05:59.646Z"
       ]
     },
     {
-      "name": "scripts",
-      "type": "directory",
-      "path": "scripts",
+      "info": "scripts/ | scripts | directory",
       "children": [
         {
-          "name": "_ci",
-          "type": "directory",
-          "path": "scripts/_ci",
+          "info": "_ci/ | scripts/_ci | directory",
           "children": [
             "deploy-pipelines.sh | scripts/_ci/deploy-pipelines.sh | 1295 bytes | 2025-08-07T13:06:59.963Z",
             "fix-day.js | scripts/_ci/fix-day.js | 345 bytes | 2025-08-06T16:23:27.638Z",
@@ -329,64 +271,46 @@
           ]
         },
         {
-          "name": "hooks",
-          "type": "directory",
-          "path": "scripts/hooks",
+          "info": "hooks/ | scripts/hooks | directory",
           "children": [
-            "pre-commit.mjs | scripts/hooks/pre-commit.mjs | 3145 bytes | 2025-08-19T18:53:55.752Z",
-            "pre-push.mjs | scripts/hooks/pre-push.mjs | 614 bytes | 2025-08-19T12:24:31.876Z"
+            "pre-commit.mjs | scripts/hooks/pre-commit.mjs | 3201 bytes | 2025-08-19T18:54:33.923Z",
+            "pre-push.mjs | scripts/hooks/pre-push.mjs | 698 bytes | 2025-08-19T18:54:33.923Z"
           ]
         }
       ]
     },
     {
-      "name": "src",
-      "type": "directory",
-      "path": "src",
+      "info": "src/ | src | directory",
       "children": [
         {
-          "name": "app",
-          "type": "directory",
-          "path": "src/app",
+          "info": "app/ | src/app | directory",
           "children": [
             {
-              "name": "application",
-              "type": "directory",
-              "path": "src/app/application",
+              "info": "application/ | src/app/application | directory",
               "children": [
                 {
-                  "name": "commands",
-                  "type": "directory",
-                  "path": "src/app/application/commands",
+                  "info": "commands/ | src/app/application/commands | directory",
                   "children": [
                     {
-                      "name": "auth",
-                      "type": "directory",
-                      "path": "src/app/application/commands/auth",
+                      "info": "auth/ | src/app/application/commands/auth | directory",
                       "children": [
                         "index.ts | src/app/application/commands/auth/index.ts | 435 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "organization",
-                      "type": "directory",
-                      "path": "src/app/application/commands/organization",
+                      "info": "organization/ | src/app/application/commands/organization | directory",
                       "children": [
                         "index.ts | src/app/application/commands/organization/index.ts | 471 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "permission",
-                      "type": "directory",
-                      "path": "src/app/application/commands/permission",
+                      "info": "permission/ | src/app/application/commands/permission | directory",
                       "children": [
                         "index.ts | src/app/application/commands/permission/index.ts | 457 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "user",
-                      "type": "directory",
-                      "path": "src/app/application/commands/user",
+                      "info": "user/ | src/app/application/commands/user | directory",
                       "children": [
                         "index.ts | src/app/application/commands/user/index.ts | 439 bytes | 2025-08-18T14:05:59.646Z"
                       ]
@@ -395,38 +319,28 @@
                   ]
                 },
                 {
-                  "name": "dto",
-                  "type": "directory",
-                  "path": "src/app/application/dto",
+                  "info": "dto/ | src/app/application/dto | directory",
                   "children": [
                     {
-                      "name": "auth",
-                      "type": "directory",
-                      "path": "src/app/application/dto/auth",
+                      "info": "auth/ | src/app/application/dto/auth | directory",
                       "children": [
                         "index.ts | src/app/application/dto/auth/index.ts | 399 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "organization",
-                      "type": "directory",
-                      "path": "src/app/application/dto/organization",
+                      "info": "organization/ | src/app/application/dto/organization | directory",
                       "children": [
                         "index.ts | src/app/application/dto/organization/index.ts | 442 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "permission",
-                      "type": "directory",
-                      "path": "src/app/application/dto/permission",
+                      "info": "permission/ | src/app/application/dto/permission | directory",
                       "children": [
                         "index.ts | src/app/application/dto/permission/index.ts | 428 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "user",
-                      "type": "directory",
-                      "path": "src/app/application/dto/user",
+                      "info": "user/ | src/app/application/dto/user | directory",
                       "children": [
                         "index.ts | src/app/application/dto/user/index.ts | 410 bytes | 2025-08-18T14:05:59.646Z"
                       ]
@@ -437,46 +351,34 @@
                   ]
                 },
                 {
-                  "name": "exceptions",
-                  "type": "directory",
-                  "path": "src/app/application/exceptions",
+                  "info": "exceptions/ | src/app/application/exceptions | directory",
                   "children": [
                     {
-                      "name": "auth",
-                      "type": "directory",
-                      "path": "src/app/application/exceptions/auth",
+                      "info": "auth/ | src/app/application/exceptions/auth | directory",
                       "children": [
                         "index.ts | src/app/application/exceptions/auth/index.ts | 446 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "common",
-                      "type": "directory",
-                      "path": "src/app/application/exceptions/common",
+                      "info": "common/ | src/app/application/exceptions/common | directory",
                       "children": [
                         "index.ts | src/app/application/exceptions/common/index.ts | 428 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "organization",
-                      "type": "directory",
-                      "path": "src/app/application/exceptions/organization",
+                      "info": "organization/ | src/app/application/exceptions/organization | directory",
                       "children": [
                         "index.ts | src/app/application/exceptions/organization/index.ts | 478 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "permission",
-                      "type": "directory",
-                      "path": "src/app/application/exceptions/permission",
+                      "info": "permission/ | src/app/application/exceptions/permission | directory",
                       "children": [
                         "index.ts | src/app/application/exceptions/permission/index.ts | 476 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "user",
-                      "type": "directory",
-                      "path": "src/app/application/exceptions/user",
+                      "info": "user/ | src/app/application/exceptions/user | directory",
                       "children": [
                         "index.ts | src/app/application/exceptions/user/index.ts | 446 bytes | 2025-08-18T14:05:59.646Z"
                       ]
@@ -485,38 +387,28 @@
                   ]
                 },
                 {
-                  "name": "mappers",
-                  "type": "directory",
-                  "path": "src/app/application/mappers",
+                  "info": "mappers/ | src/app/application/mappers | directory",
                   "children": [
                     {
-                      "name": "auth",
-                      "type": "directory",
-                      "path": "src/app/application/mappers/auth",
+                      "info": "auth/ | src/app/application/mappers/auth | directory",
                       "children": [
                         "index.ts | src/app/application/mappers/auth/index.ts | 464 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "organization",
-                      "type": "directory",
-                      "path": "src/app/application/mappers/organization",
+                      "info": "organization/ | src/app/application/mappers/organization | directory",
                       "children": [
                         "index.ts | src/app/application/mappers/organization/index.ts | 486 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "permission",
-                      "type": "directory",
-                      "path": "src/app/application/mappers/permission",
+                      "info": "permission/ | src/app/application/mappers/permission | directory",
                       "children": [
                         "index.ts | src/app/application/mappers/permission/index.ts | 478 bytes | 2025-08-18T14:05:59.646Z"
                       ]
                     },
                     {
-                      "name": "user",
-                      "type": "directory",
-                      "path": "src/app/application/mappers/user",
+                      "info": "user/ | src/app/application/mappers/user | directory",
                       "children": [
                         "index.ts | src/app/application/mappers/user/index.ts | 454 bytes | 2025-08-18T14:05:59.646Z"
                       ]
@@ -525,31 +417,23 @@
                   ]
                 },
                 {
-                  "name": "queries",
-                  "type": "directory",
-                  "path": "src/app/application/queries",
+                  "info": "queries/ | src/app/application/queries | directory",
                   "children": [
                     "index.ts | src/app/application/queries/index.ts | 1026 bytes | 2025-08-18T14:05:59.646Z"
                   ]
                 },
                 {
-                  "name": "services",
-                  "type": "directory",
-                  "path": "src/app/application/services",
+                  "info": "services/ | src/app/application/services | directory",
                   "children": [
                     {
-                      "name": "ai",
-                      "type": "directory",
-                      "path": "src/app/application/services/ai",
+                      "info": "ai/ | src/app/application/services/ai | directory",
                       "children": [
                         "ai.service.ts | src/app/application/services/ai/ai.service.ts | 8351 bytes | 2025-08-19T08:38:01.568Z",
                         "index.ts | src/app/application/services/ai/index.ts | 96 bytes | 2025-08-19T08:47:40.493Z"
                       ]
                     },
                     {
-                      "name": "app-shell",
-                      "type": "directory",
-                      "path": "src/app/application/services/app-shell",
+                      "info": "app-shell/ | src/app/application/services/app-shell | directory",
                       "children": [
                         "app-shell.service.ts | src/app/application/services/app-shell/app-shell.service.ts | 2923 bytes | 2025-08-18T14:05:59.646Z",
                         "index.ts | src/app/application/services/app-shell/index.ts | 791 bytes | 2025-08-18T14:05:59.660Z",
@@ -558,61 +442,47 @@
                       ]
                     },
                     {
-                      "name": "auth",
-                      "type": "directory",
-                      "path": "src/app/application/services/auth",
+                      "info": "auth/ | src/app/application/services/auth | directory",
                       "children": [
                         "auth.facade.ts | src/app/application/services/auth/auth.facade.ts | 1642 bytes | 2025-08-19T09:36:54.330Z",
                         "index.ts | src/app/application/services/auth/index.ts | 415 bytes | 2025-08-18T14:05:59.660Z"
                       ]
                     },
                     {
-                      "name": "file-sync",
-                      "type": "directory",
-                      "path": "src/app/application/services/file-sync",
+                      "info": "file-sync/ | src/app/application/services/file-sync | directory",
                       "children": [
                         "file-sync.service.ts | src/app/application/services/file-sync/file-sync.service.ts | 7794 bytes | 2025-08-18T14:05:59.662Z",
                         "index.ts | src/app/application/services/file-sync/index.ts | 38 bytes | 2025-08-18T14:05:59.662Z"
                       ]
                     },
                     {
-                      "name": "navigation-sync",
-                      "type": "directory",
-                      "path": "src/app/application/services/navigation-sync",
+                      "info": "navigation-sync/ | src/app/application/services/navigation-sync | directory",
                       "children": [
                         "index.ts | src/app/application/services/navigation-sync/index.ts | 270 bytes | 2025-08-18T14:05:59.663Z",
                         "navigation-sync.service.ts | src/app/application/services/navigation-sync/navigation-sync.service.ts | 2515 bytes | 2025-08-18T14:05:59.663Z"
                       ]
                     },
                     {
-                      "name": "organization",
-                      "type": "directory",
-                      "path": "src/app/application/services/organization",
+                      "info": "organization/ | src/app/application/services/organization | directory",
                       "children": [
                         "index.ts | src/app/application/services/organization/index.ts | 527 bytes | 2025-08-18T14:05:59.663Z"
                       ]
                     },
                     {
-                      "name": "permission",
-                      "type": "directory",
-                      "path": "src/app/application/services/permission",
+                      "info": "permission/ | src/app/application/services/permission | directory",
                       "children": [
                         "index.ts | src/app/application/services/permission/index.ts | 504 bytes | 2025-08-18T14:05:59.663Z"
                       ]
                     },
                     {
-                      "name": "tab-navigation",
-                      "type": "directory",
-                      "path": "src/app/application/services/tab-navigation",
+                      "info": "tab-navigation/ | src/app/application/services/tab-navigation | directory",
                       "children": [
                         "index.ts | src/app/application/services/tab-navigation/index.ts | 704 bytes | 2025-08-18T14:05:59.663Z",
                         "tab-navigation.service.ts | src/app/application/services/tab-navigation/tab-navigation.service.ts | 6261 bytes | 2025-08-19T17:20:44.273Z"
                       ]
                     },
                     {
-                      "name": "user",
-                      "type": "directory",
-                      "path": "src/app/application/services/user",
+                      "info": "user/ | src/app/application/services/user | directory",
                       "children": [
                         "index.ts | src/app/application/services/user/index.ts | 498 bytes | 2025-08-18T14:05:59.663Z"
                       ]
@@ -627,38 +497,28 @@
                   ]
                 },
                 {
-                  "name": "use-cases",
-                  "type": "directory",
-                  "path": "src/app/application/use-cases",
+                  "info": "use-cases/ | src/app/application/use-cases | directory",
                   "children": [
                     {
-                      "name": "auth",
-                      "type": "directory",
-                      "path": "src/app/application/use-cases/auth",
+                      "info": "auth/ | src/app/application/use-cases/auth | directory",
                       "children": [
                         "index.ts | src/app/application/use-cases/auth/index.ts | 517 bytes | 2025-08-18T14:05:59.663Z"
                       ]
                     },
                     {
-                      "name": "organization",
-                      "type": "directory",
-                      "path": "src/app/application/use-cases/organization",
+                      "info": "organization/ | src/app/application/use-cases/organization | directory",
                       "children": [
                         "index.ts | src/app/application/use-cases/organization/index.ts | 555 bytes | 2025-08-18T14:05:59.663Z"
                       ]
                     },
                     {
-                      "name": "permission",
-                      "type": "directory",
-                      "path": "src/app/application/use-cases/permission",
+                      "info": "permission/ | src/app/application/use-cases/permission | directory",
                       "children": [
                         "index.ts | src/app/application/use-cases/permission/index.ts | 544 bytes | 2025-08-18T14:05:59.663Z"
                       ]
                     },
                     {
-                      "name": "user",
-                      "type": "directory",
-                      "path": "src/app/application/use-cases/user",
+                      "info": "user/ | src/app/application/use-cases/user | directory",
                       "children": [
                         "index.ts | src/app/application/use-cases/user/index.ts | 515 bytes | 2025-08-18T14:05:59.669Z"
                       ]
@@ -669,38 +529,28 @@
                   ]
                 },
                 {
-                  "name": "validators",
-                  "type": "directory",
-                  "path": "src/app/application/validators",
+                  "info": "validators/ | src/app/application/validators | directory",
                   "children": [
                     {
-                      "name": "auth",
-                      "type": "directory",
-                      "path": "src/app/application/validators/auth",
+                      "info": "auth/ | src/app/application/validators/auth | directory",
                       "children": [
                         "index.ts | src/app/application/validators/auth/index.ts | 454 bytes | 2025-08-18T14:05:59.669Z"
                       ]
                     },
                     {
-                      "name": "organization",
-                      "type": "directory",
-                      "path": "src/app/application/validators/organization",
+                      "info": "organization/ | src/app/application/validators/organization | directory",
                       "children": [
                         "index.ts | src/app/application/validators/organization/index.ts | 493 bytes | 2025-08-18T14:05:59.669Z"
                       ]
                     },
                     {
-                      "name": "permission",
-                      "type": "directory",
-                      "path": "src/app/application/validators/permission",
+                      "info": "permission/ | src/app/application/validators/permission | directory",
                       "children": [
                         "index.ts | src/app/application/validators/permission/index.ts | 479 bytes | 2025-08-18T14:05:59.669Z"
                       ]
                     },
                     {
-                      "name": "user",
-                      "type": "directory",
-                      "path": "src/app/application/validators/user",
+                      "info": "user/ | src/app/application/validators/user | directory",
                       "children": [
                         "index.ts | src/app/application/validators/user/index.ts | 461 bytes | 2025-08-18T14:05:59.671Z"
                       ]
@@ -712,32 +562,22 @@
               ]
             },
             {
-              "name": "domain",
-              "type": "directory",
-              "path": "src/app/domain",
+              "info": "domain/ | src/app/domain | directory",
               "children": [
                 {
-                  "name": "aggregates",
-                  "type": "directory",
-                  "path": "src/app/domain/aggregates",
+                  "info": "aggregates/ | src/app/domain/aggregates | directory",
                   "children": [
                     "index.ts | src/app/domain/aggregates/index.ts | 1022 bytes | 2025-08-19T16:50:40.908Z"
                   ]
                 },
                 {
-                  "name": "auth",
-                  "type": "directory",
-                  "path": "src/app/domain/auth",
+                  "info": "auth/ | src/app/domain/auth | directory",
                   "children": [
                     {
-                      "name": "infrastructure",
-                      "type": "directory",
-                      "path": "src/app/domain/auth/infrastructure",
+                      "info": "infrastructure/ | src/app/domain/auth/infrastructure | directory",
                       "children": [
                         {
-                          "name": "services",
-                          "type": "directory",
-                          "path": "src/app/domain/auth/infrastructure/services",
+                          "info": "services/ | src/app/domain/auth/infrastructure/services | directory",
                           "children": []
                         }
                       ]
@@ -745,69 +585,47 @@
                   ]
                 },
                 {
-                  "name": "budget-management",
-                  "type": "directory",
-                  "path": "src/app/domain/budget-management",
+                  "info": "budget-management/ | src/app/domain/budget-management | directory",
                   "children": [
                     {
-                      "name": "application",
-                      "type": "directory",
-                      "path": "src/app/domain/budget-management/application",
+                      "info": "application/ | src/app/domain/budget-management/application | directory",
                       "children": [
                         {
-                          "name": "dto",
-                          "type": "directory",
-                          "path": "src/app/domain/budget-management/application/dto",
+                          "info": "dto/ | src/app/domain/budget-management/application/dto | directory",
                           "children": []
                         },
                         {
-                          "name": "services",
-                          "type": "directory",
-                          "path": "src/app/domain/budget-management/application/services",
+                          "info": "services/ | src/app/domain/budget-management/application/services | directory",
                           "children": []
                         }
                       ]
                     },
                     {
-                      "name": "domain",
-                      "type": "directory",
-                      "path": "src/app/domain/budget-management/domain",
+                      "info": "domain/ | src/app/domain/budget-management/domain | directory",
                       "children": [
                         {
-                          "name": "entities",
-                          "type": "directory",
-                          "path": "src/app/domain/budget-management/domain/entities",
+                          "info": "entities/ | src/app/domain/budget-management/domain/entities | directory",
                           "children": []
                         },
                         {
-                          "name": "repositories",
-                          "type": "directory",
-                          "path": "src/app/domain/budget-management/domain/repositories",
+                          "info": "repositories/ | src/app/domain/budget-management/domain/repositories | directory",
                           "children": []
                         },
                         {
-                          "name": "services",
-                          "type": "directory",
-                          "path": "src/app/domain/budget-management/domain/services",
+                          "info": "services/ | src/app/domain/budget-management/domain/services | directory",
                           "children": []
                         },
                         {
-                          "name": "value-objects",
-                          "type": "directory",
-                          "path": "src/app/domain/budget-management/domain/value-objects",
+                          "info": "value-objects/ | src/app/domain/budget-management/domain/value-objects | directory",
                           "children": []
                         }
                       ]
                     },
                     {
-                      "name": "infrastructure",
-                      "type": "directory",
-                      "path": "src/app/domain/budget-management/infrastructure",
+                      "info": "infrastructure/ | src/app/domain/budget-management/infrastructure | directory",
                       "children": [
                         {
-                          "name": "repositories",
-                          "type": "directory",
-                          "path": "src/app/domain/budget-management/infrastructure/repositories",
+                          "info": "repositories/ | src/app/domain/budget-management/infrastructure/repositories | directory",
                           "children": []
                         }
                       ]
@@ -815,19 +633,13 @@
                   ]
                 },
                 {
-                  "name": "business-partner",
-                  "type": "directory",
-                  "path": "src/app/domain/business-partner",
+                  "info": "business-partner/ | src/app/domain/business-partner | directory",
                   "children": [
                     {
-                      "name": "presentation",
-                      "type": "directory",
-                      "path": "src/app/domain/business-partner/presentation",
+                      "info": "presentation/ | src/app/domain/business-partner/presentation | directory",
                       "children": [
                         {
-                          "name": "pages",
-                          "type": "directory",
-                          "path": "src/app/domain/business-partner/presentation/pages",
+                          "info": "pages/ | src/app/domain/business-partner/presentation/pages | directory",
                           "children": []
                         }
                       ]
@@ -835,31 +647,23 @@
                   ]
                 },
                 {
-                  "name": "entities",
-                  "type": "directory",
-                  "path": "src/app/domain/entities",
+                  "info": "entities/ | src/app/domain/entities | directory",
                   "children": [
                     {
-                      "name": "app-shell",
-                      "type": "directory",
-                      "path": "src/app/domain/entities/app-shell",
+                      "info": "app-shell/ | src/app/domain/entities/app-shell | directory",
                       "children": [
                         "app-shell.aggregate.ts | src/app/domain/entities/app-shell/app-shell.aggregate.ts | 4662 bytes | 2025-08-19T18:52:51.856Z",
                         "index.ts | src/app/domain/entities/app-shell/index.ts | 725 bytes | 2025-08-19T17:07:14.113Z"
                       ]
                     },
                     {
-                      "name": "base",
-                      "type": "directory",
-                      "path": "src/app/domain/entities/base",
+                      "info": "base/ | src/app/domain/entities/base | directory",
                       "children": [
                         "index.ts | src/app/domain/entities/base/index.ts | 597 bytes | 2025-08-18T14:05:59.673Z"
                       ]
                     },
                     {
-                      "name": "user",
-                      "type": "directory",
-                      "path": "src/app/domain/entities/user",
+                      "info": "user/ | src/app/domain/entities/user | directory",
                       "children": [
                         "index.ts | src/app/domain/entities/user/index.ts | 591 bytes | 2025-08-18T14:05:59.675Z",
                         "user.entity.ts | src/app/domain/entities/user/user.entity.ts | 1879 bytes | 2025-08-19T18:52:51.856Z"
@@ -869,34 +673,26 @@
                   ]
                 },
                 {
-                  "name": "events",
-                  "type": "directory",
-                  "path": "src/app/domain/events",
+                  "info": "events/ | src/app/domain/events | directory",
                   "children": [
                     "index.ts | src/app/domain/events/index.ts | 1057 bytes | 2025-08-18T14:05:59.675Z"
                   ]
                 },
                 {
-                  "name": "exceptions",
-                  "type": "directory",
-                  "path": "src/app/domain/exceptions",
+                  "info": "exceptions/ | src/app/domain/exceptions | directory",
                   "children": [
                     "index.ts | src/app/domain/exceptions/index.ts | 1050 bytes | 2025-08-18T14:05:59.677Z"
                   ]
                 },
                 {
-                  "name": "factories",
-                  "type": "directory",
-                  "path": "src/app/domain/factories",
+                  "info": "factories/ | src/app/domain/factories | directory",
                   "children": [
                     "app-shell.factory.ts | src/app/domain/factories/app-shell.factory.ts | 3532 bytes | 2025-08-19T16:50:43.063Z",
                     "index.ts | src/app/domain/factories/index.ts | 737 bytes | 2025-08-19T16:50:26.018Z"
                   ]
                 },
                 {
-                  "name": "repositories",
-                  "type": "directory",
-                  "path": "src/app/domain/repositories",
+                  "info": "repositories/ | src/app/domain/repositories | directory",
                   "children": [
                     "app-shell.repository.ts | src/app/domain/repositories/app-shell.repository.ts | 1338 bytes | 2025-08-19T16:50:43.003Z",
                     "contract.repository.ts | src/app/domain/repositories/contract.repository.ts | 349 bytes | 2025-08-19T17:41:48.964Z",
@@ -906,9 +702,7 @@
                   ]
                 },
                 {
-                  "name": "services",
-                  "type": "directory",
-                  "path": "src/app/domain/services",
+                  "info": "services/ | src/app/domain/services | directory",
                   "children": [
                     "app-shell.domain.service.ts | src/app/domain/services/app-shell.domain.service.ts | 6227 bytes | 2025-08-19T16:50:43.018Z",
                     "auth.domain.service.ts | src/app/domain/services/auth.domain.service.ts | 1436 bytes | 2025-08-19T09:36:54.341Z",
@@ -916,77 +710,53 @@
                   ]
                 },
                 {
-                  "name": "specifications",
-                  "type": "directory",
-                  "path": "src/app/domain/specifications",
+                  "info": "specifications/ | src/app/domain/specifications | directory",
                   "children": [
                     "index.ts | src/app/domain/specifications/index.ts | 1045 bytes | 2025-08-18T14:05:59.680Z"
                   ]
                 },
                 {
-                  "name": "task-management",
-                  "type": "directory",
-                  "path": "src/app/domain/task-management",
+                  "info": "task-management/ | src/app/domain/task-management | directory",
                   "children": [
                     {
-                      "name": "application",
-                      "type": "directory",
-                      "path": "src/app/domain/task-management/application",
+                      "info": "application/ | src/app/domain/task-management/application | directory",
                       "children": [
                         {
-                          "name": "dto",
-                          "type": "directory",
-                          "path": "src/app/domain/task-management/application/dto",
+                          "info": "dto/ | src/app/domain/task-management/application/dto | directory",
                           "children": []
                         },
                         {
-                          "name": "services",
-                          "type": "directory",
-                          "path": "src/app/domain/task-management/application/services",
+                          "info": "services/ | src/app/domain/task-management/application/services | directory",
                           "children": []
                         }
                       ]
                     },
                     {
-                      "name": "domain",
-                      "type": "directory",
-                      "path": "src/app/domain/task-management/domain",
+                      "info": "domain/ | src/app/domain/task-management/domain | directory",
                       "children": [
                         {
-                          "name": "entities",
-                          "type": "directory",
-                          "path": "src/app/domain/task-management/domain/entities",
+                          "info": "entities/ | src/app/domain/task-management/domain/entities | directory",
                           "children": []
                         },
                         {
-                          "name": "repositories",
-                          "type": "directory",
-                          "path": "src/app/domain/task-management/domain/repositories",
+                          "info": "repositories/ | src/app/domain/task-management/domain/repositories | directory",
                           "children": []
                         },
                         {
-                          "name": "services",
-                          "type": "directory",
-                          "path": "src/app/domain/task-management/domain/services",
+                          "info": "services/ | src/app/domain/task-management/domain/services | directory",
                           "children": []
                         },
                         {
-                          "name": "value-objects",
-                          "type": "directory",
-                          "path": "src/app/domain/task-management/domain/value-objects",
+                          "info": "value-objects/ | src/app/domain/task-management/domain/value-objects | directory",
                           "children": []
                         }
                       ]
                     },
                     {
-                      "name": "infrastructure",
-                      "type": "directory",
-                      "path": "src/app/domain/task-management/infrastructure",
+                      "info": "infrastructure/ | src/app/domain/task-management/infrastructure | directory",
                       "children": [
                         {
-                          "name": "repositories",
-                          "type": "directory",
-                          "path": "src/app/domain/task-management/infrastructure/repositories",
+                          "info": "repositories/ | src/app/domain/task-management/infrastructure/repositories | directory",
                           "children": []
                         }
                       ]
@@ -994,14 +764,10 @@
                   ]
                 },
                 {
-                  "name": "value-objects",
-                  "type": "directory",
-                  "path": "src/app/domain/value-objects",
+                  "info": "value-objects/ | src/app/domain/value-objects | directory",
                   "children": [
                     {
-                      "name": "email",
-                      "type": "directory",
-                      "path": "src/app/domain/value-objects/email",
+                      "info": "email/ | src/app/domain/value-objects/email | directory",
                       "children": [
                         "email.vo.ts | src/app/domain/value-objects/email/email.vo.ts | 1788 bytes | 2025-08-19T17:07:14.113Z",
                         "index.ts | src/app/domain/value-objects/email/index.ts | 1143 bytes | 2025-08-18T14:05:59.681Z"
@@ -1014,27 +780,19 @@
               ]
             },
             {
-              "name": "infrastructure",
-              "type": "directory",
-              "path": "src/app/infrastructure",
+              "info": "infrastructure/ | src/app/infrastructure | directory",
               "children": [
                 {
-                  "name": "caching",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/caching",
+                  "info": "caching/ | src/app/infrastructure/caching | directory",
                   "children": [
                     "index.ts | src/app/infrastructure/caching/index.ts | 1140 bytes | 2025-08-18T14:05:59.683Z"
                   ]
                 },
                 {
-                  "name": "config",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/config",
+                  "info": "config/ | src/app/infrastructure/config | directory",
                   "children": [
                     {
-                      "name": "firebase",
-                      "type": "directory",
-                      "path": "src/app/infrastructure/config/firebase",
+                      "info": "firebase/ | src/app/infrastructure/config/firebase | directory",
                       "children": [
                         "firebase.config.ts | src/app/infrastructure/config/firebase/firebase.config.ts | 948 bytes | 2025-08-18T14:05:59.686Z",
                         "index.ts | src/app/infrastructure/config/firebase/index.ts | 660 bytes | 2025-08-18T14:05:59.686Z"
@@ -1045,28 +803,20 @@
                   ]
                 },
                 {
-                  "name": "exceptions",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/exceptions",
+                  "info": "exceptions/ | src/app/infrastructure/exceptions | directory",
                   "children": [
                     "index.ts | src/app/infrastructure/exceptions/index.ts | 1191 bytes | 2025-08-18T14:05:59.686Z"
                   ]
                 },
                 {
-                  "name": "external-services",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/external-services",
+                  "info": "external-services/ | src/app/infrastructure/external-services | directory",
                   "children": [
                     {
-                      "name": "ai",
-                      "type": "directory",
-                      "path": "src/app/infrastructure/external-services/ai",
+                      "info": "ai/ | src/app/infrastructure/external-services/ai | directory",
                       "children": []
                     },
                     {
-                      "name": "pwa",
-                      "type": "directory",
-                      "path": "src/app/infrastructure/external-services/pwa",
+                      "info": "pwa/ | src/app/infrastructure/external-services/pwa | directory",
                       "children": [
                         "index.ts | src/app/infrastructure/external-services/pwa/index.ts | 658 bytes | 2025-08-18T14:05:59.686Z",
                         "service-worker.service.ts | src/app/infrastructure/external-services/pwa/service-worker.service.ts | 3692 bytes | 2025-08-18T14:05:59.686Z"
@@ -1076,9 +826,7 @@
                   ]
                 },
                 {
-                  "name": "interceptors",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/interceptors",
+                  "info": "interceptors/ | src/app/infrastructure/interceptors | directory",
                   "children": [
                     "auth-http.interceptor.ts | src/app/infrastructure/interceptors/auth-http.interceptor.ts | 2138 bytes | 2025-08-19T18:52:51.856Z",
                     "auth.interceptor.ts | src/app/infrastructure/interceptors/auth.interceptor.ts | 1131 bytes | 2025-08-18T14:05:59.690Z",
@@ -1087,39 +835,29 @@
                   ]
                 },
                 {
-                  "name": "logging",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/logging",
+                  "info": "logging/ | src/app/infrastructure/logging | directory",
                   "children": [
                     "index.ts | src/app/infrastructure/logging/index.ts | 1137 bytes | 2025-08-18T14:05:59.690Z",
                     "logger.service.ts | src/app/infrastructure/logging/logger.service.ts | 1155 bytes | 2025-08-18T14:05:59.690Z"
                   ]
                 },
                 {
-                  "name": "messaging",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/messaging",
+                  "info": "messaging/ | src/app/infrastructure/messaging | directory",
                   "children": [
                     "index.ts | src/app/infrastructure/messaging/index.ts | 1139 bytes | 2025-08-18T14:05:59.690Z"
                   ]
                 },
                 {
-                  "name": "monitoring",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/monitoring",
+                  "info": "monitoring/ | src/app/infrastructure/monitoring | directory",
                   "children": [
                     "index.ts | src/app/infrastructure/monitoring/index.ts | 1131 bytes | 2025-08-18T14:05:59.690Z"
                   ]
                 },
                 {
-                  "name": "persistence",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/persistence",
+                  "info": "persistence/ | src/app/infrastructure/persistence | directory",
                   "children": [
                     {
-                      "name": "firebase",
-                      "type": "directory",
-                      "path": "src/app/infrastructure/persistence/firebase",
+                      "info": "firebase/ | src/app/infrastructure/persistence/firebase | directory",
                       "children": [
                         "firebase.service.ts | src/app/infrastructure/persistence/firebase/firebase.service.ts | 2233 bytes | 2025-08-19T09:36:54.341Z",
                         "firestore.service.ts | src/app/infrastructure/persistence/firebase/firestore.service.ts | 4525 bytes | 2025-08-18T14:05:59.695Z",
@@ -1127,19 +865,13 @@
                       ]
                     },
                     {
-                      "name": "repositories",
-                      "type": "directory",
-                      "path": "src/app/infrastructure/persistence/repositories",
+                      "info": "repositories/ | src/app/infrastructure/persistence/repositories | directory",
                       "children": [
                         {
-                          "name": "firebase",
-                          "type": "directory",
-                          "path": "src/app/infrastructure/persistence/repositories/firebase",
+                          "info": "firebase/ | src/app/infrastructure/persistence/repositories/firebase | directory",
                           "children": [
                             {
-                              "name": "user",
-                              "type": "directory",
-                              "path": "src/app/infrastructure/persistence/repositories/firebase/user",
+                              "info": "user/ | src/app/infrastructure/persistence/repositories/firebase/user | directory",
                               "children": [
                                 "index.ts | src/app/infrastructure/persistence/repositories/firebase/user/index.ts | 818 bytes | 2025-08-18T14:05:59.698Z",
                                 "user.firebase.repository.ts | src/app/infrastructure/persistence/repositories/firebase/user/user.firebase.repository.ts | 2030 bytes | 2025-08-18T14:05:59.698Z"
@@ -1157,9 +889,7 @@
                   ]
                 },
                 {
-                  "name": "security",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/security",
+                  "info": "security/ | src/app/infrastructure/security | directory",
                   "children": [
                     "rbac.service.ts | src/app/infrastructure/security/rbac.service.ts | 2586 bytes | 2025-08-19T09:36:54.341Z",
                     "refresh-token.service.ts | src/app/infrastructure/security/refresh-token.service.ts | 478 bytes | 2025-08-18T14:05:59.699Z",
@@ -1167,9 +897,7 @@
                   ]
                 },
                 {
-                  "name": "startup",
-                  "type": "directory",
-                  "path": "src/app/infrastructure/startup",
+                  "info": "startup/ | src/app/infrastructure/startup | directory",
                   "children": [
                     "startup.service.ts | src/app/infrastructure/startup/startup.service.ts | 1950 bytes | 2025-08-18T14:05:59.700Z"
                   ]
@@ -1178,60 +906,44 @@
               ]
             },
             {
-              "name": "interface",
-              "type": "directory",
-              "path": "src/app/interface",
+              "info": "interface/ | src/app/interface | directory",
               "children": [
                 {
-                  "name": "components",
-                  "type": "directory",
-                  "path": "src/app/interface/components",
+                  "info": "components/ | src/app/interface/components | directory",
                   "children": [
                     {
-                      "name": "common",
-                      "type": "directory",
-                      "path": "src/app/interface/components/common",
+                      "info": "common/ | src/app/interface/components/common | directory",
                       "children": [
                         {
-                          "name": "button",
-                          "type": "directory",
-                          "path": "src/app/interface/components/common/button",
+                          "info": "button/ | src/app/interface/components/common/button | directory",
                           "children": [
                             "button.component.ts | src/app/interface/components/common/button/button.component.ts | 1363 bytes | 2025-08-19T09:13:38.634Z",
                             "index.ts | src/app/interface/components/common/button/index.ts | 621 bytes | 2025-08-18T14:05:59.701Z"
                           ]
                         },
                         {
-                          "name": "file-sync",
-                          "type": "directory",
-                          "path": "src/app/interface/components/common/file-sync",
+                          "info": "file-sync/ | src/app/interface/components/common/file-sync | directory",
                           "children": [
                             "file-sync.component.ts | src/app/interface/components/common/file-sync/file-sync.component.ts | 9466 bytes | 2025-08-18T14:05:59.701Z",
                             "index.ts | src/app/interface/components/common/file-sync/index.ts | 40 bytes | 2025-08-18T14:05:59.701Z"
                           ]
                         },
                         {
-                          "name": "input",
-                          "type": "directory",
-                          "path": "src/app/interface/components/common/input",
+                          "info": "input/ | src/app/interface/components/common/input | directory",
                           "children": [
                             "index.ts | src/app/interface/components/common/input/index.ts | 636 bytes | 2025-08-18T14:05:59.702Z",
                             "input.component.ts | src/app/interface/components/common/input/input.component.ts | 1354 bytes | 2025-08-18T14:05:59.702Z"
                           ]
                         },
                         {
-                          "name": "modal",
-                          "type": "directory",
-                          "path": "src/app/interface/components/common/modal",
+                          "info": "modal/ | src/app/interface/components/common/modal | directory",
                           "children": [
                             "index.ts | src/app/interface/components/common/modal/index.ts | 636 bytes | 2025-08-18T14:05:59.703Z",
                             "modal.component.ts | src/app/interface/components/common/modal/modal.component.ts | 1838 bytes | 2025-08-18T14:05:59.703Z"
                           ]
                         },
                         {
-                          "name": "tab-navigation",
-                          "type": "directory",
-                          "path": "src/app/interface/components/common/tab-navigation",
+                          "info": "tab-navigation/ | src/app/interface/components/common/tab-navigation | directory",
                           "children": [
                             "index.ts | src/app/interface/components/common/tab-navigation/index.ts | 708 bytes | 2025-08-18T14:05:59.703Z",
                             "tab-navigation.component.scss | src/app/interface/components/common/tab-navigation/tab-navigation.component.scss | 2146 bytes | 2025-08-18T14:05:59.704Z",
@@ -1239,9 +951,7 @@
                           ]
                         },
                         {
-                          "name": "user-menu",
-                          "type": "directory",
-                          "path": "src/app/interface/components/common/user-menu",
+                          "info": "user-menu/ | src/app/interface/components/common/user-menu | directory",
                           "children": [
                             "user-menu.component.ts | src/app/interface/components/common/user-menu/user-menu.component.ts | 2537 bytes | 2025-08-19T09:13:38.612Z"
                           ]
@@ -1250,32 +960,24 @@
                       ]
                     },
                     {
-                      "name": "contracts",
-                      "type": "directory",
-                      "path": "src/app/interface/components/contracts",
+                      "info": "contracts/ | src/app/interface/components/contracts | directory",
                       "children": [
                         "contracts-dashboard-stats.component.ts | src/app/interface/components/contracts/contracts-dashboard-stats.component.ts | 3368 bytes | 2025-08-19T17:41:48.972Z",
                         "contracts-table.component.ts | src/app/interface/components/contracts/contracts-table.component.ts | 5300 bytes | 2025-08-19T17:41:48.978Z"
                       ]
                     },
                     {
-                      "name": "forms",
-                      "type": "directory",
-                      "path": "src/app/interface/components/forms",
+                      "info": "forms/ | src/app/interface/components/forms | directory",
                       "children": [
                         {
-                          "name": "login-form",
-                          "type": "directory",
-                          "path": "src/app/interface/components/forms/login-form",
+                          "info": "login-form/ | src/app/interface/components/forms/login-form | directory",
                           "children": [
                             "index.ts | src/app/interface/components/forms/login-form/index.ts | 669 bytes | 2025-08-18T14:05:59.708Z",
                             "login-form.component.ts | src/app/interface/components/forms/login-form/login-form.component.ts | 2233 bytes | 2025-08-18T14:05:59.708Z"
                           ]
                         },
                         {
-                          "name": "user-form",
-                          "type": "directory",
-                          "path": "src/app/interface/components/forms/user-form",
+                          "info": "user-form/ | src/app/interface/components/forms/user-form | directory",
                           "children": [
                             "index.ts | src/app/interface/components/forms/user-form/index.ts | 666 bytes | 2025-08-18T14:05:59.708Z",
                             "user-form.component.ts | src/app/interface/components/forms/user-form/user-form.component.ts | 2913 bytes | 2025-08-18T14:05:59.709Z"
@@ -1285,32 +987,24 @@
                       ]
                     },
                     {
-                      "name": "layout",
-                      "type": "directory",
-                      "path": "src/app/interface/components/layout",
+                      "info": "layout/ | src/app/interface/components/layout | directory",
                       "children": [
                         {
-                          "name": "app-shell-modern",
-                          "type": "directory",
-                          "path": "src/app/interface/components/layout/app-shell-modern",
+                          "info": "app-shell-modern/ | src/app/interface/components/layout/app-shell-modern | directory",
                           "children": [
                             "app-shell-modern.component.ts | src/app/interface/components/layout/app-shell-modern/app-shell-modern.component.ts | 1785 bytes | 2025-08-18T14:05:59.710Z",
                             "index.ts | src/app/interface/components/layout/app-shell-modern/index.ts | 658 bytes | 2025-08-18T14:05:59.710Z"
                           ]
                         },
                         {
-                          "name": "container-query",
-                          "type": "directory",
-                          "path": "src/app/interface/components/layout/container-query",
+                          "info": "container-query/ | src/app/interface/components/layout/container-query | directory",
                           "children": [
                             "container-query.component.ts | src/app/interface/components/layout/container-query/container-query.component.ts | 1108 bytes | 2025-08-18T14:05:59.710Z",
                             "index.ts | src/app/interface/components/layout/container-query/index.ts | 206 bytes | 2025-08-18T14:05:59.712Z"
                           ]
                         },
                         {
-                          "name": "footer",
-                          "type": "directory",
-                          "path": "src/app/interface/components/layout/footer",
+                          "info": "footer/ | src/app/interface/components/layout/footer | directory",
                           "children": [
                             "footer.component.scss | src/app/interface/components/layout/footer/footer.component.scss | 0 bytes | 2025-08-18T14:05:59.712Z",
                             "footer.component.ts | src/app/interface/components/layout/footer/footer.component.ts | 1196 bytes | 2025-08-18T14:05:59.713Z",
@@ -1318,9 +1012,7 @@
                           ]
                         },
                         {
-                          "name": "header",
-                          "type": "directory",
-                          "path": "src/app/interface/components/layout/header",
+                          "info": "header/ | src/app/interface/components/layout/header | directory",
                           "children": [
                             "header.component.scss | src/app/interface/components/layout/header/header.component.scss | 0 bytes | 2025-08-18T14:05:59.714Z",
                             "header.component.ts | src/app/interface/components/layout/header/header.component.ts | 1196 bytes | 2025-08-18T14:05:59.715Z",
@@ -1328,9 +1020,7 @@
                           ]
                         },
                         {
-                          "name": "layout-flex",
-                          "type": "directory",
-                          "path": "src/app/interface/components/layout/layout-flex",
+                          "info": "layout-flex/ | src/app/interface/components/layout/layout-flex | directory",
                           "children": [
                             "index.ts | src/app/interface/components/layout/layout-flex/index.ts | 198 bytes | 2025-08-18T14:05:59.716Z",
                             "layout-flex.component.scss | src/app/interface/components/layout/layout-flex/layout-flex.component.scss | 320 bytes | 2025-08-18T14:05:59.716Z",
@@ -1338,18 +1028,14 @@
                           ]
                         },
                         {
-                          "name": "layout-grid",
-                          "type": "directory",
-                          "path": "src/app/interface/components/layout/layout-grid",
+                          "info": "layout-grid/ | src/app/interface/components/layout/layout-grid | directory",
                           "children": [
                             "index.ts | src/app/interface/components/layout/layout-grid/index.ts | 628 bytes | 2025-08-18T14:05:59.717Z",
                             "layout-grid.component.ts | src/app/interface/components/layout/layout-grid/layout-grid.component.ts | 1477 bytes | 2025-08-18T14:05:59.718Z"
                           ]
                         },
                         {
-                          "name": "layout-utils",
-                          "type": "directory",
-                          "path": "src/app/interface/components/layout/layout-utils",
+                          "info": "layout-utils/ | src/app/interface/components/layout/layout-utils | directory",
                           "children": [
                             "index.ts | src/app/interface/components/layout/layout-utils/index.ts | 200 bytes | 2025-08-18T14:05:59.718Z",
                             "layout-utils.component.scss | src/app/interface/components/layout/layout-utils/layout-utils.component.scss | 173 bytes | 2025-08-18T14:05:59.719Z",
@@ -1357,9 +1043,7 @@
                           ]
                         },
                         {
-                          "name": "responsive-container",
-                          "type": "directory",
-                          "path": "src/app/interface/components/layout/responsive-container",
+                          "info": "responsive-container/ | src/app/interface/components/layout/responsive-container | directory",
                           "children": [
                             "index.ts | src/app/interface/components/layout/responsive-container/index.ts | 216 bytes | 2025-08-18T14:05:59.720Z",
                             "responsive-container.component.scss | src/app/interface/components/layout/responsive-container/responsive-container.component.scss | 324 bytes | 2025-08-18T14:05:59.720Z",
@@ -1367,9 +1051,7 @@
                           ]
                         },
                         {
-                          "name": "sidebar",
-                          "type": "directory",
-                          "path": "src/app/interface/components/layout/sidebar",
+                          "info": "sidebar/ | src/app/interface/components/layout/sidebar | directory",
                           "children": [
                             "index.ts | src/app/interface/components/layout/sidebar/index.ts | 243 bytes | 2025-08-18T14:05:59.721Z",
                             "sidebar.component.scss | src/app/interface/components/layout/sidebar/sidebar.component.scss | 3879 bytes | 2025-08-18T14:05:59.721Z",
@@ -1380,23 +1062,17 @@
                       ]
                     },
                     {
-                      "name": "widgets",
-                      "type": "directory",
-                      "path": "src/app/interface/components/widgets",
+                      "info": "widgets/ | src/app/interface/components/widgets | directory",
                       "children": [
                         {
-                          "name": "data-table",
-                          "type": "directory",
-                          "path": "src/app/interface/components/widgets/data-table",
+                          "info": "data-table/ | src/app/interface/components/widgets/data-table | directory",
                           "children": [
                             "data-table.component.ts | src/app/interface/components/widgets/data-table/data-table.component.ts | 1996 bytes | 2025-08-18T14:05:59.722Z",
                             "index.ts | src/app/interface/components/widgets/data-table/index.ts | 669 bytes | 2025-08-18T14:05:59.723Z"
                           ]
                         },
                         {
-                          "name": "user-card",
-                          "type": "directory",
-                          "path": "src/app/interface/components/widgets/user-card",
+                          "info": "user-card/ | src/app/interface/components/widgets/user-card | directory",
                           "children": [
                             "index.ts | src/app/interface/components/widgets/user-card/index.ts | 666 bytes | 2025-08-18T14:05:59.724Z",
                             "user-card.component.ts | src/app/interface/components/widgets/user-card/user-card.component.ts | 4833 bytes | 2025-08-19T09:10:07.451Z"
@@ -1409,56 +1085,42 @@
                   ]
                 },
                 {
-                  "name": "controllers",
-                  "type": "directory",
-                  "path": "src/app/interface/controllers",
+                  "info": "controllers/ | src/app/interface/controllers | directory",
                   "children": [
                     "index.ts | src/app/interface/controllers/index.ts | 1029 bytes | 2025-08-18T14:05:59.725Z"
                   ]
                 },
                 {
-                  "name": "directives",
-                  "type": "directory",
-                  "path": "src/app/interface/directives",
+                  "info": "directives/ | src/app/interface/directives | directory",
                   "children": [
                     "index.ts | src/app/interface/directives/index.ts | 979 bytes | 2025-08-18T14:05:59.726Z"
                   ]
                 },
                 {
-                  "name": "exceptions",
-                  "type": "directory",
-                  "path": "src/app/interface/exceptions",
+                  "info": "exceptions/ | src/app/interface/exceptions | directory",
                   "children": [
                     "index.ts | src/app/interface/exceptions/index.ts | 1116 bytes | 2025-08-18T14:05:59.726Z"
                   ]
                 },
                 {
-                  "name": "layouts",
-                  "type": "directory",
-                  "path": "src/app/interface/layouts",
+                  "info": "layouts/ | src/app/interface/layouts | directory",
                   "children": [
                     {
-                      "name": "blank",
-                      "type": "directory",
-                      "path": "src/app/interface/layouts/blank",
+                      "info": "blank/ | src/app/interface/layouts/blank | directory",
                       "children": [
                         "blank.layout.ts | src/app/interface/layouts/blank/blank.layout.ts | 1441 bytes | 2025-08-18T14:05:59.729Z",
                         "index.ts | src/app/interface/layouts/blank/index.ts | 666 bytes | 2025-08-18T14:05:59.730Z"
                       ]
                     },
                     {
-                      "name": "main-app",
-                      "type": "directory",
-                      "path": "src/app/interface/layouts/main-app",
+                      "info": "main-app/ | src/app/interface/layouts/main-app | directory",
                       "children": [
                         "index.ts | src/app/interface/layouts/main-app/index.ts | 244 bytes | 2025-08-18T14:05:59.730Z",
                         "main-app.layout.ts | src/app/interface/layouts/main-app/main-app.layout.ts | 2787 bytes | 2025-08-19T09:13:38.666Z"
                       ]
                     },
                     {
-                      "name": "passport",
-                      "type": "directory",
-                      "path": "src/app/interface/layouts/passport",
+                      "info": "passport/ | src/app/interface/layouts/passport | directory",
                       "children": [
                         "index.ts | src/app/interface/layouts/passport/index.ts | 630 bytes | 2025-08-18T14:05:59.732Z",
                         "passport.layout.ts | src/app/interface/layouts/passport/passport.layout.ts | 2462 bytes | 2025-08-18T14:05:59.732Z"
@@ -1468,37 +1130,27 @@
                   ]
                 },
                 {
-                  "name": "pages",
-                  "type": "directory",
-                  "path": "src/app/interface/pages",
+                  "info": "pages/ | src/app/interface/pages | directory",
                   "children": [
                     {
-                      "name": "analytics",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/analytics",
+                      "info": "analytics/ | src/app/interface/pages/analytics | directory",
                       "children": [
                         {
-                          "name": "costs",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/analytics/costs",
+                          "info": "costs/ | src/app/interface/pages/analytics/costs | directory",
                           "children": [
                             "costs.page.ts | src/app/interface/pages/analytics/costs/costs.page.ts | 432 bytes | 2025-08-18T14:05:59.734Z",
                             "index.ts | src/app/interface/pages/analytics/costs/index.ts | 35 bytes | 2025-08-18T14:05:59.734Z"
                           ]
                         },
                         {
-                          "name": "performance",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/analytics/performance",
+                          "info": "performance/ | src/app/interface/pages/analytics/performance | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/analytics/performance/index.ts | 41 bytes | 2025-08-18T14:05:59.735Z",
                             "performance.page.ts | src/app/interface/pages/analytics/performance/performance.page.ts | 450 bytes | 2025-08-18T14:05:59.735Z"
                           ]
                         },
                         {
-                          "name": "reports",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/analytics/reports",
+                          "info": "reports/ | src/app/interface/pages/analytics/reports | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/analytics/reports/index.ts | 37 bytes | 2025-08-18T14:05:59.736Z",
                             "reports.page.ts | src/app/interface/pages/analytics/reports/reports.page.ts | 438 bytes | 2025-08-18T14:05:59.736Z"
@@ -1507,41 +1159,31 @@
                       ]
                     },
                     {
-                      "name": "assignment",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/assignment",
+                      "info": "assignment/ | src/app/interface/pages/assignment | directory",
                       "children": [
                         {
-                          "name": "documents",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/assignment/documents",
+                          "info": "documents/ | src/app/interface/pages/assignment/documents | directory",
                           "children": [
                             "documents.page.ts | src/app/interface/pages/assignment/documents/documents.page.ts | 491 bytes | 2025-08-18T14:05:59.738Z",
                             "index.ts | src/app/interface/pages/assignment/documents/index.ts | 39 bytes | 2025-08-18T14:05:59.739Z"
                           ]
                         },
                         {
-                          "name": "equipment",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/assignment/equipment",
+                          "info": "equipment/ | src/app/interface/pages/assignment/equipment | directory",
                           "children": [
                             "equipment.page.ts | src/app/interface/pages/assignment/equipment/equipment.page.ts | 491 bytes | 2025-08-18T14:05:59.739Z",
                             "index.ts | src/app/interface/pages/assignment/equipment/index.ts | 39 bytes | 2025-08-18T14:05:59.740Z"
                           ]
                         },
                         {
-                          "name": "inventory",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/assignment/inventory",
+                          "info": "inventory/ | src/app/interface/pages/assignment/inventory | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/assignment/inventory/index.ts | 39 bytes | 2025-08-18T14:05:59.740Z",
                             "inventory.page.ts | src/app/interface/pages/assignment/inventory/inventory.page.ts | 491 bytes | 2025-08-18T14:05:59.741Z"
                           ]
                         },
                         {
-                          "name": "quality-control",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/assignment/quality-control",
+                          "info": "quality-control/ | src/app/interface/pages/assignment/quality-control | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/assignment/quality-control/index.ts | 45 bytes | 2025-08-18T14:05:59.742Z",
                             "quality-control.page.ts | src/app/interface/pages/assignment/quality-control/quality-control.page.ts | 508 bytes | 2025-08-18T14:05:59.742Z"
@@ -1550,23 +1192,17 @@
                       ]
                     },
                     {
-                      "name": "auth",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/auth",
+                      "info": "auth/ | src/app/interface/pages/auth | directory",
                       "children": [
                         {
-                          "name": "login",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/auth/login",
+                          "info": "login/ | src/app/interface/pages/auth/login | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/auth/login/index.ts | 617 bytes | 2025-08-18T14:05:59.743Z",
                             "login.page.ts | src/app/interface/pages/auth/login/login.page.ts | 4487 bytes | 2025-08-19T18:52:51.865Z"
                           ]
                         },
                         {
-                          "name": "register",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/auth/register",
+                          "info": "register/ | src/app/interface/pages/auth/register | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/auth/register/index.ts | 624 bytes | 2025-08-18T14:05:59.744Z",
                             "register.page.ts | src/app/interface/pages/auth/register/register.page.ts | 5869 bytes | 2025-08-18T14:05:59.744Z"
@@ -1576,77 +1212,59 @@
                       ]
                     },
                     {
-                      "name": "blank",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/blank",
+                      "info": "blank/ | src/app/interface/pages/blank | directory",
                       "children": [
                         "blank.page.ts | src/app/interface/pages/blank/blank.page.ts | 5563 bytes | 2025-08-18T14:05:59.745Z",
                         "index.ts | src/app/interface/pages/blank/index.ts | 660 bytes | 2025-08-18T14:05:59.746Z"
                       ]
                     },
                     {
-                      "name": "construction",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/construction",
+                      "info": "construction/ | src/app/interface/pages/construction | directory",
                       "children": [
                         {
-                          "name": "calendars",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/construction/calendars",
+                          "info": "calendars/ | src/app/interface/pages/construction/calendars | directory",
                           "children": [
                             "calendars.page.ts | src/app/interface/pages/construction/calendars/calendars.page.ts | 766 bytes | 2025-08-18T14:05:59.747Z",
                             "index.ts | src/app/interface/pages/construction/calendars/index.ts | 39 bytes | 2025-08-18T14:05:59.747Z"
                           ]
                         },
                         {
-                          "name": "construction-reports",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/construction/construction-reports",
+                          "info": "construction-reports/ | src/app/interface/pages/construction/construction-reports | directory",
                           "children": [
                             "construction-reports.page.ts | src/app/interface/pages/construction/construction-reports/construction-reports.page.ts | 523 bytes | 2025-08-18T14:05:59.748Z",
                             "index.ts | src/app/interface/pages/construction/construction-reports/index.ts | 50 bytes | 2025-08-18T14:05:59.748Z"
                           ]
                         },
                         {
-                          "name": "daily-reports",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/construction/daily-reports",
+                          "info": "daily-reports/ | src/app/interface/pages/construction/daily-reports | directory",
                           "children": [
                             "daily-reports.page.ts | src/app/interface/pages/construction/daily-reports/daily-reports.page.ts | 502 bytes | 2025-08-18T14:05:59.749Z",
                             "index.ts | src/app/interface/pages/construction/daily-reports/index.ts | 43 bytes | 2025-08-18T14:05:59.749Z"
                           ]
                         },
                         {
-                          "name": "log",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/construction/log",
+                          "info": "log/ | src/app/interface/pages/construction/log | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/construction/log/index.ts | 33 bytes | 2025-08-18T14:05:59.749Z",
                             "log.page.ts | src/app/interface/pages/construction/log/log.page.ts | 467 bytes | 2025-08-18T14:05:59.749Z"
                           ]
                         },
                         {
-                          "name": "schedules",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/construction/schedules",
+                          "info": "schedules/ | src/app/interface/pages/construction/schedules | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/construction/schedules/index.ts | 39 bytes | 2025-08-18T14:05:59.750Z",
                             "schedules.page.ts | src/app/interface/pages/construction/schedules/schedules.page.ts | 491 bytes | 2025-08-18T14:05:59.750Z"
                           ]
                         },
                         {
-                          "name": "task",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/construction/task",
+                          "info": "task/ | src/app/interface/pages/construction/task | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/construction/task/index.ts | 34 bytes | 2025-08-18T14:05:59.750Z",
                             "task.page.ts | src/app/interface/pages/construction/task/task.page.ts | 476 bytes | 2025-08-18T14:05:59.751Z"
                           ]
                         },
                         {
-                          "name": "weather-reports",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/construction/weather-reports",
+                          "info": "weather-reports/ | src/app/interface/pages/construction/weather-reports | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/construction/weather-reports/index.ts | 45 bytes | 2025-08-18T14:05:59.751Z",
                             "weather-reports.page.ts | src/app/interface/pages/construction/weather-reports/weather-reports.page.ts | 508 bytes | 2025-08-18T14:05:59.751Z"
@@ -1655,59 +1273,45 @@
                       ]
                     },
                     {
-                      "name": "contracts",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/contracts",
+                      "info": "contracts/ | src/app/interface/pages/contracts | directory",
                       "children": [
                         "contracts.page.ts | src/app/interface/pages/contracts/contracts.page.ts | 2863 bytes | 2025-08-19T17:41:48.978Z",
                         "index.ts | src/app/interface/pages/contracts/index.ts | 64 bytes | 2025-08-19T17:41:17.973Z"
                       ]
                     },
                     {
-                      "name": "dashboard",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/dashboard",
+                      "info": "dashboard/ | src/app/interface/pages/dashboard | directory",
                       "children": [
                         "dashboard.page.ts | src/app/interface/pages/dashboard/dashboard.page.ts | 3413 bytes | 2025-08-18T14:05:59.752Z",
                         "index.ts | src/app/interface/pages/dashboard/index.ts | 709 bytes | 2025-08-19T17:41:48.978Z"
                       ]
                     },
                     {
-                      "name": "finance",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/finance",
+                      "info": "finance/ | src/app/interface/pages/finance | directory",
                       "children": [
                         {
-                          "name": "budget",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/finance/budget",
+                          "info": "budget/ | src/app/interface/pages/finance/budget | directory",
                           "children": [
                             "budget.page.ts | src/app/interface/pages/finance/budget/budget.page.ts | 406 bytes | 2025-08-18T14:05:59.753Z",
                             "index.ts | src/app/interface/pages/finance/budget/index.ts | 36 bytes | 2025-08-18T14:05:59.753Z"
                           ]
                         },
                         {
-                          "name": "expenses",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/finance/expenses",
+                          "info": "expenses/ | src/app/interface/pages/finance/expenses | directory",
                           "children": [
                             "expenses.page.ts | src/app/interface/pages/finance/expenses/expenses.page.ts | 412 bytes | 2025-08-18T14:05:59.753Z",
                             "index.ts | src/app/interface/pages/finance/expenses/index.ts | 38 bytes | 2025-08-18T14:05:59.753Z"
                           ]
                         },
                         {
-                          "name": "financial-reports",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/finance/financial-reports",
+                          "info": "financial-reports/ | src/app/interface/pages/finance/financial-reports | directory",
                           "children": [
                             "financial-reports.page.ts | src/app/interface/pages/finance/financial-reports/financial-reports.page.ts | 440 bytes | 2025-08-18T14:05:59.753Z",
                             "index.ts | src/app/interface/pages/finance/financial-reports/index.ts | 47 bytes | 2025-08-18T14:05:59.753Z"
                           ]
                         },
                         {
-                          "name": "payments",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/finance/payments",
+                          "info": "payments/ | src/app/interface/pages/finance/payments | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/finance/payments/index.ts | 38 bytes | 2025-08-18T14:05:59.753Z",
                             "payments.page.ts | src/app/interface/pages/finance/payments/payments.page.ts | 412 bytes | 2025-08-18T14:05:59.753Z"
@@ -1716,64 +1320,48 @@
                       ]
                     },
                     {
-                      "name": "people",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/people",
+                      "info": "people/ | src/app/interface/pages/people | directory",
                       "children": [
                         {
-                          "name": "attendance",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/people/attendance",
+                          "info": "attendance/ | src/app/interface/pages/people/attendance | directory",
                           "children": [
                             "attendance.page.ts | src/app/interface/pages/people/attendance/attendance.page.ts | 494 bytes | 2025-08-18T14:05:59.753Z",
                             "index.ts | src/app/interface/pages/people/attendance/index.ts | 40 bytes | 2025-08-18T14:05:59.753Z"
                           ]
                         },
                         {
-                          "name": "partners",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/people/partners",
+                          "info": "partners/ | src/app/interface/pages/people/partners | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/people/partners/index.ts | 38 bytes | 2025-08-18T14:05:59.753Z",
                             "partners.page.ts | src/app/interface/pages/people/partners/partners.page.ts | 488 bytes | 2025-08-19T18:52:51.865Z"
                           ]
                         },
                         {
-                          "name": "personnel",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/people/personnel",
+                          "info": "personnel/ | src/app/interface/pages/people/personnel | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/people/personnel/index.ts | 39 bytes | 2025-08-18T14:05:59.753Z",
                             "personnel.page.ts | src/app/interface/pages/people/personnel/personnel.page.ts | 491 bytes | 2025-08-18T14:05:59.753Z"
                           ]
                         },
                         {
-                          "name": "state-machine",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/people/state-machine",
+                          "info": "state-machine/ | src/app/interface/pages/people/state-machine | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/people/state-machine/index.ts | 43 bytes | 2025-08-18T14:05:59.753Z",
                             "state-machine.page.ts | src/app/interface/pages/people/state-machine/state-machine.page.ts | 510 bytes | 2025-08-18T14:05:59.753Z"
                           ]
                         },
                         {
-                          "name": "user",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/people/user",
+                          "info": "user/ | src/app/interface/pages/people/user | directory",
                           "children": [
                             {
-                              "name": "user-detail",
-                              "type": "directory",
-                              "path": "src/app/interface/pages/people/user/user-detail",
+                              "info": "user-detail/ | src/app/interface/pages/people/user/user-detail | directory",
                               "children": [
                                 "index.ts | src/app/interface/pages/people/user/user-detail/index.ts | 669 bytes | 2025-08-18T14:05:59.763Z",
                                 "user-detail.page.ts | src/app/interface/pages/people/user/user-detail/user-detail.page.ts | 5365 bytes | 2025-08-18T14:05:59.763Z"
                               ]
                             },
                             {
-                              "name": "user-list",
-                              "type": "directory",
-                              "path": "src/app/interface/pages/people/user/user-list",
+                              "info": "user-list/ | src/app/interface/pages/people/user/user-list | directory",
                               "children": [
                                 "index.ts | src/app/interface/pages/people/user/user-list/index.ts | 665 bytes | 2025-08-18T14:05:59.763Z",
                                 "user-list.page.ts | src/app/interface/pages/people/user/user-list/user-list.page.ts | 4165 bytes | 2025-08-18T14:05:59.763Z"
@@ -1785,63 +1373,47 @@
                       ]
                     },
                     {
-                      "name": "projects",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/projects",
+                      "info": "projects/ | src/app/interface/pages/projects | directory",
                       "children": [
                         "index.ts | src/app/interface/pages/projects/index.ts | 53 bytes | 2025-08-19T17:41:14.470Z",
                         "projects.page.ts | src/app/interface/pages/projects/projects.page.ts | 5393 bytes | 2025-08-19T17:41:48.978Z"
                       ]
                     },
                     {
-                      "name": "public",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/public",
+                      "info": "public/ | src/app/interface/pages/public | directory",
                       "children": [
                         {
-                          "name": "about",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/public/about",
+                          "info": "about/ | src/app/interface/pages/public/about | directory",
                           "children": [
                             "about.page.ts | src/app/interface/pages/public/about/about.page.ts | 3248 bytes | 2025-08-18T14:05:59.767Z"
                           ]
                         },
                         {
-                          "name": "blog",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/public/blog",
+                          "info": "blog/ | src/app/interface/pages/public/blog | directory",
                           "children": [
                             "blog.page.ts | src/app/interface/pages/public/blog/blog.page.ts | 3831 bytes | 2025-08-18T14:05:59.767Z"
                           ]
                         },
                         {
-                          "name": "cases",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/public/cases",
+                          "info": "cases/ | src/app/interface/pages/public/cases | directory",
                           "children": [
                             "cases.page.ts | src/app/interface/pages/public/cases/cases.page.ts | 3877 bytes | 2025-08-18T14:05:59.767Z"
                           ]
                         },
                         {
-                          "name": "contact",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/public/contact",
+                          "info": "contact/ | src/app/interface/pages/public/contact | directory",
                           "children": [
                             "contact.page.ts | src/app/interface/pages/public/contact/contact.page.ts | 4090 bytes | 2025-08-18T14:05:59.767Z"
                           ]
                         },
                         {
-                          "name": "jobs",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/public/jobs",
+                          "info": "jobs/ | src/app/interface/pages/public/jobs | directory",
                           "children": [
                             "jobs.page.ts | src/app/interface/pages/public/jobs/jobs.page.ts | 5590 bytes | 2025-08-18T14:05:59.769Z"
                           ]
                         },
                         {
-                          "name": "legal",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/public/legal",
+                          "info": "legal/ | src/app/interface/pages/public/legal | directory",
                           "children": [
                             "legal.page.ts | src/app/interface/pages/public/legal/legal.page.ts | 4783 bytes | 2025-08-18T14:05:59.769Z"
                           ]
@@ -1851,41 +1423,31 @@
                       ]
                     },
                     {
-                      "name": "security",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/security",
+                      "info": "security/ | src/app/interface/pages/security | directory",
                       "children": [
                         {
-                          "name": "incident-reports",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/security/incident-reports",
+                          "info": "incident-reports/ | src/app/interface/pages/security/incident-reports | directory",
                           "children": [
                             "incident-reports.page.ts | src/app/interface/pages/security/incident-reports/incident-reports.page.ts | 511 bytes | 2025-08-18T14:05:59.771Z",
                             "index.ts | src/app/interface/pages/security/incident-reports/index.ts | 46 bytes | 2025-08-18T14:05:59.771Z"
                           ]
                         },
                         {
-                          "name": "monitoring",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/security/monitoring",
+                          "info": "monitoring/ | src/app/interface/pages/security/monitoring | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/security/monitoring/index.ts | 619 bytes | 2025-08-18T14:05:59.771Z",
                             "monitoring.page.ts | src/app/interface/pages/security/monitoring/monitoring.page.ts | 1412 bytes | 2025-08-18T14:05:59.771Z"
                           ]
                         },
                         {
-                          "name": "safety",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/security/safety",
+                          "info": "safety/ | src/app/interface/pages/security/safety | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/security/safety/index.ts | 36 bytes | 2025-08-18T14:05:59.771Z",
                             "safety.page.ts | src/app/interface/pages/security/safety/safety.page.ts | 482 bytes | 2025-08-18T14:05:59.773Z"
                           ]
                         },
                         {
-                          "name": "security",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/security/security",
+                          "info": "security/ | src/app/interface/pages/security/security | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/security/security/index.ts | 587 bytes | 2025-08-18T14:05:59.773Z",
                             "security.page.ts | src/app/interface/pages/security/security/security.page.ts | 1294 bytes | 2025-08-18T14:05:59.773Z"
@@ -1894,41 +1456,31 @@
                       ]
                     },
                     {
-                      "name": "settings",
-                      "type": "directory",
-                      "path": "src/app/interface/pages/settings",
+                      "info": "settings/ | src/app/interface/pages/settings | directory",
                       "children": [
                         {
-                          "name": "backup",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/settings/backup",
+                          "info": "backup/ | src/app/interface/pages/settings/backup | directory",
                           "children": [
                             "backup.page.ts | src/app/interface/pages/settings/backup/backup.page.ts | 432 bytes | 2025-08-18T14:05:59.773Z",
                             "index.ts | src/app/interface/pages/settings/backup/index.ts | 36 bytes | 2025-08-18T14:05:59.773Z"
                           ]
                         },
                         {
-                          "name": "notifications",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/settings/notifications",
+                          "info": "notifications/ | src/app/interface/pages/settings/notifications | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/settings/notifications/index.ts | 43 bytes | 2025-08-18T14:05:59.773Z",
                             "notifications.page.ts | src/app/interface/pages/settings/notifications/notifications.page.ts | 453 bytes | 2025-08-18T14:05:59.773Z"
                           ]
                         },
                         {
-                          "name": "permissions",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/settings/permissions",
+                          "info": "permissions/ | src/app/interface/pages/settings/permissions | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/settings/permissions/index.ts | 41 bytes | 2025-08-18T14:05:59.778Z",
                             "permissions.page.ts | src/app/interface/pages/settings/permissions/permissions.page.ts | 447 bytes | 2025-08-18T14:05:59.779Z"
                           ]
                         },
                         {
-                          "name": "system",
-                          "type": "directory",
-                          "path": "src/app/interface/pages/settings/system",
+                          "info": "system/ | src/app/interface/pages/settings/system | directory",
                           "children": [
                             "index.ts | src/app/interface/pages/settings/system/index.ts | 36 bytes | 2025-08-18T14:05:59.779Z",
                             "system.page.ts | src/app/interface/pages/settings/system/system.page.ts | 432 bytes | 2025-08-18T14:05:59.781Z"
@@ -1940,17 +1492,13 @@
                   ]
                 },
                 {
-                  "name": "pipes",
-                  "type": "directory",
-                  "path": "src/app/interface/pipes",
+                  "info": "pipes/ | src/app/interface/pipes | directory",
                   "children": [
                     "index.ts | src/app/interface/pipes/index.ts | 1029 bytes | 2025-08-18T14:05:59.781Z"
                   ]
                 },
                 {
-                  "name": "resolvers",
-                  "type": "directory",
-                  "path": "src/app/interface/resolvers",
+                  "info": "resolvers/ | src/app/interface/resolvers | directory",
                   "children": [
                     "index.ts | src/app/interface/resolvers/index.ts | 1003 bytes | 2025-08-18T14:05:59.783Z"
                   ]
@@ -1959,27 +1507,19 @@
               ]
             },
             {
-              "name": "security",
-              "type": "directory",
-              "path": "src/app/security",
+              "info": "security/ | src/app/security | directory",
               "children": [
                 {
-                  "name": "audit",
-                  "type": "directory",
-                  "path": "src/app/security/audit",
+                  "info": "audit/ | src/app/security/audit | directory",
                   "children": [
                     "index.ts | src/app/security/audit/index.ts | 1136 bytes | 2025-08-18T14:05:59.783Z"
                   ]
                 },
                 {
-                  "name": "authentication",
-                  "type": "directory",
-                  "path": "src/app/security/authentication",
+                  "info": "authentication/ | src/app/security/authentication | directory",
                   "children": [
                     {
-                      "name": "services",
-                      "type": "directory",
-                      "path": "src/app/security/authentication/services",
+                      "info": "services/ | src/app/security/authentication/services | directory",
                       "children": [
                         "firebase-auth.service.ts | src/app/security/authentication/services/firebase-auth.service.ts | 2407 bytes | 2025-08-19T09:33:00.236Z",
                         "index.ts | src/app/security/authentication/services/index.ts | 639 bytes | 2025-08-18T14:05:59.788Z"
@@ -1989,14 +1529,10 @@
                   ]
                 },
                 {
-                  "name": "authorization",
-                  "type": "directory",
-                  "path": "src/app/security/authorization",
+                  "info": "authorization/ | src/app/security/authorization | directory",
                   "children": [
                     {
-                      "name": "guards",
-                      "type": "directory",
-                      "path": "src/app/security/authorization/guards",
+                      "info": "guards/ | src/app/security/authorization/guards | directory",
                       "children": [
                         "auth.guard.ts | src/app/security/authorization/guards/auth.guard.ts | 1036 bytes | 2025-08-19T18:52:51.865Z",
                         "index.ts | src/app/security/authorization/guards/index.ts | 732 bytes | 2025-08-18T14:05:59.788Z",
@@ -2008,41 +1544,31 @@
                   ]
                 },
                 {
-                  "name": "encryption",
-                  "type": "directory",
-                  "path": "src/app/security/encryption",
+                  "info": "encryption/ | src/app/security/encryption | directory",
                   "children": [
                     "index.ts | src/app/security/encryption/index.ts | 1133 bytes | 2025-08-18T14:05:59.788Z"
                   ]
                 },
                 {
-                  "name": "exceptions",
-                  "type": "directory",
-                  "path": "src/app/security/exceptions",
+                  "info": "exceptions/ | src/app/security/exceptions | directory",
                   "children": [
                     "index.ts | src/app/security/exceptions/index.ts | 1163 bytes | 2025-08-18T14:05:59.788Z"
                   ]
                 },
                 {
-                  "name": "jwt",
-                  "type": "directory",
-                  "path": "src/app/security/jwt",
+                  "info": "jwt/ | src/app/security/jwt | directory",
                   "children": [
                     "index.ts | src/app/security/jwt/index.ts | 1138 bytes | 2025-08-18T14:05:59.788Z"
                   ]
                 },
                 {
-                  "name": "rate-limiting",
-                  "type": "directory",
-                  "path": "src/app/security/rate-limiting",
+                  "info": "rate-limiting/ | src/app/security/rate-limiting | directory",
                   "children": [
                     "index.ts | src/app/security/rate-limiting/index.ts | 1121 bytes | 2025-08-18T14:05:59.788Z"
                   ]
                 },
                 {
-                  "name": "validation",
-                  "type": "directory",
-                  "path": "src/app/security/validation",
+                  "info": "validation/ | src/app/security/validation | directory",
                   "children": [
                     "index.ts | src/app/security/validation/index.ts | 1135 bytes | 2025-08-18T14:05:59.788Z"
                   ]
@@ -2051,27 +1577,19 @@
               ]
             },
             {
-              "name": "shared",
-              "type": "directory",
-              "path": "src/app/shared",
+              "info": "shared/ | src/app/shared | directory",
               "children": [
                 {
-                  "name": "base",
-                  "type": "directory",
-                  "path": "src/app/shared/base",
+                  "info": "base/ | src/app/shared/base | directory",
                   "children": [
                     {
-                      "name": "aggregates",
-                      "type": "directory",
-                      "path": "src/app/shared/base/aggregates",
+                      "info": "aggregates/ | src/app/shared/base/aggregates | directory",
                       "children": [
                         "base-aggregate.ts | src/app/shared/base/aggregates/base-aggregate.ts | 2669 bytes | 2025-08-19T16:50:42.702Z"
                       ]
                     },
                     {
-                      "name": "entities",
-                      "type": "directory",
-                      "path": "src/app/shared/base/entities",
+                      "info": "entities/ | src/app/shared/base/entities | directory",
                       "children": [
                         "base.entity.ts | src/app/shared/base/entities/base.entity.ts | 1508 bytes | 2025-08-18T14:05:59.795Z",
                         "index.ts | src/app/shared/base/entities/index.ts | 1164 bytes | 2025-08-18T14:05:59.796Z",
@@ -2079,17 +1597,13 @@
                       ]
                     },
                     {
-                      "name": "result",
-                      "type": "directory",
-                      "path": "src/app/shared/base/result",
+                      "info": "result/ | src/app/shared/base/result | directory",
                       "children": [
                         "result.ts | src/app/shared/base/result/result.ts | 3764 bytes | 2025-08-19T17:07:14.125Z"
                       ]
                     },
                     {
-                      "name": "value-objects",
-                      "type": "directory",
-                      "path": "src/app/shared/base/value-objects",
+                      "info": "value-objects/ | src/app/shared/base/value-objects | directory",
                       "children": [
                         "base-value-object.ts | src/app/shared/base/value-objects/base-value-object.ts | 3444 bytes | 2025-08-19T16:57:27.686Z"
                       ]
@@ -2098,14 +1612,10 @@
                   ]
                 },
                 {
-                  "name": "components",
-                  "type": "directory",
-                  "path": "src/app/shared/components",
+                  "info": "components/ | src/app/shared/components | directory",
                   "children": [
                     {
-                      "name": "material",
-                      "type": "directory",
-                      "path": "src/app/shared/components/material",
+                      "info": "material/ | src/app/shared/components/material | directory",
                       "children": [
                         "cdk-accordion-item.component.ts | src/app/shared/components/material/cdk-accordion-item.component.ts | 947 bytes | 2025-08-18T14:05:59.796Z",
                         "cdk-accordion.component.ts | src/app/shared/components/material/cdk-accordion.component.ts | 884 bytes | 2025-08-18T14:05:59.796Z",
@@ -2181,31 +1691,23 @@
                   ]
                 },
                 {
-                  "name": "constants",
-                  "type": "directory",
-                  "path": "src/app/shared/constants",
+                  "info": "constants/ | src/app/shared/constants | directory",
                   "children": [
                     {
-                      "name": "layout",
-                      "type": "directory",
-                      "path": "src/app/shared/constants/layout",
+                      "info": "layout/ | src/app/shared/constants/layout | directory",
                       "children": [
                         "index.ts | src/app/shared/constants/layout/index.ts | 614 bytes | 2025-08-18T14:05:59.837Z",
                         "layout.constants.ts | src/app/shared/constants/layout/layout.constants.ts | 1062 bytes | 2025-08-18T14:05:59.837Z"
                       ]
                     },
                     {
-                      "name": "sidebar",
-                      "type": "directory",
-                      "path": "src/app/shared/constants/sidebar",
+                      "info": "sidebar/ | src/app/shared/constants/sidebar | directory",
                       "children": [
                         "sidebar.constants.ts | src/app/shared/constants/sidebar/sidebar.constants.ts | 966 bytes | 2025-08-19T17:23:45.148Z"
                       ]
                     },
                     {
-                      "name": "tab",
-                      "type": "directory",
-                      "path": "src/app/shared/constants/tab",
+                      "info": "tab/ | src/app/shared/constants/tab | directory",
                       "children": [
                         "index.ts | src/app/shared/constants/tab/index.ts | 606 bytes | 2025-08-18T14:05:59.837Z",
                         "tab.constants.ts | src/app/shared/constants/tab/tab.constants.ts | 1124 bytes | 2025-08-18T14:05:59.837Z"
@@ -2215,30 +1717,22 @@
                   ]
                 },
                 {
-                  "name": "decorators",
-                  "type": "directory",
-                  "path": "src/app/shared/decorators",
+                  "info": "decorators/ | src/app/shared/decorators | directory",
                   "children": [
                     "index.ts | src/app/shared/decorators/index.ts | 1055 bytes | 2025-08-18T14:05:59.837Z"
                   ]
                 },
                 {
-                  "name": "directives",
-                  "type": "directory",
-                  "path": "src/app/shared/directives",
+                  "info": "directives/ | src/app/shared/directives | directory",
                   "children": [
                     "index.ts | src/app/shared/directives/index.ts | 1007 bytes | 2025-08-18T14:05:59.837Z"
                   ]
                 },
                 {
-                  "name": "enums",
-                  "type": "directory",
-                  "path": "src/app/shared/enums",
+                  "info": "enums/ | src/app/shared/enums | directory",
                   "children": [
                     {
-                      "name": "common",
-                      "type": "directory",
-                      "path": "src/app/shared/enums/common",
+                      "info": "common/ | src/app/shared/enums/common | directory",
                       "children": [
                         "index.ts | src/app/shared/enums/common/index.ts | 4 bytes | 2025-08-18T14:05:59.842Z"
                       ]
@@ -2247,30 +1741,22 @@
                   ]
                 },
                 {
-                  "name": "exceptions",
-                  "type": "directory",
-                  "path": "src/app/shared/exceptions",
+                  "info": "exceptions/ | src/app/shared/exceptions | directory",
                   "children": [
                     "index.ts | src/app/shared/exceptions/index.ts | 1003 bytes | 2025-08-18T14:05:59.845Z"
                   ]
                 },
                 {
-                  "name": "i18n",
-                  "type": "directory",
-                  "path": "src/app/shared/i18n",
+                  "info": "i18n/ | src/app/shared/i18n | directory",
                   "children": [
                     "index.ts | src/app/shared/i18n/index.ts | 1128 bytes | 2025-08-18T14:05:59.848Z"
                   ]
                 },
                 {
-                  "name": "interfaces",
-                  "type": "directory",
-                  "path": "src/app/shared/interfaces",
+                  "info": "interfaces/ | src/app/shared/interfaces | directory",
                   "children": [
                     {
-                      "name": "app-shell",
-                      "type": "directory",
-                      "path": "src/app/shared/interfaces/app-shell",
+                      "info": "app-shell/ | src/app/shared/interfaces/app-shell | directory",
                       "children": [
                         "app-shell.interface.ts | src/app/shared/interfaces/app-shell/app-shell.interface.ts | 1062 bytes | 2025-08-18T14:05:59.850Z",
                         "index.ts | src/app/shared/interfaces/app-shell/index.ts | 799 bytes | 2025-08-18T14:05:59.850Z",
@@ -2278,18 +1764,14 @@
                       ]
                     },
                     {
-                      "name": "layout",
-                      "type": "directory",
-                      "path": "src/app/shared/interfaces/layout",
+                      "info": "layout/ | src/app/shared/interfaces/layout | directory",
                       "children": [
                         "index.ts | src/app/shared/interfaces/layout/index.ts | 597 bytes | 2025-08-18T14:05:59.850Z",
                         "sidebar.interface.ts | src/app/shared/interfaces/layout/sidebar.interface.ts | 1993 bytes | 2025-08-19T08:56:50.438Z"
                       ]
                     },
                     {
-                      "name": "tab",
-                      "type": "directory",
-                      "path": "src/app/shared/interfaces/tab",
+                      "info": "tab/ | src/app/shared/interfaces/tab | directory",
                       "children": [
                         "index.ts | src/app/shared/interfaces/tab/index.ts | 608 bytes | 2025-08-18T14:05:59.850Z",
                         "tab.interface.ts | src/app/shared/interfaces/tab/tab.interface.ts | 1185 bytes | 2025-08-18T14:05:59.850Z"
@@ -2299,30 +1781,22 @@
                   ]
                 },
                 {
-                  "name": "models",
-                  "type": "directory",
-                  "path": "src/app/shared/models",
+                  "info": "models/ | src/app/shared/models | directory",
                   "children": [
                     "index.ts | src/app/shared/models/index.ts | 1025 bytes | 2025-08-18T14:05:59.855Z"
                   ]
                 },
                 {
-                  "name": "pipes",
-                  "type": "directory",
-                  "path": "src/app/shared/pipes",
+                  "info": "pipes/ | src/app/shared/pipes | directory",
                   "children": [
                     "index.ts | src/app/shared/pipes/index.ts | 950 bytes | 2025-08-18T14:05:59.855Z"
                   ]
                 },
                 {
-                  "name": "services",
-                  "type": "directory",
-                  "path": "src/app/shared/services",
+                  "info": "services/ | src/app/shared/services | directory",
                   "children": [
                     {
-                      "name": "material",
-                      "type": "directory",
-                      "path": "src/app/shared/services/material",
+                      "info": "material/ | src/app/shared/services/material | directory",
                       "children": [
                         "index.ts | src/app/shared/services/material/index.ts | 725 bytes | 2025-08-18T14:05:59.857Z",
                         "material-layout.service.ts | src/app/shared/services/material/material-layout.service.ts | 3365 bytes | 2025-08-18T14:05:59.857Z",
@@ -2337,22 +1811,16 @@
                   ]
                 },
                 {
-                  "name": "types",
-                  "type": "directory",
-                  "path": "src/app/shared/types",
+                  "info": "types/ | src/app/shared/types | directory",
                   "children": [
                     "index.ts | src/app/shared/types/index.ts | 1671 bytes | 2025-08-19T17:41:48.949Z"
                   ]
                 },
                 {
-                  "name": "utils",
-                  "type": "directory",
-                  "path": "src/app/shared/utils",
+                  "info": "utils/ | src/app/shared/utils | directory",
                   "children": [
                     {
-                      "name": "tab",
-                      "type": "directory",
-                      "path": "src/app/shared/utils/tab",
+                      "info": "tab/ | src/app/shared/utils/tab | directory",
                       "children": [
                         "index.ts | src/app/shared/utils/tab/index.ts | 637 bytes | 2025-08-18T14:05:59.862Z",
                         "tab.util.ts | src/app/shared/utils/tab/tab.util.ts | 1320 bytes | 2025-08-18T14:05:59.862Z"
@@ -2363,17 +1831,13 @@
                   ]
                 },
                 {
-                  "name": "validators",
-                  "type": "directory",
-                  "path": "src/app/shared/validators",
+                  "info": "validators/ | src/app/shared/validators | directory",
                   "children": [
                     "index.ts | src/app/shared/validators/index.ts | 978 bytes | 2025-08-18T14:05:59.864Z"
                   ]
                 },
                 {
-                  "name": "value-objects",
-                  "type": "directory",
-                  "path": "src/app/shared/value-objects",
+                  "info": "value-objects/ | src/app/shared/value-objects | directory",
                   "children": [
                     "index.ts | src/app/shared/value-objects/index.ts | 950 bytes | 2025-08-19T16:50:42.953Z",
                     "sidebar-state.vo.ts | src/app/shared/value-objects/sidebar-state.vo.ts | 2437 bytes | 2025-08-19T16:50:42.800Z",
@@ -2390,30 +1854,22 @@
           ]
         },
         {
-          "name": "assets",
-          "type": "directory",
-          "path": "src/assets",
+          "info": "assets/ | src/assets | directory",
           "children": [
             {
-              "name": "data",
-              "type": "directory",
-              "path": "src/assets/data",
+              "info": "data/ | src/assets/data | directory",
               "children": [
                 "index.ts | src/assets/data/index.ts | 2715 bytes | 2025-08-18T14:05:59.864Z"
               ]
             },
             {
-              "name": "fonts",
-              "type": "directory",
-              "path": "src/assets/fonts",
+              "info": "fonts/ | src/assets/fonts | directory",
               "children": [
                 "index.ts | src/assets/fonts/index.ts | 2268 bytes | 2025-08-18T14:05:59.864Z"
               ]
             },
             {
-              "name": "icons",
-              "type": "directory",
-              "path": "src/assets/icons",
+              "info": "icons/ | src/assets/icons | directory",
               "children": [
                 "icon-128x128.png | src/assets/icons/icon-128x128.png | 122 bytes | 2025-08-18T14:05:59.864Z",
                 "icon-144x144.png | src/assets/icons/icon-144x144.png | 141 bytes | 2025-08-18T14:05:59.864Z",
@@ -2427,9 +1883,7 @@
               ]
             },
             {
-              "name": "images",
-              "type": "directory",
-              "path": "src/assets/images",
+              "info": "images/ | src/assets/images | directory",
               "children": [
                 "index.ts | src/assets/images/index.ts | 1744 bytes | 2025-08-18T14:05:59.864Z"
               ]
@@ -2438,23 +1892,17 @@
           ]
         },
         {
-          "name": "environments",
-          "type": "directory",
-          "path": "src/environments",
+          "info": "environments/ | src/environments | directory",
           "children": [
             "environment.prod.ts | src/environments/environment.prod.ts | 1316 bytes | 2025-08-18T14:05:59.871Z",
             "environment.ts | src/environments/environment.ts | 1524 bytes | 2025-08-18T14:05:59.871Z"
           ]
         },
         {
-          "name": "styles",
-          "type": "directory",
-          "path": "src/styles",
+          "info": "styles/ | src/styles | directory",
           "children": [
             {
-              "name": "app-shell",
-              "type": "directory",
-              "path": "src/styles/app-shell",
+              "info": "app-shell/ | src/styles/app-shell | directory",
               "children": [
                 "_app-shell-accessibility.scss | src/styles/app-shell/_app-shell-accessibility.scss | 2891 bytes | 2025-08-18T14:05:59.875Z",
                 "_app-shell-layout.scss | src/styles/app-shell/_app-shell-layout.scss | 2163 bytes | 2025-08-18T14:05:59.875Z",

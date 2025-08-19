@@ -38,10 +38,9 @@ async function readDirectoryTree(directoryPath, basePath) {
     const relativePath = absolutePath.replace(basePath, '').replace(/\\/g, '/').replace(/^\/+/, '');
 
     if (dirent.isDirectory()) {
+      const dirInfo = `${dirent.name}/ | ${relativePath} | directory`;
       entries.push({
-        name: dirent.name,
-        type: 'directory',
-        path: relativePath,
+        info: dirInfo,
         children: await readDirectoryTree(absolutePath, basePath)
       });
     } else {
@@ -66,7 +65,7 @@ async function generateFullStructureJson() {
       generatedAt,
       source: 'project-root',
       root: 'docs/00_file_structure_now.json',
-      description: 'Complete file structure of project root (excluding .angular, dist, .git, node_modules)'
+      description: 'Complete file structure of project root (excluding .angular, dist, .git, node_modules) - Format: name | path | size/modified | type'
     },
     structure
   };
