@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T17:21:18.802Z",
+    "generatedAt": "2025-08-19T17:23:41.667Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
@@ -926,7 +926,7 @@
           "type": "file",
           "path": "docs/00_file_structure_now.json",
           "size": 249177,
-          "modified": "2025-08-19T17:20:30.227Z"
+          "modified": "2025-08-19T17:21:18.879Z"
         },
         {
           "name": "00-file-header-convention.md",
@@ -5078,8 +5078,8 @@
                           "name": "sidebar.constants.ts",
                           "type": "file",
                           "path": "src/app/shared/constants/sidebar/sidebar.constants.ts",
-                          "size": 6128,
-                          "modified": "2025-08-19T17:05:24.496Z"
+                          "size": 966,
+                          "modified": "2025-08-19T17:23:39.066Z"
                         }
                       ]
                     },
