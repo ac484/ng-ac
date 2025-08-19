@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T17:15:48.846Z",
+    "generatedAt": "2025-08-19T17:20:30.118Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
@@ -672,169 +672,9 @@
               "type": "file",
               "path": ".kiro/settings/mcp.json",
               "size": 2236,
-              "modified": "2025-08-19T08:02:02.483Z"
+              "modified": "2025-08-19T17:20:26.168Z"
             }
           ]
-        },
-        {
-          "name": "specs",
-          "type": "directory",
-          "path": ".kiro/specs",
-          "children": [
-            {
-              "name": "app-shell",
-              "type": "directory",
-              "path": ".kiro/specs/app-shell",
-              "children": [
-                {
-                  "name": "design.md",
-                  "type": "file",
-                  "path": ".kiro/specs/app-shell/design.md",
-                  "size": 27671,
-                  "modified": "2025-08-18T14:05:59.602Z"
-                },
-                {
-                  "name": "implementation.md",
-                  "type": "file",
-                  "path": ".kiro/specs/app-shell/implementation.md",
-                  "size": 7382,
-                  "modified": "2025-08-18T14:05:59.602Z"
-                },
-                {
-                  "name": "requirements.md",
-                  "type": "file",
-                  "path": ".kiro/specs/app-shell/requirements.md",
-                  "size": 14816,
-                  "modified": "2025-08-18T14:05:59.602Z"
-                },
-                {
-                  "name": "tasks.md",
-                  "type": "file",
-                  "path": ".kiro/specs/app-shell/tasks.md",
-                  "size": 35136,
-                  "modified": "2025-08-18T14:05:59.603Z"
-                }
-              ]
-            },
-            {
-              "name": "app-shell copy",
-              "type": "directory",
-              "path": ".kiro/specs/app-shell copy",
-              "children": [
-                {
-                  "name": "design.md",
-                  "type": "file",
-                  "path": ".kiro/specs/app-shell copy/design.md",
-                  "size": 27671,
-                  "modified": "2025-08-18T14:05:59.602Z"
-                },
-                {
-                  "name": "implementation.md",
-                  "type": "file",
-                  "path": ".kiro/specs/app-shell copy/implementation.md",
-                  "size": 7382,
-                  "modified": "2025-08-18T14:05:59.602Z"
-                },
-                {
-                  "name": "requirements.md",
-                  "type": "file",
-                  "path": ".kiro/specs/app-shell copy/requirements.md",
-                  "size": 14816,
-                  "modified": "2025-08-18T14:05:59.602Z"
-                },
-                {
-                  "name": "tasks.md",
-                  "type": "file",
-                  "path": ".kiro/specs/app-shell copy/tasks.md",
-                  "size": 35136,
-                  "modified": "2025-08-18T14:05:59.603Z"
-                }
-              ]
-            },
-            {
-              "name": "file-header-validation",
-              "type": "directory",
-              "path": ".kiro/specs/file-header-validation",
-              "children": [
-                {
-                  "name": "design.md",
-                  "type": "file",
-                  "path": ".kiro/specs/file-header-validation/design.md",
-                  "size": 513,
-                  "modified": "2025-08-19T08:02:02.489Z"
-                },
-                {
-                  "name": "requirements.md",
-                  "type": "file",
-                  "path": ".kiro/specs/file-header-validation/requirements.md",
-                  "size": 4423,
-                  "modified": "2025-08-19T08:02:02.495Z"
-                }
-              ]
-            },
-            {
-              "name": "tab-navigation",
-              "type": "directory",
-              "path": ".kiro/specs/tab-navigation",
-              "children": [
-                {
-                  "name": "design.md",
-                  "type": "file",
-                  "path": ".kiro/specs/tab-navigation/design.md",
-                  "size": 16797,
-                  "modified": "2025-08-18T14:05:59.603Z"
-                },
-                {
-                  "name": "requirements.md",
-                  "type": "file",
-                  "path": ".kiro/specs/tab-navigation/requirements.md",
-                  "size": 9559,
-                  "modified": "2025-08-18T14:05:59.603Z"
-                },
-                {
-                  "name": "tasks.md",
-                  "type": "file",
-                  "path": ".kiro/specs/tab-navigation/tasks.md",
-                  "size": 8708,
-                  "modified": "2025-08-18T14:05:59.604Z"
-                }
-              ]
-            },
-            {
-              "name": "tab-navigation copy",
-              "type": "directory",
-              "path": ".kiro/specs/tab-navigation copy",
-              "children": [
-                {
-                  "name": "design.md",
-                  "type": "file",
-                  "path": ".kiro/specs/tab-navigation copy/design.md",
-                  "size": 16797,
-                  "modified": "2025-08-18T14:05:59.603Z"
-                },
-                {
-                  "name": "requirements.md",
-                  "type": "file",
-                  "path": ".kiro/specs/tab-navigation copy/requirements.md",
-                  "size": 9559,
-                  "modified": "2025-08-18T14:05:59.603Z"
-                },
-                {
-                  "name": "tasks.md",
-                  "type": "file",
-                  "path": ".kiro/specs/tab-navigation copy/tasks.md",
-                  "size": 8708,
-                  "modified": "2025-08-18T14:05:59.604Z"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "steering",
-          "type": "directory",
-          "path": ".kiro/steering",
-          "children": []
         }
       ]
     },
@@ -1086,7 +926,7 @@
           "type": "file",
           "path": "docs/00_file_structure_now.json",
           "size": 254501,
-          "modified": "2025-08-19T17:10:49.748Z"
+          "modified": "2025-08-19T17:15:48.929Z"
         },
         {
           "name": "00-file-header-convention.md",
@@ -1850,6 +1690,13 @@
                       "path": "src/app/application/services/index.ts",
                       "size": 815,
                       "modified": "2025-08-18T14:05:59.663Z"
+                    },
+                    {
+                      "name": "navigation.service.ts",
+                      "type": "file",
+                      "path": "src/app/application/services/navigation.service.ts",
+                      "size": 7704,
+                      "modified": "2025-08-19T17:18:52.078Z"
                     },
                     {
                       "name": "user-application.service.ts",
@@ -3241,8 +3088,8 @@
                               "name": "sidebar.component.ts",
                               "type": "file",
                               "path": "src/app/interface/components/layout/sidebar/sidebar.component.ts",
-                              "size": 3701,
-                              "modified": "2025-08-19T17:14:53.598Z"
+                              "size": 3710,
+                              "modified": "2025-08-19T17:20:29.448Z"
                             }
                           ]
                         },

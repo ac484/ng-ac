@@ -3,7 +3,7 @@
  *   "role": "Interface/Component",
  *   "purpose": "極簡側邊欄組件-導航菜單",
  *   "constraints": ["Standalone組件", "OnPush策略", "現代控制流程"],
- *   "dependencies": ["MatListModule", "MatIconModule", "RouterModule", "SIDEBAR_NAV_ITEMS"],
+ *   "dependencies": ["MatListModule", "MatIconModule", "RouterModule", "NavigationService"],
  *   "security": "medium",
  *   "lastmod": "2025-01-18"
  * }
@@ -11,12 +11,13 @@
  * @see docs/architecture/interface.md
  */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import { SIDEBAR_NAV_ITEMS, SidebarItem } from '../../../../shared/constants/sidebar/sidebar.constants';
+import { NavigationService } from '../../../../application/services/navigation.service';
+import { SidebarItem } from '../../../../shared/interfaces/layout/sidebar.interface';
 
 // 使用 SidebarItem 類型，與常數文件保持一致
 export type NavigationItem = SidebarItem;
@@ -121,8 +122,7 @@ export type NavigationItem = SidebarItem;
   `]
 })
 export class SidebarComponent {
-  // 使用從常數文件導入的導航項目
-  private readonly _navigationItems = signal<NavigationItem[]>(SIDEBAR_NAV_ITEMS);
+  private readonly navigationService = inject(NavigationService);
 
-  readonly navigationItems = this._navigationItems.asReadonly();
+  readonly navigationItems = this.navigationService.navigationItems;
 }
