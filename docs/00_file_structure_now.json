@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T17:54:21.382Z",
+    "generatedAt": "2025-08-19T18:01:37.140Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
@@ -855,8 +855,8 @@
           "name": "00_file_structure_now.json",
           "type": "file",
           "path": "docs/00_file_structure_now.json",
-          "size": 273537,
-          "modified": "2025-08-19T17:42:21.317Z"
+          "size": 251934,
+          "modified": "2025-08-19T17:54:21.465Z"
         },
         {
           "name": "00-file-header-convention.md",
@@ -1632,8 +1632,8 @@
                       "name": "navigation.service.ts",
                       "type": "file",
                       "path": "src/app/application/services/navigation.service.ts",
-                      "size": 8956,
-                      "modified": "2025-08-19T17:46:14.626Z"
+                      "size": 8734,
+                      "modified": "2025-08-19T17:59:29.914Z"
                     },
                     {
                       "name": "project.service.ts",
@@ -3081,8 +3081,8 @@
                               "name": "sidebar.component.ts",
                               "type": "file",
                               "path": "src/app/interface/components/layout/sidebar/sidebar.component.ts",
-                              "size": 3710,
-                              "modified": "2025-08-19T17:20:44.273Z"
+                              "size": 4290,
+                              "modified": "2025-08-19T18:00:22.225Z"
                             }
                           ]
                         },
@@ -5229,19 +5229,6 @@
                       "path": "src/app/shared/i18n/index.ts",
                       "size": 1128,
                       "modified": "2025-08-18T14:05:59.848Z"
-                    }
-                  ]
-                },
-                {
-                  "name": "infrastructure",
-                  "type": "directory",
-                  "path": "src/app/shared/infrastructure",
-                  "children": [
-                    {
-                      "name": "interceptors",
-                      "type": "directory",
-                      "path": "src/app/shared/infrastructure/interceptors",
-                      "children": []
                     }
                   ]
                 },

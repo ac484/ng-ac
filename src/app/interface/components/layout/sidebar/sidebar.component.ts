@@ -11,7 +11,7 @@
  * @see docs/architecture/interface.md
  */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -45,20 +45,24 @@ export type NavigationItem = SidebarItem;
       <nav class="sidebar-nav">
         @for (item of navigationItems(); track item.id) {
           <div class="nav-item">
-            @if (item.children) {
-              <mat-list-item class="nav-group">
+            @if (item.children?.length) {
+              <mat-list-item class="nav-group" (click)="toggle(item.id)">
                 <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
                 <span matListItemTitle>{{ item.label }}</span>
+                <span class="spacer"></span>
+                <mat-icon>{{ isOpen(item.id) ? 'expand_less' : 'expand_more' }}</mat-icon>
               </mat-list-item>
 
-              @for (child of item.children; track child.id) {
-                <mat-list-item
-                  class="nav-child"
-                  [routerLink]="child.route"
-                  routerLinkActive="active">
-                  <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
-                  <span matListItemTitle>{{ child.label }}</span>
-                </mat-list-item>
+              @if (isOpen(item.id)) {
+                @for (child of item.children; track child.id) {
+                  <mat-list-item
+                    class="nav-child"
+                    [routerLink]="child.route"
+                    routerLinkActive="active">
+                    <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
+                    <span matListItemTitle>{{ child.label }}</span>
+                  </mat-list-item>
+                }
               }
             } @else {
               <mat-list-item
@@ -105,15 +109,14 @@ export type NavigationItem = SidebarItem;
       margin-bottom: 0.5rem;
     }
 
-    .nav-group {
-      font-weight: 500;
-      color: var(--mat-sys-primary);
-    }
+    .nav-group { font-weight: 500; color: var(--mat-sys-primary); cursor: pointer; }
 
     .nav-child {
       padding-left: 2rem;
       font-size: 0.9rem;
     }
+
+    .spacer { flex: 1 1 auto; }
 
     .active {
       background-color: var(--mat-sys-primary-container);
@@ -125,4 +128,16 @@ export class SidebarComponent {
   private readonly navigationService = inject(NavigationService);
 
   readonly navigationItems = this.navigationService.navigationItems;
+
+  private readonly openGroups = signal<Record<string, boolean>>({});
+
+  isOpen(id: string): boolean {
+    return !!this.openGroups()[id];
+  }
+
+  toggle(id: string): void {
+    const state = { ...this.openGroups() };
+    state[id] = !state[id];
+    this.openGroups.set(state);
+  }
 }

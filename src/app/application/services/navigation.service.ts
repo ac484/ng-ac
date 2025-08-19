@@ -30,6 +30,7 @@ export class NavigationService {
     };
 
     private readonly GROUP_ICONS: Record<string, string> = {
+        main: 'apps',
         analytics: 'analytics',
         construction: 'construction',
         finance: 'account_balance',
@@ -40,6 +41,7 @@ export class NavigationService {
 
     /** 群組顯示順序（main-flat 先行，其餘依此順序呈現） */
     private readonly GROUP_ORDER: string[] = [
+        'main',
         'analytics',
         'construction',
         'finance',
@@ -166,19 +168,12 @@ export class NavigationService {
             const full = this.join('/app', route.path ?? '');
             const key = route.path ?? '';
 
-            if (group === 'main') {
-                // 直接平鋪到頂層（不包一層 group）
-                pushToGroup('main-flat', this.toItem(key, full));
-            } else {
-                pushToGroup(group, this.toItem(key, full));
-            }
+            // 將 main 也歸到分組，提供可收合的主類別
+            pushToGroup(group, this.toItem(key, full));
         }
 
         // 組裝最終 SidebarItem[]：先平鋪 main，再各 group 依固定順序呈現
         const result: SidebarItem[] = [];
-        if (grouped['main-flat']) {
-            result.push(...grouped['main-flat'].sort(this.sortByLabel));
-        }
 
         // 依指定順序加入各群組
         for (const group of this.GROUP_ORDER) {
