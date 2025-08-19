@@ -28,14 +28,17 @@ export * from './entities';
 // 值對象導出 (待實現)
 // export * from './value-objects';
 
-// 聚合根導出 (待實現)
-// export * from './aggregates';
+// 聚合根導出
+export * from './aggregates';
 
 // 倉儲接口導出
 export * from './repositories';
 
-// 領域服務導出 (待實現)
-// export * from './services';
+// 領域服務導出
+export * from './services';
+
+// 工廠導出
+export * from './factories';
 
 // 領域事件導出 (待實現)
 // export * from './events';

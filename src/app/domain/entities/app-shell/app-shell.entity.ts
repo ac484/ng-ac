@@ -18,8 +18,8 @@
  * - 極簡主義實現
  */
 
-import { BaseEntity } from '../../base';
-import { Theme, SidebarState } from '../../../shared/interfaces/app-shell';
+import { BaseEntity } from '../../../shared/base/entities/base.entity';
+import { SidebarState, Theme } from '../../../shared/interfaces/app-shell';
 
 export class AppShell extends BaseEntity {
   constructor(

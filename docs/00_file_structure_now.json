@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T13:49:50.793Z",
+    "generatedAt": "2025-08-19T16:54:51.640Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
@@ -637,14 +637,14 @@
               "type": "file",
               "path": ".husky/_/pre-commit",
               "size": 243,
-              "modified": "2025-08-19T13:36:41.450Z"
+              "modified": "2025-08-19T16:43:47.885Z"
             },
             {
               "name": "pre-push",
               "type": "file",
               "path": ".husky/_/pre-push",
               "size": 241,
-              "modified": "2025-08-19T13:36:41.789Z"
+              "modified": "2025-08-19T16:43:48.208Z"
             }
           ]
         },
@@ -861,8 +861,8 @@
           "name": "settings.json",
           "type": "file",
           "path": ".vscode/settings.json",
-          "size": 7794,
-          "modified": "2025-08-19T10:06:31.182Z"
+          "size": 7801,
+          "modified": "2025-08-19T16:48:27.480Z"
         },
         {
           "name": "tasks.json",
@@ -1086,7 +1086,7 @@
           "type": "file",
           "path": "docs/00_file_structure_now.json",
           "size": 252872,
-          "modified": "2025-08-19T13:49:43.915Z"
+          "modified": "2025-08-19T13:49:50.914Z"
         },
         {
           "name": "00-file-header-convention.md",
@@ -1152,11 +1152,11 @@
           "modified": "2025-08-18T15:10:05.972Z"
         },
         {
-          "name": "01.ddd_fixes_plan.md",
+          "name": "01.ddd_violations_fixed.md",
           "type": "file",
-          "path": "docs/01.ddd_fixes_plan.md",
-          "size": 98,
-          "modified": "2025-08-19T13:49:45.791Z"
+          "path": "docs/01.ddd_violations_fixed.md",
+          "size": 6965,
+          "modified": "2025-08-19T16:53:25.890Z"
         },
         {
           "name": "11.security_plan.md",
@@ -1241,29 +1241,7 @@
       "name": "memory-bank",
       "type": "directory",
       "path": "memory-bank",
-      "children": [
-        {
-          "name": "00_memory_bank_structure.md",
-          "type": "file",
-          "path": "memory-bank/00_memory_bank_structure.md",
-          "size": 736,
-          "modified": "2025-08-19T13:46:30.269Z"
-        },
-        {
-          "name": "systemPatterns.md",
-          "type": "file",
-          "path": "memory-bank/systemPatterns.md",
-          "size": 1261,
-          "modified": "2025-08-19T13:46:30.269Z"
-        },
-        {
-          "name": "taskTracking.md",
-          "type": "file",
-          "path": "memory-bank/taskTracking.md",
-          "size": 1190,
-          "modified": "2025-08-19T13:46:30.269Z"
-        }
-      ]
+      "children": []
     },
     {
       "name": "public",
@@ -2066,8 +2044,8 @@
                       "name": "index.ts",
                       "type": "file",
                       "path": "src/app/domain/aggregates/index.ts",
-                      "size": 968,
-                      "modified": "2025-08-18T14:05:59.671Z"
+                      "size": 1022,
+                      "modified": "2025-08-19T16:50:40.908Z"
                     }
                   ]
                 },
@@ -2088,27 +2066,6 @@
                           "children": []
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "name": "base",
-                  "type": "directory",
-                  "path": "src/app/domain/base",
-                  "children": [
-                    {
-                      "name": "base.entity.ts",
-                      "type": "file",
-                      "path": "src/app/domain/base/base.entity.ts",
-                      "size": 1580,
-                      "modified": "2025-08-18T14:05:59.671Z"
-                    },
-                    {
-                      "name": "index.ts",
-                      "type": "file",
-                      "path": "src/app/domain/base/index.ts",
-                      "size": 1155,
-                      "modified": "2025-08-18T14:05:59.671Z"
                     }
                   ]
                 },
@@ -2213,11 +2170,18 @@
                       "path": "src/app/domain/entities/app-shell",
                       "children": [
                         {
+                          "name": "app-shell.aggregate.ts",
+                          "type": "file",
+                          "path": "src/app/domain/entities/app-shell/app-shell.aggregate.ts",
+                          "size": 4662,
+                          "modified": "2025-08-19T16:50:42.834Z"
+                        },
+                        {
                           "name": "app-shell.entity.ts",
                           "type": "file",
                           "path": "src/app/domain/entities/app-shell/app-shell.entity.ts",
-                          "size": 1525,
-                          "modified": "2025-08-18T14:05:59.671Z"
+                          "size": 1494,
+                          "modified": "2025-08-19T16:50:42.646Z"
                         },
                         {
                           "name": "app-shell.factory.ts",
@@ -2274,8 +2238,8 @@
                       "name": "index.ts",
                       "type": "file",
                       "path": "src/app/domain/entities/index.ts",
-                      "size": 29,
-                      "modified": "2025-08-19T08:47:14.353Z"
+                      "size": 122,
+                      "modified": "2025-08-19T16:50:41.131Z"
                     }
                   ]
                 },
@@ -2308,16 +2272,44 @@
                   ]
                 },
                 {
+                  "name": "factories",
+                  "type": "directory",
+                  "path": "src/app/domain/factories",
+                  "children": [
+                    {
+                      "name": "app-shell.factory.ts",
+                      "type": "file",
+                      "path": "src/app/domain/factories/app-shell.factory.ts",
+                      "size": 3532,
+                      "modified": "2025-08-19T16:50:43.063Z"
+                    },
+                    {
+                      "name": "index.ts",
+                      "type": "file",
+                      "path": "src/app/domain/factories/index.ts",
+                      "size": 737,
+                      "modified": "2025-08-19T16:50:26.018Z"
+                    }
+                  ]
+                },
+                {
                   "name": "repositories",
                   "type": "directory",
                   "path": "src/app/domain/repositories",
                   "children": [
                     {
+                      "name": "app-shell.repository.ts",
+                      "type": "file",
+                      "path": "src/app/domain/repositories/app-shell.repository.ts",
+                      "size": 1338,
+                      "modified": "2025-08-19T16:50:43.003Z"
+                    },
+                    {
                       "name": "index.ts",
                       "type": "file",
                       "path": "src/app/domain/repositories/index.ts",
-                      "size": 812,
-                      "modified": "2025-08-19T08:46:36.965Z"
+                      "size": 963,
+                      "modified": "2025-08-19T16:50:41.487Z"
                     },
                     {
                       "name": "user.repository.ts",
@@ -2334,6 +2326,13 @@
                   "path": "src/app/domain/services",
                   "children": [
                     {
+                      "name": "app-shell.domain.service.ts",
+                      "type": "file",
+                      "path": "src/app/domain/services/app-shell.domain.service.ts",
+                      "size": 6227,
+                      "modified": "2025-08-19T16:50:43.018Z"
+                    },
+                    {
                       "name": "auth.domain.service.ts",
                       "type": "file",
                       "path": "src/app/domain/services/auth.domain.service.ts",
@@ -2344,8 +2343,8 @@
                       "name": "index.ts",
                       "type": "file",
                       "path": "src/app/domain/services/index.ts",
-                      "size": 742,
-                      "modified": "2025-08-19T08:46:11.061Z"
+                      "size": 852,
+                      "modified": "2025-08-19T16:50:41.984Z"
                     }
                   ]
                 },
@@ -2472,8 +2471,8 @@
                   "name": "index.ts",
                   "type": "file",
                   "path": "src/app/domain/index.ts",
-                  "size": 1352,
-                  "modified": "2025-08-18T14:05:59.677Z"
+                  "size": 1321,
+                  "modified": "2025-08-19T16:50:42.030Z"
                 }
               ]
             },
@@ -3378,27 +3377,6 @@
                   ]
                 },
                 {
-                  "name": "guards",
-                  "type": "directory",
-                  "path": "src/app/interface/guards",
-                  "children": [
-                    {
-                      "name": "auth.guard.ts",
-                      "type": "file",
-                      "path": "src/app/interface/guards/auth.guard.ts",
-                      "size": 848,
-                      "modified": "2025-08-19T09:37:16.278Z"
-                    },
-                    {
-                      "name": "index.ts",
-                      "type": "file",
-                      "path": "src/app/interface/guards/index.ts",
-                      "size": 925,
-                      "modified": "2025-08-18T14:05:59.727Z"
-                    }
-                  ]
-                },
-                {
                   "name": "interceptors",
                   "type": "directory",
                   "path": "src/app/interface/interceptors",
@@ -3407,8 +3385,8 @@
                       "name": "index.ts",
                       "type": "file",
                       "path": "src/app/interface/interceptors/index.ts",
-                      "size": 1056,
-                      "modified": "2025-08-18T14:05:59.728Z"
+                      "size": 1227,
+                      "modified": "2025-08-19T16:50:42.575Z"
                     }
                   ]
                 },
@@ -4671,6 +4649,20 @@
                   "path": "src/app/shared/base",
                   "children": [
                     {
+                      "name": "aggregates",
+                      "type": "directory",
+                      "path": "src/app/shared/base/aggregates",
+                      "children": [
+                        {
+                          "name": "base-aggregate.ts",
+                          "type": "file",
+                          "path": "src/app/shared/base/aggregates/base-aggregate.ts",
+                          "size": 2669,
+                          "modified": "2025-08-19T16:50:42.702Z"
+                        }
+                      ]
+                    },
+                    {
                       "name": "entities",
                       "type": "directory",
                       "path": "src/app/shared/base/entities",
@@ -4688,6 +4680,41 @@
                           "path": "src/app/shared/base/entities/index.ts",
                           "size": 1164,
                           "modified": "2025-08-18T14:05:59.796Z"
+                        },
+                        {
+                          "name": "modern-base-entity.ts",
+                          "type": "file",
+                          "path": "src/app/shared/base/entities/modern-base-entity.ts",
+                          "size": 3658,
+                          "modified": "2025-08-19T16:50:42.346Z"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "result",
+                      "type": "directory",
+                      "path": "src/app/shared/base/result",
+                      "children": [
+                        {
+                          "name": "result.ts",
+                          "type": "file",
+                          "path": "src/app/shared/base/result/result.ts",
+                          "size": 3763,
+                          "modified": "2025-08-19T16:50:42.262Z"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "value-objects",
+                      "type": "directory",
+                      "path": "src/app/shared/base/value-objects",
+                      "children": [
+                        {
+                          "name": "base-value-object.ts",
+                          "type": "file",
+                          "path": "src/app/shared/base/value-objects/base-value-object.ts",
+                          "size": 3015,
+                          "modified": "2025-08-19T16:50:42.670Z"
                         }
                       ]
                     },
@@ -4695,8 +4722,8 @@
                       "name": "index.ts",
                       "type": "file",
                       "path": "src/app/shared/base/index.ts",
-                      "size": 1161,
-                      "modified": "2025-08-18T14:05:59.796Z"
+                      "size": 1215,
+                      "modified": "2025-08-19T16:50:42.847Z"
                     }
                   ]
                 },
@@ -5603,6 +5630,34 @@
                   ]
                 },
                 {
+                  "name": "value-objects",
+                  "type": "directory",
+                  "path": "src/app/shared/value-objects",
+                  "children": [
+                    {
+                      "name": "index.ts",
+                      "type": "file",
+                      "path": "src/app/shared/value-objects/index.ts",
+                      "size": 950,
+                      "modified": "2025-08-19T16:50:42.953Z"
+                    },
+                    {
+                      "name": "sidebar-state.vo.ts",
+                      "type": "file",
+                      "path": "src/app/shared/value-objects/sidebar-state.vo.ts",
+                      "size": 2437,
+                      "modified": "2025-08-19T16:50:42.800Z"
+                    },
+                    {
+                      "name": "theme.vo.ts",
+                      "type": "file",
+                      "path": "src/app/shared/value-objects/theme.vo.ts",
+                      "size": 2231,
+                      "modified": "2025-08-19T16:50:42.737Z"
+                    }
+                  ]
+                },
+                {
                   "name": "index.ts",
                   "type": "file",
                   "path": "src/app/shared/index.ts",
@@ -5629,8 +5684,8 @@
               "name": "app.routes.ts",
               "type": "file",
               "path": "src/app/app.routes.ts",
-              "size": 7430,
-              "modified": "2025-08-19T09:51:07.541Z"
+              "size": 7454,
+              "modified": "2025-08-19T16:54:43.402Z"
             },
             {
               "name": "index.ts",
@@ -6011,8 +6066,8 @@
       "name": "pnpm-lock.yaml",
       "type": "file",
       "path": "pnpm-lock.yaml",
-      "size": 476031,
-      "modified": "2025-08-19T13:36:40.615Z"
+      "size": 476044,
+      "modified": "2025-08-19T16:43:46.741Z"
     },
     {
       "name": "pnpm-workspace.yaml",

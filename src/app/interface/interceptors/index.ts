@@ -22,11 +22,9 @@
  * - 此檔案須遵守安全防護原則
  */
 
-// 請求攔截器導出 (待實現)
-// export * from './request';
+// 從 Infrastructure 層導入 Interceptors
+export { AuthHttpInterceptor } from '../../infrastructure/interceptors/auth-http.interceptor';
+export { AuthInterceptor } from '../../infrastructure/interceptors/auth.interceptor';
+export { ErrorInterceptor } from '../../infrastructure/interceptors/error.interceptor';
+export { LoggingInterceptor } from '../../infrastructure/interceptors/logging.interceptor';
 
-// 響應攔截器導出 (待實現)
-// export * from './response';
-
-// 日誌攔截器導出 (待實現)
-// export * from './logging';

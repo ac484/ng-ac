@@ -22,6 +22,9 @@
  * - 此檔案須遵守聚合業務規則原則
  */
 
+// App Shell 聚合根
+export * from '../entities/app-shell/app-shell.aggregate';
+
 // 用戶賬戶聚合導出 (待實現)
 // export * from './user-account';
 
