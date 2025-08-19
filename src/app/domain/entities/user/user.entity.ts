@@ -25,17 +25,25 @@
  */
 
 import { BaseEntity } from '../../../shared/base/entities/base.entity';
-import { Email } from '../../value-objects/email';
+import { Result } from '../../../shared/base/result/result';
+import { Email } from '../../value-objects/email/email.vo';
 
 export class User extends BaseEntity {
-  email: Email;
-  name: string;
-  isActive: boolean = true;
-
-  constructor(id: string, email: string, name: string) {
+  private constructor(
+    id: string,
+    public readonly email: Email,
+    public name: string,
+    public isActive: boolean = true
+  ) {
     super(id);
-    this.email = new Email(email);
-    this.name = name;
+  }
+
+  static create(id: string, email: string, name: string): Result<User, string> {
+    const emailResult = Email.create(email);
+    if (emailResult.isFailure) {
+      return Result.fail(emailResult.error());
+    }
+    return Result.ok(new User(id, emailResult.value()!, name, true));
   }
 
   updateProfile(name: string): void {

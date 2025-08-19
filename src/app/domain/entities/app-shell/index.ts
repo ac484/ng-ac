@@ -16,6 +16,6 @@
  * - 所有 App Shell 實體必須在此檔案中導出
  */
 
-export { AppShell } from './app-shell.entity';
-export { AppShellFactory } from './app-shell.factory';
+export { AppShellFactory } from '../../factories/app-shell.factory';
+export { AppShell } from './app-shell.aggregate';
 

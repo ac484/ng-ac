@@ -3,7 +3,7 @@
  *   "role": "Interface/Component",
  *   "purpose": "極簡側邊欄組件-導航菜單",
  *   "constraints": ["Standalone組件", "OnPush策略", "現代控制流程"],
- *   "dependencies": ["MatListModule", "MatIconModule", "RouterModule"],
+ *   "dependencies": ["MatListModule", "MatIconModule", "RouterModule", "SIDEBAR_NAV_ITEMS"],
  *   "security": "medium",
  *   "lastmod": "2025-01-18"
  * }
@@ -16,13 +16,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+import { SIDEBAR_NAV_ITEMS, SidebarItem } from '../../../../shared/constants/sidebar/sidebar.constants';
 
-export interface NavigationItem {
-  label: string;
-  icon: string;
-  route: string;
-  children?: NavigationItem[];
-}
+// 使用 SidebarItem 類型，與常數文件保持一致
+export type NavigationItem = SidebarItem;
 
 @Component({
   selector: 'app-sidebar',
@@ -45,7 +42,7 @@ export interface NavigationItem {
       <mat-divider />
 
       <nav class="sidebar-nav">
-        @for (item of navigationItems(); track item.route) {
+        @for (item of navigationItems(); track item.id) {
           <div class="nav-item">
             @if (item.children) {
               <mat-list-item class="nav-group">
@@ -53,7 +50,7 @@ export interface NavigationItem {
                 <span matListItemTitle>{{ item.label }}</span>
               </mat-list-item>
 
-              @for (child of item.children; track child.route) {
+              @for (child of item.children; track child.id) {
                 <mat-list-item
                   class="nav-child"
                   [routerLink]="child.route"
@@ -124,33 +121,8 @@ export interface NavigationItem {
   `]
 })
 export class SidebarComponent {
-  // 導航項目 - 使用 Signals 管理
-  private readonly _navigationItems = signal<NavigationItem[]>([
-    {
-      label: '儀表板',
-      icon: 'dashboard',
-      route: '/dashboard'
-    },
-    {
-      label: '用戶管理',
-      icon: 'people',
-      route: '/users',
-      children: [
-        { label: '用戶列表', icon: 'list', route: '/users' },
-        { label: '新增用戶', icon: 'person_add', route: '/users/create' }
-      ]
-    },
-    {
-      label: '合約管理',
-      icon: 'description',
-      route: '/contracts'
-    },
-    {
-      label: '設置',
-      icon: 'settings',
-      route: '/settings'
-    }
-  ]);
+  // 使用從常數文件導入的導航項目
+  private readonly _navigationItems = signal<NavigationItem[]>(SIDEBAR_NAV_ITEMS);
 
   readonly navigationItems = this._navigationItems.asReadonly();
 }

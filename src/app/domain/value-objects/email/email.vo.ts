@@ -24,26 +24,28 @@
  * - 此檔案須遵守此架構規則8：測試友好 ✅ 已實現
  */
 
-export class Email {
-  private readonly value: string;
+import { Result } from '../../../shared/base/result/result';
 
-  constructor(email: string) {
-    if (!this.isValid(email)) {
-      throw new Error('Invalid email format');
+export class Email {
+  private constructor(private readonly _value: string) {}
+
+  static create(email: string): Result<Email, string> {
+    if (!Email.isValid(email)) {
+      return Result.fail('Invalid email format');
     }
-    this.value = email.toLowerCase();
+    return Result.ok(new Email(email.toLowerCase()));
   }
 
-  private isValid(email: string): boolean {
+  static isValid(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
 
   toString(): string {
-    return this.value;
+    return this._value;
   }
 
   equals(other: Email): boolean {
-    return this.value === other.value;
+    return this._value === other._value;
   }
 }

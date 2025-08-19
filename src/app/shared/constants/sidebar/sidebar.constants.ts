@@ -24,6 +24,27 @@ export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
     icon: 'dashboard'
   },
   {
+    id: 'analytics',
+    title: '分析',
+    label: '分析',
+    icon: 'analytics',
+    route: '/analytics'
+  },
+  {
+    id: 'assignment',
+    title: '任務分配',
+    label: '任務分配',
+    icon: 'assignment',
+    route: '/assignment'
+  },
+  {
+    id: 'auth',
+    title: '認證管理',
+    label: '認證管理',
+    icon: 'security',
+    route: '/auth'
+  },
+  {
     id: 'user-management',
     title: '用戶管理',
     label: '用戶管理',
@@ -46,6 +67,42 @@ export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
     ]
   },
   {
+    id: 'people',
+    title: '人員管理',
+    label: '人員管理',
+    icon: 'group',
+    children: [
+      {
+        id: 'personnel',
+        title: '人員管理',
+        label: '人員管理',
+        route: '/people/personnel',
+        icon: 'person'
+      },
+      {
+        id: 'attendance',
+        title: '考勤管理',
+        label: '考勤管理',
+        route: '/people/attendance',
+        icon: 'schedule'
+      },
+      {
+        id: 'partners',
+        title: '合作夥伴',
+        label: '合作夥伴',
+        route: '/people/partners',
+        icon: 'handshake'
+      },
+      {
+        id: 'state-machine',
+        title: '狀態機',
+        label: '狀態機',
+        route: '/people/state-machine',
+        icon: 'device_hub'
+      }
+    ]
+  },
+  {
     id: 'construction',
     title: '工程管理',
     label: '工程管理',
@@ -64,6 +121,134 @@ export const SIDEBAR_NAV_ITEMS: SidebarItem[] = [
         label: '任務管理',
         route: '/construction/tasks',
         icon: 'task'
+      },
+      {
+        id: 'schedules',
+        title: '排程管理',
+        label: '排程管理',
+        route: '/construction/schedules',
+        icon: 'calendar_today'
+      },
+      {
+        id: 'calendars',
+        title: '日曆',
+        label: '日曆',
+        route: '/construction/calendars',
+        icon: 'event'
+      },
+      {
+        id: 'daily-reports',
+        title: '日報',
+        label: '日報',
+        route: '/construction/daily-reports',
+        icon: 'report'
+      },
+      {
+        id: 'construction-reports',
+        title: '工程報告',
+        label: '工程報告',
+        route: '/construction/construction-reports',
+        icon: 'assessment'
+      },
+      {
+        id: 'weather-reports',
+        title: '天氣報告',
+        label: '天氣報告',
+        route: '/construction/weather-reports',
+        icon: 'wb_sunny'
+      },
+      {
+        id: 'log',
+        title: '日誌',
+        label: '日誌',
+        route: '/construction/log',
+        icon: 'history'
+      }
+    ]
+  },
+  {
+    id: 'finance',
+    title: '財務管理',
+    label: '財務管理',
+    icon: 'account_balance',
+    children: [
+      {
+        id: 'budget',
+        title: '預算管理',
+        label: '預算管理',
+        route: '/finance/budget',
+        icon: 'account_balance_wallet'
+      },
+      {
+        id: 'expenses',
+        title: '費用管理',
+        label: '費用管理',
+        route: '/finance/expenses',
+        icon: 'receipt'
+      },
+      {
+        id: 'payments',
+        title: '付款管理',
+        label: '付款管理',
+        route: '/finance/payments',
+        icon: 'payment'
+      },
+      {
+        id: 'financial-reports',
+        title: '財務報告',
+        label: '財務報告',
+        route: '/finance/financial-reports',
+        icon: 'assessment'
+      }
+    ]
+  },
+  {
+    id: 'public',
+    title: '公共頁面',
+    label: '公共頁面',
+    icon: 'public',
+    children: [
+      {
+        id: 'about',
+        title: '關於我們',
+        label: '關於我們',
+        route: '/public/about',
+        icon: 'info'
+      },
+      {
+        id: 'blog',
+        title: '部落格',
+        label: '部落格',
+        route: '/public/blog',
+        icon: 'article'
+      },
+      {
+        id: 'cases',
+        title: '案例展示',
+        label: '案例展示',
+        route: '/public/cases',
+        icon: 'cases'
+      },
+      {
+        id: 'contact',
+        title: '聯絡我們',
+        label: '聯絡我們',
+        route: '/public/contact',
+        icon: 'contact_support'
+      },
+      {
+        id: 'jobs',
+        title: '職缺資訊',
+        label: '職缺資訊',
+        route: '/public/jobs',
+        icon: 'work'
+      },
+      {
+        id: 'legal',
+        title: '法律條款',
+        label: '法律條款',
+        route: '/public/legal',
+        icon: 'gavel'
       }
     ]
   }

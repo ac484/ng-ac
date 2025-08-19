@@ -136,7 +136,7 @@ export namespace Result {
   ): Promise<Result<T, Error>> {
     return promise
       .then(value => Result.ok(value))
-      .catch(error => Result.fail(error instanceof Error ? error : new Error(String(error)));
+      .catch(error => Result.fail(error instanceof Error ? error : new Error(String(error))));
   }
 }
 

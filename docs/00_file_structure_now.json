@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-19T16:58:43.669Z",
+    "generatedAt": "2025-08-19T17:10:49.665Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules)"
@@ -1085,8 +1085,8 @@
           "name": "00_file_structure_now.json",
           "type": "file",
           "path": "docs/00_file_structure_now.json",
-          "size": 255723,
-          "modified": "2025-08-19T16:54:51.725Z"
+          "size": 255199,
+          "modified": "2025-08-19T16:58:43.764Z"
         },
         {
           "name": "00-file-header-convention.md",
@@ -2177,25 +2177,11 @@
                           "modified": "2025-08-19T16:50:42.834Z"
                         },
                         {
-                          "name": "app-shell.entity.ts",
-                          "type": "file",
-                          "path": "src/app/domain/entities/app-shell/app-shell.entity.ts",
-                          "size": 1494,
-                          "modified": "2025-08-19T16:50:42.646Z"
-                        },
-                        {
-                          "name": "app-shell.factory.ts",
-                          "type": "file",
-                          "path": "src/app/domain/entities/app-shell/app-shell.factory.ts",
-                          "size": 1367,
-                          "modified": "2025-08-18T14:05:59.671Z"
-                        },
-                        {
                           "name": "index.ts",
                           "type": "file",
                           "path": "src/app/domain/entities/app-shell/index.ts",
-                          "size": 708,
-                          "modified": "2025-08-18T14:05:59.673Z"
+                          "size": 725,
+                          "modified": "2025-08-19T17:07:14.113Z"
                         }
                       ]
                     },
@@ -2229,8 +2215,8 @@
                           "name": "user.entity.ts",
                           "type": "file",
                           "path": "src/app/domain/entities/user/user.entity.ts",
-                          "size": 1549,
-                          "modified": "2025-08-19T16:58:40.478Z"
+                          "size": 1879,
+                          "modified": "2025-08-19T17:07:14.114Z"
                         }
                       ]
                     },
@@ -2446,8 +2432,8 @@
                           "name": "email.vo.ts",
                           "type": "file",
                           "path": "src/app/domain/value-objects/email/email.vo.ts",
-                          "size": 1653,
-                          "modified": "2025-08-18T14:05:59.681Z"
+                          "size": 1788,
+                          "modified": "2025-08-19T17:07:14.113Z"
                         },
                         {
                           "name": "index.ts",
@@ -3255,8 +3241,8 @@
                               "name": "sidebar.component.ts",
                               "type": "file",
                               "path": "src/app/interface/components/layout/sidebar/sidebar.component.ts",
-                              "size": 4133,
-                              "modified": "2025-08-19T09:14:08.952Z"
+                              "size": 3701,
+                              "modified": "2025-08-19T17:06:43.586Z"
                             }
                           ]
                         },
@@ -4685,8 +4671,8 @@
                           "name": "result.ts",
                           "type": "file",
                           "path": "src/app/shared/base/result/result.ts",
-                          "size": 3763,
-                          "modified": "2025-08-19T16:50:42.262Z"
+                          "size": 3764,
+                          "modified": "2025-08-19T17:07:14.125Z"
                         }
                       ]
                     },
@@ -5245,8 +5231,8 @@
                           "name": "sidebar.constants.ts",
                           "type": "file",
                           "path": "src/app/shared/constants/sidebar/sidebar.constants.ts",
-                          "size": 1898,
-                          "modified": "2025-08-19T09:02:00.007Z"
+                          "size": 6128,
+                          "modified": "2025-08-19T17:05:24.496Z"
                         }
                       ]
                     },
