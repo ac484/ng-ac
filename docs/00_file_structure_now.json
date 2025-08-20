@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-20T00:32:10.951Z",
+    "generatedAt": "2025-08-20T00:33:59.281Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules) - Format: name | path | size/modified | type"
@@ -226,7 +226,7 @@
             "angular_url.json | docs/08-angular-api-reference/angular_url.json | 20487 bytes | 2025-08-19T13:09:02.274Z"
           ]
         },
-        "00_file_structure_now.json | docs/00_file_structure_now.json | 127069 bytes | 2025-08-20T00:31:56.770Z",
+        "00_file_structure_now.json | docs/00_file_structure_now.json | 127069 bytes | 2025-08-20T00:32:11.047Z",
         "00-file-header-convention.md | docs/00-file-header-convention.md | 15558 bytes | 2025-08-19T12:40:49.119Z",
         "00.angular_ddd_core_guide.md | docs/00.angular_ddd_core_guide.md | 14533 bytes | 2025-08-19T13:34:09.377Z",
         "00.angular_ddd_core.json | docs/00.angular_ddd_core.json | 15407 bytes | 2025-08-19T13:34:33.635Z",
@@ -1928,7 +1928,7 @@
     "angular.json | angular.json | 3422 bytes | 2025-08-19T09:06:47.713Z",
     "eslint.config.js | eslint.config.js | 3144 bytes | 2025-08-18T14:05:59.637Z",
     "firebase.json | firebase.json | 2 bytes | 2025-08-18T14:05:59.637Z",
-    "genkit.config.ts | genkit.config.ts | 1178 bytes | 2025-08-18T14:05:59.637Z",
+    "genkit.config.ts | genkit.config.ts | 1197 bytes | 2025-08-20T00:33:49.555Z",
     "package.json | package.json | 2039 bytes | 2025-08-19T13:37:05.709Z",
     "pnpm-lock.yaml | pnpm-lock.yaml | 476044 bytes | 2025-08-19T16:43:46.741Z",
     "pnpm-workspace.yaml | pnpm-workspace.yaml | 49 bytes | 2025-08-19T08:02:02.535Z",

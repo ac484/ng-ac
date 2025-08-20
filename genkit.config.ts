@@ -7,7 +7,7 @@ export const ai = genkit({
   plugins: [
     // Google AI 插件配置
     googleAI({
-      apiKey: process.env['GOOGLE_GENAI_API_KEY'],
+      apiKey: process.env['AIzaSyAQN_s5Ez2aMIGw55iwgMicCdlvToL5kY0'],
     }),
 
     // 安全檢查插件
