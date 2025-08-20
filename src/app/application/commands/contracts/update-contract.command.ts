@@ -27,6 +27,7 @@ import { ContractType } from '../../../domain/value-objects/contract-type/contra
 export class UpdateContractCommand {
   constructor(
     public readonly id: string,
+    public readonly updatedBy: string,
     public readonly title?: string,
     public readonly description?: string,
     public readonly contractNumber?: string,
@@ -40,7 +41,6 @@ export class UpdateContractCommand {
     public readonly partyB?: string,
     public readonly terms?: string[],
     public readonly attachments?: string[],
-    public readonly updatedBy: string,
     public readonly timestamp: Date = new Date()
   ) {}
 
@@ -122,19 +122,19 @@ export class UpdateContractCommand {
       timestamp: this.timestamp
     };
 
-    if (this.title !== undefined) result.title = this.title;
-    if (this.description !== undefined) result.description = this.description;
-    if (this.contractNumber !== undefined) result.contractNumber = this.contractNumber;
-    if (this.status !== undefined) result.status = this.status;
-    if (this.type !== undefined) result.type = this.type;
-    if (this.startDate !== undefined) result.startDate = this.startDate;
-    if (this.endDate !== undefined) result.endDate = this.endDate;
-    if (this.amount !== undefined) result.amount = this.amount;
-    if (this.currency !== undefined) result.currency = this.currency;
-    if (this.partyA !== undefined) result.partyA = this.partyA;
-    if (this.partyB !== undefined) result.partyB = this.partyB;
-    if (this.terms !== undefined) result.terms = this.terms;
-    if (this.attachments !== undefined) result.attachments = this.attachments;
+    if (this.title !== undefined) result['title'] = this.title;
+    if (this.description !== undefined) result['description'] = this.description;
+    if (this.contractNumber !== undefined) result['contractNumber'] = this.contractNumber;
+    if (this.status !== undefined) result['status'] = this.status;
+    if (this.type !== undefined) result['type'] = this.type;
+    if (this.startDate !== undefined) result['startDate'] = this.startDate;
+    if (this.endDate !== undefined) result['endDate'] = this.endDate;
+    if (this.amount !== undefined) result['amount'] = this.amount;
+    if (this.currency !== undefined) result['currency'] = this.currency;
+    if (this.partyA !== undefined) result['partyA'] = this.partyA;
+    if (this.partyB !== undefined) result['partyB'] = this.partyB;
+    if (this.terms !== undefined) result['terms'] = this.terms;
+    if (this.attachments !== undefined) result['attachments'] = this.attachments;
 
     return result;
   }

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-20T00:53:34.248Z",
+    "generatedAt": "2025-08-20T00:56:02.784Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules) - Format: name | path | size/modified | type"
@@ -226,7 +226,7 @@
             "angular_url.json | docs/08-angular-api-reference/angular_url.json | 20487 bytes | 2025-08-19T13:09:02.274Z"
           ]
         },
-        "00_file_structure_now.json | docs/00_file_structure_now.json | 127069 bytes | 2025-08-20T00:33:59.365Z",
+        "00_file_structure_now.json | docs/00_file_structure_now.json | 133731 bytes | 2025-08-20T00:53:34.349Z",
         "00-file-header-convention.md | docs/00-file-header-convention.md | 15558 bytes | 2025-08-19T12:40:49.119Z",
         "00.angular_ddd_core_guide.md | docs/00.angular_ddd_core_guide.md | 14533 bytes | 2025-08-19T13:34:09.377Z",
         "00.angular_ddd_core.json | docs/00.angular_ddd_core.json | 15407 bytes | 2025-08-19T13:34:33.635Z",
@@ -301,7 +301,7 @@
                         "create-contract.command.ts | src/app/application/commands/contracts/create-contract.command.ts | 2539 bytes | 2025-08-20T00:52:48.784Z",
                         "delete-contract.command.ts | src/app/application/commands/contracts/delete-contract.command.ts | 1563 bytes | 2025-08-20T00:52:48.784Z",
                         "index.ts | src/app/application/commands/contracts/index.ts | 623 bytes | 2025-08-20T00:52:48.784Z",
-                        "update-contract.command.ts | src/app/application/commands/contracts/update-contract.command.ts | 4582 bytes | 2025-08-20T00:52:48.784Z"
+                        "update-contract.command.ts | src/app/application/commands/contracts/update-contract.command.ts | 4621 bytes | 2025-08-20T00:55:48.078Z"
                       ]
                     },
                     {
@@ -529,7 +529,7 @@
                     {
                       "info": "contracts/ | src/app/application/use-cases/contracts | directory",
                       "children": [
-                        "create-contract.use-case.ts | src/app/application/use-cases/contracts/create-contract.use-case.ts | 3998 bytes | 2025-08-20T00:52:48.786Z",
+                        "create-contract.use-case.ts | src/app/application/use-cases/contracts/create-contract.use-case.ts | 3998 bytes | 2025-08-20T00:53:37.135Z",
                         "index.ts | src/app/application/use-cases/contracts/index.ts | 514 bytes | 2025-08-20T00:52:48.786Z"
                       ]
                     },
@@ -1036,7 +1036,7 @@
                           "info": "contract-form/ | src/app/interface/components/contracts/contract-form | directory",
                           "children": [
                             "contract-form.component.scss | src/app/interface/components/contracts/contract-form/contract-form.component.scss | 3119 bytes | 2025-08-20T00:52:48.443Z",
-                            "contract-form.component.ts | src/app/interface/components/contracts/contract-form/contract-form.component.ts | 6700 bytes | 2025-08-20T00:52:48.818Z",
+                            "contract-form.component.ts | src/app/interface/components/contracts/contract-form/contract-form.component.ts | 6700 bytes | 2025-08-20T00:53:37.149Z",
                             "index.ts | src/app/interface/components/contracts/contract-form/index.ts | 504 bytes | 2025-08-20T00:52:48.818Z"
                           ]
                         },
@@ -1356,7 +1356,7 @@
                         {
                           "info": "contract-management/ | src/app/interface/pages/contracts/contract-management | directory",
                           "children": [
-                            "contract-management.page.ts | src/app/interface/pages/contracts/contract-management/contract-management.page.ts | 5863 bytes | 2025-08-20T00:52:48.818Z",
+                            "contract-management.page.ts | src/app/interface/pages/contracts/contract-management/contract-management.page.ts | 5863 bytes | 2025-08-20T00:53:37.203Z",
                             "index.ts | src/app/interface/pages/contracts/contract-management/index.ts | 502 bytes | 2025-08-20T00:52:48.819Z"
                           ]
                         },
