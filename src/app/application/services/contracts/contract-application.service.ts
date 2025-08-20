@@ -18,7 +18,7 @@
  * - 不包含業務邏輯
  */
 
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { CreateContractCommand } from '@application/commands/contracts/create-contract.command';
 import { ContractDTO } from '@application/dto/contracts/contract.dto';
 import { CreateContractResult, CreateContractUseCase } from '@application/use-cases/contracts/create-contract.use-case';
@@ -40,7 +40,7 @@ export class ContractApplicationService {
   constructor(
     private createContractUseCase: CreateContractUseCase,
     private contractDomainService: ContractDomainService,
-    private contractRepository: IContractRepository
+    @Inject('IContractRepository') private contractRepository: IContractRepository
   ) {}
 
   /**

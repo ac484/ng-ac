@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { ContractService } from '@application/services/contract.service';
+import { ContractDTO } from '@application/dto/contracts/contract.dto';
+import { ContractApplicationService } from '@application/services/contracts/contract-application.service';
 import { ContractsDashboardStatsComponent } from '@interface/components/contracts/contracts-dashboard-stats.component';
 import { ContractsTableComponent } from '@interface/components/contracts/contracts-table.component';
-import { Contract } from '@shared/types';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-contracts',
@@ -26,7 +27,9 @@ import { Contract } from '@shared/types';
       <mat-card class="contracts-table-card">
         <mat-card-header><mat-card-title>合約列表</mat-card-title></mat-card-header>
         <mat-card-content>
-          <app-contracts-table [contracts]="contracts()" />
+          <div *ngIf="isLoading" class="loading">載入中...</div>
+          <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+          <app-contracts-table *ngIf="!isLoading && !errorMessage" [contracts]="contracts()" />
         </mat-card-content>
       </mat-card>
     </div>
@@ -37,23 +40,65 @@ import { Contract } from '@shared/types';
     .page-header h1{margin:0;font-size:2rem;font-weight:500}
     .header-actions{display:flex;gap:12px}
     .contracts-table-card{margin-top:24px}
+    .loading{text-align:center;padding:20px;color:#666}
+    .error{text-align:center;padding:20px;color:#f44336}
     @media (max-width:768px){.contracts-page{padding:16px}.page-header{flex-direction:column;align-items:flex-start;gap:16px}.header-actions{width:100%;justify-content:flex-end}}
   `]
 })
-export class ContractsPageComponent {
-  private readonly contractService = inject(ContractService);
+export class ContractsPageComponent implements OnInit, OnDestroy {
+  private readonly contractService = inject(ContractApplicationService);
   private readonly dialog = inject(MatDialog);
-  readonly contracts = this.contractService.contracts;
+  private destroy$ = new Subject<void>();
+
+  private readonly _contracts = signal<ContractDTO[]>([]);
+  private readonly _loading = signal(false);
+  private readonly _errorMessage = signal('');
+
+  readonly contracts = this._contracts.asReadonly();
+  readonly loading = this._loading.asReadonly();
+  readonly errorMessage = this._errorMessage.asReadonly();
+
   readonly contractStats = computed(() => {
     const contracts = this.contracts();
     return {
       total: contracts.length,
-      active: contracts.filter((c: Contract) => c.status === 'Active').length,
-      completed: contracts.filter((c: Contract) => c.status === 'Completed').length,
-      totalValue: contracts.reduce((sum: number, c: Contract) => sum + c.totalValue, 0)
+      active: contracts.filter((c: ContractDTO) => c.status === 'Active').length,
+      completed: contracts.filter((c: ContractDTO) => c.status === 'Completed').length,
+      totalValue: contracts.reduce((sum: number, c: ContractDTO) => sum + (c.amount || 0), 0)
     };
   });
-  openAiSummarizer() { console.log('AI 摘要功能開發中...'); }
+
+  ngOnInit(): void {
+    this.loadContracts();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadContracts(): void {
+    this._loading.set(true);
+    this._errorMessage.set('');
+
+    this.contractService.getAllContracts()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (contracts) => {
+          this._contracts.set(contracts);
+          this._loading.set(false);
+        },
+        error: (error) => {
+          this._errorMessage.set('載入合約列表失敗');
+          this._loading.set(false);
+          console.error('載入合約錯誤:', error);
+        }
+      });
+  }
+
+  openAiSummarizer() {
+    console.log('AI 摘要功能開發中...');
+  }
 }
 
 

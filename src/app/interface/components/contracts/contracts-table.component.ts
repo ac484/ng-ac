@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { Contract } from '@shared/types';
+import { ContractDTO } from '@application/dto/contracts/contract.dto';
 
 @Component({
   selector: 'app-contracts-table',
@@ -15,14 +15,14 @@ import { Contract } from '@shared/types';
       <table mat-table [dataSource]="contracts()" class="contracts-table">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>合約編號</th>
-          <td mat-cell *matCellDef="let contract">{{ contract.id }}</td>
+          <td mat-cell *matCellDef="let contract">{{ contract.contractNumber }}</td>
         </ng-container>
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef>合約標題</th>
           <td mat-cell *matCellDef="let contract">
             <div class="contract-title">
               <span class="title">{{ contract.title }}</span>
-              <span class="contractor">{{ contract.contractor }}</span>
+              <span class="contractor">{{ contract.partyA }}</span>
             </div>
           </td>
         </ng-container>
@@ -32,9 +32,9 @@ import { Contract } from '@shared/types';
             <mat-chip [color]="getStatusColor(contract.status)">{{ getStatusText(contract.status) }}</mat-chip>
           </td>
         </ng-container>
-        <ng-container matColumnDef="totalValue">
+        <ng-container matColumnDef="amount">
           <th mat-header-cell *matHeaderCellDef>合約金額</th>
-          <td mat-cell *matCellDef="let contract">{{ contract.totalValue | currency:'USD':'symbol':'1.0-0' }}</td>
+          <td mat-cell *matCellDef="let contract">{{ contract.amount | currency:contract.currency:'symbol':'1.0-0' }}</td>
         </ng-container>
         <ng-container matColumnDef="dates">
           <th mat-header-cell *matHeaderCellDef>期間</th>
@@ -88,13 +88,30 @@ import { Contract } from '@shared/types';
   `]
 })
 export class ContractsTableComponent {
-  readonly contracts = input.required<Contract[]>();
-  readonly displayedColumns = ['id', 'title', 'status', 'totalValue', 'dates', 'actions'];
-  protected getStatusColor(status: string): 'primary' | 'accent' | 'warn' { switch (status) { case 'Active': return 'primary'; case 'Completed': return 'accent'; case 'Pending': return 'warn'; default: return 'primary'; } }
-  protected getStatusText(status: string): string { switch (status) { case 'Active': return '進行中'; case 'Completed': return '已完成'; case 'Pending': return '待處理'; default: return status; } }
-  protected viewContract(contract: Contract): void { console.log('View contract:', contract); }
-  protected editContract(contract: Contract): void { console.log('Edit contract:', contract); }
-  protected exportContract(contract: Contract): void { console.log('Export contract:', contract); }
+  readonly contracts = input.required<ContractDTO[]>();
+  readonly displayedColumns = ['id', 'title', 'status', 'amount', 'dates', 'actions'];
+
+  protected getStatusColor(status: string): 'primary' | 'accent' | 'warn' {
+    switch (status) {
+      case 'Active': return 'primary';
+      case 'Completed': return 'accent';
+      case 'Pending': return 'warn';
+      default: return 'primary';
+    }
+  }
+
+  protected getStatusText(status: string): string {
+    switch (status) {
+      case 'Active': return '進行中';
+      case 'Completed': return '已完成';
+      case 'Pending': return '待處理';
+      default: return status;
+    }
+  }
+
+  protected viewContract(contract: ContractDTO): void { console.log('View contract:', contract); }
+  protected editContract(contract: ContractDTO): void { console.log('Edit contract:', contract); }
+  protected exportContract(contract: ContractDTO): void { console.log('Export contract:', contract); }
 }
 
 

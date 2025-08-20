@@ -49,6 +49,7 @@ import { routes } from './app.routes';
 import { AuthHttpInterceptor } from './infrastructure/interceptors/auth-http.interceptor';
 import { ErrorInterceptor } from './infrastructure/interceptors/error.interceptor';
 import { LoggingInterceptor } from './infrastructure/interceptors/logging.interceptor';
+import { ContractFirestoreRepository } from './infrastructure/persistence/repositories/contracts/contract.firestore.repository';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -98,6 +99,8 @@ export const appConfig: ApplicationConfig = {
         // 提供 Firebase Remote Config 遠端配置服務
         provideRemoteConfig(() => getRemoteConfig()),
         // 提供 Firebase VertexAI AI 服務
-        provideVertexAI(() => getVertexAI())
+        provideVertexAI(() => getVertexAI()),
+        // 提供合約儲存庫服務
+        { provide: 'IContractRepository', useClass: ContractFirestoreRepository }
     ]
 };
