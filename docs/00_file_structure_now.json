@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-20T00:56:02.784Z",
+    "generatedAt": "2025-08-20T01:01:06.117Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules) - Format: name | path | size/modified | type"
@@ -150,7 +150,7 @@
         {
           "info": "workflows/ | .github/workflows | directory",
           "children": [
-            "deploy-site.yml | .github/workflows/deploy-site.yml | 1392 bytes | 2025-08-18T14:05:59.585Z",
+            "deploy-site.yml | .github/workflows/deploy-site.yml | 1524 bytes | 2025-08-20T01:01:03.711Z",
             "deploy-surge.yml | .github/workflows/deploy-surge.yml | 1057 bytes | 2025-08-18T14:05:59.585Z",
             "issue-inactive-checker.yml | .github/workflows/issue-inactive-checker.yml | 539 bytes | 2025-08-18T14:05:59.585Z",
             "issue-labeled.yml | .github/workflows/issue-labeled.yml | 3654 bytes | 2025-08-18T14:05:59.585Z",
@@ -226,7 +226,7 @@
             "angular_url.json | docs/08-angular-api-reference/angular_url.json | 20487 bytes | 2025-08-19T13:09:02.274Z"
           ]
         },
-        "00_file_structure_now.json | docs/00_file_structure_now.json | 133731 bytes | 2025-08-20T00:53:34.349Z",
+        "00_file_structure_now.json | docs/00_file_structure_now.json | 133731 bytes | 2025-08-20T00:56:02.872Z",
         "00-file-header-convention.md | docs/00-file-header-convention.md | 15558 bytes | 2025-08-19T12:40:49.119Z",
         "00.angular_ddd_core_guide.md | docs/00.angular_ddd_core_guide.md | 14533 bytes | 2025-08-19T13:34:09.377Z",
         "00.angular_ddd_core.json | docs/00.angular_ddd_core.json | 15407 bytes | 2025-08-19T13:34:33.635Z",
@@ -301,7 +301,7 @@
                         "create-contract.command.ts | src/app/application/commands/contracts/create-contract.command.ts | 2539 bytes | 2025-08-20T00:52:48.784Z",
                         "delete-contract.command.ts | src/app/application/commands/contracts/delete-contract.command.ts | 1563 bytes | 2025-08-20T00:52:48.784Z",
                         "index.ts | src/app/application/commands/contracts/index.ts | 623 bytes | 2025-08-20T00:52:48.784Z",
-                        "update-contract.command.ts | src/app/application/commands/contracts/update-contract.command.ts | 4621 bytes | 2025-08-20T00:55:48.078Z"
+                        "update-contract.command.ts | src/app/application/commands/contracts/update-contract.command.ts | 4621 bytes | 2025-08-20T00:56:03.331Z"
                       ]
                     },
                     {
@@ -2012,6 +2012,7 @@
     ".eslintignore | .eslintignore | 1282 bytes | 2025-08-18T14:05:59.585Z",
     ".eslintrc.json | .eslintrc.json | 2517 bytes | 2025-08-18T14:05:59.585Z",
     ".gitignore | .gitignore | 688 bytes | 2025-08-18T14:05:59.585Z",
+    ".nvmrc | .nvmrc | 4 bytes | 2025-08-20T01:01:05.189Z",
     ".postcssrc.json | .postcssrc.json | 59 bytes | 2025-08-18T14:05:59.585Z",
     ".prettierrc.js | .prettierrc.js | 1518 bytes | 2025-08-18T14:05:59.585Z",
     "angular.json | angular.json | 3422 bytes | 2025-08-19T09:06:47.713Z",
