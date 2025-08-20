@@ -27,9 +27,9 @@ import { Subject, takeUntil } from 'rxjs';
       <mat-card class="contracts-table-card">
         <mat-card-header><mat-card-title>合約列表</mat-card-title></mat-card-header>
         <mat-card-content>
-          <div *ngIf="isLoading" class="loading">載入中...</div>
-          <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-          <app-contracts-table *ngIf="!isLoading && !errorMessage" [contracts]="contracts()" />
+          <div *ngIf="loading()" class="loading">載入中...</div>
+          <div *ngIf="errorMessage()" class="error">{{ errorMessage() }}</div>
+          <app-contracts-table *ngIf="!loading() && !errorMessage()" [contracts]="contracts()" />
         </mat-card-content>
       </mat-card>
     </div>

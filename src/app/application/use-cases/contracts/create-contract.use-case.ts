@@ -18,7 +18,7 @@
  * - 返回操作結果
  */
 
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Contract } from '../../../domain/entities/contracts/contract.entity';
 import { IContractRepository } from '../../../domain/repositories/contracts/contract.repository.interface';
 import { ContractDomainService } from '../../../domain/services/contracts/contract-domain.service';
@@ -42,7 +42,7 @@ export interface CreateContractResult {
 export class CreateContractUseCase {
   constructor(
     private contractDomainService: ContractDomainService,
-    private contractRepository: IContractRepository
+    @Inject('IContractRepository') private contractRepository: IContractRepository
   ) {}
 
   /**

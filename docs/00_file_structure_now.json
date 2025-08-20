@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-20T01:12:32.617Z",
+    "generatedAt": "2025-08-20T01:15:58.371Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules) - Format: name | path | size/modified | type"
@@ -226,7 +226,7 @@
             "angular_url.json | docs/08-angular-api-reference/angular_url.json | 20487 bytes | 2025-08-19T13:09:02.274Z"
           ]
         },
-        "00_file_structure_now.json | docs/00_file_structure_now.json | 133789 bytes | 2025-08-20T01:07:06.617Z",
+        "00_file_structure_now.json | docs/00_file_structure_now.json | 133789 bytes | 2025-08-20T01:12:32.702Z",
         "00-file-header-convention.md | docs/00-file-header-convention.md | 15558 bytes | 2025-08-19T12:40:49.119Z",
         "00.angular_ddd_core_guide.md | docs/00.angular_ddd_core_guide.md | 14533 bytes | 2025-08-19T13:34:09.377Z",
         "00.angular_ddd_core.json | docs/00.angular_ddd_core.json | 15407 bytes | 2025-08-19T13:34:33.635Z",
@@ -465,7 +465,7 @@
                     {
                       "info": "contracts/ | src/app/application/services/contracts | directory",
                       "children": [
-                        "contract-application.service.ts | src/app/application/services/contracts/contract-application.service.ts | 6808 bytes | 2025-08-20T01:11:24.600Z",
+                        "contract-application.service.ts | src/app/application/services/contracts/contract-application.service.ts | 6808 bytes | 2025-08-20T01:13:40.329Z",
                         "index.ts | src/app/application/services/contracts/index.ts | 527 bytes | 2025-08-20T00:52:48.786Z"
                       ]
                     },
@@ -529,7 +529,7 @@
                     {
                       "info": "contracts/ | src/app/application/use-cases/contracts | directory",
                       "children": [
-                        "create-contract.use-case.ts | src/app/application/use-cases/contracts/create-contract.use-case.ts | 3998 bytes | 2025-08-20T00:53:37.135Z",
+                        "create-contract.use-case.ts | src/app/application/use-cases/contracts/create-contract.use-case.ts | 4037 bytes | 2025-08-20T01:15:48.898Z",
                         "index.ts | src/app/application/use-cases/contracts/index.ts | 514 bytes | 2025-08-20T00:52:48.786Z"
                       ]
                     },
@@ -749,7 +749,7 @@
                     {
                       "info": "contracts/ | src/app/domain/services/contracts | directory",
                       "children": [
-                        "contract-domain.service.ts | src/app/domain/services/contracts/contract-domain.service.ts | 6332 bytes | 2025-08-20T00:52:48.767Z",
+                        "contract-domain.service.ts | src/app/domain/services/contracts/contract-domain.service.ts | 6387 bytes | 2025-08-20T01:15:48.898Z",
                         "index.ts | src/app/domain/services/contracts/index.ts | 547 bytes | 2025-08-20T00:52:48.775Z"
                       ]
                     },
@@ -1041,7 +1041,7 @@
                           ]
                         },
                         "contracts-dashboard-stats.component.ts | src/app/interface/components/contracts/contracts-dashboard-stats.component.ts | 3368 bytes | 2025-08-19T17:41:48.972Z",
-                        "contracts-table.component.ts | src/app/interface/components/contracts/contracts-table.component.ts | 5437 bytes | 2025-08-20T01:10:16.163Z"
+                        "contracts-table.component.ts | src/app/interface/components/contracts/contracts-table.component.ts | 5437 bytes | 2025-08-20T01:13:40.313Z"
                       ]
                     },
                     {
@@ -1360,7 +1360,7 @@
                             "index.ts | src/app/interface/pages/contracts/contract-management/index.ts | 502 bytes | 2025-08-20T00:52:48.819Z"
                           ]
                         },
-                        "contracts.page.ts | src/app/interface/pages/contracts/contracts.page.ts | 4352 bytes | 2025-08-20T01:09:44.561Z",
+                        "contracts.page.ts | src/app/interface/pages/contracts/contracts.page.ts | 4358 bytes | 2025-08-20T01:15:48.910Z",
                         "index.ts | src/app/interface/pages/contracts/index.ts | 64 bytes | 2025-08-19T17:41:17.973Z"
                       ]
                     },
@@ -1933,7 +1933,7 @@
               ]
             },
             "app.component.ts | src/app/app.component.ts | 1377 bytes | 2025-08-19T18:52:51.856Z",
-            "app.config.ts | src/app/app.config.ts | 5764 bytes | 2025-08-20T01:11:11.466Z",
+            "app.config.ts | src/app/app.config.ts | 5764 bytes | 2025-08-20T01:13:40.336Z",
             "app.routes.ts | src/app/app.routes.ts | 7877 bytes | 2025-08-19T18:52:51.856Z",
             "index.ts | src/app/index.ts | 897 bytes | 2025-08-18T14:05:59.681Z"
           ]

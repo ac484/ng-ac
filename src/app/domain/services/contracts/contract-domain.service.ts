@@ -18,10 +18,10 @@
  * - 使用依賴注入
  */
 
-import { Injectable } from '@angular/core';
-import { Contract } from '../../entities/contracts/contract.entity';
-import { IContractRepository } from '../../repositories/contracts/contract.repository.interface';
-import { ContractStatus } from '../../value-objects/contract-status/contract-status.vo';
+import { Inject, Injectable } from '@angular/core';
+import { Contract } from '@domain/entities/contracts/contract.entity';
+import { IContractRepository } from '@domain/repositories/contracts/contract.repository.interface';
+import { ContractStatus } from '@domain/value-objects/contract-status/contract-status.vo';
 
 /**
  * 合約業務規則驗證結果
@@ -52,7 +52,9 @@ export interface ContractStatistics {
   providedIn: 'root'
 })
 export class ContractDomainService {
-  constructor(private contractRepository: IContractRepository) {}
+  constructor(
+    @Inject('IContractRepository') private contractRepository: IContractRepository
+  ) {}
 
   /**
    * 驗證合約是否可以激活
