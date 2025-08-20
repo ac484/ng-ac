@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkng_ac=self.webpackChunkng_ac||[]).push([[5865],{5865:(s,a,t)=>{t.r(a),t.d(a,{authGuard:()=>e});var u=t(1698),n=t(305);const e=(o,c)=>{const r=(0,u.WQX)(n.Ix);return!!localStorage.getItem("ng-ac-auth-token")||(r.navigate(["/auth/login"]),!1)}}}]);
