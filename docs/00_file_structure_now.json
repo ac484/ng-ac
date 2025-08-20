@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-08-20T01:01:06.117Z",
+    "generatedAt": "2025-08-20T01:04:11.184Z",
     "source": "project-root",
     "root": "docs/00_file_structure_now.json",
     "description": "Complete file structure of project root (excluding .angular, dist, .git, node_modules) - Format: name | path | size/modified | type"
@@ -151,7 +151,7 @@
           "info": "workflows/ | .github/workflows | directory",
           "children": [
             "deploy-site.yml | .github/workflows/deploy-site.yml | 1524 bytes | 2025-08-20T01:01:03.711Z",
-            "deploy-surge.yml | .github/workflows/deploy-surge.yml | 1057 bytes | 2025-08-18T14:05:59.585Z",
+            "deploy-surge.yml | .github/workflows/deploy-surge.yml | 968 bytes | 2025-08-20T01:02:34.673Z",
             "issue-inactive-checker.yml | .github/workflows/issue-inactive-checker.yml | 539 bytes | 2025-08-18T14:05:59.585Z",
             "issue-labeled.yml | .github/workflows/issue-labeled.yml | 3654 bytes | 2025-08-18T14:05:59.585Z",
             "label.yml | .github/workflows/label.yml | 648 bytes | 2025-08-18T14:05:59.585Z",
@@ -226,7 +226,7 @@
             "angular_url.json | docs/08-angular-api-reference/angular_url.json | 20487 bytes | 2025-08-19T13:09:02.274Z"
           ]
         },
-        "00_file_structure_now.json | docs/00_file_structure_now.json | 133731 bytes | 2025-08-20T00:56:02.872Z",
+        "00_file_structure_now.json | docs/00_file_structure_now.json | 133791 bytes | 2025-08-20T01:01:06.199Z",
         "00-file-header-convention.md | docs/00-file-header-convention.md | 15558 bytes | 2025-08-19T12:40:49.119Z",
         "00.angular_ddd_core_guide.md | docs/00.angular_ddd_core_guide.md | 14533 bytes | 2025-08-19T13:34:09.377Z",
         "00.angular_ddd_core.json | docs/00.angular_ddd_core.json | 15407 bytes | 2025-08-19T13:34:33.635Z",
@@ -263,7 +263,7 @@
         {
           "info": "_ci/ | scripts/_ci | directory",
           "children": [
-            "deploy-pipelines.sh | scripts/_ci/deploy-pipelines.sh | 1295 bytes | 2025-08-07T13:06:59.963Z",
+            "deploy-pipelines.sh | scripts/_ci/deploy-pipelines.sh | 942 bytes | 2025-08-20T01:04:02.653Z",
             "fix-day.js | scripts/_ci/fix-day.js | 345 bytes | 2025-08-06T16:23:27.638Z",
             "github-comment.js | scripts/_ci/github-comment.js | 1478 bytes | 2025-08-06T16:23:27.639Z"
           ]
@@ -2021,7 +2021,7 @@
     "genkit.config.ts | genkit.config.ts | 1197 bytes | 2025-08-20T00:33:49.555Z",
     "package.json | package.json | 2039 bytes | 2025-08-19T13:37:05.709Z",
     "pnpm-lock.yaml | pnpm-lock.yaml | 476044 bytes | 2025-08-19T16:43:46.741Z",
-    "pnpm-workspace.yaml | pnpm-workspace.yaml | 49 bytes | 2025-08-19T08:02:02.535Z",
+    "pnpm-workspace.yaml | pnpm-workspace.yaml | 71 bytes | 2025-08-20T01:02:47.957Z",
     "tsconfig.app.json | tsconfig.app.json | 199 bytes | 2025-08-18T14:05:59.878Z",
     "tsconfig.json | tsconfig.json | 1113 bytes | 2025-08-19T09:06:47.741Z",
     "tsconfig.spec.json | tsconfig.spec.json | 434 bytes | 2025-08-07T13:21:00.008Z"

@@ -15,7 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 先安裝 pnpm
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -28,11 +27,8 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: true
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build Angular app
         run: pnpm run build

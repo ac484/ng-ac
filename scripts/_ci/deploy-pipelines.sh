@@ -3,58 +3,38 @@
 set -e
 
 GH=false
-DAY=false
 for ARG in "$@"; do
   case "$ARG" in
     -gh)
       GH=true
       ;;
-    -day)
-      DAY=true
-      ;;
   esac
 done
 
-echo "List:"
-ls -al
+echo "Starting build for ng-ac project..."
 
 ROOT_DIR="$(pwd)"
 DIST_DIR="$(pwd)/dist"
 
 VERSION=$(node -p "require('./package.json').version")
+echo "Build version: ${VERSION}"
 
-echo "Start build version: ${VERSION}"
-
-if [[ ${DAY} == true ]]; then
-  echo ""
-  echo "Download day @delon/* libs"
-  echo ""
-  bash ./scripts/_ci/delon.sh
-fi
-
-echo ""
-echo "Generate color less"
-echo ""
-npm run color-less
-
-echo ""
-echo "Generate theme files"
-echo ""
-npm run theme
-
-echo '===== need mock'
+# Set production environment
+echo "Setting production environment..."
 cp -f ${ROOT_DIR}/src/environments/environment.ts ${ROOT_DIR}/src/environments/environment.prod.ts
 sed -i 's/production: false/production: true/g' ${ROOT_DIR}/src/environments/environment.prod.ts
-sed -i 's/showSettingDrawer = !environment.production;/showSettingDrawer = true;/g' ${ROOT_DIR}/src/app/layout/basic/basic.component.ts
 
+# Build Angular app
 if [[ ${GH} == true ]]; then
-  echo "Build angular [github gh-pages]"
-  node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build --base-href /ng-alain/
+  echo "Building for GitHub Pages..."
+  pnpm run build --base-href /ng-ac/
 else
-  echo "Build angular"
-  node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build
+  echo "Building for production..."
+  pnpm run build
 fi
 
-cp -f ${DIST_DIR}/ng-alain/browser/index.html ${DIST_DIR}/ng-alain/browser/404.html
+# Create 404.html for SPA routing
+echo "Creating 404.html for SPA routing..."
+cp -f ${DIST_DIR}/ng-ac/browser/index.html ${DIST_DIR}/ng-ac/browser/404.html
 
-echo "Finished"
+echo "Build completed successfully!"
