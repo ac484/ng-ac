@@ -33,8 +33,8 @@ else
   pnpm run build
 fi
 
-# Create 404.html for SPA routing
+# Create 404.html for SPA routing (Angular 17+ structure)
 echo "Creating 404.html for SPA routing..."
-cp -f ${DIST_DIR}/ng-ac/browser/index.html ${DIST_DIR}/ng-ac/browser/404.html
+cp -f ${DIST_DIR}/ng-ac/index.html ${DIST_DIR}/ng-ac/404.html
 
 echo "Build completed successfully!"
